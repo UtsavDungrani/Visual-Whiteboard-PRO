@@ -65,6 +65,7 @@ This file lists project phases and concrete tasks (one after another) for review
 ---
 
 If you'd like, I can:
+
 - create GitHub Issues from these tasks,
 - scaffold the repo and apply Phase 0/1 files now,
 - or split tasks into finer-grained tickets with owner estimates.
