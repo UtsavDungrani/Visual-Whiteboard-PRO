@@ -65,6 +65,102 @@ export default function App() {
   const [suggestions, setSuggestions] = useState([])
   const [isCleanupLoading, setIsCleanupLoading] = useState(false)
   const [isAssistLoading, setIsAssistLoading] = useState(false)
+  const clipboardRef = useRef(null)
+  const isCreatingShapeRef = useRef(false)
+  const tempCreationShapeRef = useRef(null)
+
+  // --- Canvas Management & Clipboard ---
+  const handleClearPage = () => {
+    const canvas = fabricRef.current
+    if (!canvas) return
+    if (!window.confirm('Are you sure you want to clear this entire page? This can be undone.')) return
+
+    // Keep page boundary if it exists
+    const objects = canvas.getObjects()
+    objects.forEach(obj => {
+      if (obj.id !== 'page-boundary') {
+        canvas.remove(obj)
+      }
+    })
+
+    canvas.requestRenderAll()
+    saveHistory()
+    sendCanvasUpdate()
+  }
+
+  const handleCopy = () => {
+    const canvas = fabricRef.current
+    if (!canvas) return
+    const activeObj = canvas.getActiveObject()
+    if (!activeObj) return
+
+    activeObj.clone((cloned) => {
+      clipboardRef.current = cloned
+    }, ['id', 'isLocked']) // include custom properties
+  }
+
+  const handleCut = () => {
+    const canvas = fabricRef.current
+    if (!canvas) return
+    const activeObj = canvas.getActiveObject()
+    if (!activeObj) return
+
+    activeObj.clone((cloned) => {
+      clipboardRef.current = cloned
+      // Remove original objects
+      if (activeObj.type === 'activeSelection') {
+        activeObj.forEachObject((obj) => {
+          canvas.remove(obj)
+        })
+      } else {
+        canvas.remove(activeObj)
+      }
+      canvas.discardActiveObject()
+      canvas.requestRenderAll()
+      saveHistory()
+      sendCanvasUpdate()
+    }, ['id', 'isLocked'])
+  }
+
+  const handlePaste = () => {
+    const canvas = fabricRef.current
+    if (!canvas || !clipboardRef.current) return
+
+    clipboardRef.current.clone((clonedObj) => {
+      canvas.discardActiveObject()
+      
+      // Offset pasted items so they don't land exactly on top
+      clonedObj.set({
+        left: clonedObj.left + 20,
+        top: clonedObj.top + 20,
+        evented: true,
+      })
+
+      if (clonedObj.type === 'activeSelection') {
+        // activeSelection needs to be added to canvas item by item
+        clonedObj.canvas = canvas
+        clonedObj.forEachObject((obj) => {
+          const newId = 'el-' + Date.now() + '-' + Math.round(Math.random() * 1e9)
+          obj.set('id', newId)
+          canvas.add(obj)
+        })
+        clonedObj.setCoords()
+      } else {
+        const newId = 'el-' + Date.now() + '-' + Math.round(Math.random() * 1e9)
+        clonedObj.set('id', newId)
+        canvas.add(clonedObj)
+      }
+
+      // Update clipboard for next paste (cumulative offset)
+      clipboardRef.current.top += 20
+      clipboardRef.current.left += 20
+
+      canvas.setActiveObject(clonedObj)
+      canvas.requestRenderAll()
+      saveHistory()
+      sendCanvasUpdate()
+    }, ['id', 'isLocked'])
+  }
 
   // Real-time Collaboration States
   const [roomUsers, setRoomUsers] = useState([])
@@ -959,6 +1055,70 @@ export default function App() {
           canvas.add(tempSelectionShapeRef.current)
         }
         canvas.requestRenderAll()
+      } else if (['rect', 'circle', 'diamond', 'arrow', 'line'].includes(activeTool) && !isReadOnlyRef.current) {
+        const pointer = canvas.getPointer(opt.e)
+        selectionStartRef.current = { x: pointer.x, y: pointer.y }
+        isCreatingShapeRef.current = true
+
+        const F = window.fabric
+        const stroke = propertiesRef.current.stroke
+        const strokeWidth = propertiesRef.current.strokeWidth
+        const fill = propertiesRef.current.fill
+
+        if (activeTool === 'rect') {
+          tempCreationShapeRef.current = new F.Rect({
+            left: pointer.x,
+            top: pointer.y,
+            width: 1, // Start small but visible
+            height: 1,
+            fill: 'rgba(46, 134, 171, 0.1)',
+            stroke: stroke,
+            strokeWidth: strokeWidth,
+            strokeDashArray: [5, 5],
+            selectable: false,
+            evented: false
+          })
+        } else if (activeTool === 'circle') {
+          tempCreationShapeRef.current = new F.Circle({
+            left: pointer.x,
+            top: pointer.y,
+            radius: 1,
+            fill: 'rgba(46, 134, 171, 0.1)',
+            stroke: stroke,
+            strokeWidth: strokeWidth,
+            strokeDashArray: [5, 5],
+            selectable: false,
+            evented: false
+          })
+        } else if (activeTool === 'diamond') {
+          tempCreationShapeRef.current = new F.Polygon([
+            { x: 0, y: 0 }, { x: 1, y: 0.5 }, { x: 0, y: 1 }, { x: -1, y: 0.5 }
+          ], {
+            left: pointer.x,
+            top: pointer.y,
+            fill: 'rgba(46, 134, 171, 0.1)',
+            stroke: stroke,
+            strokeWidth: strokeWidth,
+            strokeDashArray: [5, 5],
+            selectable: false,
+            evented: false
+          })
+        } else if (activeTool === 'arrow' || activeTool === 'line') {
+          tempCreationShapeRef.current = new F.Line([pointer.x, pointer.y, pointer.x, pointer.y], {
+            stroke: stroke,
+            strokeWidth: strokeWidth,
+            selectable: false,
+            evented: false,
+            strokeLineCap: 'round',
+            strokeDashArray: [5, 5]
+          })
+        }
+
+
+        if (tempCreationShapeRef.current) {
+          canvas.add(tempCreationShapeRef.current)
+        }
+        canvas.requestRenderAll()
       }
     }
 
@@ -1018,6 +1178,51 @@ export default function App() {
           }
           canvas.requestRenderAll()
         }
+
+        // Update creation shape dimensions
+        if (isCreatingShapeRef.current && tempCreationShapeRef.current) {
+          const startX = selectionStartRef.current.x
+          const startY = selectionStartRef.current.y
+
+          if (activeTool === 'rect') {
+            const left = Math.min(startX, pointer.x)
+            const top = Math.min(startY, pointer.y)
+            const width = Math.abs(startX - pointer.x)
+            const height = Math.abs(startY - pointer.y)
+            tempCreationShapeRef.current.set({ left, top, width, height })
+          } else if (activeTool === 'circle') {
+            const dx = pointer.x - startX
+            const dy = pointer.y - startY
+            const radius = Math.sqrt(dx * dx + dy * dy)
+            tempCreationShapeRef.current.set({
+              left: startX - radius,
+              top: startY - radius,
+              radius: radius
+            })
+          } else if (activeTool === 'diamond') {
+            const left = Math.min(startX, pointer.x)
+            const top = Math.min(startY, pointer.y)
+            const width = Math.abs(startX - pointer.x)
+            const height = Math.abs(startY - pointer.y)
+
+            tempCreationShapeRef.current.set({
+              points: [
+                { x: width / 2, y: 0 },
+                { x: width, y: height / 2 },
+                { x: width / 2, y: height },
+                { x: 0, y: height / 2 }
+              ],
+              left,
+              top
+            })
+          } else if (activeTool === 'arrow' || activeTool === 'line') {
+            tempCreationShapeRef.current.set({
+              x2: pointer.x,
+              y2: pointer.y
+            })
+          }
+          canvas.requestRenderAll()
+        }
       }
     }
 
@@ -1026,6 +1231,132 @@ export default function App() {
       interactingRef.current = false
       flushPendingRemoteCanvas()
       
+      const pointer = canvas.getPointer(opt.e)
+      const startX = selectionStartRef.current.x
+      const startY = selectionStartRef.current.y
+
+      // Finalize Shape Creation
+      if (isCreatingShapeRef.current) {
+        isCreatingShapeRef.current = false
+        const activeTool = activeToolRef.current
+        const F = window.fabric
+        
+        if (tempCreationShapeRef.current) {
+          canvas.remove(tempCreationShapeRef.current)
+        }
+
+        const width = Math.abs(startX - pointer.x)
+        const height = Math.abs(startY - pointer.y)
+
+        // Ignore tiny clicks (min 5px)
+        if (width < 5 && height < 5 && activeTool !== 'arrow' && activeTool !== 'line') {
+          tempCreationShapeRef.current = null
+          canvas.requestRenderAll()
+        } else {
+          const elementId = 'el-' + Date.now() + '-' + Math.round(Math.random() * 1e9)
+          const stroke = propertiesRef.current.stroke
+          const strokeWidth = propertiesRef.current.strokeWidth
+          const fill = propertiesRef.current.fill
+          
+          let finalShape
+          if (activeTool === 'rect') {
+            finalShape = new F.Rect({
+              id: elementId,
+              left: Math.min(startX, pointer.x),
+              top: Math.min(startY, pointer.y),
+              width: width,
+              height: height,
+              fill: fill,
+              stroke: stroke,
+              strokeWidth: strokeWidth,
+              selectable: true,
+              evented: true
+            })
+          } else if (activeTool === 'circle') {
+            const dx = pointer.x - startX
+            const dy = pointer.y - startY
+            const radius = Math.sqrt(dx * dx + dy * dy)
+            finalShape = new F.Circle({
+              id: elementId,
+              left: startX - radius,
+              top: startY - radius,
+              radius: radius,
+              fill: fill,
+              stroke: stroke,
+              strokeWidth: strokeWidth,
+              selectable: true,
+              evented: true
+            })
+          } else if (activeTool === 'diamond') {
+            finalShape = new F.Polygon([
+              { x: width / 2, y: 0 },
+              { x: width, y: height / 2 },
+              { x: width / 2, y: height },
+              { x: 0, y: height / 2 }
+            ], {
+              id: elementId,
+              left: Math.min(startX, pointer.x),
+              top: Math.min(startY, pointer.y),
+              fill: fill,
+              stroke: stroke,
+              strokeWidth: strokeWidth,
+              selectable: true,
+              evented: true
+            })
+          } else if (activeTool === 'line') {
+            finalShape = new F.Line([startX, startY, pointer.x, pointer.y], {
+              id: elementId,
+              customType: 'line',
+              stroke: stroke,
+              strokeWidth: strokeWidth,
+              strokeLineCap: 'round',
+              selectable: true,
+              evented: true
+            })
+          } else if (activeTool === 'arrow') {
+            // Complex Arrow (Line + Triangle head)
+            const headLength = 15
+            const dx = pointer.x - startX
+            const dy = pointer.y - startY
+            const angle = Math.atan2(dy, dx)
+            
+            const line = new F.Line([startX, startY, pointer.x, pointer.y], {
+              stroke: stroke,
+              strokeWidth: strokeWidth,
+              strokeLineCap: 'round'
+            })
+            
+            const head = new F.Triangle({
+              left: pointer.x,
+              top: pointer.y,
+              angle: (angle * 180 / Math.PI) + 90,
+              width: headLength,
+              height: headLength,
+              fill: stroke,
+              originX: 'center',
+              originY: 'center',
+              selectable: false,
+              evented: false
+            })
+            
+            finalShape = new F.Group([line, head], {
+              id: elementId,
+              customType: 'arrow',
+              selectable: true,
+              evented: true
+            })
+          }
+
+          if (finalShape) {
+            canvas.add(finalShape)
+            canvas.setActiveObject(finalShape)
+            saveHistory()
+            sendCanvasUpdate()
+          }
+          tempCreationShapeRef.current = null
+        }
+      }
+
       if (isDrawingSelectionRef.current) {
         isDrawingSelectionRef.current = false
         const activeTool = activeToolRef.current
@@ -1168,11 +1499,11 @@ export default function App() {
     }
 
     const onSelectionCreated = (e) => {
-      updateInspectorProperties(e.selected[0])
+      updateInspectorProperties(canvas.getActiveObject() || e.selected[0])
     }
 
     const onSelectionUpdated = (e) => {
-      updateInspectorProperties(e.selected[0])
+      updateInspectorProperties(canvas.getActiveObject() || e.selected[0])
     }
 
     const onSelectionCleared = () => {
@@ -1349,15 +1680,20 @@ export default function App() {
     } else {
       hideEraserCursor()
       canvas.selection = false
-      canvas.defaultCursor = 'default'
+      
+      const isShapeTool = ['rect', 'circle', 'diamond', 'arrow', 'line'].includes(activeTool)
+      canvas.defaultCursor = isShapeTool ? 'crosshair' : 'default'
+
       canvas.forEachObject((obj) => {
         obj.selectable = false
         obj.evented = false
       })
 
-      // If a shape creation tool is selected, add the element and auto-switch back to square-select
-      addNewElement(activeTool)
-      setActiveTool('square-select')
+      // If text tool is selected, we still use click-to-drop or a simple placement logic
+      if (activeTool === 'text') {
+        addNewElement('text')
+        setActiveTool('square-select')
+      }
     }
   }, [activeTool, isReadOnly, drawType])
 
@@ -1498,12 +1834,13 @@ export default function App() {
           left: centerX - 80,
           top: centerY - 15,
           fontFamily: 'Inter, sans-serif',
-          fontSize: 16,
-          fill: propertiesRef.current.stroke,
+          fontSize: 20,
+          fill: propertiesRef.current.stroke, // Use active stroke color
           selectable: true,
           evented: true
         })
         break
+
       case 'arrow':
         // Beautiful solid flowchart arrow
         shape = new F.Path('M 0 4 L 75 4 L 75 0 L 95 5 L 75 10 L 75 6 Z', {
@@ -1534,6 +1871,11 @@ export default function App() {
     const activeObject = canvas.getActiveObject()
 
     setProperties((prev) => ({ ...prev, [name]: value }))
+
+    // Sync drawing brush color immediately
+    if (name === 'stroke' && canvas.freeDrawingBrush) {
+      canvas.freeDrawingBrush.color = value
+    }
 
     if (activeObject) {
       if (activeObject.type === 'activeSelection') {
@@ -1610,6 +1952,64 @@ export default function App() {
     setZoom(1.0)
   }
 
+  // --- Grouping & Locking ---
+  const handleGroup = () => {
+    const canvas = fabricRef.current
+    if (!canvas) return
+    const activeObj = canvas.getActiveObject()
+    if (!activeObj || activeObj.type !== 'activeSelection') return
+
+    activeObj.toGroup()
+    const newGroup = canvas.getActiveObject()
+    if (newGroup) {
+      newGroup.set({
+        id: 'group-' + Date.now() + '-' + Math.round(Math.random() * 1e9),
+        subTargetCheck: true // allows selecting inner elements if needed
+      })
+      canvas.requestRenderAll()
+      updateInspectorProperties(newGroup)
+      saveHistory()
+      sendCanvasUpdate()
+    }
+  }
+
+  const handleUngroup = () => {
+    const canvas = fabricRef.current
+    if (!canvas) return
+    const activeObj = canvas.getActiveObject()
+    if (!activeObj || activeObj.type !== 'group') return
+
+    activeObj.toActiveSelection()
+    canvas.requestRenderAll()
+    updateInspectorProperties(canvas.getActiveObject())
+    saveHistory()
+    sendCanvasUpdate()
+  }
+
+  const handleToggleLock = () => {
+    const canvas = fabricRef.current
+    if (!canvas) return
+    const activeObj = canvas.getActiveObject()
+    if (!activeObj) return
+
+    const isLocked = !activeObj.lockMovementX
+    activeObj.set({
+      lockMovementX: isLocked,
+      lockMovementY: isLocked,
+      lockScalingX: isLocked,
+      lockScalingY: isLocked,
+      lockRotation: isLocked,
+      hasControls: !isLocked,
+      editable: !isLocked,
+      selectable: !isLocked, // Optional: if we want it completely unselectable
+      hoverCursor: isLocked ? 'default' : 'move'
+    })
+
+    canvas.requestRenderAll()
+    saveHistory()
+    sendCanvasUpdate()
+  }
+
   // Phase 5: AI features (Mess Cleanup and Architecture Assist)
   const handleCleanup = async () => {
     const canvas = fabricRef.current
@@ -1633,18 +2033,24 @@ export default function App() {
       width: obj.width,
       height: obj.height,
       scaleX: obj.scaleX || 1,
-      scaleY: obj.scaleY || 1
+      scaleY: obj.scaleY || 1,
+      isLocked: obj.lockMovementX || obj.isLocked || false
     }))
 
     try {
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 15000) // 15s timeout
+
       const token = localStorage.getItem('wb_token')
       const headers = { 'Content-Type': 'application/json' }
       if (token) headers['Authorization'] = `Bearer ${token}`
       const res = await fetch('http://localhost:4000/api/ai/cleanup', {
         method: 'POST',
         headers,
-        body: JSON.stringify({ elements })
+        body: JSON.stringify({ elements }),
+        signal: controller.signal
       })
+      clearTimeout(timeoutId)
 
       if (!res.ok) throw new Error('Cleanup failed')
       const data = await res.json()
@@ -1749,20 +2155,53 @@ export default function App() {
         elements.push({
           id: text.id,
           type: 'text',
-          label: text.text.trim()
+          label: text.text.trim(),
+          left: text.left,
+          top: text.top
         })
       }
     })
 
+    // Detect connections (edges)
+    const edges = []
+    const connectors = rawObjects.filter(obj => obj.customType === 'arrow' || obj.customType === 'line')
+    
+    connectors.forEach(conn => {
+      conn.setCoords()
+      const connRect = conn.getBoundingRect(true, true)
+      
+      const connectedShapes = shapes.filter(s => {
+        s.setCoords()
+        const sRect = s.getBoundingRect(true, true)
+        // Check simple bounding box intersection
+        return !(
+          connRect.left > sRect.left + sRect.width ||
+          connRect.left + connRect.width < sRect.left ||
+          connRect.top > sRect.top + sRect.height ||
+          connRect.top + connRect.height < sRect.top
+        )
+      }).map(s => s.id)
+      
+      if (connectedShapes.length >= 2) {
+        // Assume first is 'from' and second is 'to' for simplicity
+        edges.push({ from: connectedShapes[0], to: connectedShapes[1] })
+      }
+    })
+
     try {
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 20000) // 20s timeout for assist
+
       const token = localStorage.getItem('wb_token')
       const headers = { 'Content-Type': 'application/json' }
       if (token) headers['Authorization'] = `Bearer ${token}`
       const res = await fetch('http://localhost:4000/api/ai/assist', {
         method: 'POST',
         headers,
-        body: JSON.stringify({ elements })
+        body: JSON.stringify({ elements, edges }),
+        signal: controller.signal
       })
+      clearTimeout(timeoutId)
 
       if (!res.ok) throw new Error('Assist failed')
       const data = await res.json()
@@ -1780,10 +2219,20 @@ export default function App() {
     const canvas = fabricRef.current
     if (!F || !canvas) return
 
-    // Calculate viewport center
+    // Calculate default viewport center
     const vpt = canvas.viewportTransform
-    const centerX = (-vpt[4] + canvas.getWidth() / 2) / zoom
-    const centerY = (-vpt[5] + canvas.getHeight() / 2) / zoom
+    let centerX = (-vpt[4] + canvas.getWidth() / 2) / zoom
+    let centerY = (-vpt[5] + canvas.getHeight() / 2) / zoom
+
+    // Smart Placement
+    if (suggestedComponent.targetId) {
+      const targetObj = canvas.getObjects().find(o => o.id === suggestedComponent.targetId)
+      if (targetObj) {
+        targetObj.setCoords()
+        centerX = targetObj.left + (targetObj.width * (targetObj.scaleX || 1)) + 150 // Place 150px to the right
+        centerY = targetObj.top + ((targetObj.height * (targetObj.scaleY || 1)) / 2)
+      }
+    }
 
     const elementId = 'el-' + Date.now() + '-' + Math.round(Math.random() * 1e9)
     const textId = 'el-' + Date.now() + '-' + Math.round(Math.random() * 1e9)
@@ -2169,6 +2618,24 @@ export default function App() {
         e.preventDefault()
       }
 
+      // Copy (Ctrl+C)
+      if (e.ctrlKey && key === 'c') {
+        handleCopy()
+        e.preventDefault()
+      }
+
+      // Cut (Ctrl+X)
+      if (e.ctrlKey && key === 'x') {
+        handleCut()
+        e.preventDefault()
+      }
+
+      // Paste (Ctrl+V)
+      if (e.ctrlKey && key === 'v') {
+        handlePaste()
+        e.preventDefault()
+      }
+
       // Zoom In (Ctrl+=)
       if (e.ctrlKey && e.key === '=') {
         handleZoom(zoom + 0.1)
@@ -2187,22 +2654,43 @@ export default function App() {
         e.preventDefault()
       }
 
+      // Group (Ctrl+G)
+      if (e.ctrlKey && !e.shiftKey && key === 'g') {
+        handleGroup()
+        e.preventDefault()
+      }
+
+      // Ungroup (Ctrl+Shift+G)
+      if (e.ctrlKey && e.shiftKey && key === 'g') {
+        handleUngroup()
+        e.preventDefault()
+      }
+
+      // Lock/Unlock Toggle (Ctrl+L)
+      if (e.ctrlKey && key === 'l') {
+        handleToggleLock()
+        e.preventDefault()
+      }
+
       // Grid Snap toggle (G)
-      if (key === 'g') {
+      if (!e.ctrlKey && key === 'g') {
         setSnapToGrid((prev) => !prev)
       }
 
       // Tool shortcuts
-      if (key === 'v') setActiveTool('square-select')
-      if (key === 'c') setActiveTool('circle-select')
-      if (key === 'l') setActiveTool('lasso-select')
-      if (key === 'h') setActiveTool('pan')
-      if (key === 'p') setActiveTool('draw')
-      if (key === 'r') setActiveTool('rect')
-      if (key === 'o') setActiveTool('circle')
-      if (key === 'd') setActiveTool('diamond')
-      if (key === 't') setActiveTool('text')
-      if (key === 'a') setActiveTool('arrow')
+      if (!e.ctrlKey) {
+        if (key === 'v') setActiveTool('square-select')
+        if (key === 'c') setActiveTool('circle-select')
+        if (key === 'l') setActiveTool('lasso-select')
+        if (key === 'h') setActiveTool('pan')
+        if (key === 'p') setActiveTool('draw')
+        if (key === 'r') setActiveTool('rect')
+        if (key === 'o') setActiveTool('circle')
+        if (key === 'd') setActiveTool('diamond')
+        if (key === 't') setActiveTool('text')
+        if (key === 'a') setActiveTool('arrow')
+        if (key === 's') setActiveTool('line')
+      }
     }
     window.addEventListener('keydown', onKeyDown)
 
@@ -2559,6 +3047,7 @@ export default function App() {
         setTitle={setTitle}
         onSave={saveBoard}
         onLoad={loadBoard}
+        onClearPage={handleClearPage}
         savedId={savedId}
         roomUsers={roomUsers}
         currentUser={{ id: socketRef.current?.id, ...user }}
@@ -2702,6 +3191,9 @@ export default function App() {
           onBringToFront={handleBringToFront}
           onSendToBack={handleSendToBack}
           onDelete={handleDeleteElement}
+          onGroup={handleGroup}
+          onUngroup={handleUngroup}
+          onToggleLock={handleToggleLock}
           onEditContext={() => {
             if (!savedId) {
               alert('Please save the whiteboard first (click "Save" in the top bar) to enable attaching notes, code, and files.')
@@ -2777,3 +3269,4 @@ export default function App() {
     </div>
   )
 }
+

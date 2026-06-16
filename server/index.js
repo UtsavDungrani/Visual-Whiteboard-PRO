@@ -13,6 +13,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const rateLimit = require("express-rate-limit");
 const redis = require("redis");
+const { createAdapter } = require("@socket.io/redis-adapter");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
@@ -57,6 +58,7 @@ if (process.env.NODE_ENV !== "production") {
 
 // Resilient Redis configuration
 let redisClient = null;
+let subClient = null;
 const REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
 
 (async () => {
@@ -68,16 +70,24 @@ const REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
         reconnectStrategy: false,
       },
     });
+    subClient = redisClient.duplicate();
+
     // Log the error only once, then clean up so we don't keep a broken client
     redisClient.on("error", (err) => {
       console.warn("Redis unavailable. Running in in-memory mode.", err.message);
       redisClient = null;
+      subClient = null;
     });
-    await redisClient.connect();
+    subClient.on("error", (err) => {
+      subClient = null;
+    });
+
+    await Promise.all([redisClient.connect(), subClient.connect()]);
     console.log("Connected to Redis successfully.");
   } catch (err) {
     console.warn("Redis connection failed. Running server in-memory mode.", err.message);
     redisClient = null;
+    subClient = null;
   }
 })();
 
@@ -555,12 +565,12 @@ app.post("/api/ai/cleanup", auth, aiLimiter, (req, res) => {
 // POST static system architecture review
 app.post("/api/ai/assist", auth, aiLimiter, (req, res) => {
   try {
-    const { elements } = req.body;
+    const { elements, edges } = req.body;
     if (!elements || !Array.isArray(elements)) {
       return res.status(400).json({ error: "missing_elements_array" });
     }
     const { architectureAssist } = require("./ai.service");
-    const suggestions = architectureAssist(elements);
+    const suggestions = architectureAssist(elements, edges || []);
     return res.json({ suggestions });
   } catch (err) {
     console.error("Static architecture assist failed", err);
@@ -583,6 +593,40 @@ const io = new Server(httpServer, {
     methods: ["GET", "POST"],
   },
 });
+
+(async () => {
+  try {
+    redisClient = redis.createClient({
+      url: REDIS_URL,
+      socket: {
+        // Disable automatic reconnection — try once, fail gracefully
+        reconnectStrategy: false,
+      },
+    });
+    subClient = redisClient.duplicate();
+
+    // Log the error only once, then clean up so we don't keep a broken client
+    redisClient.on("error", (err) => {
+      console.warn("Redis unavailable. Running in in-memory mode.", err.message);
+      redisClient = null;
+      subClient = null;
+    });
+    subClient.on("error", (err) => {
+      subClient = null;
+    });
+
+    await Promise.all([redisClient.connect(), subClient.connect()]);
+    console.log("Connected to Redis successfully.");
+
+    // Attach Socket.io Redis Adapter for horizontal scaling
+    io.adapter(createAdapter(redisClient, subClient));
+    console.log("Socket.io Redis adapter attached.");
+  } catch (err) {
+    console.warn("Redis connection failed. Running server in-memory mode.", err.message);
+    redisClient = null;
+    subClient = null;
+  }
+})();
 
 // Dynamic active users tracking (socketId -> { roomId, name, color, pageId })
 const activeUsers = new Map();
@@ -719,17 +763,22 @@ function startServer(port, attemptsLeft = 5) {
   });
 }
 
-// Connect to MongoDB then start server
-const mongo =
-  process.env.MONGO_URI || "mongodb://127.0.0.1:27017/visual-whiteboard";
-mongoose
-  .connect(mongo, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    console.log("Connected to MongoDB");
-    startServer(DEFAULT_PORT);
-  })
-  .catch((err) => {
-    console.error("MongoDB connection error:", err);
-    // start server anyway (fallback to ephemeral in-memory behavior was removed)
-    startServer(DEFAULT_PORT);
-  });
+// Export app, httpServer, and io for testing
+module.exports = { app, httpServer, io };
+
+if (require.main === module) {
+  // Connect to MongoDB then start server
+  const mongo =
+    process.env.MONGO_URI || "mongodb://127.0.0.1:27017/visual-whiteboard";
+  mongoose
+    .connect(mongo, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+      console.log("Connected to MongoDB");
+      startServer(DEFAULT_PORT);
+    })
+    .catch((err) => {
+      console.error("MongoDB connection error:", err);
+      // start server anyway (fallback to ephemeral in-memory behavior was removed)
+      startServer(DEFAULT_PORT);
+    });
+}

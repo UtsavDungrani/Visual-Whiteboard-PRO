@@ -7,6 +7,9 @@ export default function PropertiesPanel({
   onBringToFront,
   onSendToBack,
   onDelete,
+  onGroup,
+  onUngroup,
+  onToggleLock,
   onEditContext,
   isReadOnly = false,
   activeTool = 'select',
@@ -95,6 +98,15 @@ export default function PropertiesPanel({
                     title={color}
                   />
                 ))}
+                <div className="color-option custom-color-btn" title="Choose custom brush color">
+                  <input 
+                    type="color" 
+                    value={properties.stroke || '#000000'} 
+                    onChange={(e) => onChangeProperty('stroke', e.target.value)} 
+                    style={{ opacity: 0, width: '100%', height: '100%', cursor: 'pointer' }}
+                  />
+                  <span style={{ position: 'absolute', pointerEvents: 'none', fontSize: '14px' }}>+</span>
+                </div>
               </div>
             </div>
           )}
@@ -223,6 +235,15 @@ export default function PropertiesPanel({
                   title={color}
                 />
               ))}
+              <div className="color-option custom-color-btn" title="Choose custom color">
+                <input 
+                  type="color" 
+                  value={properties.stroke || '#000000'} 
+                  onChange={(e) => onChangeProperty('stroke', e.target.value)} 
+                  style={{ opacity: 0, width: '100%', height: '100%', cursor: 'pointer' }}
+                />
+                <span style={{ position: 'absolute', pointerEvents: 'none', fontSize: '14px' }}>+</span>
+              </div>
             </div>
           </div>
         )}
@@ -241,6 +262,15 @@ export default function PropertiesPanel({
                   title={color === 'transparent' ? 'Transparent' : color}
                 />
               ))}
+              <div className="color-option custom-color-btn" title="Choose custom fill color">
+                <input 
+                  type="color" 
+                  value={properties.fill && properties.fill !== 'transparent' ? properties.fill : '#ffffff'} 
+                  onChange={(e) => onChangeProperty('fill', e.target.value)} 
+                  style={{ opacity: 0, width: '100%', height: '100%', cursor: 'pointer' }}
+                />
+                <span style={{ position: 'absolute', pointerEvents: 'none', fontSize: '14px' }}>+</span>
+              </div>
             </div>
           </div>
         )}
@@ -310,6 +340,60 @@ export default function PropertiesPanel({
                 Send Back
               </button>
             </div>
+          </div>
+        )}
+
+        {/* Selection Logic: Group/Lock */}
+        {!isReadOnly && (
+          <div className="property-group">
+            <h3 className="section-title">Selection Actions</h3>
+            {(selectedObject.type === 'activeSelection' || selectedObject.type === 'group') && (
+              <div className="action-row" style={{ marginBottom: '8px' }}>
+                <button 
+                  onClick={onGroup} 
+                  className="btn btn-secondary" 
+                  title="Group selected elements (Ctrl+G)"
+                  disabled={selectedObject.type !== 'activeSelection'}
+                >
+                  <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+                  </svg>
+                  Group
+                </button>
+                <button 
+                  onClick={onUngroup} 
+                  className="btn btn-secondary" 
+                  title="Ungroup selected group (Ctrl+Shift+G)"
+                  disabled={selectedObject.type !== 'group'}
+                >
+                  <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 15l5.25 5.25M4.5 4.5l5.25 5.25m7.5-5.25L12 9.75M9 15l-5.25 5.25" />
+                  </svg>
+                  Ungroup
+                </button>
+              </div>
+            )}
+            <button 
+              onClick={onToggleLock} 
+              className={`btn btn-full ${selectedObject.lockMovementX ? 'btn-danger' : 'btn-secondary'}`}
+              title="Lock element in place (Ctrl+L)"
+            >
+              {selectedObject.lockMovementX ? (
+                <>
+                  <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" style={{ marginRight: '6px' }} xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                  </svg>
+                  Unlock Element
+                </>
+              ) : (
+                <>
+                  <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" style={{ marginRight: '6px' }} xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 119 0v3.75M3.75 21.75h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H3.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                  </svg>
+                  Lock in Place
+                </>
+              )}
+            </button>
           </div>
         )}
 
