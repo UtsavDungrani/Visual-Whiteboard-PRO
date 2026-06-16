@@ -1,0 +1,36 @@
+{
+  "name": "visual-whiteboard-pro",
+  "version": "1.0.0",
+  "description": "Visual Whiteboard Pro is a real-time whiteboard for collaborative diagramming, built around a FabricJS canvas in the frontend and an Express + Socket.io backend. The current codebase already supports drawing basic shapes, live canvas sync between connected clients, and saving/loading boards from MongoDB.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UtsavDungrani/Visual-Whiteboard-PRO.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/UtsavDungrani/Visual-Whiteboard-PRO/issues"
+  },
+  "homepage": "https://github.com/UtsavDungrani/Visual-Whiteboard-PRO#readme",
+  "devDependencies": {
+    "eslint": "^10.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.4"
+  },
+  "lint-staged": {
+    "*": "prettier --write",
+    "*.{js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  }
+}
