@@ -205,7 +205,7 @@
       "label": "App()",
       "file_type": "code",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L12",
+      "source_location": "L18",
       "_origin": "ast",
       "id": "src_app_app",
       "community": 2,
@@ -382,6 +382,16 @@
       "norm_label": "topbar()"
     },
     {
+      "label": "fabric-eraser.js",
+      "file_type": "code",
+      "source_file": "frontend/src/fabric-eraser.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_fabric_eraser",
+      "community": 5,
+      "norm_label": "fabric-eraser.js"
+    },
+    {
       "label": "main.jsx",
       "file_type": "code",
       "source_file": "frontend/src/main.jsx",
@@ -390,6 +400,106 @@
       "id": "src_main",
       "community": 2,
       "norm_label": "main.jsx"
+    },
+    {
+      "label": "pathLassoSplit.js",
+      "file_type": "code",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_pathlassosplit",
+      "community": 5,
+      "norm_label": "pathlassosplit.js"
+    },
+    {
+      "label": "isPointInPolygon()",
+      "file_type": "code",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "src_pathlassosplit_ispointinpolygon",
+      "community": 5,
+      "norm_label": "ispointinpolygon()"
+    },
+    {
+      "label": "pathDataToSvgD()",
+      "file_type": "code",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "src_pathlassosplit_pathdatatosvgd",
+      "community": 5,
+      "norm_label": "pathdatatosvgd()"
+    },
+    {
+      "label": "sampleFabricPath()",
+      "file_type": "code",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L37",
+      "_origin": "ast",
+      "id": "src_pathlassosplit_samplefabricpath",
+      "community": 5,
+      "norm_label": "samplefabricpath()"
+    },
+    {
+      "label": "samplePathHitPoints()",
+      "file_type": "code",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L59",
+      "_origin": "ast",
+      "id": "src_pathlassosplit_samplepathhitpoints",
+      "community": 5,
+      "norm_label": "samplepathhitpoints()"
+    },
+    {
+      "label": "bboxCornersInPolygon()",
+      "file_type": "code",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L80",
+      "_origin": "ast",
+      "id": "src_pathlassosplit_bboxcornersinpolygon",
+      "community": 5,
+      "norm_label": "bboxcornersinpolygon()"
+    },
+    {
+      "label": "getPathSelectionMode()",
+      "file_type": "code",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L94",
+      "_origin": "ast",
+      "id": "src_pathlassosplit_getpathselectionmode",
+      "community": 5,
+      "norm_label": "getpathselectionmode()"
+    },
+    {
+      "label": "canvasPolygonToLocal()",
+      "file_type": "code",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L121",
+      "_origin": "ast",
+      "id": "src_pathlassosplit_canvaspolygontolocal",
+      "community": 5,
+      "norm_label": "canvaspolygontolocal()"
+    },
+    {
+      "label": "buildClipPolygon()",
+      "file_type": "code",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L129",
+      "_origin": "ast",
+      "id": "src_pathlassosplit_buildclippolygon",
+      "community": 5,
+      "norm_label": "buildclippolygon()"
+    },
+    {
+      "label": "splitPathWithLasso()",
+      "file_type": "code",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L148",
+      "_origin": "ast",
+      "id": "src_pathlassosplit_splitpathwithlasso",
+      "community": 5,
+      "norm_label": "splitpathwithlasso()"
     },
     {
       "label": "package.json",
@@ -998,7 +1108,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "models_elementcontext",
-      "community": 9,
+      "community": 1,
       "norm_label": "elementcontext.js"
     },
     {
@@ -1008,7 +1118,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "models_elementcontext_mongoose",
-      "community": 9,
+      "community": 1,
       "norm_label": "mongoose"
     },
     {
@@ -1018,7 +1128,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "models_elementcontext_elementcontextschema",
-      "community": 9,
+      "community": 1,
       "norm_label": "elementcontextschema"
     },
     {
@@ -1028,7 +1138,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "models_user",
-      "community": 12,
+      "community": 1,
       "norm_label": "user.js"
     },
     {
@@ -1038,7 +1148,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "models_user_mongoose",
-      "community": 12,
+      "community": 1,
       "norm_label": "mongoose"
     },
     {
@@ -1048,7 +1158,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "models_user_userschema",
-      "community": 12,
+      "community": 1,
       "norm_label": "userschema"
     },
     {
@@ -2120,6 +2230,61 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "src_app",
+      "target": "src_fabric_eraser",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "src_app",
+      "target": "src_pathlassosplit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "src_app",
+      "target": "src_pathlassosplit_getpathselectionmode",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "src_app",
+      "target": "src_pathlassosplit_ispointinpolygon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "src_app",
+      "target": "src_pathlassosplit_splitpathwithlasso",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "frontend/src/main.jsx",
       "source_location": "L3",
       "weight": 1.0,
@@ -2257,6 +2422,162 @@
       "weight": 1.0,
       "source": "frontend_index",
       "target": "src_main"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "src_pathlassosplit",
+      "target": "src_pathlassosplit_bboxcornersinpolygon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L129",
+      "weight": 1.0,
+      "source": "src_pathlassosplit",
+      "target": "src_pathlassosplit_buildclippolygon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L121",
+      "weight": 1.0,
+      "source": "src_pathlassosplit",
+      "target": "src_pathlassosplit_canvaspolygontolocal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L94",
+      "weight": 1.0,
+      "source": "src_pathlassosplit",
+      "target": "src_pathlassosplit_getpathselectionmode",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "src_pathlassosplit",
+      "target": "src_pathlassosplit_ispointinpolygon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "src_pathlassosplit",
+      "target": "src_pathlassosplit_pathdatatosvgd",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "src_pathlassosplit",
+      "target": "src_pathlassosplit_samplefabricpath",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "src_pathlassosplit",
+      "target": "src_pathlassosplit_samplepathhitpoints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L148",
+      "weight": 1.0,
+      "source": "src_pathlassosplit",
+      "target": "src_pathlassosplit_splitpathwithlasso",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L101",
+      "weight": 1.0,
+      "source": "src_pathlassosplit_getpathselectionmode",
+      "target": "src_pathlassosplit_ispointinpolygon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L73",
+      "weight": 1.0,
+      "source": "src_pathlassosplit_samplepathhitpoints",
+      "target": "src_pathlassosplit_ispointinpolygon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "src_pathlassosplit_samplefabricpath",
+      "target": "src_pathlassosplit_pathdatatosvgd",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L97",
+      "weight": 1.0,
+      "source": "src_pathlassosplit_getpathselectionmode",
+      "target": "src_pathlassosplit_samplefabricpath",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L110",
+      "weight": 1.0,
+      "source": "src_pathlassosplit_getpathselectionmode",
+      "target": "src_pathlassosplit_samplepathhitpoints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L104",
+      "weight": 1.0,
+      "source": "src_pathlassosplit_getpathselectionmode",
+      "target": "src_pathlassosplit_bboxcornersinpolygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",

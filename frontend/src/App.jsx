@@ -1091,8 +1091,9 @@ export default function App() {
             evented: false
           })
         } else if (activeTool === 'diamond') {
+          // Initialize a standard 100x100 diamond. We will scale it during mousemove.
           tempCreationShapeRef.current = new F.Polygon([
-            { x: 0, y: 0 }, { x: 1, y: 0.5 }, { x: 0, y: 1 }, { x: -1, y: 0.5 }
+            { x: 50, y: 0 }, { x: 100, y: 50 }, { x: 50, y: 100 }, { x: 0, y: 50 }
           ], {
             left: pointer.x,
             top: pointer.y,
@@ -1101,7 +1102,9 @@ export default function App() {
             strokeWidth: strokeWidth,
             strokeDashArray: [5, 5],
             selectable: false,
-            evented: false
+            evented: false,
+            scaleX: 0.01, // Start tiny
+            scaleY: 0.01
           })
         } else if (activeTool === 'arrow' || activeTool === 'line') {
           tempCreationShapeRef.current = new F.Line([pointer.x, pointer.y, pointer.x, pointer.y], {
@@ -1205,16 +1208,16 @@ export default function App() {
             const width = Math.abs(startX - pointer.x)
             const height = Math.abs(startY - pointer.y)
 
-            tempCreationShapeRef.current.set({
-              points: [
-                { x: width / 2, y: 0 },
-                { x: width, y: height / 2 },
-                { x: width / 2, y: height },
-                { x: 0, y: height / 2 }
-              ],
-              left,
-              top
-            })
+            // For Polygons in FabricJS, resetting points doesn't automatically recalculate width/height/pathOffset properly during a live render.
+            // We use standard scaling of a base shape instead of changing points dynamically.
+            if (width > 0 && height > 0) {
+              tempCreationShapeRef.current.set({
+                left,
+                top,
+                scaleX: width / 100, // scale relative to 100x100 base shape
+                scaleY: height / 100
+              })
+            }
           } else if (activeTool === 'arrow' || activeTool === 'line') {
             tempCreationShapeRef.current.set({
               x2: pointer.x,
@@ -2001,11 +2004,12 @@ export default function App() {
       lockRotation: isLocked,
       hasControls: !isLocked,
       editable: !isLocked,
-      selectable: !isLocked, // Optional: if we want it completely unselectable
       hoverCursor: isLocked ? 'default' : 'move'
     })
 
     canvas.requestRenderAll()
+    // Force React to re-render without losing scroll position by shallow-copying the reference
+    setSelectedObject(Object.assign(Object.create(Object.getPrototypeOf(activeObj)), activeObj))
     saveHistory()
     sendCanvasUpdate()
   }

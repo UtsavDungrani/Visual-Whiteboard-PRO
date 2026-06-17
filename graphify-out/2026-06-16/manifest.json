@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "frontend/src/App.jsx": {
-    "mtime": 1781518945.506974,
-    "ast_hash": "be324618e5b2aa32fcedcb0be0d20529",
+    "mtime": 1781591884.679615,
+    "ast_hash": "712c6f87327e43a917f71a4961736990",
     "semantic_hash": ""
   },
   "frontend/src/main.jsx": {
@@ -55,9 +55,9 @@
     "semantic_hash": "7145a77ed24654d9301cc22b6e9316c9"
   },
   "frontend/index.html": {
-    "mtime": 1780714615.126347,
-    "ast_hash": "04c460055a7c06b52bf50ee8b5e72ec5",
-    "semantic_hash": "04c460055a7c06b52bf50ee8b5e72ec5"
+    "mtime": 1781590791.3260634,
+    "ast_hash": "ba83513762ea88f479eadec1215f2465",
+    "semantic_hash": ""
   },
   "frontend/src/components/CanvasControls.jsx": {
     "mtime": 1781494339.6462417,
@@ -65,13 +65,13 @@
     "semantic_hash": ""
   },
   "frontend/src/components/PropertiesPanel.jsx": {
-    "mtime": 1781516541.1021466,
-    "ast_hash": "f6155692290f3d28811974f9eec9677e",
+    "mtime": 1781591374.3377573,
+    "ast_hash": "71a4979952be3f083f06e8f354ae5ba1",
     "semantic_hash": ""
   },
   "frontend/src/components/Toolbar.jsx": {
-    "mtime": 1781516532.3285491,
-    "ast_hash": "64593f84f7e52cbfa7573201e77da746",
+    "mtime": 1781588714.391954,
+    "ast_hash": "1f44e44f2034a6ee570578ccd554b854",
     "semantic_hash": ""
   },
   "frontend/src/components/Topbar.jsx": {
@@ -207,6 +207,16 @@
   "server/models/User.js": {
     "mtime": 1781514005.1480267,
     "ast_hash": "71ade02b8a256b45c90b25663a1762e2",
+    "semantic_hash": ""
+  },
+  "frontend/src/fabric-eraser.js": {
+    "mtime": 1781590933.0932899,
+    "ast_hash": "174baea0583ee2bd2f1c114b59d6de5d",
+    "semantic_hash": ""
+  },
+  "frontend/src/pathLassoSplit.js": {
+    "mtime": 1781591861.8826172,
+    "ast_hash": "10c8830cf1a60ed1282f1759720710a6",
     "semantic_hash": ""
   }
 }

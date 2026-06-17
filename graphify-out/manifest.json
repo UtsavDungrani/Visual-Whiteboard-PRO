@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "frontend/src/App.jsx": {
-    "mtime": 1781591884.679615,
-    "ast_hash": "712c6f87327e43a917f71a4961736990",
+    "mtime": 1781618742.6255715,
+    "ast_hash": "2960d3649a38159e878956fb0422f74a",
     "semantic_hash": ""
   },
   "frontend/src/main.jsx": {
@@ -15,8 +15,8 @@
     "semantic_hash": "1805ad7bae3bf603446eed7431bab36a"
   },
   "server/index.js": {
-    "mtime": 1781518289.0956361,
-    "ast_hash": "c22dab7cf24b6c0155b136c86ff23575",
+    "mtime": 1781613894.2041378,
+    "ast_hash": "e831366b7b7084e87037128fd4033b31",
     "semantic_hash": ""
   },
   "server/models/Whiteboard.js": {
@@ -25,8 +25,8 @@
     "semantic_hash": ""
   },
   "server/package.json": {
-    "mtime": 1781514002.1952488,
-    "ast_hash": "7e0e66ac60c4769df43a0d3efb6f3718",
+    "mtime": 1781604719.1088278,
+    "ast_hash": "cf81a2d2ad815802e22e9fd29fc9e36f",
     "semantic_hash": ""
   },
   ".agents/rules/graphify.md": {
@@ -45,9 +45,9 @@
     "semantic_hash": "061c65932a362b25164f1fe90fbf79b4"
   },
   "TASKS.md": {
-    "mtime": 1780713905.9283636,
-    "ast_hash": "cfce3ab143d1ed371cc2fe3725c6f4cd",
-    "semantic_hash": "cfce3ab143d1ed371cc2fe3725c6f4cd"
+    "mtime": 1781614078.0020692,
+    "ast_hash": "0644edb5c73584f245a7086ef907cecc",
+    "semantic_hash": ""
   },
   "description.txt": {
     "mtime": 1780713694.1014004,
@@ -65,18 +65,18 @@
     "semantic_hash": ""
   },
   "frontend/src/components/PropertiesPanel.jsx": {
-    "mtime": 1781591374.3377573,
-    "ast_hash": "71a4979952be3f083f06e8f354ae5ba1",
+    "mtime": 1781613176.8477075,
+    "ast_hash": "fe01655ed0f7bbd5b2664aa79389cc01",
     "semantic_hash": ""
   },
   "frontend/src/components/Toolbar.jsx": {
-    "mtime": 1781588714.391954,
-    "ast_hash": "1f44e44f2034a6ee570578ccd554b854",
+    "mtime": 1781609381.483635,
+    "ast_hash": "c6b965e4ca351479571246998c3864e1",
     "semantic_hash": ""
   },
   "frontend/src/components/Topbar.jsx": {
-    "mtime": 1781514215.960262,
-    "ast_hash": "1de5839fa219d799e63a37a2acb06e62",
+    "mtime": 1781606779.5153008,
+    "ast_hash": "13f20fc20379a8dc23639c1973dd3e11",
     "semantic_hash": ""
   },
   "frontend/src/components/ExportModal.jsx": {
@@ -105,8 +105,8 @@
     "semantic_hash": ""
   },
   "server/ai.service.js": {
-    "mtime": 1781503996.288661,
-    "ast_hash": "2a62bfc6cd7c5da6cf8554c542ab7bf3",
+    "mtime": 1781613825.9360116,
+    "ast_hash": "dbc1bbd24f8c31d32bbfe8b49cf88983",
     "semantic_hash": ""
   },
   ".husky/_/applypatch-msg": {
@@ -217,6 +217,31 @@
   "frontend/src/pathLassoSplit.js": {
     "mtime": 1781591861.8826172,
     "ast_hash": "10c8830cf1a60ed1282f1759720710a6",
+    "semantic_hash": ""
+  },
+  ".gemini/settings.json": {
+    "mtime": 1781603670.6522298,
+    "ast_hash": "ddc6069a85a1acc06096e06bcd8087ac",
+    "semantic_hash": ""
+  },
+  "eslint.config.mjs": {
+    "mtime": 1781600400.1912048,
+    "ast_hash": "c852809e6f8ba47c0fa9aa9e18ecbf33",
+    "semantic_hash": ""
+  },
+  "server/tests/auth.test.js": {
+    "mtime": 1781604955.863215,
+    "ast_hash": "53e967bbc5a6a5a286f51713fa1b33b0",
+    "semantic_hash": ""
+  },
+  "server/tests/health.test.js": {
+    "mtime": 1781604871.4049041,
+    "ast_hash": "a67d716e972a95d04bf5ced830abeca0",
+    "semantic_hash": ""
+  },
+  "GEMINI.md": {
+    "mtime": 1781603670.6502314,
+    "ast_hash": "8a6643a420fdad6bfb583523bc6cef16",
     "semantic_hash": ""
   }
 }

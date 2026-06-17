@@ -32,6 +32,16 @@
       "norm_label": "husky.sh script"
     },
     {
+      "label": "eslint.config.mjs",
+      "file_type": "code",
+      "source_file": "eslint.config.mjs",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "eslint_config",
+      "community": 14,
+      "norm_label": "eslint.config.mjs"
+    },
+    {
       "label": "package.json",
       "file_type": "code",
       "source_file": "frontend/package.json",
@@ -408,7 +418,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_pathlassosplit",
-      "community": 5,
+      "community": 12,
       "norm_label": "pathlassosplit.js"
     },
     {
@@ -418,7 +428,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_pathlassosplit_ispointinpolygon",
-      "community": 5,
+      "community": 12,
       "norm_label": "ispointinpolygon()"
     },
     {
@@ -428,7 +438,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_pathlassosplit_pathdatatosvgd",
-      "community": 5,
+      "community": 12,
       "norm_label": "pathdatatosvgd()"
     },
     {
@@ -438,7 +448,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "src_pathlassosplit_samplefabricpath",
-      "community": 5,
+      "community": 12,
       "norm_label": "samplefabricpath()"
     },
     {
@@ -448,7 +458,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "src_pathlassosplit_samplepathhitpoints",
-      "community": 5,
+      "community": 12,
       "norm_label": "samplepathhitpoints()"
     },
     {
@@ -458,7 +468,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "src_pathlassosplit_bboxcornersinpolygon",
-      "community": 5,
+      "community": 12,
       "norm_label": "bboxcornersinpolygon()"
     },
     {
@@ -468,7 +478,7 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "src_pathlassosplit_getpathselectionmode",
-      "community": 5,
+      "community": 12,
       "norm_label": "getpathselectionmode()"
     },
     {
@@ -478,7 +488,7 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "src_pathlassosplit_canvaspolygontolocal",
-      "community": 5,
+      "community": 12,
       "norm_label": "canvaspolygontolocal()"
     },
     {
@@ -488,7 +498,7 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "src_pathlassosplit_buildclippolygon",
-      "community": 5,
+      "community": 12,
       "norm_label": "buildclippolygon()"
     },
     {
@@ -775,7 +785,7 @@
       "label": "cleanupLayout()",
       "file_type": "code",
       "source_file": "server/ai.service.js",
-      "source_location": "L11",
+      "source_location": "L13",
       "_origin": "ast",
       "id": "server_ai_service_cleanuplayout",
       "community": 1,
@@ -785,7 +795,7 @@
       "label": "architectureAssist()",
       "file_type": "code",
       "source_file": "server/ai.service.js",
-      "source_location": "L145",
+      "source_location": "L141",
       "_origin": "ast",
       "id": "server_ai_service_architectureassist",
       "community": 1,
@@ -848,7 +858,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "server_index_app",
-      "community": 1,
+      "community": 9,
       "norm_label": "app"
     },
     {
@@ -942,10 +952,20 @@
       "norm_label": "redis"
     },
     {
-      "label": "multer",
+      "label": "{ createAdapter }",
       "file_type": "code",
       "source_file": "server/index.js",
       "source_location": "L16",
+      "_origin": "ast",
+      "id": "server_index_createadapter",
+      "community": 1,
+      "norm_label": "{ createadapter }"
+    },
+    {
+      "label": "multer",
+      "file_type": "code",
+      "source_file": "server/index.js",
+      "source_location": "L17",
       "_origin": "ast",
       "id": "server_index_multer",
       "community": 1,
@@ -955,7 +975,7 @@
       "label": "path",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L17",
+      "source_location": "L18",
       "_origin": "ast",
       "id": "server_index_path",
       "community": 1,
@@ -965,7 +985,7 @@
       "label": "fs",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L18",
+      "source_location": "L19",
       "_origin": "ast",
       "id": "server_index_fs",
       "community": 1,
@@ -975,7 +995,7 @@
       "label": "uploadsDir",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L25",
+      "source_location": "L26",
       "_origin": "ast",
       "id": "server_index_uploadsdir",
       "community": 1,
@@ -985,7 +1005,7 @@
       "label": "storage",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L31",
+      "source_location": "L32",
       "_origin": "ast",
       "id": "server_index_storage",
       "community": 1,
@@ -995,7 +1015,7 @@
       "label": "upload",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L40",
+      "source_location": "L41",
       "_origin": "ast",
       "id": "server_index_upload",
       "community": 1,
@@ -1005,7 +1025,7 @@
       "label": "whiteboards",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L85",
+      "source_location": "L95",
       "_origin": "ast",
       "id": "server_index_whiteboards",
       "community": 1,
@@ -1015,7 +1035,7 @@
       "label": "authLimiter",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L100",
+      "source_location": "L110",
       "_origin": "ast",
       "id": "server_index_authlimiter",
       "community": 1,
@@ -1025,7 +1045,7 @@
       "label": "aiLimiter",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L412",
+      "source_location": "L422",
       "_origin": "ast",
       "id": "server_index_ailimiter",
       "community": 1,
@@ -1035,7 +1055,7 @@
       "label": "httpServer",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L573",
+      "source_location": "L583",
       "_origin": "ast",
       "id": "server_index_httpserver",
       "community": 1,
@@ -1045,7 +1065,7 @@
       "label": "io",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L574",
+      "source_location": "L584",
       "_origin": "ast",
       "id": "server_index_io",
       "community": 1,
@@ -1055,7 +1075,7 @@
       "label": "activeUsers",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L588",
+      "source_location": "L632",
       "_origin": "ast",
       "id": "server_index_activeusers",
       "community": 1,
@@ -1065,7 +1085,7 @@
       "label": "broadcastRoomUsers()",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L590",
+      "source_location": "L634",
       "_origin": "ast",
       "id": "server_index_broadcastroomusers",
       "community": 1,
@@ -1075,7 +1095,7 @@
       "label": "startServer()",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L704",
+      "source_location": "L748",
       "_origin": "ast",
       "id": "server_index_startserver",
       "community": 1,
@@ -1138,7 +1158,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "models_user",
-      "community": 1,
+      "community": 9,
       "norm_label": "user.js"
     },
     {
@@ -1148,7 +1168,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "models_user_mongoose",
-      "community": 1,
+      "community": 9,
       "norm_label": "mongoose"
     },
     {
@@ -1158,7 +1178,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "models_user_userschema",
-      "community": 1,
+      "community": 9,
       "norm_label": "userschema"
     },
     {
@@ -1262,20 +1282,40 @@
       "norm_label": "start"
     },
     {
+      "label": "test",
+      "file_type": "code",
+      "source_file": "server/package.json",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "server_package_scripts_test",
+      "community": 3,
+      "norm_label": "test"
+    },
+    {
       "label": "dependencies",
       "file_type": "code",
       "source_file": "server/package.json",
-      "source_location": "L9",
+      "source_location": "L10",
       "_origin": "ast",
       "id": "server_package_dependencies",
       "community": 3,
       "norm_label": "dependencies"
     },
     {
+      "label": "@socket.io/redis-adapter",
+      "file_type": "code",
+      "source_file": "server/package.json",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "server_package_dependencies_socket_io_redis_adapter",
+      "community": 3,
+      "norm_label": "@socket.io/redis-adapter"
+    },
+    {
       "label": "bcryptjs",
       "file_type": "code",
       "source_file": "server/package.json",
-      "source_location": "L10",
+      "source_location": "L12",
       "_origin": "ast",
       "id": "server_package_dependencies_bcryptjs",
       "community": 3,
@@ -1285,7 +1325,7 @@
       "label": "cors",
       "file_type": "code",
       "source_file": "server/package.json",
-      "source_location": "L11",
+      "source_location": "L13",
       "_origin": "ast",
       "id": "server_package_dependencies_cors",
       "community": 3,
@@ -1295,7 +1335,7 @@
       "label": "dotenv",
       "file_type": "code",
       "source_file": "server/package.json",
-      "source_location": "L12",
+      "source_location": "L14",
       "_origin": "ast",
       "id": "server_package_dependencies_dotenv",
       "community": 3,
@@ -1305,7 +1345,7 @@
       "label": "express",
       "file_type": "code",
       "source_file": "server/package.json",
-      "source_location": "L13",
+      "source_location": "L15",
       "_origin": "ast",
       "id": "server_package_dependencies_express",
       "community": 3,
@@ -1315,7 +1355,7 @@
       "label": "express-rate-limit",
       "file_type": "code",
       "source_file": "server/package.json",
-      "source_location": "L14",
+      "source_location": "L16",
       "_origin": "ast",
       "id": "server_package_dependencies_express_rate_limit",
       "community": 3,
@@ -1325,7 +1365,7 @@
       "label": "jsonwebtoken",
       "file_type": "code",
       "source_file": "server/package.json",
-      "source_location": "L15",
+      "source_location": "L17",
       "_origin": "ast",
       "id": "server_package_dependencies_jsonwebtoken",
       "community": 3,
@@ -1335,7 +1375,7 @@
       "label": "mongoose",
       "file_type": "code",
       "source_file": "server/package.json",
-      "source_location": "L16",
+      "source_location": "L18",
       "_origin": "ast",
       "id": "server_package_dependencies_mongoose",
       "community": 3,
@@ -1345,7 +1385,7 @@
       "label": "multer",
       "file_type": "code",
       "source_file": "server/package.json",
-      "source_location": "L17",
+      "source_location": "L19",
       "_origin": "ast",
       "id": "server_package_dependencies_multer",
       "community": 3,
@@ -1355,7 +1395,7 @@
       "label": "redis",
       "file_type": "code",
       "source_file": "server/package.json",
-      "source_location": "L18",
+      "source_location": "L20",
       "_origin": "ast",
       "id": "server_package_dependencies_redis",
       "community": 3,
@@ -1365,11 +1405,121 @@
       "label": "socket.io",
       "file_type": "code",
       "source_file": "server/package.json",
-      "source_location": "L19",
+      "source_location": "L21",
       "_origin": "ast",
       "id": "server_package_dependencies_socket_io",
       "community": 3,
       "norm_label": "socket.io"
+    },
+    {
+      "label": "devDependencies",
+      "file_type": "code",
+      "source_file": "server/package.json",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "server_package_devdependencies",
+      "community": 3,
+      "norm_label": "devdependencies"
+    },
+    {
+      "label": "jest",
+      "file_type": "code",
+      "source_file": "server/package.json",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "server_package_devdependencies_jest",
+      "community": 3,
+      "norm_label": "jest"
+    },
+    {
+      "label": "supertest",
+      "file_type": "code",
+      "source_file": "server/package.json",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "server_package_devdependencies_supertest",
+      "community": 3,
+      "norm_label": "supertest"
+    },
+    {
+      "label": "auth.test.js",
+      "file_type": "code",
+      "source_file": "server/tests/auth.test.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_auth_test",
+      "community": 9,
+      "norm_label": "auth.test.js"
+    },
+    {
+      "label": "request",
+      "file_type": "code",
+      "source_file": "server/tests/auth.test.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_auth_test_request",
+      "community": 9,
+      "norm_label": "request"
+    },
+    {
+      "label": "{ app }",
+      "file_type": "code",
+      "source_file": "server/tests/auth.test.js",
+      "source_location": "L2",
+      "_origin": "ast",
+      "id": "tests_auth_test_app",
+      "community": 9,
+      "norm_label": "{ app }"
+    },
+    {
+      "label": "mongoose",
+      "file_type": "code",
+      "source_file": "server/tests/auth.test.js",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "tests_auth_test_mongoose",
+      "community": 9,
+      "norm_label": "mongoose"
+    },
+    {
+      "label": "User",
+      "file_type": "code",
+      "source_file": "server/tests/auth.test.js",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "tests_auth_test_user",
+      "community": 9,
+      "norm_label": "user"
+    },
+    {
+      "label": "health.test.js",
+      "file_type": "code",
+      "source_file": "server/tests/health.test.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_health_test",
+      "community": 9,
+      "norm_label": "health.test.js"
+    },
+    {
+      "label": "request",
+      "file_type": "code",
+      "source_file": "server/tests/health.test.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_health_test_request",
+      "community": 9,
+      "norm_label": "request"
+    },
+    {
+      "label": "{ app }",
+      "file_type": "code",
+      "source_file": "server/tests/health.test.js",
+      "source_location": "L2",
+      "_origin": "ast",
+      "id": "tests_health_test_app",
+      "community": 9,
+      "norm_label": "{ app }"
     },
     {
       "label": "graphify.md",
@@ -1429,6 +1579,26 @@
       "_origin": "ast",
       "id": "github_copilot_instructions_graphify",
       "community": 11,
+      "norm_label": "graphify"
+    },
+    {
+      "label": "GEMINI.md",
+      "file_type": "document",
+      "source_file": "GEMINI.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "gemini",
+      "community": 13,
+      "norm_label": "gemini.md"
+    },
+    {
+      "label": "graphify",
+      "file_type": "document",
+      "source_file": "GEMINI.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "gemini_graphify",
+      "community": 13,
       "norm_label": "graphify"
     },
     {
@@ -2233,9 +2403,9 @@
       "source_file": "frontend/src/App.jsx",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_app",
-      "target": "src_fabric_eraser",
-      "confidence_score": 1.0
+      "target": "src_fabric_eraser"
     },
     {
       "relation": "imports_from",
@@ -2244,9 +2414,9 @@
       "source_file": "frontend/src/App.jsx",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_app",
-      "target": "src_pathlassosplit",
-      "confidence_score": 1.0
+      "target": "src_pathlassosplit"
     },
     {
       "relation": "imports",
@@ -2255,9 +2425,9 @@
       "source_file": "frontend/src/App.jsx",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_app",
-      "target": "src_pathlassosplit_getpathselectionmode",
-      "confidence_score": 1.0
+      "target": "src_pathlassosplit_getpathselectionmode"
     },
     {
       "relation": "imports",
@@ -2266,9 +2436,9 @@
       "source_file": "frontend/src/App.jsx",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_app",
-      "target": "src_pathlassosplit_ispointinpolygon",
-      "confidence_score": 1.0
+      "target": "src_pathlassosplit_ispointinpolygon"
     },
     {
       "relation": "imports",
@@ -2277,9 +2447,9 @@
       "source_file": "frontend/src/App.jsx",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_app",
-      "target": "src_pathlassosplit_splitpathwithlasso",
-      "confidence_score": 1.0
+      "target": "src_pathlassosplit_splitpathwithlasso"
     },
     {
       "relation": "imports_from",
@@ -2429,9 +2599,9 @@
       "source_file": "frontend/src/pathLassoSplit.js",
       "source_location": "L80",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_pathlassosplit",
-      "target": "src_pathlassosplit_bboxcornersinpolygon",
-      "confidence_score": 1.0
+      "target": "src_pathlassosplit_bboxcornersinpolygon"
     },
     {
       "relation": "contains",
@@ -2439,9 +2609,9 @@
       "source_file": "frontend/src/pathLassoSplit.js",
       "source_location": "L129",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_pathlassosplit",
-      "target": "src_pathlassosplit_buildclippolygon",
-      "confidence_score": 1.0
+      "target": "src_pathlassosplit_buildclippolygon"
     },
     {
       "relation": "contains",
@@ -2449,9 +2619,9 @@
       "source_file": "frontend/src/pathLassoSplit.js",
       "source_location": "L121",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_pathlassosplit",
-      "target": "src_pathlassosplit_canvaspolygontolocal",
-      "confidence_score": 1.0
+      "target": "src_pathlassosplit_canvaspolygontolocal"
     },
     {
       "relation": "contains",
@@ -2459,9 +2629,9 @@
       "source_file": "frontend/src/pathLassoSplit.js",
       "source_location": "L94",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_pathlassosplit",
-      "target": "src_pathlassosplit_getpathselectionmode",
-      "confidence_score": 1.0
+      "target": "src_pathlassosplit_getpathselectionmode"
     },
     {
       "relation": "contains",
@@ -2469,9 +2639,9 @@
       "source_file": "frontend/src/pathLassoSplit.js",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_pathlassosplit",
-      "target": "src_pathlassosplit_ispointinpolygon",
-      "confidence_score": 1.0
+      "target": "src_pathlassosplit_ispointinpolygon"
     },
     {
       "relation": "contains",
@@ -2479,9 +2649,9 @@
       "source_file": "frontend/src/pathLassoSplit.js",
       "source_location": "L21",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_pathlassosplit",
-      "target": "src_pathlassosplit_pathdatatosvgd",
-      "confidence_score": 1.0
+      "target": "src_pathlassosplit_pathdatatosvgd"
     },
     {
       "relation": "contains",
@@ -2489,9 +2659,9 @@
       "source_file": "frontend/src/pathLassoSplit.js",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_pathlassosplit",
-      "target": "src_pathlassosplit_samplefabricpath",
-      "confidence_score": 1.0
+      "target": "src_pathlassosplit_samplefabricpath"
     },
     {
       "relation": "contains",
@@ -2499,9 +2669,9 @@
       "source_file": "frontend/src/pathLassoSplit.js",
       "source_location": "L59",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_pathlassosplit",
-      "target": "src_pathlassosplit_samplepathhitpoints",
-      "confidence_score": 1.0
+      "target": "src_pathlassosplit_samplepathhitpoints"
     },
     {
       "relation": "contains",
@@ -2509,9 +2679,9 @@
       "source_file": "frontend/src/pathLassoSplit.js",
       "source_location": "L148",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_pathlassosplit",
-      "target": "src_pathlassosplit_splitpathwithlasso",
-      "confidence_score": 1.0
+      "target": "src_pathlassosplit_splitpathwithlasso"
     },
     {
       "relation": "calls",
@@ -2520,9 +2690,9 @@
       "source_file": "frontend/src/pathLassoSplit.js",
       "source_location": "L101",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_pathlassosplit_getpathselectionmode",
-      "target": "src_pathlassosplit_ispointinpolygon",
-      "confidence_score": 1.0
+      "target": "src_pathlassosplit_ispointinpolygon"
     },
     {
       "relation": "calls",
@@ -2531,9 +2701,9 @@
       "source_file": "frontend/src/pathLassoSplit.js",
       "source_location": "L73",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_pathlassosplit_samplepathhitpoints",
-      "target": "src_pathlassosplit_ispointinpolygon",
-      "confidence_score": 1.0
+      "target": "src_pathlassosplit_ispointinpolygon"
     },
     {
       "relation": "calls",
@@ -2542,9 +2712,9 @@
       "source_file": "frontend/src/pathLassoSplit.js",
       "source_location": "L42",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_pathlassosplit_samplefabricpath",
-      "target": "src_pathlassosplit_pathdatatosvgd",
-      "confidence_score": 1.0
+      "target": "src_pathlassosplit_pathdatatosvgd"
     },
     {
       "relation": "calls",
@@ -2553,9 +2723,9 @@
       "source_file": "frontend/src/pathLassoSplit.js",
       "source_location": "L97",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_pathlassosplit_getpathselectionmode",
-      "target": "src_pathlassosplit_samplefabricpath",
-      "confidence_score": 1.0
+      "target": "src_pathlassosplit_samplefabricpath"
     },
     {
       "relation": "calls",
@@ -2564,9 +2734,9 @@
       "source_file": "frontend/src/pathLassoSplit.js",
       "source_location": "L110",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_pathlassosplit_getpathselectionmode",
-      "target": "src_pathlassosplit_samplepathhitpoints",
-      "confidence_score": 1.0
+      "target": "src_pathlassosplit_samplepathhitpoints"
     },
     {
       "relation": "calls",
@@ -2575,9 +2745,9 @@
       "source_file": "frontend/src/pathLassoSplit.js",
       "source_location": "L104",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_pathlassosplit_getpathselectionmode",
-      "target": "src_pathlassosplit_bboxcornersinpolygon",
-      "confidence_score": 1.0
+      "target": "src_pathlassosplit_bboxcornersinpolygon"
     },
     {
       "relation": "contains",
@@ -3030,6 +3200,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "server/index.js",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "server_index",
+      "target": "server_index_createadapter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/index.js",
       "source_location": "L9",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -3227,6 +3407,50 @@
       "target": "server_index_whiteboards"
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/auth.test.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "tests_auth_test",
+      "target": "server_index",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/health.test.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "tests_health_test",
+      "target": "server_index",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/auth.test.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "tests_auth_test",
+      "target": "server_index_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/health.test.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "tests_health_test",
+      "target": "server_index_app",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "server/middleware/auth.js",
@@ -3277,6 +3501,17 @@
       "target": "models_user_userschema"
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/auth.test.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "tests_auth_test",
+      "target": "models_user",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "references",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
@@ -3315,6 +3550,16 @@
       "confidence_score": 1.0,
       "source": "server_package",
       "target": "server_package_dependencies"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/package.json",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "server_package",
+      "target": "server_package_devdependencies",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -3375,6 +3620,16 @@
       "confidence_score": 1.0,
       "source": "server_package_scripts",
       "target": "server_package_scripts_start"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/package.json",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "server_package_scripts",
+      "target": "server_package_scripts_test",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -3479,6 +3734,96 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "server/package.json",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "server_package_dependencies",
+      "target": "server_package_dependencies_socket_io_redis_adapter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/package.json",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "server_package_devdependencies",
+      "target": "server_package_devdependencies_jest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/package.json",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "server_package_devdependencies",
+      "target": "server_package_devdependencies_supertest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/auth.test.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "tests_auth_test",
+      "target": "tests_auth_test_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/auth.test.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tests_auth_test",
+      "target": "tests_auth_test_mongoose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/auth.test.js",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "tests_auth_test",
+      "target": "tests_auth_test_request",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/auth.test.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "tests_auth_test",
+      "target": "tests_auth_test_user",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/health.test.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "tests_health_test",
+      "target": "tests_health_test_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/health.test.js",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "tests_health_test",
+      "target": "tests_health_test_request",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": ".agents/rules/graphify.md",
       "source_location": "L6",
       "weight": 1.0,
@@ -3515,6 +3860,16 @@
       "confidence_score": 1.0,
       "source": "github_copilot_instructions",
       "target": "github_copilot_instructions_graphify"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "GEMINI.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "gemini",
+      "target": "gemini_graphify",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -3968,5 +4323,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "9fc7abe36f2b17b35609bccaea83d9346fc658ff"
+  "built_at_commit": "66c54212276782797f54a5dbed6e48d9ab0812c8"
 }

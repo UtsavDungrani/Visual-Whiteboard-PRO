@@ -1,11 +1,11 @@
-# Graph Report - Visual Whiteboard Pro  (2026-06-15)
+# Graph Report - Visual Whiteboard Pro  (2026-06-16)
 
 ## Corpus Check
-- 40 files · ~24,885 words
+- 42 files · ~29,753 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 171 nodes · 186 edges · 13 communities (9 shown, 4 thin omitted)
+- 182 nodes · 206 edges · 11 communities (9 shown, 2 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
@@ -24,22 +24,20 @@
 - [[_COMMUNITY_Database Schema & Persistence|Database Schema & Persistence]]
 - [[_COMMUNITY_Graphify Knowledge Graph Configuration|Graphify Knowledge Graph Configuration]]
 - [[_COMMUNITY_Community 8|Community 8]]
-- [[_COMMUNITY_Community 9|Community 9]]
 - [[_COMMUNITY_Community 10|Community 10]]
 - [[_COMMUNITY_Community 11|Community 11]]
-- [[_COMMUNITY_Community 12|Community 12]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `Visual Whiteboard Pro` - 16 edges
 2. `Project Description and Requirements` - 12 edges
 3. `Visual Whiteboard Pro — Phased Task Breakdown` - 10 edges
 4. `Drawing Canvas` - 8 edges
-5. `scripts` - 5 edges
-6. `scripts` - 4 edges
-7. `App()` - 4 edges
-8. `repository` - 3 edges
-9. `Real-time Collaboration` - 3 edges
-10. `MongoDB Storage` - 3 edges
+5. `getPathSelectionMode()` - 6 edges
+6. `scripts` - 5 edges
+7. `scripts` - 4 edges
+8. `App()` - 4 edges
+9. `isPointInPolygon()` - 4 edges
+10. `sampleFabricPath()` - 3 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `App()` --references--> `Real-time Collaboration`  [EXTRACTED]
@@ -50,15 +48,15 @@
 ## Import Cycles
 - None detected.
 
-## Communities (13 total, 4 thin omitted)
+## Communities (11 total, 2 thin omitted)
 
 ### Community 0 - "Frontend Package Configuration"
 Cohesion: 0.12
 Nodes (15): dependencies, jspdf, jszip, react, react-dom, socket.io-client, devDependencies, vite (+7 more)
 
 ### Community 1 - "Backend Server Initialization"
-Cohesion: 0.06
-Nodes (32): MongoDB Storage, jwt, mongoose, WhiteboardSchema, architectureAssist(), cleanupLayout(), activeUsers, aiLimiter (+24 more)
+Cohesion: 0.05
+Nodes (36): MongoDB Storage, jwt, ElementContextSchema, mongoose, mongoose, UserSchema, mongoose, WhiteboardSchema (+28 more)
 
 ### Community 2 - "Editor Specifications & Features"
 Cohesion: 0.21
@@ -73,8 +71,8 @@ Cohesion: 0.12
 Nodes (16): API Surface, Configuration, Current Limitations, Data Model, Future Improvements, How It Works, Local Setup, Notes For Development (+8 more)
 
 ### Community 5 - "Frontend Application & Collaboration UI"
-Cohesion: 0.16
-Nodes (9): AssistPanel(), CanvasControls(), ContextPanel(), LANGUAGES, ExportModal(), PageStrip(), PropertiesPanel(), Toolbar() (+1 more)
+Cohesion: 0.11
+Nodes (16): AssistPanel(), CanvasControls(), ContextPanel(), LANGUAGES, ExportModal(), PageStrip(), PropertiesPanel(), Toolbar() (+8 more)
 
 ### Community 6 - "Database Schema & Persistence"
 Cohesion: 0.20
@@ -91,7 +89,7 @@ Nodes (6): husky.sh script, devDependencies, eslint, husky, lint-staged, prettie
 ## Knowledge Gaps
 - **109 isolated node(s):** `husky.sh script`, `name`, `version`, `private`, `dev` (+104 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **4 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **2 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -99,9 +97,9 @@ _Questions this graph is uniquely positioned to answer:_
 - **Why does `Project Description and Requirements` connect `Editor Specifications & Features` to `Backend Server Initialization`?**
   _High betweenness centrality (0.172) - this node is a cross-community bridge._
 - **Why does `Real-time Collaboration` connect `Editor Specifications & Features` to `Backend Server Initialization`?**
-  _High betweenness centrality (0.138) - this node is a cross-community bridge._
+  _High betweenness centrality (0.161) - this node is a cross-community bridge._
 - **Why does `App()` connect `Editor Specifications & Features` to `Frontend Application & Collaboration UI`?**
-  _High betweenness centrality (0.115) - this node is a cross-community bridge._
+  _High betweenness centrality (0.157) - this node is a cross-community bridge._
 - **Are the 6 inferred relationships involving `Drawing Canvas` (e.g. with `Architecture Assist AI` and `Context Layer`) actually correct?**
   _`Drawing Canvas` has 6 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `husky.sh script`, `name`, `version` to the rest of the system?**
@@ -109,4 +107,4 @@ _Questions this graph is uniquely positioned to answer:_
 - **Should `Frontend Package Configuration` be split into smaller, more focused modules?**
   _Cohesion score 0.125 - nodes in this community are weakly interconnected._
 - **Should `Backend Server Initialization` be split into smaller, more focused modules?**
-  _Cohesion score 0.05689900426742532 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.048625792811839326 - nodes in this community are weakly interconnected._
