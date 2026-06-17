@@ -734,6 +734,11 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("board:structure-update", ({ roomId, pages, mode, pageSize }) => {
+    const room = roomId || "global";
+    socket.to(room).emit("board:structure-update", { pages, mode, pageSize });
+  });
+
   socket.on("disconnect", () => {
     const u = activeUsers.get(socket.id);
     if (u) {

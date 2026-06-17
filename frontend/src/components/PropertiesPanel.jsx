@@ -39,10 +39,51 @@ export default function PropertiesPanel({
 
   if (activeTool === 'draw') {
     const brushTypes = [
-      { id: 'pencil', label: 'Pencil', icon: '✏️', desc: 'Fine line drawing' },
-      { id: 'pen', label: 'Felt Pen', icon: '🖊️', desc: 'Thicker annotation lines' },
-      { id: 'highlighter', label: 'Highlighter', icon: '🖍️', desc: 'Semi-transparent highlighting' },
-      { id: 'eraser', label: 'Eraser', icon: '🧹', desc: 'Erase drawings and paths' },
+      { 
+        id: 'pencil', 
+        label: 'Pencil', 
+        icon: (
+          <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+          </svg>
+        ), 
+        desc: 'Fine line drawing' 
+      },
+      { 
+        id: 'pen', 
+        label: 'Felt Pen', 
+        icon: (
+          <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L15.5 3.5z" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l3 3" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 10l3 3" />
+          </svg>
+        ), 
+        desc: 'Thicker annotation lines' 
+      },
+      { 
+        id: 'highlighter', 
+        label: 'Highlighter', 
+        icon: (
+          <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 11l.5 5.5L3 21l1.5-5.5.5-4.5h4z" />
+            <rect x="7" y="10" width="12" height="6" transform="rotate(-45 7 10)" fill="currentColor" opacity="0.3" stroke="none" />
+          </svg>
+        ), 
+        desc: 'Semi-transparent highlighting' 
+      },
+      { 
+        id: 'eraser', 
+        label: 'Eraser', 
+        icon: (
+          <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path d="M20 20H7L3 16C2 15 2 13.5 3 12.5L12.5 3C13.5 2 15 2 16 3L21 8C22 9 22 10.5 21 11.5L12 20.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M17 7L12 12" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        ), 
+        desc: 'Erase drawings and paths' 
+      },
     ]
 
     return (
@@ -77,7 +118,7 @@ export default function PropertiesPanel({
                   }}
                   title={t.desc}
                 >
-                  <span style={{ fontSize: '20px' }}>{t.icon}</span>
+                  <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{t.icon}</span>
                   <span>{t.label}</span>
                 </button>
               ))}
@@ -98,14 +139,18 @@ export default function PropertiesPanel({
                     title={color}
                   />
                 ))}
-                <div className="color-option custom-color-btn" title="Choose custom brush color">
+                <div 
+                  className={`color-option custom-color-btn ${!strokeColors.includes(properties.stroke) ? 'active' : ''}`} 
+                  title="Choose custom brush color"
+                  style={{ backgroundColor: !strokeColors.includes(properties.stroke) ? properties.stroke : undefined }}
+                >
                   <input 
                     type="color" 
                     value={properties.stroke || '#000000'} 
                     onChange={(e) => onChangeProperty('stroke', e.target.value)} 
                     style={{ opacity: 0, width: '100%', height: '100%', cursor: 'pointer' }}
                   />
-                  <span style={{ position: 'absolute', pointerEvents: 'none', fontSize: '14px' }}>+</span>
+                  <span style={{ position: 'absolute', pointerEvents: 'none', fontSize: '14px', color: !strokeColors.includes(properties.stroke) ? 'white' : 'inherit' }}>+</span>
                 </div>
               </div>
             </div>
@@ -155,8 +200,8 @@ export default function PropertiesPanel({
             <div
               style={{
                 width: '80%',
-                height: drawType === 'eraser' ? '72px' : '28px',
-                borderRadius: drawType === 'eraser' ? '12px' : '14px',
+                height: '80px',
+                borderRadius: '12px',
                 border: '1px solid var(--color-border)',
                 background: '#F9FAFB',
                 display: 'flex',
@@ -168,8 +213,8 @@ export default function PropertiesPanel({
               {drawType === 'eraser' ? (
                 <div
                   style={{
-                    width: `${Math.min(drawSizes.eraser * 2, 56)}px`,
-                    height: `${Math.min(drawSizes.eraser * 2, 56)}px`,
+                    width: `${drawSizes.eraser}px`,
+                    height: `${drawSizes.eraser}px`,
                     borderRadius: '50%',
                     border: '2px solid #2E86AB',
                     background: 'rgba(46, 134, 171, 0.1)',
@@ -235,14 +280,18 @@ export default function PropertiesPanel({
                   title={color}
                 />
               ))}
-              <div className="color-option custom-color-btn" title="Choose custom color">
+              <div 
+                className={`color-option custom-color-btn ${!strokeColors.includes(properties.stroke) ? 'active' : ''}`} 
+                title="Choose custom color"
+                style={{ backgroundColor: !strokeColors.includes(properties.stroke) ? properties.stroke : undefined }}
+              >
                 <input 
                   type="color" 
                   value={properties.stroke || '#000000'} 
                   onChange={(e) => onChangeProperty('stroke', e.target.value)} 
                   style={{ opacity: 0, width: '100%', height: '100%', cursor: 'pointer' }}
                 />
-                <span style={{ position: 'absolute', pointerEvents: 'none', fontSize: '14px' }}>+</span>
+                <span style={{ position: 'absolute', pointerEvents: 'none', fontSize: '14px', color: !strokeColors.includes(properties.stroke) ? 'white' : 'inherit' }}>+</span>
               </div>
             </div>
           </div>
@@ -262,14 +311,18 @@ export default function PropertiesPanel({
                   title={color === 'transparent' ? 'Transparent' : color}
                 />
               ))}
-              <div className="color-option custom-color-btn" title="Choose custom fill color">
+              <div 
+                className={`color-option custom-color-btn ${properties.fill !== 'transparent' && !fillColors.includes(properties.fill) ? 'active' : ''}`} 
+                title="Choose custom fill color"
+                style={{ backgroundColor: properties.fill !== 'transparent' && !fillColors.includes(properties.fill) ? properties.fill : undefined }}
+              >
                 <input 
                   type="color" 
                   value={properties.fill && properties.fill !== 'transparent' ? properties.fill : '#ffffff'} 
                   onChange={(e) => onChangeProperty('fill', e.target.value)} 
                   style={{ opacity: 0, width: '100%', height: '100%', cursor: 'pointer' }}
                 />
-                <span style={{ position: 'absolute', pointerEvents: 'none', fontSize: '14px' }}>+</span>
+                <span style={{ position: 'absolute', pointerEvents: 'none', fontSize: '14px', color: properties.fill !== 'transparent' && !fillColors.includes(properties.fill) ? 'white' : 'inherit' }}>+</span>
               </div>
             </div>
           </div>

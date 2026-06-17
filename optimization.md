@@ -9,37 +9,37 @@ This document outlines the pending technical tasks, optimizations, and feature i
 * **Context/Scope:** Canvas state management / Page Manager component.
 * **Access Control:** **Strictly Owner-only or Full Access users.** View-only and restricted users must not have access to these controls.
 * **Action Items:**
-    * [ ] Implement drag-and-drop or directional layout controls to reorder pages within the global state array.
-    * [ ] Wrap the reordering UI and event listeners in a permission guard checking if `user.role === 'owner'` or `user.hasFullAccess === true`.
-    * [ ] Add a "Share Page" action payload containing specific page JSON data, accessible only to authorized roles.
+    * [c] Implement drag-and-drop or directional layout controls to reorder pages within the global state array.
+    * [c] Wrap the reordering UI and event listeners in a permission guard checking if `user.role === 'owner'` or `user.hasFullAccess === true`.
+    * [c] Add a "Share Page" action payload containing specific page JSON data, accessible only to authorized roles.
 * **Acceptance Criteria:** Only the board owner or a user explicitly granted full access can change the sequence of pages or initiate page sharing. The UI elements for ordering are hidden or disabled for all other users.
 
 ## 2. Fixed Position Page Navigation UI
 * **Objective:** Prevent the page control/navigation buttons from shifting layout positions when new pages are appended.
 * **Context/Scope:** UI/UX Front-end (`PageControls` component).
 * **Action Items:**
-    * [ ] Refactor CSS/Tailwind classes of the page control container from relative flow to fixed positioning (e.g., `fixed bottom-4 left-1/2 -translate-x-1/2`).
-    * [ ] Ensure overflow scrolling is restricted only to the page thumbnail list, keeping control buttons static.
+    * [c] Refactor CSS/Tailwind classes of the page control container from relative flow to fixed positioning (e.g., `fixed bottom-4 left-1/2 -translate-x-1/2`).
+    * [c] Ensure overflow scrolling is restricted only to the page thumbnail list, keeping control buttons static.
 * **Acceptance Criteria:** Adding $N$ number of pages allows scrolling through the navigation list, but the container buttons stay locked in place on the viewport.
 
 ## 3. Toolbar UX & Optimization
 * **Objective:** Convert the main toolbar into a draggable floating dock, consolidate tools into 3 distinct logical groups, and elevate the eraser tool.
 * **Context/Scope:** `Toolbar` component & layout state.
 * **Action Items:**
-    * [ ] Implement draggable boundaries on the main toolbar container using pointer events or a positioning library (e.g., `framer-motion` or `react-draggable`).
-    * [ ] Refactor and group the toolbar options into the following 3 collapsible dropdowns/popover sub-menus:
+    * [c] Implement draggable boundaries on the main toolbar container using pointer events or a positioning library (e.g., `framer-motion` or `react-draggable`).
+    * [c] Refactor and group the toolbar options into the following 3 collapsible dropdowns/popover sub-menus:
         1. **Selection Tools Group:** Rectangle Selection, Round Selection, Lasso Tool.
         2. **Shape Draw Group:** Rectangle, Circle, Diamond.
         3. **Connectors Group:** Arrow, Line.
-    * [ ] Extract the `Eraser` tool entirely out of the Free Draw sub-panel and expose it as a primary, first-class standalone button on the main toolbar dock.
+    * [c] Extract the `Eraser` tool entirely out of the Free Draw sub-panel and expose it as a primary, first-class standalone button on the main toolbar dock.
 * **Acceptance Criteria:** The main toolbar is freely draggable. Tools are neatly consolidated into their 3 defined structural drop-down categories, and the eraser is immediately accessible without opening sub-menus.
 
 ## 4. Color Selection State Sync Bug
 * **Objective:** Fix active color UI feedback on the selection button.
 * **Context/Scope:** `ColorPicker` component & global tool state.
 * **Action Items:**
-    * [ ] Verify that selecting a color properly updates the active color state variable (e.g., `currentStrokeColor`).
-    * [ ] Bind the background color or border style of the picker button directly to the `currentStrokeColor` state reactive variable.
+    * [c] Verify that selecting a color properly updates the active color state variable (e.g., `currentStrokeColor`).
+    * [c] Bind the background color or border style of the picker button directly to the `currentStrokeColor` state reactive variable.
 * **Acceptance Criteria:** When a color is selected, the color picker box visibly reflects that specific hue dynamically on the UI, matching the stroke color rendering on the canvas.
 
 ## 5. Optimized PDF Export Pipeline (Sketchbook Pro Style)

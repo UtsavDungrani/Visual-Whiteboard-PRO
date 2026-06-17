@@ -500,6 +500,7 @@ export default function App() {
     setCanRedo(false)
 
     // Notify other users
+    sendStructureUpdate(nextPages)
     sendCanvasUpdate()
   }
 
@@ -535,6 +536,7 @@ export default function App() {
     }
 
     setPages(updatedPages)
+    sendStructureUpdate(updatedPages)
     sendCanvasUpdate()
   }
 
@@ -579,6 +581,7 @@ export default function App() {
       setCanRedo(false)
     })
 
+    sendStructureUpdate(orderedPages)
     sendCanvasUpdate()
   }
 
@@ -590,6 +593,68 @@ export default function App() {
         : p
     )
     setPages(updatedPages)
+    sendStructureUpdate(updatedPages)
+  }
+
+  const reorderPage = (pageId, targetIndexOrDirection) => {
+    const fromIndex = pagesRef.current.findIndex(p => p.page_id === pageId)
+    if (fromIndex === -1) return
+
+    const newPages = [...pagesRef.current]
+    const item = newPages.splice(fromIndex, 1)[0]
+
+    if (typeof targetIndexOrDirection === 'number') {
+      newPages.splice(targetIndexOrDirection, 0, item)
+    } else {
+      // Legacy direction support (up/down)
+      const targetIndex = targetIndexOrDirection === 'up' ? fromIndex - 1 : fromIndex + 1
+      if (targetIndex < 0 || targetIndex >= pagesRef.current.length) return
+      newPages.splice(targetIndex, 0, item)
+    }
+
+    const orderedPages = newPages.map((p, idx) => ({ ...p, order: idx }))
+    setPages(orderedPages)
+    sendStructureUpdate(orderedPages)
+  }
+
+  const sharePage = (pageId) => {
+    const page = pagesRef.current.find(p => p.page_id === pageId)
+    if (!page) return
+
+    // Create a shareable payload for just this page
+    const sharePayload = {
+      type: 'vwp_page_share',
+      version: '1.0',
+      timestamp: Date.now(),
+      board_title: title,
+      page: {
+        title: page.title,
+        canvas_state: page.page_id === activePageIdRef.current ? getCanvasJson() : page.canvas_state
+      }
+    }
+
+    const jsonStr = JSON.stringify(sharePayload, null, 2)
+    const blob = new Blob([jsonStr], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `${title}-${page.title}.json`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+
+    alert(`Page "${page.title}" exported as JSON for sharing.`)
+  }
+
+  const sendStructureUpdate = (updatedPages = pagesRef.current) => {
+    if (!socketRef.current) return
+    socketRef.current.emit('board:structure-update', {
+      roomId: savedIdRef.current || 'global',
+      pages: updatedPages,
+      mode: pageModeRef.current,
+      pageSize: pageSizeRef.current
+    })
   }
 
   const handleRenameUser = () => {
@@ -1069,12 +1134,13 @@ export default function App() {
           tempCreationShapeRef.current = new F.Rect({
             left: pointer.x,
             top: pointer.y,
-            width: 1, // Start small but visible
+            width: 1,
             height: 1,
             fill: 'rgba(46, 134, 171, 0.1)',
             stroke: stroke,
             strokeWidth: strokeWidth,
             strokeDashArray: [5, 5],
+            strokeUniform: true,
             selectable: false,
             evented: false
           })
@@ -1087,6 +1153,7 @@ export default function App() {
             stroke: stroke,
             strokeWidth: strokeWidth,
             strokeDashArray: [5, 5],
+            strokeUniform: true,
             selectable: false,
             evented: false
           })
@@ -1101,6 +1168,7 @@ export default function App() {
             stroke: stroke,
             strokeWidth: strokeWidth,
             strokeDashArray: [5, 5],
+            strokeUniform: true,
             selectable: false,
             evented: false,
             scaleX: 0.01, // Start tiny
@@ -1272,6 +1340,7 @@ export default function App() {
               fill: fill,
               stroke: stroke,
               strokeWidth: strokeWidth,
+              strokeUniform: true,
               selectable: true,
               evented: true
             })
@@ -1287,6 +1356,7 @@ export default function App() {
               fill: fill,
               stroke: stroke,
               strokeWidth: strokeWidth,
+              strokeUniform: true,
               selectable: true,
               evented: true
             })
@@ -1303,6 +1373,7 @@ export default function App() {
               fill: fill,
               stroke: stroke,
               strokeWidth: strokeWidth,
+              strokeUniform: true,
               selectable: true,
               evented: true
             })
@@ -2688,6 +2759,10 @@ export default function App() {
         if (key === 'l') setActiveTool('lasso-select')
         if (key === 'h') setActiveTool('pan')
         if (key === 'p') setActiveTool('draw')
+        if (key === 'e') {
+          setActiveTool('draw')
+          setDrawType('eraser')
+        }
         if (key === 'r') setActiveTool('rect')
         if (key === 'o') setActiveTool('circle')
         if (key === 'd') setActiveTool('diamond')
@@ -2751,6 +2826,20 @@ export default function App() {
           )
         )
       }
+    })
+
+    socket.on('board:structure-update', ({ pages: remotePages, mode: remoteMode, pageSize: remotePageSize }) => {
+      // If our current page is gone, switch to first available
+      if (!remotePages.find(p => p.page_id === activePageIdRef.current)) {
+        const firstPage = remotePages[0]
+        if (firstPage) {
+          setActivePageId(firstPage.page_id)
+          applyRemoteCanvas(firstPage.canvas_state)
+        }
+      }
+      setPages(remotePages)
+      setPageMode(remoteMode)
+      setPageSize(remotePageSize)
     })
 
     socket.on('room:users', (users) => {
@@ -3076,10 +3165,19 @@ export default function App() {
           onDeletePage={deletePage}
           onDuplicatePage={duplicatePage}
           onRenamePage={renamePage}
+          onReorderPage={reorderPage}
+          onSharePage={sharePage}
+          canManagePages={!isReadOnly && (boardMeta.owner === user.id || !savedId)}
         />
 
         {/* Toolbar Left Side */}
-        <Toolbar activeTool={activeTool} setActiveTool={setActiveTool} isReadOnly={isReadOnly} />
+        <Toolbar 
+          activeTool={activeTool} 
+          setActiveTool={setActiveTool} 
+          drawType={drawType}
+          setDrawType={setDrawType}
+          isReadOnly={isReadOnly} 
+        />
 
         {/* Central Canvas Viewport */}
         <div id="canvas-viewport" className="canvas-viewport">

@@ -232,29 +232,30 @@ body,
 }
 
 /* Floating Vertical Toolbar (Left) */
+/* Main Draggable Toolbar Dock */
 .toolbar {
   position: absolute;
-  left: 20px;
   top: 50%;
+  left: 20px;
   transform: translateY(-50%);
-  background-color: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px) saturate(190%);
-  -webkit-backdrop-filter: blur(12px) saturate(190%);
-  border: 1px solid rgba(229, 231, 235, 0.7);
-  border-radius: 14px;
-  padding: 8px;
+  background-color: white;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 6px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-  z-index: 5;
+  gap: 4px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  z-index: 100;
+  user-select: none;
+  min-width: 48px;
 }
 
 /* Toolbar Buttons */
 .tool-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
   border: none;
   background: transparent;
   color: var(--color-text-secondary);
@@ -262,9 +263,10 @@ body,
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s;
   position: relative;
 }
+
 
 .tool-btn:hover {
   background-color: rgba(229, 231, 235, 0.5);
@@ -277,10 +279,69 @@ body,
 }
 
 .tool-btn.active {
-  background-color: var(--color-primary);
+  background-color: var(--color-accent);
   color: white;
-  box-shadow: 0 4px 12px rgba(30, 58, 95, 0.25);
 }
+
+.toolbar-handle {
+  height: 12px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  padding-bottom: 4px;
+  margin-bottom: 2px;
+  border-bottom: 1px solid var(--color-bg);
+}
+
+.toolbar-handle::after {
+  content: '...';
+  font-size: 18px;
+  color: var(--color-text-muted);
+  letter-spacing: 2px;
+  line-height: 0;
+}
+
+.tool-btn.has-submenu::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  border-left: 3px solid transparent;
+  border-top: 3px solid currentColor;
+  transform: rotate(-45deg);
+}
+
+.tool-submenu {
+  position: absolute;
+  left: 52px;
+  top: 0;
+  background: white;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 4px;
+  display: flex;
+  gap: 4px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  z-index: 110;
+}
+
+.submenu-item {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.submenu-item:hover { background-color: var(--color-bg); }
+.submenu-item.active { color: var(--color-accent); background-color: rgba(46,134,171,0.1); }
 
 .tool-btn .tooltip {
   position: absolute;
@@ -748,16 +809,23 @@ input[type="range"]::-webkit-slider-thumb:hover {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 16px;
-  gap: 16px;
-  overflow-y: auto;
   min-width: 160px;
+  overflow: hidden; /* Header and Footer stay fixed, list scrolls */
 }
 
 .thumbnail-list {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.strip-footer {
+  padding: 12px 16px;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
 }
 
 .thumbnail-card {
@@ -765,9 +833,65 @@ input[type="range"]::-webkit-slider-thumb:hover {
   border-radius: 8px;
   padding: 6px;
   background-color: var(--color-bg);
-  cursor: pointer;
+  cursor: grab;
   transition: all 0.2s;
   user-select: none;
+  position: relative;
+}
+
+.thumbnail-card:active {
+  cursor: grabbing;
+}
+
+.thumbnail-card.dragging {
+  opacity: 0.2;
+  transform: scale(0.95);
+  filter: grayscale(1);
+  border: 1px dashed var(--color-text-muted);
+}
+
+.thumbnail-card.drag-over,
+.thumbnail-card.drag-over-bottom {
+  background-color: rgba(46, 134, 171, 0.03);
+}
+
+.thumbnail-card.drag-over::before,
+.thumbnail-card.drag-over-bottom::after {
+  content: '';
+  position: absolute;
+  left: -8px;
+  right: -8px;
+  height: 4px;
+  background-color: var(--color-accent);
+  border-radius: 4px;
+  z-index: 20;
+  pointer-events: none;
+  box-shadow: 0 0 0 2px var(--color-surface);
+}
+
+.thumbnail-card.drag-over::before {
+  top: -8px;
+}
+
+.thumbnail-card.drag-over-bottom::after {
+  bottom: -8px;
+}
+
+/* Add little circles at the end of the insertion line for that PPT/Premium look */
+.thumbnail-card.drag-over::after,
+.thumbnail-card.drag-over-bottom::before {
+  /* We reuse the other pseudo-element slot for the circles if available, 
+     but since we use both for lines, we'll just stick to a clean line or 
+     refactor to one pseudo per position. */
+}
+
+.thumbnail-card.drag-over::before {
+  border-left: 6px solid var(--color-accent);
+  border-right: 6px solid var(--color-accent);
+}
+.thumbnail-card.drag-over-bottom::after {
+  border-left: 6px solid var(--color-accent);
+  border-right: 6px solid var(--color-accent);
 }
 
 .thumbnail-card:hover {

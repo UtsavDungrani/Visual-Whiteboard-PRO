@@ -7,10 +7,16 @@ export default function PageStrip({
   onAddPage,
   onDeletePage,
   onDuplicatePage,
-  onRenamePage
+  onRenamePage,
+  onReorderPage,
+  onSharePage,
+  canManagePages = false
 }) {
   const [isOpen, setIsOpen] = useState(true)
   const [contextMenu, setContextMenu] = useState(null)
+  const [draggedPageId, setDraggedPageId] = useState(null)
+  const [dragOverPageId, setDragOverPageId] = useState(null)
+  const [dragPosition, setDragPosition] = useState(null) // 'top' or 'bottom'
   const contextMenuRef = useRef(null)
 
   // Close context menu on click outside
@@ -25,6 +31,7 @@ export default function PageStrip({
   }, [])
 
   const handleContextMenu = (e, pageId) => {
+    if (!canManagePages) return
     e.preventDefault()
     setContextMenu({
       pageId,
@@ -39,6 +46,67 @@ export default function PageStrip({
       onRenamePage(pageId, newTitle.trim())
     }
     setContextMenu(null)
+  }
+
+  // --- Drag and Drop Handlers ---
+  const onDragStart = (e, pageId) => {
+    if (!canManagePages) return
+    setDraggedPageId(pageId)
+    e.dataTransfer.setData('pageId', pageId)
+    e.dataTransfer.effectAllowed = 'move'
+    
+    // Create a ghost image if needed, but default is usually fine
+  }
+
+  const onDragOver = (e, pageId) => {
+    if (!canManagePages || draggedPageId === pageId) return
+    e.preventDefault()
+    
+    const rect = e.currentTarget.getBoundingClientRect()
+    const offset = e.clientY - rect.top
+    const position = offset < rect.height / 2 ? 'top' : 'bottom'
+    
+    setDragOverPageId(pageId)
+    setDragPosition(position)
+  }
+
+  const onDragLeave = () => {
+    setDragOverPageId(null)
+    setDragPosition(null)
+  }
+
+  const onDrop = (e, targetPageId) => {
+    if (!canManagePages || draggedPageId === null || draggedPageId === targetPageId) {
+      setDraggedPageId(null)
+      setDragOverPageId(null)
+      setDragPosition(null)
+      return
+    }
+    e.preventDefault()
+
+    const fromIndex = pages.findIndex(p => p.page_id === draggedPageId)
+    let toIndex = pages.findIndex(p => p.page_id === targetPageId)
+
+    // Adjust toIndex based on drop position
+    if (dragPosition === 'bottom' && fromIndex > toIndex) {
+      toIndex += 1
+    } else if (dragPosition === 'top' && fromIndex < toIndex) {
+      toIndex -= 1
+    }
+
+    if (fromIndex !== toIndex) {
+      onReorderPage(draggedPageId, toIndex)
+    }
+
+    setDraggedPageId(null)
+    setDragOverPageId(null)
+    setDragPosition(null)
+  }
+
+  const onDragEnd = () => {
+    setDraggedPageId(null)
+    setDragOverPageId(null)
+    setDragPosition(null)
   }
 
   return (
@@ -67,15 +135,23 @@ export default function PageStrip({
             <div className="thumbnail-list">
               {pages.map((page, index) => {
                 const isActive = page.page_id === activePageId
+                const isDragging = page.page_id === draggedPageId
+                const isDragOver = page.page_id === dragOverPageId
                 const objectsCount = page.canvas_state?.objects?.length || 0
 
                 return (
                   <div
                     key={page.page_id}
-                    className={`thumbnail-card ${isActive ? 'active' : ''}`}
+                    className={`thumbnail-card ${isActive ? 'active' : ''} ${isDragging ? 'dragging' : ''} ${isDragOver && dragPosition === 'top' ? 'drag-over' : ''} ${isDragOver && dragPosition === 'bottom' ? 'drag-over-bottom' : ''}`}
                     onClick={() => onSwitchPage(page.page_id)}
                     onContextMenu={(e) => handleContextMenu(e, page.page_id)}
-                    title="Right-click for options"
+                    draggable={canManagePages}
+                    onDragStart={(e) => onDragStart(e, page.page_id)}
+                    onDragOver={(e) => onDragOver(e, page.page_id)}
+                    onDragLeave={onDragLeave}
+                    onDrop={(e) => onDrop(e, page.page_id)}
+                    onDragEnd={onDragEnd}
+                    title={canManagePages ? "Drag to reorder, Right-click for options" : ""}
                   >
                     <div className="thumbnail-preview-container">
                       {page.thumbnail ? (
@@ -102,12 +178,16 @@ export default function PageStrip({
               })}
             </div>
 
-            <button onClick={onAddPage} className="btn btn-secondary btn-full add-page-btn">
-              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-              </svg>
-              Add Page
-            </button>
+            {canManagePages && (
+              <div className="strip-footer">
+                <button onClick={onAddPage} className="btn btn-secondary btn-full add-page-btn">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>
+                  Add Page
+                </button>
+              </div>
+            )}
           </div>
         )}
       </aside>
@@ -137,43 +217,64 @@ export default function PageStrip({
             zIndex: 10000
           }}
         >
+          {canManagePages && (
+            <>
+              <button
+                onClick={() => {
+                  const page = pages.find((p) => p.page_id === contextMenu.pageId)
+                  if (page) triggerRename(contextMenu.pageId, page.title)
+                }}
+                className="context-menu-item"
+              >
+                <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                </svg>
+                Rename
+              </button>
+              <button
+                onClick={() => {
+                  onDuplicatePage(contextMenu.pageId)
+                  setContextMenu(null)
+                }}
+                className="context-menu-item"
+              >
+                <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376A8.965 8.965 0 0012 12.75a8.965 8.965 0 00-3.75 4.5m7.5 0v-4.5m-7.5 4.5v-4.5m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25z" />
+                </svg>
+                Duplicate
+              </button>
+              <div className="context-menu-divider"></div>
+            </>
+          )}
           <button
             onClick={() => {
-              const page = pages.find((p) => p.page_id === contextMenu.pageId)
-              if (page) triggerRename(contextMenu.pageId, page.title)
-            }}
-            className="context-menu-item"
-          >
-            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-            </svg>
-            Rename
-          </button>
-          <button
-            onClick={() => {
-              onDuplicatePage(contextMenu.pageId)
+              onSharePage(contextMenu.pageId)
               setContextMenu(null)
             }}
             className="context-menu-item"
           >
             <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376A8.965 8.965 0 0012 12.75a8.965 8.965 0 00-3.75 4.5m7.5 0v-4.5m-7.5 4.5v-4.5m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" />
             </svg>
-            Duplicate
+            Share Page
           </button>
-          <div className="context-menu-divider"></div>
-          <button
-            onClick={() => {
-              onDeletePage(contextMenu.pageId)
-              setContextMenu(null)
-            }}
-            className="context-menu-item text-danger"
-          >
-            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9 9m-4.788-3L5.67 19.88A2.25 2.25 0 007.88 22h8.24a2.25 2.25 0 002.228-2.08L18.75 6m-13.8 0h12.58M9 3h4.14M6.75 6h10.5" />
-            </svg>
-            Delete
-          </button>
+          {canManagePages && (
+            <>
+              <div className="context-menu-divider"></div>
+              <button
+                onClick={() => {
+                  onDeletePage(contextMenu.pageId)
+                  setContextMenu(null)
+                }}
+                className="context-menu-item text-danger"
+              >
+                <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9 9m-4.788-3L5.67 19.88A2.25 2.25 0 007.88 22h8.24a2.25 2.25 0 002.228-2.08L18.75 6m-13.8 0h12.58M9 3h4.14M6.75 6h10.5" />
+                </svg>
+                Delete
+              </button>
+            </>
+          )}
         </div>
       )}
     </>
