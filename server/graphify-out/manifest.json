@@ -1,0 +1,47 @@
+{
+  "ai.service.js": {
+    "mtime": 1781613825.9360116,
+    "ast_hash": "dbc1bbd24f8c31d32bbfe8b49cf88983",
+    "semantic_hash": ""
+  },
+  "index.js": {
+    "mtime": 1781662845.0298586,
+    "ast_hash": "f4b9d3ab8479e184da12b49d04c69e7d",
+    "semantic_hash": ""
+  },
+  "middleware/auth.js": {
+    "mtime": 1781514015.5161448,
+    "ast_hash": "3b9097b7641b1dc90014a36c4398063e",
+    "semantic_hash": ""
+  },
+  "models/ElementContext.js": {
+    "mtime": 1781496650.591339,
+    "ast_hash": "e7aa41d949bde7b70488e86609033bba",
+    "semantic_hash": ""
+  },
+  "models/User.js": {
+    "mtime": 1781514005.1480267,
+    "ast_hash": "71ade02b8a256b45c90b25663a1762e2",
+    "semantic_hash": ""
+  },
+  "models/Whiteboard.js": {
+    "mtime": 1781514010.8075514,
+    "ast_hash": "abeb89552281fdb402d8cfe3e01002f0",
+    "semantic_hash": ""
+  },
+  "package.json": {
+    "mtime": 1781604719.1088278,
+    "ast_hash": "cf81a2d2ad815802e22e9fd29fc9e36f",
+    "semantic_hash": ""
+  },
+  "tests/auth.test.js": {
+    "mtime": 1781604955.863215,
+    "ast_hash": "53e967bbc5a6a5a286f51713fa1b33b0",
+    "semantic_hash": ""
+  },
+  "tests/health.test.js": {
+    "mtime": 1781604871.4049041,
+    "ast_hash": "a67d716e972a95d04bf5ced830abeca0",
+    "semantic_hash": ""
+  }
+}
