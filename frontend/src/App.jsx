@@ -379,7 +379,7 @@ export default function App() {
 
   const getCanvasJson = () => {
     if (!fabricRef.current) return { objects: [] }
-    const json = fabricRef.current.toJSON(['selectable', 'id', 'globalCompositeOperation', 'erasable', 'eraser'])
+    const json = fabricRef.current.toJSON(['selectable', 'id', 'globalCompositeOperation', 'erasable', 'eraser', 'customType'])
     if (json && json.objects) {
       json.objects = json.objects.filter(obj => obj.id !== 'page-boundary')
     }
@@ -990,7 +990,7 @@ export default function App() {
     const canvas = fabricRef.current
     canvas.discardActiveObject()
     canvas.loadFromJSON(json, () => {
-      canvas.getObjects().forEach((object) => object.setCoords())
+      canvas.getObjects().forEach((obj) => obj.setCoords())
       canvas.calcOffset()
       canvas.requestRenderAll()
       applyingRemoteRef.current = false
@@ -1373,7 +1373,6 @@ export default function App() {
               fill: fill,
               stroke: stroke,
               strokeWidth: strokeWidth,
-              strokeUniform: true,
               selectable: true,
               evented: true
             })
@@ -1383,23 +1382,23 @@ export default function App() {
               customType: 'line',
               stroke: stroke,
               strokeWidth: strokeWidth,
+              strokeUniform: true,
               strokeLineCap: 'round',
               selectable: true,
               evented: true
             })
           } else if (activeTool === 'arrow') {
-            // Complex Arrow (Line + Triangle head)
-            const headLength = 15
             const dx = pointer.x - startX
             const dy = pointer.y - startY
             const angle = Math.atan2(dy, dx)
+            const headLength = 15 + (strokeWidth * 0.5)
             
             const line = new F.Line([startX, startY, pointer.x, pointer.y], {
               stroke: stroke,
               strokeWidth: strokeWidth,
+              strokeUniform: true,
               strokeLineCap: 'round'
             })
-            
             const head = new F.Triangle({
               left: pointer.x,
               top: pointer.y,
@@ -1412,7 +1411,6 @@ export default function App() {
               selectable: false,
               evented: false
             })
-            
             finalShape = new F.Group([line, head], {
               id: elementId,
               customType: 'arrow',
@@ -1611,6 +1609,7 @@ export default function App() {
         if (obj.type === 'path') {
           obj.erasable = true
         }
+
         // Keep free-draw strokes non-interactive until a selection tool is chosen
         if (activeToolRef.current === 'draw') {
           obj.selectable = false
@@ -1853,89 +1852,93 @@ export default function App() {
 
     const elementId = 'el-' + Date.now() + '-' + Math.round(Math.random() * 1e9)
     let shape
+    const stroke = propertiesRef.current.stroke || '#1E3A5F'
+    const fill = propertiesRef.current.fill || '#FFFFFF'
+    const strokeWidth = propertiesRef.current.strokeWidth || 2
 
-    switch (type) {
-      case 'rect':
-        shape = new F.Rect({
-          id: elementId,
-          left: centerX - 60,
-          top: centerY - 40,
-          width: 120,
-          height: 80,
-          fill: '#FFFFFF',
-          stroke: propertiesRef.current.stroke,
-          strokeWidth: propertiesRef.current.strokeWidth,
-          rx: 6,
-          ry: 6,
-          selectable: true,
-          evented: true
-        })
-        break
-      case 'circle':
-        shape = new F.Circle({
-          id: elementId,
-          left: centerX - 50,
-          top: centerY - 50,
-          radius: 50,
-          fill: '#FFFFFF',
-          stroke: propertiesRef.current.stroke,
-          strokeWidth: propertiesRef.current.strokeWidth,
-          selectable: true,
-          evented: true
-        })
-        break
-      case 'diamond':
-        // Standard rotated square for flowchart decision nodes
-        shape = new F.Polygon([
-          { x: 50, y: 0 },
-          { x: 100, y: 50 },
-          { x: 50, y: 100 },
-          { x: 0, y: 50 }
-        ], {
-          id: elementId,
-          left: centerX - 50,
-          top: centerY - 50,
-          fill: '#FFFFFF',
-          stroke: propertiesRef.current.stroke,
-          strokeWidth: propertiesRef.current.strokeWidth,
-          selectable: true,
-          evented: true
-        })
-        break
-      case 'text':
-        shape = new F.IText('Double click to edit', {
-          id: elementId,
-          left: centerX - 80,
-          top: centerY - 15,
-          fontFamily: 'Inter, sans-serif',
-          fontSize: 20,
-          fill: propertiesRef.current.stroke, // Use active stroke color
-          selectable: true,
-          evented: true
-        })
-        break
-
-      case 'arrow':
-        // Beautiful solid flowchart arrow
-        shape = new F.Path('M 0 4 L 75 4 L 75 0 L 95 5 L 75 10 L 75 6 Z', {
-          id: elementId,
-          left: centerX - 48,
-          top: centerY - 5,
-          fill: propertiesRef.current.stroke,
-          stroke: propertiesRef.current.stroke,
-          strokeWidth: 1,
-          selectable: true,
-          evented: true
-        })
-        break
-      default:
-        return
+    if (type === 'text') {
+      shape = new F.IText('Double-click to edit', {
+        id: elementId,
+        left: centerX,
+        top: centerY,
+        fontFamily: 'Inter, system-ui, Arial',
+        fontSize: 24,
+        fill: stroke,
+        originX: 'center',
+        originY: 'center',
+        selectable: true,
+        evented: true
+      })
+    } else if (type === 'rect') {
+      shape = new F.Rect({
+        id: elementId,
+        left: centerX - 50,
+        top: centerY - 50,
+        width: 100,
+        height: 100,
+        fill: fill,
+        stroke: stroke,
+        strokeWidth: strokeWidth,
+        selectable: true,
+        evented: true
+      })
+    } else if (type === 'circle') {
+      shape = new F.Circle({
+        id: elementId,
+        left: centerX - 50,
+        top: centerY - 50,
+        radius: 50,
+        fill: fill,
+        stroke: stroke,
+        strokeWidth: strokeWidth,
+        selectable: true,
+        evented: true
+      })
+    } else if (type === 'line') {
+      shape = new F.Line([centerX - 50, centerY, centerX + 50, centerY], {
+        id: elementId,
+        customType: 'line',
+        stroke: stroke,
+        strokeWidth: strokeWidth,
+        strokeUniform: true,
+        strokeLineCap: 'round',
+        selectable: true,
+        evented: true
+      })
+    } else if (type === 'arrow') {
+      // Create standard arrow group
+      const line = new F.Line([centerX - 50, centerY, centerX + 50, centerY], {
+        stroke: stroke,
+        strokeWidth: strokeWidth,
+        strokeUniform: true,
+        strokeLineCap: 'round'
+      })
+      const head = new F.Triangle({
+        left: centerX + 50,
+        top: centerY,
+        angle: 90,
+        width: 15 + (strokeWidth * 0.5),
+        height: 15 + (strokeWidth * 0.5),
+        fill: stroke,
+        originX: 'center',
+        originY: 'center',
+        selectable: false,
+        evented: false
+      })
+      shape = new F.Group([line, head], {
+        id: elementId,
+        customType: 'arrow',
+        selectable: true,
+        evented: true
+      })
     }
 
-    canvas.add(shape)
-    canvas.setActiveObject(shape)
-    shape.setCoords()
-    canvas.requestRenderAll()
+    if (shape) {
+      canvas.add(shape)
+      canvas.setActiveObject(shape)
+      saveHistory()
+      sendCanvasUpdate()
+    }
   }
 
   // Property Changes from sidebar panel
@@ -2630,7 +2633,7 @@ export default function App() {
     const cleanupFabricListeners = attachFabricListeners(canvas)
 
     // Load existing pages if populated, else save initial history snapshot
-    const initialJson = canvas.toJSON(['selectable', 'id', 'globalCompositeOperation', 'erasable', 'eraser'])
+    const initialJson = canvas.toJSON(['selectable', 'id', 'globalCompositeOperation', 'erasable', 'eraser', 'customType'])
     if (initialJson && initialJson.objects) {
       initialJson.objects = initialJson.objects.filter(obj => obj.id !== 'page-boundary')
     }

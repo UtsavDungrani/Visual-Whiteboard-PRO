@@ -258,6 +258,7 @@ export default function PropertiesPanel({
   }
 
   const isText = selectedObject.type === 'i-text' || selectedObject.type === 'text'
+  const isConnector = selectedObject.customType === 'line' || selectedObject.customType === 'arrow'
 
   return (
     <aside className="properties-panel">
@@ -297,8 +298,8 @@ export default function PropertiesPanel({
           </div>
         )}
 
-        {/* Fill / Background Color (Hidden for Text elements) */}
-        {!isText && !isReadOnly && (
+        {/* Fill / Background Color (Hidden for Text elements and Connectors) */}
+        {!isText && !isConnector && !isReadOnly && (
           <div className="property-group">
             <h3 className="section-title">Fill Color</h3>
             <div className="color-grid">
