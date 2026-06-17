@@ -418,7 +418,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_pathlassosplit",
-      "community": 12,
+      "community": 5,
       "norm_label": "pathlassosplit.js"
     },
     {
@@ -428,7 +428,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_pathlassosplit_ispointinpolygon",
-      "community": 12,
+      "community": 5,
       "norm_label": "ispointinpolygon()"
     },
     {
@@ -438,7 +438,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_pathlassosplit_pathdatatosvgd",
-      "community": 12,
+      "community": 5,
       "norm_label": "pathdatatosvgd()"
     },
     {
@@ -448,7 +448,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "src_pathlassosplit_samplefabricpath",
-      "community": 12,
+      "community": 5,
       "norm_label": "samplefabricpath()"
     },
     {
@@ -458,7 +458,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "src_pathlassosplit_samplepathhitpoints",
-      "community": 12,
+      "community": 5,
       "norm_label": "samplepathhitpoints()"
     },
     {
@@ -468,7 +468,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "src_pathlassosplit_bboxcornersinpolygon",
-      "community": 12,
+      "community": 5,
       "norm_label": "bboxcornersinpolygon()"
     },
     {
@@ -478,7 +478,7 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "src_pathlassosplit_getpathselectionmode",
-      "community": 12,
+      "community": 5,
       "norm_label": "getpathselectionmode()"
     },
     {
@@ -488,7 +488,7 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "src_pathlassosplit_canvaspolygontolocal",
-      "community": 12,
+      "community": 5,
       "norm_label": "canvaspolygontolocal()"
     },
     {
@@ -498,7 +498,7 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "src_pathlassosplit_buildclippolygon",
-      "community": 12,
+      "community": 5,
       "norm_label": "buildclippolygon()"
     },
     {
@@ -1095,7 +1095,7 @@
       "label": "startServer()",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L748",
+      "source_location": "L753",
       "_origin": "ast",
       "id": "server_index_startserver",
       "community": 1,
@@ -1880,6 +1880,126 @@
       "id": "tasks_pr_review_checklist",
       "community": 6,
       "norm_label": "pr / review checklist"
+    },
+    {
+      "label": "optimization.md",
+      "file_type": "document",
+      "source_file": "optimization.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "optimization",
+      "community": 12,
+      "norm_label": "optimization.md"
+    },
+    {
+      "label": "Visual Whiteboard - Feature Backlog & Task Tracking",
+      "file_type": "document",
+      "source_file": "optimization.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "optimization_visual_whiteboard_feature_backlog_task_tracking",
+      "community": 12,
+      "norm_label": "visual whiteboard - feature backlog & task tracking"
+    },
+    {
+      "label": "1. Multi-Page Reordering & Sharing (Restricted Access)",
+      "file_type": "document",
+      "source_file": "optimization.md",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "optimization_1_multi_page_reordering_sharing_restricted_access",
+      "community": 12,
+      "norm_label": "1. multi-page reordering & sharing (restricted access)"
+    },
+    {
+      "label": "2. Fixed Position Page Navigation UI",
+      "file_type": "document",
+      "source_file": "optimization.md",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "optimization_2_fixed_position_page_navigation_ui",
+      "community": 12,
+      "norm_label": "2. fixed position page navigation ui"
+    },
+    {
+      "label": "3. Toolbar UX & Optimization",
+      "file_type": "document",
+      "source_file": "optimization.md",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "optimization_3_toolbar_ux_optimization",
+      "community": 12,
+      "norm_label": "3. toolbar ux & optimization"
+    },
+    {
+      "label": "4. Color Selection State Sync Bug",
+      "file_type": "document",
+      "source_file": "optimization.md",
+      "source_location": "L37",
+      "_origin": "ast",
+      "id": "optimization_4_color_selection_state_sync_bug",
+      "community": 12,
+      "norm_label": "4. color selection state sync bug"
+    },
+    {
+      "label": "5. Optimized PDF Export Pipeline (Sketchbook Pro Style)",
+      "file_type": "document",
+      "source_file": "optimization.md",
+      "source_location": "L45",
+      "_origin": "ast",
+      "id": "optimization_5_optimized_pdf_export_pipeline_sketchbook_pro_style",
+      "community": 12,
+      "norm_label": "5. optimized pdf export pipeline (sketchbook pro style)"
+    },
+    {
+      "label": "6. Collapsible Side Menus & Immersive Canvas Mode",
+      "file_type": "document",
+      "source_file": "optimization.md",
+      "source_location": "L54",
+      "_origin": "ast",
+      "id": "optimization_6_collapsible_side_menus_immersive_canvas_mode",
+      "community": 12,
+      "norm_label": "6. collapsible side menus & immersive canvas mode"
+    },
+    {
+      "label": "7. Board Loading by ID via Dashboard Input",
+      "file_type": "document",
+      "source_file": "optimization.md",
+      "source_location": "L62",
+      "_origin": "ast",
+      "id": "optimization_7_board_loading_by_id_via_dashboard_input",
+      "community": 12,
+      "norm_label": "7. board loading by id via dashboard input"
+    },
+    {
+      "label": "8. Admin Access Management & View-Only Canvas State",
+      "file_type": "document",
+      "source_file": "optimization.md",
+      "source_location": "L72",
+      "_origin": "ast",
+      "id": "optimization_8_admin_access_management_view_only_canvas_state",
+      "community": 12,
+      "norm_label": "8. admin access management & view-only canvas state"
+    },
+    {
+      "label": "9. Integrated Audio, Video, and Chat Communication Rooms",
+      "file_type": "document",
+      "source_file": "optimization.md",
+      "source_location": "L80",
+      "_origin": "ast",
+      "id": "optimization_9_integrated_audio_video_and_chat_communication_rooms",
+      "community": 12,
+      "norm_label": "9. integrated audio, video, and chat communication rooms"
+    },
+    {
+      "label": "10. Advanced Lasso & Selection Tool Refactor (On-Demand Implementation)",
+      "file_type": "document",
+      "source_file": "optimization.md",
+      "source_location": "L88",
+      "_origin": "ast",
+      "id": "optimization_10_advanced_lasso_selection_tool_refactor_on_demand_implementation",
+      "community": 12,
+      "norm_label": "10. advanced lasso & selection tool refactor (on-demand implementation)"
     },
     {
       "label": "Project Description and Requirements",
@@ -3202,9 +3322,9 @@
       "source_file": "server/index.js",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "server_index",
-      "target": "server_index_createadapter",
-      "confidence_score": 1.0
+      "target": "server_index_createadapter"
     },
     {
       "relation": "contains",
@@ -3413,9 +3533,9 @@
       "source_file": "server/tests/auth.test.js",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_auth_test",
-      "target": "server_index",
-      "confidence_score": 1.0
+      "target": "server_index"
     },
     {
       "relation": "imports_from",
@@ -3424,9 +3544,9 @@
       "source_file": "server/tests/health.test.js",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_health_test",
-      "target": "server_index",
-      "confidence_score": 1.0
+      "target": "server_index"
     },
     {
       "relation": "imports",
@@ -3435,9 +3555,9 @@
       "source_file": "server/tests/auth.test.js",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_auth_test",
-      "target": "server_index_app",
-      "confidence_score": 1.0
+      "target": "server_index_app"
     },
     {
       "relation": "imports",
@@ -3446,9 +3566,9 @@
       "source_file": "server/tests/health.test.js",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_health_test",
-      "target": "server_index_app",
-      "confidence_score": 1.0
+      "target": "server_index_app"
     },
     {
       "relation": "contains",
@@ -3507,9 +3627,9 @@
       "source_file": "server/tests/auth.test.js",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_auth_test",
-      "target": "models_user",
-      "confidence_score": 1.0
+      "target": "models_user"
     },
     {
       "relation": "references",
@@ -3557,9 +3677,9 @@
       "source_file": "server/package.json",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "server_package",
-      "target": "server_package_devdependencies",
-      "confidence_score": 1.0
+      "target": "server_package_devdependencies"
     },
     {
       "relation": "contains",
@@ -3627,9 +3747,9 @@
       "source_file": "server/package.json",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "server_package_scripts",
-      "target": "server_package_scripts_test",
-      "confidence_score": 1.0
+      "target": "server_package_scripts_test"
     },
     {
       "relation": "contains",
@@ -3737,9 +3857,9 @@
       "source_file": "server/package.json",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "server_package_dependencies",
-      "target": "server_package_dependencies_socket_io_redis_adapter",
-      "confidence_score": 1.0
+      "target": "server_package_dependencies_socket_io_redis_adapter"
     },
     {
       "relation": "contains",
@@ -3747,9 +3867,9 @@
       "source_file": "server/package.json",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "server_package_devdependencies",
-      "target": "server_package_devdependencies_jest",
-      "confidence_score": 1.0
+      "target": "server_package_devdependencies_jest"
     },
     {
       "relation": "contains",
@@ -3757,9 +3877,9 @@
       "source_file": "server/package.json",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "server_package_devdependencies",
-      "target": "server_package_devdependencies_supertest",
-      "confidence_score": 1.0
+      "target": "server_package_devdependencies_supertest"
     },
     {
       "relation": "contains",
@@ -3767,9 +3887,9 @@
       "source_file": "server/tests/auth.test.js",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_auth_test",
-      "target": "tests_auth_test_app",
-      "confidence_score": 1.0
+      "target": "tests_auth_test_app"
     },
     {
       "relation": "contains",
@@ -3777,9 +3897,9 @@
       "source_file": "server/tests/auth.test.js",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_auth_test",
-      "target": "tests_auth_test_mongoose",
-      "confidence_score": 1.0
+      "target": "tests_auth_test_mongoose"
     },
     {
       "relation": "contains",
@@ -3787,9 +3907,9 @@
       "source_file": "server/tests/auth.test.js",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_auth_test",
-      "target": "tests_auth_test_request",
-      "confidence_score": 1.0
+      "target": "tests_auth_test_request"
     },
     {
       "relation": "contains",
@@ -3797,9 +3917,9 @@
       "source_file": "server/tests/auth.test.js",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_auth_test",
-      "target": "tests_auth_test_user",
-      "confidence_score": 1.0
+      "target": "tests_auth_test_user"
     },
     {
       "relation": "contains",
@@ -3807,9 +3927,9 @@
       "source_file": "server/tests/health.test.js",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_health_test",
-      "target": "tests_health_test_app",
-      "confidence_score": 1.0
+      "target": "tests_health_test_app"
     },
     {
       "relation": "contains",
@@ -3817,9 +3937,9 @@
       "source_file": "server/tests/health.test.js",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_health_test",
-      "target": "tests_health_test_request",
-      "confidence_score": 1.0
+      "target": "tests_health_test_request"
     },
     {
       "relation": "contains",
@@ -3867,9 +3987,9 @@
       "source_file": "GEMINI.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gemini",
-      "target": "gemini_graphify",
-      "confidence_score": 1.0
+      "target": "gemini_graphify"
     },
     {
       "relation": "references",
@@ -4162,6 +4282,116 @@
       "target": "tasks_pr_review_checklist"
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "optimization.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "optimization",
+      "target": "optimization_visual_whiteboard_feature_backlog_task_tracking",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "optimization.md",
+      "source_location": "L88",
+      "weight": 1.0,
+      "source": "optimization_visual_whiteboard_feature_backlog_task_tracking",
+      "target": "optimization_10_advanced_lasso_selection_tool_refactor_on_demand_implementation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "optimization.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "optimization_visual_whiteboard_feature_backlog_task_tracking",
+      "target": "optimization_1_multi_page_reordering_sharing_restricted_access",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "optimization.md",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "optimization_visual_whiteboard_feature_backlog_task_tracking",
+      "target": "optimization_2_fixed_position_page_navigation_ui",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "optimization.md",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "optimization_visual_whiteboard_feature_backlog_task_tracking",
+      "target": "optimization_3_toolbar_ux_optimization",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "optimization.md",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "optimization_visual_whiteboard_feature_backlog_task_tracking",
+      "target": "optimization_4_color_selection_state_sync_bug",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "optimization.md",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "optimization_visual_whiteboard_feature_backlog_task_tracking",
+      "target": "optimization_5_optimized_pdf_export_pipeline_sketchbook_pro_style",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "optimization.md",
+      "source_location": "L54",
+      "weight": 1.0,
+      "source": "optimization_visual_whiteboard_feature_backlog_task_tracking",
+      "target": "optimization_6_collapsible_side_menus_immersive_canvas_mode",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "optimization.md",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "optimization_visual_whiteboard_feature_backlog_task_tracking",
+      "target": "optimization_7_board_loading_by_id_via_dashboard_input",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "optimization.md",
+      "source_location": "L72",
+      "weight": 1.0,
+      "source": "optimization_visual_whiteboard_feature_backlog_task_tracking",
+      "target": "optimization_8_admin_access_management_view_only_canvas_state",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "optimization.md",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "optimization_visual_whiteboard_feature_backlog_task_tracking",
+      "target": "optimization_9_integrated_audio_video_and_chat_communication_rooms",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "references",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
@@ -4323,5 +4553,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "66c54212276782797f54a5dbed6e48d9ab0812c8"
+  "built_at_commit": "846c4d0564d62e6eb59ca5f328ef277572197ee4"
 }

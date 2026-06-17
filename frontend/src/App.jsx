@@ -1391,29 +1391,26 @@ export default function App() {
             const dx = pointer.x - startX
             const dy = pointer.y - startY
             const angle = Math.atan2(dy, dx)
-            const headLength = 15 + (strokeWidth * 0.5)
+            const headLength = 10 + (strokeWidth * 0.8)
             
-            const line = new F.Line([startX, startY, pointer.x, pointer.y], {
-              stroke: stroke,
-              strokeWidth: strokeWidth,
-              strokeUniform: true,
-              strokeLineCap: 'round'
-            })
-            const head = new F.Triangle({
-              left: pointer.x,
-              top: pointer.y,
-              angle: (angle * 180 / Math.PI) + 90,
-              width: headLength,
-              height: headLength,
-              fill: stroke,
-              originX: 'center',
-              originY: 'center',
-              selectable: false,
-              evented: false
-            })
-            finalShape = new F.Group([line, head], {
+            // Calculate head points for unified path
+            const headX1 = pointer.x - headLength * Math.cos(angle - Math.PI / 6)
+            const headY1 = pointer.y - headLength * Math.sin(angle - Math.PI / 6)
+            const headX2 = pointer.x - headLength * Math.cos(angle + Math.PI / 6)
+            const headY2 = pointer.y - headLength * Math.sin(angle + Math.PI / 6)
+
+            // Single path: Line to end, then triangle head, then back to end
+            const pathData = `M ${startX} ${startY} L ${pointer.x} ${pointer.y} M ${pointer.x} ${pointer.y} L ${headX1} ${headY1} L ${headX2} ${headY2} Z`
+            
+            finalShape = new F.Path(pathData, {
               id: elementId,
               customType: 'arrow',
+              stroke: stroke,
+              strokeWidth: strokeWidth,
+              fill: stroke, // Head is filled with stroke color
+              strokeUniform: true,
+              strokeLineCap: 'round',
+              strokeLineJoin: 'round',
               selectable: true,
               evented: true
             })
@@ -1906,28 +1903,19 @@ export default function App() {
         evented: true
       })
     } else if (type === 'arrow') {
-      // Create standard arrow group
-      const line = new F.Line([centerX - 50, centerY, centerX + 50, centerY], {
-        stroke: stroke,
-        strokeWidth: strokeWidth,
-        strokeUniform: true,
-        strokeLineCap: 'round'
-      })
-      const head = new F.Triangle({
-        left: centerX + 50,
-        top: centerY,
-        angle: 90,
-        width: 15 + (strokeWidth * 0.5),
-        height: 15 + (strokeWidth * 0.5),
-        fill: stroke,
-        originX: 'center',
-        originY: 'center',
-        selectable: false,
-        evented: false
-      })
-      shape = new F.Group([line, head], {
+      const headLength = 10 + (strokeWidth * 0.8)
+      // M 0 0 L 100 0 (Line) M 100 0 L 85 -7.5 L 85 7.5 Z (Head)
+      const pathData = `M ${centerX - 50} ${centerY} L ${centerX + 50} ${centerY} M ${centerX + 50} ${centerY} L ${centerX + 50 - headLength} ${centerY - headLength/2} L ${centerX + 50 - headLength} ${centerY + headLength/2} Z`
+      
+      shape = new F.Path(pathData, {
         id: elementId,
         customType: 'arrow',
+        stroke: stroke,
+        strokeWidth: strokeWidth,
+        fill: stroke,
+        strokeUniform: true,
+        strokeLineCap: 'round',
+        strokeLineJoin: 'round',
         selectable: true,
         evented: true
       })
@@ -1958,9 +1946,15 @@ export default function App() {
       if (activeObject.type === 'activeSelection') {
         activeObject.forEachObject((obj) => {
           obj.set(name, value)
+          if (obj.customType === 'arrow' && name === 'stroke') {
+            obj.set('fill', value) // Keep head filled with stroke color
+          }
         })
       } else {
         activeObject.set(name, value)
+        if (activeObject.customType === 'arrow' && name === 'stroke') {
+          activeObject.set('fill', value)
+        }
       }
       canvas.requestRenderAll()
       saveHistory()

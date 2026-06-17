@@ -1,16 +1,16 @@
-# Graph Report - Visual Whiteboard Pro  (2026-06-16)
+# Graph Report - Visual Whiteboard Pro  (2026-06-17)
 
 ## Corpus Check
-- 47 files · ~32,532 words
+- 48 files · ~35,035 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 199 nodes · 224 edges · 15 communities (12 shown, 3 thin omitted)
+- 211 nodes · 235 edges · 15 communities (12 shown, 3 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `66c54212`
+- Built from commit: `846c4d05`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -33,14 +33,14 @@
 ## God Nodes (most connected - your core abstractions)
 1. `Visual Whiteboard Pro` - 16 edges
 2. `Project Description and Requirements` - 12 edges
-3. `Visual Whiteboard Pro — Phased Task Breakdown` - 10 edges
-4. `Drawing Canvas` - 8 edges
-5. `getPathSelectionMode()` - 6 edges
-6. `scripts` - 5 edges
-7. `scripts` - 4 edges
-8. `App()` - 4 edges
-9. `isPointInPolygon()` - 4 edges
-10. `sampleFabricPath()` - 3 edges
+3. `Visual Whiteboard - Feature Backlog & Task Tracking` - 11 edges
+4. `Visual Whiteboard Pro — Phased Task Breakdown` - 10 edges
+5. `Drawing Canvas` - 8 edges
+6. `getPathSelectionMode()` - 6 edges
+7. `scripts` - 5 edges
+8. `scripts` - 4 edges
+9. `App()` - 4 edges
+10. `isPointInPolygon()` - 4 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `App()` --references--> `Real-time Collaboration`  [EXTRACTED]
@@ -74,8 +74,8 @@ Cohesion: 0.12
 Nodes (16): API Surface, Configuration, Current Limitations, Data Model, Future Improvements, How It Works, Local Setup, Notes For Development (+8 more)
 
 ### Community 5 - "Frontend Application & Collaboration UI"
-Cohesion: 0.14
-Nodes (10): AssistPanel(), CanvasControls(), ContextPanel(), LANGUAGES, ExportModal(), PageStrip(), PropertiesPanel(), Toolbar() (+2 more)
+Cohesion: 0.11
+Nodes (16): AssistPanel(), CanvasControls(), ContextPanel(), LANGUAGES, ExportModal(), PageStrip(), PropertiesPanel(), Toolbar() (+8 more)
 
 ### Community 6 - "Database Schema & Persistence"
 Cohesion: 0.20
@@ -94,11 +94,11 @@ Cohesion: 0.29
 Nodes (6): husky.sh script, devDependencies, eslint, husky, lint-staged, prettier
 
 ### Community 12 - "Community 12"
-Cohesion: 0.39
-Nodes (6): bboxCornersInPolygon(), getPathSelectionMode(), isPointInPolygon(), pathDataToSvgD(), sampleFabricPath(), samplePathHitPoints()
+Cohesion: 0.17
+Nodes (11): 10. Advanced Lasso & Selection Tool Refactor (On-Demand Implementation), 1. Multi-Page Reordering & Sharing (Restricted Access), 2. Fixed Position Page Navigation UI, 3. Toolbar UX & Optimization, 4. Color Selection State Sync Bug, 5. Optimized PDF Export Pipeline (Sketchbook Pro Style), 6. Collapsible Side Menus & Immersive Canvas Mode, 7. Board Loading by ID via Dashboard Input (+3 more)
 
 ## Knowledge Gaps
-- **120 isolated node(s):** `husky.sh script`, `name`, `version`, `private`, `dev` (+115 more)
+- **130 isolated node(s):** `husky.sh script`, `name`, `version`, `private`, `dev` (+125 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **3 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -106,16 +106,16 @@ Nodes (6): bboxCornersInPolygon(), getPathSelectionMode(), isPointInPolygon(), p
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Project Description and Requirements` connect `Editor Specifications & Features` to `Backend Server Initialization`?**
-  _High betweenness centrality (0.160) - this node is a cross-community bridge._
+  _High betweenness centrality (0.142) - this node is a cross-community bridge._
 - **Why does `Real-time Collaboration` connect `Editor Specifications & Features` to `Backend Server Initialization`?**
-  _High betweenness centrality (0.158) - this node is a cross-community bridge._
+  _High betweenness centrality (0.140) - this node is a cross-community bridge._
 - **Why does `App()` connect `Editor Specifications & Features` to `Frontend Application & Collaboration UI`?**
-  _High betweenness centrality (0.146) - this node is a cross-community bridge._
-- **Are the 6 inferred relationships involving `Drawing Canvas` (e.g. with `Architecture Assist AI` and `Context Layer`) actually correct?**
-  _`Drawing Canvas` has 6 INFERRED edges - model-reasoned connections that need verification._
+  _High betweenness centrality (0.129) - this node is a cross-community bridge._
 - **What connects `husky.sh script`, `name`, `version` to the rest of the system?**
-  _120 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _130 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Frontend Package Configuration` be split into smaller, more focused modules?**
   _Cohesion score 0.125 - nodes in this community are weakly interconnected._
 - **Should `Backend Server Initialization` be split into smaller, more focused modules?**
   _Cohesion score 0.0524390243902439 - nodes in this community are weakly interconnected._
+- **Should `Backend Package Configuration` be split into smaller, more focused modules?**
+  _Cohesion score 0.08695652173913043 - nodes in this community are weakly interconnected._
