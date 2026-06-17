@@ -198,6 +198,19 @@ export default function App() {
   const [pageSize, setPageSize] = useState({ w: 1024, h: 576 }) // default 16:9 Presentation Slide size
   const [isExportModalOpen, setIsExportModalOpen] = useState(false)
 
+  // Collapsible Panel States (Item 6)
+  const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(false)
+  const [isRightPanelCollapsed, setIsRightPanelCollapsed] = useState(false)
+
+  const toggleLeftPanel = () => setIsLeftPanelCollapsed(prev => !prev)
+  const toggleRightPanel = () => setIsRightPanelCollapsed(prev => !prev)
+
+  // Auto-collapse logic when interacting with canvas
+  const handleCanvasInteraction = () => {
+    if (!isLeftPanelCollapsed) setIsLeftPanelCollapsed(true)
+    if (!isRightPanelCollapsed) setIsRightPanelCollapsed(true)
+  }
+
   // Refs for callbacks & listeners to avoid stale states
   const activeToolRef = useRef(activeTool)
   const snapToGridRef = useRef(snapToGrid)
@@ -1039,6 +1052,9 @@ export default function App() {
       const activeTool = activeToolRef.current
       const selectionTools = ['lasso-select', 'square-select', 'circle-select']
       
+      // Auto-collapse panels on interaction
+      handleCanvasInteraction()
+
       // Panning logic on drag
       if (activeTool === 'pan') {
         canvas.isDragging = true
@@ -3178,7 +3194,21 @@ export default function App() {
           onReorderPage={reorderPage}
           onSharePage={sharePage}
           canManagePages={!isReadOnly && (boardMeta.owner === user.id || !savedId)}
+          isCollapsed={isLeftPanelCollapsed}
+          onToggleCollapse={toggleLeftPanel}
         />
+
+        {isLeftPanelCollapsed && (
+          <div 
+            className="strip-expand-trigger" 
+            onClick={toggleLeftPanel}
+            title="Expand Page Strip"
+          >
+            <svg width="12" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </div>
+        )}
 
         {/* Toolbar Left Side */}
         <Toolbar 
@@ -3319,7 +3349,21 @@ export default function App() {
           setDrawType={setDrawType}
           drawSizes={drawSizes}
           onChangeDrawSize={handleChangeDrawSize}
+          isCollapsed={isRightPanelCollapsed}
+          onToggleCollapse={toggleRightPanel}
         />
+
+        {isRightPanelCollapsed && (
+          <div 
+            className="panel-expand-trigger" 
+            onClick={toggleRightPanel}
+            title="Expand Properties"
+          >
+            <svg width="12" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </div>
+        )}
 
         {/* Context Details Panel (Slides from Right) */}
         <ContextPanel

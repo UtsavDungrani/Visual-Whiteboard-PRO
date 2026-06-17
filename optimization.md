@@ -55,8 +55,8 @@ This document outlines the pending technical tasks, optimizations, and feature i
 * **Objective:** Maximize drawing real estate by making side menus auto-hide or overlay intelligently.
 * **Context/Scope:** Main Layout UI shell.
 * **Action Items:**
-    * [ ] Implement an auto-collapse trigger for side menus when the active canvas receives focus or a drag/draw event starts (`onPointerDown`).
-    * [ ] Change menus from static layout columns to absolute overlays (`absolute z-50`) that appear on hovering/clicking the edge and slide away on blur.
+    * [c] Implement an auto-collapse trigger for side menus when the active canvas receives focus or a drag/draw event starts (`onPointerDown`).
+    * [c] Change menus from static layout columns to absolute overlays (`absolute z-50`) that appear on hovering/clicking the edge and slide away on blur.
 * **Acceptance Criteria:** Canvas fills the full screen by default. Selecting a menu opens a floating drawer overlay that slides closed automatically when interaction shifts back to drawing.
 
 ## 7. Board Loading by ID via Dashboard Input

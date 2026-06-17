@@ -10,9 +10,10 @@ export default function PageStrip({
   onRenamePage,
   onReorderPage,
   onSharePage,
-  canManagePages = false
+  canManagePages = false,
+  isCollapsed = false,
+  onToggleCollapse
 }) {
-  const [isOpen, setIsOpen] = useState(true)
   const [contextMenu, setContextMenu] = useState(null)
   const [draggedPageId, setDraggedPageId] = useState(null)
   const [dragOverPageId, setDragOverPageId] = useState(null)
@@ -112,16 +113,16 @@ export default function PageStrip({
   return (
     <>
       {/* Sidebar PageStrip Panel */}
-      <aside className={`page-strip ${isOpen ? 'open' : 'collapsed'}`}>
+      <aside className={`page-strip ${isCollapsed ? 'collapsed' : 'open'}`}>
         <div className="strip-header">
           <span className="strip-title">Pages</span>
           <button 
             className="collapse-toggle-btn"
-            onClick={() => setIsOpen(!isOpen)}
-            title={isOpen ? "Collapse Sidebar" : "Expand Sidebar"}
+            onClick={onToggleCollapse}
+            title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
           >
             <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              {isOpen ? (
+              {!isCollapsed ? (
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
               ) : (
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
@@ -130,7 +131,7 @@ export default function PageStrip({
           </button>
         </div>
 
-        {isOpen && (
+        {!isCollapsed && (
           <div className="strip-body">
             <div className="thumbnail-list">
               {pages.map((page, index) => {
@@ -191,19 +192,6 @@ export default function PageStrip({
           </div>
         )}
       </aside>
-
-      {/* Expand trigger button when collapsed */}
-      {!isOpen && (
-        <button 
-          className="strip-expand-trigger"
-          onClick={() => setIsOpen(true)}
-          title="Expand Pages Sidebar"
-        >
-          <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-          </svg>
-        </button>
-      )}
 
       {/* Styled Custom Context Menu */}
       {contextMenu && (

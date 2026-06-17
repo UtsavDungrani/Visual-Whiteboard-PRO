@@ -16,7 +16,9 @@ export default function PropertiesPanel({
   drawType = 'pencil',
   setDrawType = () => {},
   drawSizes = { pencil: 2, pen: 6, highlighter: 20, eraser: 20 },
-  onChangeDrawSize = () => {}
+  onChangeDrawSize = () => {},
+  isCollapsed = false,
+  onToggleCollapse
 }) {
   const strokeColors = [
     '#1E3A5F', // Primary Blue
@@ -87,172 +89,202 @@ export default function PropertiesPanel({
     ]
 
     return (
-      <aside className="properties-panel">
+      <aside className={`properties-panel ${isCollapsed ? 'collapsed' : 'open'}`}>
         <div className="panel-header">
           <span className="panel-title">Brush Settings</span>
+          <button 
+            className="collapse-toggle-btn"
+            onClick={onToggleCollapse}
+            title={isCollapsed ? "Expand Inspector" : "Collapse Inspector"}
+          >
+            <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              {isCollapsed ? (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              )}
+            </svg>
+          </button>
         </div>
-        <div className="panel-body">
-          {/* Brush Type */}
-          <div className="property-group">
-            <h3 className="section-title">Brush Type</h3>
-            <div className="brush-type-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px', marginBottom: '16px' }}>
-              {brushTypes.map((t) => (
-                <button
-                  key={t.id}
-                  className={`btn ${drawType === t.id ? 'btn-primary' : 'btn-secondary'}`}
-                  onClick={() => setDrawType(t.id)}
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    padding: '12px 8px',
-                    gap: '6px',
-                    borderRadius: '10px',
-                    fontSize: '12px',
-                    fontWeight: '600',
-                    textAlign: 'center',
-                    cursor: 'pointer',
-                    background: drawType === t.id ? 'var(--color-primary)' : 'rgba(243, 244, 246, 0.8)',
-                    color: drawType === t.id ? 'white' : 'var(--color-text-secondary)',
-                    border: '1px solid var(--color-border)'
-                  }}
-                  title={t.desc}
-                >
-                  <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{t.icon}</span>
-                  <span>{t.label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Brush Color (hidden for Eraser) */}
-          {drawType !== 'eraser' && (
+        {!isCollapsed && (
+          <div className="panel-body">
+            {/* Brush Type */}
             <div className="property-group">
-              <h3 className="section-title">Brush Color</h3>
-              <div className="color-grid">
-                {strokeColors.map((color) => (
+              <h3 className="section-title">Brush Type</h3>
+              <div className="brush-type-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px', marginBottom: '16px' }}>
+                {brushTypes.map((t) => (
                   <button
-                    key={color}
-                    className={`color-option ${properties.stroke === color ? 'active' : ''}`}
-                    style={{ backgroundColor: color }}
-                    onClick={() => onChangeProperty('stroke', color)}
-                    title={color}
-                  />
+                    key={t.id}
+                    className={`btn ${drawType === t.id ? 'btn-primary' : 'btn-secondary'}`}
+                    onClick={() => setDrawType(t.id)}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      padding: '12px 8px',
+                      gap: '6px',
+                      borderRadius: '10px',
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      textAlign: 'center',
+                      cursor: 'pointer',
+                      background: drawType === t.id ? 'var(--color-primary)' : 'rgba(243, 244, 246, 0.8)',
+                      color: drawType === t.id ? 'white' : 'var(--color-text-secondary)',
+                      border: '1px solid var(--color-border)'
+                    }}
+                    title={t.desc}
+                  >
+                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{t.icon}</span>
+                    <span>{t.label}</span>
+                  </button>
                 ))}
-                <div 
-                  className={`color-option custom-color-btn ${!strokeColors.includes(properties.stroke) ? 'active' : ''}`} 
-                  title="Choose custom brush color"
-                  style={{ backgroundColor: !strokeColors.includes(properties.stroke) ? properties.stroke : undefined }}
-                >
-                  <input 
-                    type="color" 
-                    value={properties.stroke || '#000000'} 
-                    onChange={(e) => onChangeProperty('stroke', e.target.value)} 
-                    style={{ opacity: 0, width: '100%', height: '100%', cursor: 'pointer' }}
-                  />
-                  <span style={{ position: 'absolute', pointerEvents: 'none', fontSize: '14px', color: !strokeColors.includes(properties.stroke) ? 'white' : 'inherit' }}>+</span>
+              </div>
+            </div>
+
+            {/* Brush Color (hidden for Eraser) */}
+            {drawType !== 'eraser' && (
+              <div className="property-group">
+                <h3 className="section-title">Brush Color</h3>
+                <div className="color-grid">
+                  {strokeColors.map((color) => (
+                    <button
+                      key={color}
+                      className={`color-option ${properties.stroke === color ? 'active' : ''}`}
+                      style={{ backgroundColor: color }}
+                      onClick={() => onChangeProperty('stroke', color)}
+                      title={color}
+                    />
+                  ))}
+                  <div 
+                    className={`color-option custom-color-btn ${!strokeColors.includes(properties.stroke) ? 'active' : ''}`} 
+                    title="Choose custom brush color"
+                    style={{ backgroundColor: !strokeColors.includes(properties.stroke) ? properties.stroke : undefined }}
+                  >
+                    <input 
+                      type="color" 
+                      value={properties.stroke || '#000000'} 
+                      onChange={(e) => onChangeProperty('stroke', e.target.value)} 
+                      style={{ opacity: 0, width: '100%', height: '100%', cursor: 'pointer' }}
+                    />
+                    <span style={{ position: 'absolute', pointerEvents: 'none', fontSize: '14px', color: !strokeColors.includes(properties.stroke) ? 'white' : 'inherit' }}>+</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Eraser size controls */}
-          {drawType === 'eraser' && (
-            <div className="property-group">
-              <h3 className="section-title">Eraser Size</h3>
-              <div className="brush-size-control">
-                <button
-                  type="button"
-                  className="brush-size-btn"
-                  onClick={() => onChangeDrawSize('eraser', drawSizes.eraser - 4)}
-                  title="Decrease eraser size"
-                  aria-label="Decrease eraser size"
-                >
-                  −
-                </button>
-                <input
-                  type="range"
-                  min="5"
-                  max="60"
-                  step="1"
-                  value={drawSizes.eraser}
-                  onChange={(e) => onChangeDrawSize('eraser', parseInt(e.target.value, 10))}
-                  className="brush-size-slider"
-                />
-                <button
-                  type="button"
-                  className="brush-size-btn"
-                  onClick={() => onChangeDrawSize('eraser', drawSizes.eraser + 4)}
-                  title="Increase eraser size"
-                  aria-label="Increase eraser size"
-                >
-                  +
-                </button>
+            {/* Eraser size controls */}
+            {drawType === 'eraser' && (
+              <div className="property-group">
+                <h3 className="section-title">Eraser Size</h3>
+                <div className="brush-size-control">
+                  <button
+                    type="button"
+                    className="brush-size-btn"
+                    onClick={() => onChangeDrawSize('eraser', drawSizes.eraser - 4)}
+                    title="Decrease eraser size"
+                    aria-label="Decrease eraser size"
+                  >
+                    −
+                  </button>
+                  <input
+                    type="range"
+                    min="5"
+                    max="60"
+                    step="1"
+                    value={drawSizes.eraser}
+                    onChange={(e) => onChangeDrawSize('eraser', parseInt(e.target.value, 10))}
+                    className="brush-size-slider"
+                  />
+                  <button
+                    type="button"
+                    className="brush-size-btn"
+                    onClick={() => onChangeDrawSize('eraser', drawSizes.eraser + 4)}
+                    title="Increase eraser size"
+                    aria-label="Increase eraser size"
+                  >
+                    +
+                  </button>
+                </div>
+                <span className="slider-value">{drawSizes.eraser}px</span>
               </div>
-              <span className="slider-value">{drawSizes.eraser}px</span>
-            </div>
-          )}
+            )}
 
-          <div className="property-group brush-preview-group" style={{ borderTop: '1px solid var(--color-border)', paddingTop: '16px', marginTop: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '11px', color: 'var(--color-text-secondary)', fontWeight: '600' }}>
-              {drawType === 'eraser' ? 'Eraser Preview' : 'Stroke Preview'}
-            </span>
-            <div
-              style={{
-                width: '80%',
-                height: '80px',
-                borderRadius: '12px',
-                border: '1px solid var(--color-border)',
-                background: '#F9FAFB',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                overflow: 'hidden'
-              }}
-            >
-              {drawType === 'eraser' ? (
-                <div
-                  style={{
-                    width: `${drawSizes.eraser}px`,
-                    height: `${drawSizes.eraser}px`,
-                    borderRadius: '50%',
-                    border: '2px solid #2E86AB',
-                    background: 'rgba(46, 134, 171, 0.1)',
-                    boxSizing: 'border-box'
-                  }}
-                />
-              ) : (
-                <div
-                  style={{
-                    width: '60%',
-                    height: drawType === 'pencil' ? '2px' : drawType === 'pen' ? '6px' : '12px',
-                    backgroundColor: properties.stroke || '#1E3A5F',
-                    opacity: drawType === 'highlighter' ? 0.4 : 1,
-                    borderRadius: '9999px'
-                  }}
-                />
-              )}
+            <div className="property-group brush-preview-group" style={{ borderTop: '1px solid var(--color-border)', paddingTop: '16px', marginTop: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '11px', color: 'var(--color-text-secondary)', fontWeight: '600' }}>
+                {drawType === 'eraser' ? 'Eraser Preview' : 'Stroke Preview'}
+              </span>
+              <div
+                style={{
+                  width: '80%',
+                  height: '80px',
+                  borderRadius: '12px',
+                  border: '1px solid var(--color-border)',
+                  background: '#F9FAFB',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  overflow: 'hidden'
+                }}
+              >
+                {drawType === 'eraser' ? (
+                  <div
+                    style={{
+                      width: `${drawSizes.eraser}px`,
+                      height: `${drawSizes.eraser}px`,
+                      borderRadius: '50%',
+                      border: '2px solid #2E86AB',
+                      background: 'rgba(46, 134, 171, 0.1)',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: '60%',
+                      height: drawType === 'pencil' ? '2px' : drawType === 'pen' ? '6px' : '12px',
+                      backgroundColor: properties.stroke || '#1E3A5F',
+                      opacity: drawType === 'highlighter' ? 0.4 : 1,
+                      borderRadius: '9999px'
+                    }}
+                  />
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </aside>
     )
   }
 
   if (!selectedObject) {
     return (
-      <aside className="properties-panel">
+      <aside className={`properties-panel ${isCollapsed ? 'collapsed' : 'open'}`}>
         <div className="panel-header">
           <span className="panel-title">Inspector</span>
-        </div>
-        <div className="panel-body">
-          <div className="empty-state">
-            <svg fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.042 9.152c.582.448 1.148.89 1.676 1.345m-7.708-.415L3 16.2m10.158-1.579l-4.52-4.519M21 21l-6-6m6-6V3m0 0h-6m6 0l-6 6M4.5 9a3.5 3.5 0 117 0 3.5 3.5 0 01-7 0z"></path>
+          <button 
+            className="collapse-toggle-btn"
+            onClick={onToggleCollapse}
+            title={isCollapsed ? "Expand Inspector" : "Collapse Inspector"}
+          >
+            <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              {isCollapsed ? (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              )}
             </svg>
-            <p>Select a shape or text to modify its properties.</p>
-          </div>
+          </button>
         </div>
+        {!isCollapsed && (
+          <div className="panel-body">
+            <div className="empty-state">
+              <svg fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.042 9.152c.582.448 1.148.89 1.676 1.345m-7.708-.415L3 16.2m10.158-1.579l-4.52-4.519M21 21l-6-6m6-6V3m0 0h-6m6 0l-6 6M4.5 9a3.5 3.5 0 117 0 3.5 3.5 0 01-7 0z"></path>
+              </svg>
+              <p>Select a shape or text to modify its properties.</p>
+            </div>
+          </div>
+        )}
       </aside>
     )
   }
@@ -261,12 +293,26 @@ export default function PropertiesPanel({
   const isConnector = selectedObject.customType === 'line' || selectedObject.customType === 'arrow'
 
   return (
-    <aside className="properties-panel">
+    <aside className={`properties-panel ${isCollapsed ? 'collapsed' : 'open'}`}>
       <div className="panel-header">
         <span className="panel-title">Properties</span>
+        <button 
+          className="collapse-toggle-btn"
+          onClick={onToggleCollapse}
+          title={isCollapsed ? "Expand Inspector" : "Collapse Inspector"}
+        >
+          <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            {isCollapsed ? (
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            )}
+          </svg>
+        </button>
       </div>
 
-      <div className="panel-body">
+      {!isCollapsed && (
+        <div className="panel-body">
         {/* Stroke / Border Color */}
         {!isReadOnly && (
           <div className="property-group">
@@ -470,7 +516,8 @@ export default function PropertiesPanel({
             </span>
           </div>
         )}
-      </div>
+        </div>
+      )}
     </aside>
   )
 }

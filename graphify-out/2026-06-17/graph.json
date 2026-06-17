@@ -1942,14 +1942,14 @@
       "norm_label": "4. color selection state sync bug"
     },
     {
-      "label": "5. Optimized PDF Export Pipeline (Sketchbook Book Style) [DONE]",
+      "label": "5. Optimized PDF Export Pipeline (Sketchbook Book Style)",
       "file_type": "document",
       "source_file": "optimization.md",
       "source_location": "L45",
       "_origin": "ast",
-      "id": "optimization_5_optimized_pdf_export_pipeline_sketchbook_book_style_done",
+      "id": "optimization_5_optimized_pdf_export_pipeline_sketchbook_book_style",
       "community": 12,
-      "norm_label": "5. optimized pdf export pipeline (sketchbook book style) [done]"
+      "norm_label": "5. optimized pdf export pipeline (sketchbook book style)"
     },
     {
       "label": "6. Collapsible Side Menus & Immersive Canvas Mode",
@@ -4348,7 +4348,7 @@
       "source_location": "L45",
       "weight": 1.0,
       "source": "optimization_visual_whiteboard_feature_backlog_task_tracking",
-      "target": "optimization_5_optimized_pdf_export_pipeline_sketchbook_book_style_done",
+      "target": "optimization_5_optimized_pdf_export_pipeline_sketchbook_book_style",
       "confidence_score": 1.0
     },
     {

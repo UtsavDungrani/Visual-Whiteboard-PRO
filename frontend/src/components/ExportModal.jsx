@@ -17,6 +17,7 @@ export default function ExportModal({
   const [pdfOrientation, setPdfOrientation] = useState('landscape') // portrait, landscape
   const [pdfSize, setPdfSize] = useState('16:9') // a4, 16:9
   const [pdfResolution, setPdfResolution] = useState(2) // 1 = 72, 2 = 150, 4 = 300 DPI
+  const [pdfBgColor, setPdfBgColor] = useState('#FFFFFF') // #FFFFFF, #000000
 
   // HTML settings
   const [htmlFormat, setHtmlFormat] = useState('single') // single, zip
@@ -105,6 +106,43 @@ export default function ExportModal({
                 obj.setCoords()
               }
             })
+            
+            // Calculate Bounding Box for Auto-Fit
+            const objects = tempCanvas.getObjects()
+            if (objects.length > 0) {
+              let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity
+              objects.forEach(obj => {
+                const rect = obj.getBoundingRect(true)
+                minX = Math.min(minX, rect.left)
+                minY = Math.min(minY, rect.top)
+                maxX = Math.max(maxX, rect.left + rect.width)
+                maxY = Math.max(maxY, rect.top + rect.height)
+              })
+
+              const contentW = maxX - minX
+              const contentH = maxY - minY
+              const padding = 40
+
+              // Prevent division by zero
+              const safeContentW = Math.max(contentW, 1)
+              const safeContentH = Math.max(contentH, 1)
+
+              // Calculate scale to fit content into target PDF page dimensions
+              const scale = Math.min(
+                (width - padding * 2) / safeContentW,
+                (height - padding * 2) / safeContentH
+              )
+
+              // Calculate offsets to center the content
+              const dx = (width - (safeContentW * scale)) / 2 - (minX * scale)
+              const dy = (height - (safeContentH * scale)) / 2 - (minY * scale)
+
+              // Apply the translation and scaling so large infinite canvas drawings fit perfectly
+              tempCanvas.setViewportTransform([scale, 0, 0, scale, dx, dy])
+            }
+
+            // Set User Selected Background Color
+            tempCanvas.backgroundColor = pdfBgColor
             tempCanvas.requestRenderAll()
 
             // Get high resolution snapshot
@@ -184,14 +222,10 @@ export default function ExportModal({
       for (let i = 0; i < selectedPages.length; i++) {
         const page = selectedPages[i]
         
-        const blob = await new Promise((resolve) => {
-          // Scale canvas for higher resolution if needed
-          const exportWidth = width * pdfResolution
-          const exportHeight = height * pdfResolution
-          
-          tempCanvas.setWidth(exportWidth)
-          tempCanvas.setHeight(exportHeight)
-          tempCanvas.setZoom(pdfResolution)
+        const dataUrl = await new Promise((resolve) => {
+          // Keep canvas at base resolution, let toDataURL handle scaling
+          tempCanvas.setWidth(width)
+          tempCanvas.setHeight(height)
           
           tempCanvas.loadFromJSON(page.canvas_state, () => {
             tempCanvas.getObjects().forEach((obj) => {
@@ -201,11 +235,57 @@ export default function ExportModal({
                 obj.setCoords()
               }
             })
+
+            // Calculate Bounding Box for Auto-Fit
+            const objects = tempCanvas.getObjects()
+            if (objects.length > 0) {
+              let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity
+              objects.forEach(obj => {
+                const rect = obj.getBoundingRect(true)
+                minX = Math.min(minX, rect.left)
+                minY = Math.min(minY, rect.top)
+                maxX = Math.max(maxX, rect.left + rect.width)
+                maxY = Math.max(maxY, rect.top + rect.height)
+              })
+
+              const contentW = maxX - minX
+              const contentH = maxY - minY
+              const padding = 40
+
+              const safeContentW = Math.max(contentW, 1)
+              const safeContentH = Math.max(contentH, 1)
+
+              // Calculate scale relative to the base dimension
+              const scale = Math.min(
+                (width - padding * 2) / safeContentW,
+                (height - padding * 2) / safeContentH
+              )
+
+              // Calculate offsets relative to the base dimension
+              const dx = (width - (safeContentW * scale)) / 2 - (minX * scale)
+              const dy = (height - (safeContentH * scale)) / 2 - (minY * scale)
+
+              // Apply the base translation and scaling
+              tempCanvas.setViewportTransform([scale, 0, 0, scale, dx, dy])
+            }
+
+            tempCanvas.backgroundColor = pdfBgColor
             tempCanvas.requestRenderAll()
 
-            tempCanvasEl.toBlob((b) => resolve(b), 'image/jpeg', 0.85)
+            const generatedDataUrl = tempCanvas.toDataURL({
+              format: 'jpeg',
+              quality: 0.85,
+              multiplier: pdfResolution
+            })
+            resolve(generatedDataUrl)
           })
         })
+
+        imgDataList.push(dataUrl)
+
+        // Convert base64 Data URL to Blob for saving to file system
+        const res = await fetch(dataUrl)
+        const blob = await res.blob()
 
         // Save JPEG to folder
         const fileName = `${i}.jpg`
@@ -213,14 +293,6 @@ export default function ExportModal({
         const writable = await fileHandle.createWritable()
         await writable.write(blob)
         await writable.close()
-
-        // Keep image data for PDF generation
-        const dataUrl = await new Promise((resolve) => {
-          const reader = new FileReader()
-          reader.onload = () => resolve(reader.result)
-          reader.readAsDataURL(blob)
-        })
-        imgDataList.push(dataUrl)
       }
 
       // Dispose offscreen canvas resources
@@ -533,6 +605,32 @@ export default function ExportModal({
                       <option value={2}>Print / High Definition (150 DPI)</option>
                       <option value={4}>Ultra Presentation Vector Quality (300 DPI)</option>
                     </select>
+                  </div>
+
+                  <div className="form-group">
+                    <span className="form-label">Background Color</span>
+                    <div className="radio-group">
+                      <label className="radio-label">
+                        <input 
+                          type="radio" 
+                          name="pdfBgColor" 
+                          value="#FFFFFF" 
+                          checked={pdfBgColor === '#FFFFFF'} 
+                          onChange={(e) => setPdfBgColor(e.target.value)} 
+                        />
+                        White
+                      </label>
+                      <label className="radio-label">
+                        <input 
+                          type="radio" 
+                          name="pdfBgColor" 
+                          value="#000000" 
+                          checked={pdfBgColor === '#000000'} 
+                          onChange={(e) => setPdfBgColor(e.target.value)} 
+                        />
+                        Black
+                      </label>
+                    </div>
                   </div>
 
                   <div className="export-actions-row" style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
