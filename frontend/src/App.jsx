@@ -3142,7 +3142,20 @@ export default function App() {
         roomUsers={roomUsers}
         currentUser={{ id: socketRef.current?.id, ...user }}
         onRenameUser={handleRenameUser}
-        onExport={() => setIsExportModalOpen(true)}
+        onExport={() => {
+          // Synchronize current page state before opening export modal
+          if (fabricRef.current) {
+            const currentJson = getCanvasJson()
+            const currentThumbnail = fabricRef.current.toDataURL({ format: 'jpeg', quality: 0.1, multiplier: 0.1 })
+            const updatedPages = pagesRef.current.map(p =>
+              p.page_id === activePageIdRef.current
+                ? { ...p, canvas_state: currentJson, thumbnail: currentThumbnail }
+                : p
+            )
+            setPages(updatedPages)
+          }
+          setIsExportModalOpen(true)
+        }}
         onCleanup={handleCleanup}
         onAssist={handleAssist}
         isCleanupLoading={isCleanupLoading}

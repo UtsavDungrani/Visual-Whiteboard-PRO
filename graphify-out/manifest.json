@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "frontend/src/App.jsx": {
-    "mtime": 1781677472.2364738,
-    "ast_hash": "077e83c1bb346d4788469042b26170ad",
+    "mtime": 1781694945.1516457,
+    "ast_hash": "c3c0bcbfae9b33d60055b1191ce429bb",
     "semantic_hash": ""
   },
   "frontend/src/main.jsx": {
@@ -80,8 +80,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ExportModal.jsx": {
-    "mtime": 1781496315.220582,
-    "ast_hash": "f5d37a3b5283955944a952d3613629d9",
+    "mtime": 1781695257.8839753,
+    "ast_hash": "c4cb7c998489008bee2cb078f0bff41f",
     "semantic_hash": ""
   },
   "frontend/src/components/PageStrip.jsx": {
@@ -245,8 +245,8 @@
     "semantic_hash": ""
   },
   "optimization.md": {
-    "mtime": 1781668763.134637,
-    "ast_hash": "945dfbd7c812d49e35aed1410da4edd7",
+    "mtime": 1781695346.399412,
+    "ast_hash": "66fa201f86a8212bf5051a1536f0ea82",
     "semantic_hash": ""
   }
 }

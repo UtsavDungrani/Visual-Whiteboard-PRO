@@ -215,7 +215,7 @@
       "label": "App()",
       "file_type": "code",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L140",
+      "source_location": "L18",
       "_origin": "ast",
       "id": "src_app_app",
       "community": 2,
@@ -1942,14 +1942,14 @@
       "norm_label": "4. color selection state sync bug"
     },
     {
-      "label": "5. Optimized PDF Export Pipeline (Sketchbook Pro Style)",
+      "label": "5. Optimized PDF Export Pipeline (Sketchbook Book Style)",
       "file_type": "document",
       "source_file": "optimization.md",
       "source_location": "L45",
       "_origin": "ast",
-      "id": "optimization_5_optimized_pdf_export_pipeline_sketchbook_pro_style",
+      "id": "optimization_5_optimized_pdf_export_pipeline_sketchbook_book_style",
       "community": 12,
-      "norm_label": "5. optimized pdf export pipeline (sketchbook pro style)"
+      "norm_label": "5. optimized pdf export pipeline (sketchbook book style)"
     },
     {
       "label": "6. Collapsible Side Menus & Immersive Canvas Mode",
@@ -4347,9 +4347,9 @@
       "source_file": "optimization.md",
       "source_location": "L45",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "optimization_visual_whiteboard_feature_backlog_task_tracking",
-      "target": "optimization_5_optimized_pdf_export_pipeline_sketchbook_pro_style"
+      "target": "optimization_5_optimized_pdf_export_pipeline_sketchbook_book_style",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -4553,5 +4553,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "b8f1cdc4332500bc06ce806fae16cd2180f59a35"
+  "built_at_commit": "d9b28810ea099570aad23a1829f82cae6203c554"
 }

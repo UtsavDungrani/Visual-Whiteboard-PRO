@@ -42,14 +42,14 @@ This document outlines the pending technical tasks, optimizations, and feature i
     * [c] Bind the background color or border style of the picker button directly to the `currentStrokeColor` state reactive variable.
 * **Acceptance Criteria:** When a color is selected, the color picker box visibly reflects that specific hue dynamically on the UI, matching the stroke color rendering on the canvas.
 
-## 5. Optimized PDF Export Pipeline (Sketchbook Pro Style)
+## 5. Optimized PDF Export Pipeline (Sketchbook Book Style)
 * **Objective:** Implement a lightweight, rapid multi-page PDF generation pipeline by converting pages to optimized images first.
 * **Context/Scope:** Export Utilities module.
 * **Action Items:**
-    * [ ] Create a generation routine that creates a workspace directory path structured as `${timestamp}-${boardName}`.
-    * [ ] Iterate through all canvas pages, converting them to compressed image formats (e.g., JPEG with 0.7 quality or WebP) for rapid compilation and low file size.
-    * [ ] Sequence the compressed image files into a cohesive PDF document (using `jsPDF` or equivalent).
-* **Acceptance Criteria:** Clicking "Save as PDF" outputs a highly compressed file quickly without freezing the browser tab, using an intermediate image step.
+    * [c] Create a generation routine that creates a workspace directory path structured as `${timestamp}-${boardName}`.
+    * [c] Iterate through all canvas pages, converting them to compressed image formats (e.g., JPEG with 0.85 quality) for rapid compilation and low file size.
+    * [c] Sequence the compressed image files into a cohesive PDF document (using `jsPDF`).
+* **Acceptance Criteria:** Clicking "Save as PDF" outputs a highly compressed file quickly without freezing the browser tab, using an intermediate image step. (Note: Implemented as "Save to Local Folder" in ExportModal).
 
 ## 6. Collapsible Side Menus & Immersive Canvas Mode
 * **Objective:** Maximize drawing real estate by making side menus auto-hide or overlay intelligently.

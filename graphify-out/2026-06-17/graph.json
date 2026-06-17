@@ -1942,14 +1942,14 @@
       "norm_label": "4. color selection state sync bug"
     },
     {
-      "label": "5. Optimized PDF Export Pipeline (Sketchbook Pro Style)",
+      "label": "5. Optimized PDF Export Pipeline (Sketchbook Book Style) [DONE]",
       "file_type": "document",
       "source_file": "optimization.md",
       "source_location": "L45",
       "_origin": "ast",
-      "id": "optimization_5_optimized_pdf_export_pipeline_sketchbook_pro_style",
+      "id": "optimization_5_optimized_pdf_export_pipeline_sketchbook_book_style_done",
       "community": 12,
-      "norm_label": "5. optimized pdf export pipeline (sketchbook pro style)"
+      "norm_label": "5. optimized pdf export pipeline (sketchbook book style) [done]"
     },
     {
       "label": "6. Collapsible Side Menus & Immersive Canvas Mode",
@@ -4287,9 +4287,9 @@
       "source_file": "optimization.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "optimization",
-      "target": "optimization_visual_whiteboard_feature_backlog_task_tracking",
-      "confidence_score": 1.0
+      "target": "optimization_visual_whiteboard_feature_backlog_task_tracking"
     },
     {
       "relation": "contains",
@@ -4297,9 +4297,9 @@
       "source_file": "optimization.md",
       "source_location": "L88",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "optimization_visual_whiteboard_feature_backlog_task_tracking",
-      "target": "optimization_10_advanced_lasso_selection_tool_refactor_on_demand_implementation",
-      "confidence_score": 1.0
+      "target": "optimization_10_advanced_lasso_selection_tool_refactor_on_demand_implementation"
     },
     {
       "relation": "contains",
@@ -4307,9 +4307,9 @@
       "source_file": "optimization.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "optimization_visual_whiteboard_feature_backlog_task_tracking",
-      "target": "optimization_1_multi_page_reordering_sharing_restricted_access",
-      "confidence_score": 1.0
+      "target": "optimization_1_multi_page_reordering_sharing_restricted_access"
     },
     {
       "relation": "contains",
@@ -4317,9 +4317,9 @@
       "source_file": "optimization.md",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "optimization_visual_whiteboard_feature_backlog_task_tracking",
-      "target": "optimization_2_fixed_position_page_navigation_ui",
-      "confidence_score": 1.0
+      "target": "optimization_2_fixed_position_page_navigation_ui"
     },
     {
       "relation": "contains",
@@ -4327,9 +4327,9 @@
       "source_file": "optimization.md",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "optimization_visual_whiteboard_feature_backlog_task_tracking",
-      "target": "optimization_3_toolbar_ux_optimization",
-      "confidence_score": 1.0
+      "target": "optimization_3_toolbar_ux_optimization"
     },
     {
       "relation": "contains",
@@ -4337,9 +4337,9 @@
       "source_file": "optimization.md",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "optimization_visual_whiteboard_feature_backlog_task_tracking",
-      "target": "optimization_4_color_selection_state_sync_bug",
-      "confidence_score": 1.0
+      "target": "optimization_4_color_selection_state_sync_bug"
     },
     {
       "relation": "contains",
@@ -4348,7 +4348,7 @@
       "source_location": "L45",
       "weight": 1.0,
       "source": "optimization_visual_whiteboard_feature_backlog_task_tracking",
-      "target": "optimization_5_optimized_pdf_export_pipeline_sketchbook_pro_style",
+      "target": "optimization_5_optimized_pdf_export_pipeline_sketchbook_book_style_done",
       "confidence_score": 1.0
     },
     {
@@ -4357,9 +4357,9 @@
       "source_file": "optimization.md",
       "source_location": "L54",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "optimization_visual_whiteboard_feature_backlog_task_tracking",
-      "target": "optimization_6_collapsible_side_menus_immersive_canvas_mode",
-      "confidence_score": 1.0
+      "target": "optimization_6_collapsible_side_menus_immersive_canvas_mode"
     },
     {
       "relation": "contains",
@@ -4367,9 +4367,9 @@
       "source_file": "optimization.md",
       "source_location": "L62",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "optimization_visual_whiteboard_feature_backlog_task_tracking",
-      "target": "optimization_7_board_loading_by_id_via_dashboard_input",
-      "confidence_score": 1.0
+      "target": "optimization_7_board_loading_by_id_via_dashboard_input"
     },
     {
       "relation": "contains",
@@ -4377,9 +4377,9 @@
       "source_file": "optimization.md",
       "source_location": "L72",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "optimization_visual_whiteboard_feature_backlog_task_tracking",
-      "target": "optimization_8_admin_access_management_view_only_canvas_state",
-      "confidence_score": 1.0
+      "target": "optimization_8_admin_access_management_view_only_canvas_state"
     },
     {
       "relation": "contains",
@@ -4387,9 +4387,9 @@
       "source_file": "optimization.md",
       "source_location": "L80",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "optimization_visual_whiteboard_feature_backlog_task_tracking",
-      "target": "optimization_9_integrated_audio_video_and_chat_communication_rooms",
-      "confidence_score": 1.0
+      "target": "optimization_9_integrated_audio_video_and_chat_communication_rooms"
     },
     {
       "relation": "references",
@@ -4553,5 +4553,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "846c4d0564d62e6eb59ca5f328ef277572197ee4"
+  "built_at_commit": "d9b28810ea099570aad23a1829f82cae6203c554"
 }

@@ -1,7 +1,7 @@
 # Graph Report - Visual Whiteboard Pro  (2026-06-17)
 
 ## Corpus Check
-- 48 files · ~35,326 words
+- 48 files · ~35,322 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b8f1cdc4`
+- Built from commit: `d9b28810`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -95,7 +95,7 @@ Nodes (6): husky.sh script, devDependencies, eslint, husky, lint-staged, prettie
 
 ### Community 12 - "Community 12"
 Cohesion: 0.17
-Nodes (11): 10. Advanced Lasso & Selection Tool Refactor (On-Demand Implementation), 1. Multi-Page Reordering & Sharing (Restricted Access), 2. Fixed Position Page Navigation UI, 3. Toolbar UX & Optimization, 4. Color Selection State Sync Bug, 5. Optimized PDF Export Pipeline (Sketchbook Pro Style), 6. Collapsible Side Menus & Immersive Canvas Mode, 7. Board Loading by ID via Dashboard Input (+3 more)
+Nodes (11): 10. Advanced Lasso & Selection Tool Refactor (On-Demand Implementation), 1. Multi-Page Reordering & Sharing (Restricted Access), 2. Fixed Position Page Navigation UI, 3. Toolbar UX & Optimization, 4. Color Selection State Sync Bug, 5. Optimized PDF Export Pipeline (Sketchbook Book Style), 6. Collapsible Side Menus & Immersive Canvas Mode, 7. Board Loading by ID via Dashboard Input (+3 more)
 
 ## Knowledge Gaps
 - **130 isolated node(s):** `husky.sh script`, `name`, `version`, `private`, `dev` (+125 more)

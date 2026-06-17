@@ -109,13 +109,13 @@ export default function ExportModal({
 
             // Get high resolution snapshot
             const imgData = tempCanvas.toDataURL({
-              format: 'png',
-              quality: 1.0,
+              format: 'jpeg',
+              quality: 0.85,
               multiplier: pdfResolution
             })
 
             if (i > 0) doc.addPage([width, height], orientation)
-            doc.addImage(imgData, 'PNG', 0, 0, width, height)
+            doc.addImage(imgData, 'JPEG', 0, 0, width, height)
             resolve()
           })
         })
@@ -134,90 +134,128 @@ export default function ExportModal({
     }
   }
 
-  // HTML / CSS Custom Serializer
-  const serializePageToHTML = (page, styleMode) => {
-    const objects = page.canvas_state?.objects || []
-    let elementsHtml = ''
-    let stylesHtml = ''
-    
-    // Grid sizes mapping
-    const w = 1024
-    const h = 576
+  const handleOptimizedExport = async () => {
+    if (selectedPageIds.length === 0) {
+      alert('Please select at least one page to export!')
+      return
+    }
 
-    objects.forEach((obj, index) => {
-      if (obj.id === 'page-boundary') return
+    if (!window.showDirectoryPicker) {
+      alert('Your browser does not support the File System Access API. Please use a modern desktop browser like Chrome or Edge over HTTPS.')
+      return
+    }
 
-      const left = Math.round(obj.left || 0)
-      const top = Math.round(obj.top || 0)
-      const width = Math.round((obj.width || 0) * (obj.scaleX || 1))
-      const height = Math.round((obj.height || 0) * (obj.scaleY || 1))
-      const fill = obj.fill || 'transparent'
-      const stroke = obj.stroke || '#000000'
-      const strokeWidth = obj.strokeWidth || 0
-      const opacity = obj.opacity !== undefined ? obj.opacity : 1
-      const rx = obj.rx || 0
-      
-      const className = `shape-${page.page_id}-${index}`
-      const baseStyles = `position: absolute; left: ${left}px; top: ${top}px; opacity: ${opacity};`
+    setIsExporting(true)
 
-      let styleStr = ''
-      let elementStr = ''
+    try {
+      const selectedPages = pages
+        .filter((p) => selectedPageIds.includes(p.page_id))
+        .sort((a, b) => a.order - b.order)
 
-      if (obj.type === 'rect') {
-        const shapeStyles = `width: ${width}px; height: ${height}px; background-color: ${fill}; border: ${strokeWidth}px solid ${stroke}; border-radius: ${rx}px;`
-        if (styleMode === 'inline') {
-          elementStr = `  <div style="${baseStyles} ${shapeStyles}"></div>\n`
-        } else {
-          stylesHtml += `.${className} { ${baseStyles} ${shapeStyles} }\n`
-          elementStr = `  <div class="${className}"></div>\n`
-        }
-      } else if (obj.type === 'circle') {
-        const radius = Math.round((obj.radius || 50) * (obj.scaleX || 1))
-        const shapeStyles = `width: ${radius * 2}px; height: ${radius * 2}px; background-color: ${fill}; border: ${strokeWidth}px solid ${stroke}; border-radius: 50%;`
-        if (styleMode === 'inline') {
-          elementStr = `  <div style="${baseStyles} ${shapeStyles}"></div>\n`
-        } else {
-          stylesHtml += `.${className} { ${baseStyles} ${shapeStyles} }\n`
-          elementStr = `  <div class="${className}"></div>\n`
-        }
-      } else if (obj.type === 'polygon' || obj.type === 'path') {
-        const shapeStyles = `width: ${width}px; height: ${height}px; overflow: visible;`
-        const pathSvg = obj.path ? obj.path.map(p => p.join(' ')).join(' ') : ''
-        
-        let svgContent = ''
-        if (obj.type === 'polygon' && obj.points) {
-          const pointsStr = obj.points.map(p => `${p.x},${p.y}`).join(' ')
-          svgContent = `<polygon points="${pointsStr}" fill="${fill}" stroke="${stroke}" stroke-width="${strokeWidth}" />`
-        } else {
-          svgContent = `<path d="${pathSvg}" fill="${fill}" stroke="${stroke}" stroke-width="${strokeWidth}" />`
-        }
+      // 1. Ask for root directory
+      const rootDirHandle = await window.showDirectoryPicker({
+        mode: 'readwrite'
+      })
 
-        if (styleMode === 'inline') {
-          elementStr = `  <svg style="${baseStyles} ${shapeStyles}" viewBox="0 0 ${obj.width} ${obj.height}">\n    ${svgContent}\n  </svg>\n`
-        } else {
-          stylesHtml += `.${className} { ${baseStyles} ${shapeStyles} }\n`
-          elementStr = `  <svg class="${className}" viewBox="0 0 ${obj.width} ${obj.height}">\n    ${svgContent}\n  </svg>\n`
-        }
-      } else if (obj.type === 'i-text' || obj.type === 'text') {
-        const fontSize = Math.round(obj.fontSize || 16)
-        const fontFamily = obj.fontFamily || 'Inter, sans-serif'
-        const fontStyle = obj.fontStyle || 'normal'
-        const fontWeight = obj.fontWeight || 'normal'
-        const textColor = obj.fill || '#111827'
-        
-        const textStyles = `font-family: ${fontFamily}; font-size: ${fontSize}px; font-style: ${fontStyle}; font-weight: ${fontWeight}; color: ${textColor}; margin: 0; line-height: 1.2;`
-        if (styleMode === 'inline') {
-          elementStr = `  <p style="${baseStyles} ${textStyles}">${obj.text}</p>\n`
-        } else {
-          stylesHtml += `.${className} { ${baseStyles} ${textStyles} }\n`
-          elementStr = `  <p class="${className}">${obj.text}</p>\n`
-        }
+      // 2. Create subfolder with timestamp and board name
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)
+      const folderName = `${timestamp}-${title.replace(/\s+/g, '_')}`
+      const subDirHandle = await rootDirHandle.getDirectoryHandle(folderName, { create: true })
+
+      // Determine page dimensions
+      const orientation = pdfOrientation === 'portrait' ? 'p' : 'l'
+      let width = 842, height = 595
+      if (pdfOrientation === 'portrait') { width = 595; height = 842 }
+      if (pdfSize === '16:9') {
+        width = pdfOrientation === 'portrait' ? 576 : 1024
+        height = pdfOrientation === 'portrait' ? 1024 : 576
       }
 
-      elementsHtml += elementStr
-    })
+      // We use a temporary Fabric canvas to render background JSONs
+      const tempCanvasEl = document.createElement('canvas')
+      tempCanvasEl.style.display = 'none'
+      document.body.appendChild(tempCanvasEl)
+      
+      const F = window.fabric
+      const tempCanvas = new F.Canvas(tempCanvasEl)
 
-    return { elementsHtml, stylesHtml }
+      const imgDataList = []
+
+      for (let i = 0; i < selectedPages.length; i++) {
+        const page = selectedPages[i]
+        
+        const blob = await new Promise((resolve) => {
+          // Scale canvas for higher resolution if needed
+          const exportWidth = width * pdfResolution
+          const exportHeight = height * pdfResolution
+          
+          tempCanvas.setWidth(exportWidth)
+          tempCanvas.setHeight(exportHeight)
+          tempCanvas.setZoom(pdfResolution)
+          
+          tempCanvas.loadFromJSON(page.canvas_state, () => {
+            tempCanvas.getObjects().forEach((obj) => {
+              if (obj.id === 'page-boundary') {
+                tempCanvas.remove(obj)
+              } else {
+                obj.setCoords()
+              }
+            })
+            tempCanvas.requestRenderAll()
+
+            tempCanvasEl.toBlob((b) => resolve(b), 'image/jpeg', 0.85)
+          })
+        })
+
+        // Save JPEG to folder
+        const fileName = `${i}.jpg`
+        const fileHandle = await subDirHandle.getFileHandle(fileName, { create: true })
+        const writable = await fileHandle.createWritable()
+        await writable.write(blob)
+        await writable.close()
+
+        // Keep image data for PDF generation
+        const dataUrl = await new Promise((resolve) => {
+          const reader = new FileReader()
+          reader.onload = () => resolve(reader.result)
+          reader.readAsDataURL(blob)
+        })
+        imgDataList.push(dataUrl)
+      }
+
+      // Dispose offscreen canvas resources
+      tempCanvas.dispose()
+      tempCanvasEl.remove()
+
+      // 3. Ask again to create PDF
+      const shouldCreatePdf = window.confirm(`Successfully saved ${selectedPages.length} images to "${folderName}".\n\nWould you like to generate a compiled PDF document from these images as well?`)
+      
+      if (shouldCreatePdf) {
+        const doc = new jsPDF({
+          orientation,
+          unit: 'pt',
+          format: [width, height]
+        })
+
+        for (let i = 0; i < imgDataList.length; i++) {
+          if (i > 0) doc.addPage([width, height], orientation)
+          doc.addImage(imgDataList[i], 'JPEG', 0, 0, width, height)
+        }
+
+        doc.save(`${title.replace(/\s+/g, '_')}_export.pdf`)
+      }
+
+      alert('Export process completed!')
+    } catch (err) {
+      if (err.name === 'AbortError') {
+        // User cancelled picker
+      } else {
+        console.error(err)
+        alert('Optimized export failed: ' + err.message)
+      }
+    } finally {
+      setIsExporting(false)
+    }
   }
 
   // HTML / CSS Export Process
@@ -234,27 +272,82 @@ export default function ExportModal({
         .filter((p) => selectedPageIds.includes(p.page_id))
         .sort((a, b) => a.order - b.order)
 
-      if (htmlFormat === 'single') {
-        // Single File: all pages as sections
-        let sectionsContent = ''
-        let stylesheetContent = ''
+      // We use a temporary Fabric canvas to render background JSONs and export to SVG
+      const tempCanvasEl = document.createElement('canvas')
+      tempCanvasEl.style.display = 'none'
+      document.body.appendChild(tempCanvasEl)
+      
+      const F = window.fabric
+      const tempCanvas = new F.Canvas(tempCanvasEl)
 
-        selectedPages.forEach((page) => {
-          const { elementsHtml, stylesHtml } = serializePageToHTML(page, htmlStyles)
-          
-          sectionsContent += `<section id="${page.page_id}" class="page-section">\n`
-          sectionsContent += `  <h2 class="page-header">${page.title}</h2>\n`
-          sectionsContent += `  <div class="canvas-box">\n`
-          sectionsContent += elementsHtml
-          sectionsContent += `  </div>\n`
-          sectionsContent += `</section>\n\n`
+      let sectionsContent = ''
 
-          if (htmlStyles === 'block') {
-            stylesheetContent += stylesHtml
-          }
+      for (let i = 0; i < selectedPages.length; i++) {
+        const page = selectedPages[i]
+        
+        const pageHtml = await new Promise((resolve) => {
+          tempCanvas.loadFromJSON(page.canvas_state, () => {
+            // 1. Strip page boundaries
+            tempCanvas.getObjects().forEach((obj) => {
+              if (obj.id === 'page-boundary') {
+                tempCanvas.remove(obj)
+              } else {
+                obj.setCoords()
+              }
+            })
+
+            // 2. Calculate drawing bounds
+            const objects = tempCanvas.getObjects()
+            if (objects.length === 0) {
+              resolve(`<section class="page-section"><h2>${page.title}</h2><div class="canvas-box empty">Page is empty</div></section>`)
+              return
+            }
+
+            let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity
+            objects.forEach(obj => {
+              const rect = obj.getBoundingRect(true)
+              minX = Math.min(minX, rect.left)
+              minY = Math.min(minY, rect.top)
+              maxX = Math.max(maxX, rect.left + rect.width)
+              maxY = Math.max(maxY, rect.top + rect.height)
+            })
+
+            const padding = 40
+            const width = (maxX - minX) + (padding * 2)
+            const height = (maxY - minY) + (padding * 2)
+
+            // 3. Export to SVG using Fabric's built-in robust method
+            // We use viewBox to "crop" and center the drawing
+            const svgData = tempCanvas.toSVG({
+              viewBox: {
+                x: minX - padding,
+                y: minY - padding,
+                width: width,
+                height: height
+              },
+              width: width,
+              height: height
+            })
+
+            resolve(`
+              <section class="page-section" style="width: ${Math.max(800, width + 48)}px;">
+                <h2 class="page-header">${page.title}</h2>
+                <div class="canvas-box">
+                  ${svgData}
+                </div>
+              </section>
+            `)
+          })
         })
+        
+        sectionsContent += pageHtml
+      }
 
-        const singlePageHtml = `<!DOCTYPE html>
+      // Dispose offscreen canvas resources
+      tempCanvas.dispose()
+      tempCanvasEl.remove()
+
+      const singlePageHtml = `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
@@ -276,7 +369,7 @@ export default function ExportModal({
       padding: 24px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
       border: 1px solid #E5E7EB;
-      width: 1024px;
+      box-sizing: border-box;
     }
     .page-header {
       font-size: 18px;
@@ -288,15 +381,23 @@ export default function ExportModal({
       padding-bottom: 8px;
     }
     .canvas-box {
-      position: relative;
-      width: 1024px;
-      height: 576px;
       background-color: #F9FAFB;
       border: 1px solid #E5E7EB;
       border-radius: 8px;
       overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
-    ${stylesheetContent}
+    .canvas-box.empty {
+      height: 200px;
+      color: #9CA3AF;
+      font-style: italic;
+    }
+    svg {
+      max-width: 100%;
+      height: auto;
+    }
   </style>
 </head>
 <body>
@@ -305,65 +406,13 @@ export default function ExportModal({
 </body>
 </html>`
 
-        const blob = new Blob([singlePageHtml], { type: 'text/html' })
-        const url = URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = `${title.replace(/\s+/g, '_')}_export.html`
-        a.click()
-        URL.revokeObjectURL(url)
-      } else {
-        // Separate Files: ZIP archive
-        const zip = new JSZip()
-
-        selectedPages.forEach((page) => {
-          const { elementsHtml, stylesHtml } = serializePageToHTML(page, htmlStyles)
-          
-          const pageHtml = `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>${page.title}</title>
-  <style>
-    body {
-      background-color: #F3F4F6;
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      margin: 0;
-      padding: 40px 20px;
-      display: flex;
-      justify-content: center;
-    }
-    .canvas-box {
-      position: relative;
-      width: 1024px;
-      height: 576px;
-      background-color: #F9FAFB;
-      border: 1px solid #E5E7EB;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
-    ${htmlStyles === 'block' ? stylesHtml : ''}
-  </style>
-</head>
-<body>
-  <div class="canvas-box">
-    ${elementsHtml}
-  </div>
-</body>
-</html>`
-
-          zip.file(`${page.title.replace(/\s+/g, '_')}.html`, pageHtml)
-        })
-
-        const content = await zip.generateAsync({ type: 'blob' })
-        const url = URL.createObjectURL(content)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = `${title.replace(/\s+/g, '_')}_pages_export.zip`
-        a.click()
-        URL.revokeObjectURL(url)
-      }
+      const blob = new Blob([singlePageHtml], { type: 'text/html' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${title.replace(/\s+/g, '_')}_export.html`
+      a.click()
+      URL.revokeObjectURL(url)
     } catch (err) {
       console.error(err)
       alert('HTML Export failed: ' + err.message)
@@ -486,13 +535,26 @@ export default function ExportModal({
                     </select>
                   </div>
 
-                  <button 
-                    onClick={handleExportPDF} 
-                    disabled={isExporting} 
-                    className="btn btn-primary btn-full export-trigger-btn"
-                  >
-                    {isExporting ? 'Compiling PDF...' : 'Download PDF Document'}
-                  </button>
+                  <div className="export-actions-row" style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
+                    <button 
+                      onClick={handleExportPDF} 
+                      disabled={isExporting} 
+                      className="btn btn-primary btn-full export-trigger-btn"
+                      style={{ flex: 1 }}
+                    >
+                      {isExporting ? 'Compiling...' : 'Download PDF'}
+                    </button>
+
+                    <button 
+                      onClick={handleOptimizedExport} 
+                      disabled={isExporting} 
+                      className="btn btn-secondary btn-full export-trigger-btn"
+                      title="Saves each page as JPG to a local folder first, then compiles PDF"
+                      style={{ flex: 1 }}
+                    >
+                      {isExporting ? 'Exporting...' : 'Save to Folder'}
+                    </button>
+                  </div>
                 </div>
               ) : (
                 /* HTML Options */
