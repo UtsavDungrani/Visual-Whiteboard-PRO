@@ -342,16 +342,6 @@
       "norm_label": "propertiespanel.jsx"
     },
     {
-      "label": "PropertiesPanel()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/PropertiesPanel.jsx",
-      "source_location": "L3",
-      "_origin": "ast",
-      "id": "components_propertiespanel_propertiespanel",
-      "community": 5,
-      "norm_label": "propertiespanel()"
-    },
-    {
       "label": "Toolbar.jsx",
       "file_type": "code",
       "source_file": "frontend/src/components/Toolbar.jsx",
@@ -2452,17 +2442,6 @@
       "target": "components_propertiespanel"
     },
     {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_app",
-      "target": "components_propertiespanel_propertiespanel"
-    },
-    {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -2672,16 +2651,6 @@
       "confidence_score": 1.0,
       "source": "components_pagestrip",
       "target": "components_pagestrip_pagestrip"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/PropertiesPanel.jsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_propertiespanel",
-      "target": "components_propertiespanel_propertiespanel"
     },
     {
       "relation": "contains",
@@ -4347,9 +4316,9 @@
       "source_file": "optimization.md",
       "source_location": "L45",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "optimization_visual_whiteboard_feature_backlog_task_tracking",
-      "target": "optimization_5_optimized_pdf_export_pipeline_sketchbook_book_style",
-      "confidence_score": 1.0
+      "target": "optimization_5_optimized_pdf_export_pipeline_sketchbook_book_style"
     },
     {
       "relation": "contains",
@@ -4553,5 +4522,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "d9b28810ea099570aad23a1829f82cae6203c554"
+  "built_at_commit": "2a7cc9f1f100f0e19e5f384dbc1227dc9b5d591f"
 }

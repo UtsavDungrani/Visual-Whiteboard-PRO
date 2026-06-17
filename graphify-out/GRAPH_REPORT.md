@@ -1,16 +1,16 @@
 # Graph Report - Visual Whiteboard Pro  (2026-06-17)
 
 ## Corpus Check
-- 48 files · ~35,560 words
+- 48 files · ~36,216 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 210 nodes · 233 edges · 15 communities (12 shown, 3 thin omitted)
+- 211 nodes · 235 edges · 15 communities (12 shown, 3 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `2a7cc9f1`
+- Built from commit: `3b0a4675`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -75,7 +75,7 @@ Nodes (16): API Surface, Configuration, Current Limitations, Data Model, Future 
 
 ### Community 5 - "Frontend Application & Collaboration UI"
 Cohesion: 0.11
-Nodes (15): AssistPanel(), CanvasControls(), ContextPanel(), LANGUAGES, ExportModal(), PageStrip(), Toolbar(), Topbar() (+7 more)
+Nodes (16): AssistPanel(), CanvasControls(), ContextPanel(), LANGUAGES, ExportModal(), PageStrip(), PropertiesPanel(), Toolbar() (+8 more)
 
 ### Community 6 - "Database Schema & Persistence"
 Cohesion: 0.20
@@ -108,9 +108,9 @@ _Questions this graph is uniquely positioned to answer:_
 - **Why does `Project Description and Requirements` connect `Editor Specifications & Features` to `Backend Server Initialization`?**
   _High betweenness centrality (0.142) - this node is a cross-community bridge._
 - **Why does `Real-time Collaboration` connect `Editor Specifications & Features` to `Backend Server Initialization`?**
-  _High betweenness centrality (0.139) - this node is a cross-community bridge._
+  _High betweenness centrality (0.140) - this node is a cross-community bridge._
 - **Why does `App()` connect `Editor Specifications & Features` to `Frontend Application & Collaboration UI`?**
-  _High betweenness centrality (0.126) - this node is a cross-community bridge._
+  _High betweenness centrality (0.129) - this node is a cross-community bridge._
 - **What connects `husky.sh script`, `name`, `version` to the rest of the system?**
   _130 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Frontend Package Configuration` be split into smaller, more focused modules?**

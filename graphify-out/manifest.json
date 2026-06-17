@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "frontend/src/App.jsx": {
-    "mtime": 1781695606.6928694,
-    "ast_hash": "e9e4b6c7b8c044497e94cc6afbbe0f06",
+    "mtime": 1781698846.6927745,
+    "ast_hash": "cea5fa1d71ddc9a0c83423b5524fc9de",
     "semantic_hash": ""
   },
   "frontend/src/main.jsx": {
@@ -65,13 +65,13 @@
     "semantic_hash": ""
   },
   "frontend/src/components/PropertiesPanel.jsx": {
-    "mtime": 1781695824.7107804,
-    "ast_hash": "326b2f2f8f3ba3f013f55f9996ef1b1e",
+    "mtime": 1781697253.9598098,
+    "ast_hash": "9e8ba0f4f7934fbb188b0ff3f60e0fec",
     "semantic_hash": ""
   },
   "frontend/src/components/Toolbar.jsx": {
-    "mtime": 1781668092.6708846,
-    "ast_hash": "639077a24d25bccf543daa54d9791a10",
+    "mtime": 1781698781.3982244,
+    "ast_hash": "b9b62f3054556a638a04cf250e565da4",
     "semantic_hash": ""
   },
   "frontend/src/components/Topbar.jsx": {
@@ -80,8 +80,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ExportModal.jsx": {
-    "mtime": 1781695257.8839753,
-    "ast_hash": "c4cb7c998489008bee2cb078f0bff41f",
+    "mtime": 1781698164.9306507,
+    "ast_hash": "203e3b432356aace90a8d7d5e0567f9a",
     "semantic_hash": ""
   },
   "frontend/src/components/PageStrip.jsx": {
@@ -245,8 +245,8 @@
     "semantic_hash": ""
   },
   "optimization.md": {
-    "mtime": 1781697146.2373893,
-    "ast_hash": "9d75fb5a814b3a3ebc4312f9b7c6d888",
+    "mtime": 1781698891.790147,
+    "ast_hash": "74319616bb8b0cb0b41eaf240e69b3f9",
     "semantic_hash": ""
   }
 }

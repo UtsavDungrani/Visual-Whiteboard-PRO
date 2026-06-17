@@ -63,8 +63,8 @@ This document outlines the pending technical tasks, optimizations, and feature i
 * **Objective:** Add a quick-connect board option by string ID with visibility permission guardrails.
 * **Context/Scope:** Dashboard / Landing Page Router.
 * **Action Items:**
-    * [ ] Add a "Join Board by ID" button on the main dashboard page that triggers an input modal box.
-    * [ ] Fetch board metadata on submission: 
+    * [] Add a "Join Board by ID" button on the main dashboard page that triggers an input modal box.
+    * [] Fetch board metadata on submission: 
         * If `visibility === 'private'`, throw an error message: "Board is not available/Private".
         * If `visibility === 'public'`, route the user into the canvas room in a **Default View-Only Mode**.
 * **Acceptance Criteria:** Users can instantly join public boards as view-only directly via their ID string from the dashboard.
