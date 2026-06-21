@@ -1152,11 +1152,12 @@ export default function App() {
     if (!target.id) {
       target.id = 'el-' + Date.now() + '-' + Math.round(Math.random() * 1e9)
     }
+    const isTextObj = target.type === 'i-text' || target.type === 'text'
     setSelectedObject(target)
     setProperties({
-      stroke: target.stroke || '#1E3A5F',
+      stroke: target.stroke || 'transparent',
       fill: target.fill || '#FFFFFF',
-      strokeWidth: target.strokeWidth || 2,
+      strokeWidth: target.strokeWidth !== undefined ? target.strokeWidth : (isTextObj ? 0 : 2),
       opacity: target.opacity || 1,
       // Text properties
       fontFamily: target.fontFamily || 'Inter',
