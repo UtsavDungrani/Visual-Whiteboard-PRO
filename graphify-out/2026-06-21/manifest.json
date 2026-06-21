@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "frontend/src/App.jsx": {
-    "mtime": 1782052586.0574453,
-    "ast_hash": "498562c67d72258164b57c3f1e096ddf",
+    "mtime": 1782056452.1540322,
+    "ast_hash": "a1eca00f9f7fb84b92c3194d922fa903",
     "semantic_hash": ""
   },
   "frontend/src/main.jsx": {
@@ -15,8 +15,8 @@
     "semantic_hash": "1805ad7bae3bf603446eed7431bab36a"
   },
   "server/index.js": {
-    "mtime": 1782052581.3372657,
-    "ast_hash": "c9f83621c00ed526f1d5d9e7b93e81d4",
+    "mtime": 1782056207.4018407,
+    "ast_hash": "5f99414ec287f7a19db278e04080f002",
     "semantic_hash": ""
   },
   "server/models/Whiteboard.js": {
@@ -60,13 +60,13 @@
     "semantic_hash": ""
   },
   "frontend/src/components/CanvasControls.jsx": {
-    "mtime": 1781494339.6462417,
-    "ast_hash": "d7ac74275b34702ce08cd023f8d60266",
+    "mtime": 1782054223.227507,
+    "ast_hash": "02f9a06fd97a177ee8da99135a2a7a21",
     "semantic_hash": ""
   },
   "frontend/src/components/PropertiesPanel.jsx": {
-    "mtime": 1781697253.9598098,
-    "ast_hash": "9e8ba0f4f7934fbb188b0ff3f60e0fec",
+    "mtime": 1782055877.302697,
+    "ast_hash": "51d45dec3b30f00cdbc6e3a5c251d8de",
     "semantic_hash": ""
   },
   "frontend/src/components/Toolbar.jsx": {
@@ -75,8 +75,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Topbar.jsx": {
-    "mtime": 1782052237.828076,
-    "ast_hash": "48771b7263e8f33a0910a7103763d54b",
+    "mtime": 1782056261.8448892,
+    "ast_hash": "20c77aa6db590b69420252f2a76071df",
     "semantic_hash": ""
   },
   "frontend/src/components/ExportModal.jsx": {
@@ -245,13 +245,28 @@
     "semantic_hash": ""
   },
   "optimization.md": {
-    "mtime": 1782052190.6135836,
+    "mtime": 1782053325.708331,
     "ast_hash": "4bd41a67ce1bd4c9af66e32c63f19bf2",
     "semantic_hash": ""
   },
   "frontend/src/components/PermissionsPanel.jsx": {
-    "mtime": 1782052547.5538385,
-    "ast_hash": "dfe52133071e2f7936c0a406e853f238",
+    "mtime": 1782052813.4460278,
+    "ast_hash": "5492ea59eeeafbf4ef404512685a1529",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ChatPanel.jsx": {
+    "mtime": 1782056221.2458472,
+    "ast_hash": "847dea2eaafbd91c9055d1af43f79547",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/VideoGrid.jsx": {
+    "mtime": 1782056234.0070198,
+    "ast_hash": "ba8fc82568ef7d270682a46d64450644",
+    "semantic_hash": ""
+  },
+  "server/models/Message.js": {
+    "mtime": 1782056189.2509644,
+    "ast_hash": "1be494d514c3bdc5c0a98b017bf6d50f",
     "semantic_hash": ""
   }
 }

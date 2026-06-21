@@ -215,7 +215,7 @@
       "label": "App()",
       "file_type": "code",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L19",
+      "source_location": "L21",
       "_origin": "ast",
       "id": "src_app_app",
       "community": 2,
@@ -260,6 +260,26 @@
       "id": "components_canvascontrols_canvascontrols",
       "community": 5,
       "norm_label": "canvascontrols()"
+    },
+    {
+      "label": "ChatPanel.jsx",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ChatPanel.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "components_chatpanel",
+      "community": 5,
+      "norm_label": "chatpanel.jsx"
+    },
+    {
+      "label": "ChatPanel()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ChatPanel.jsx",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "components_chatpanel_chatpanel",
+      "community": 5,
+      "norm_label": "chatpanel()"
     },
     {
       "label": "ContextPanel.jsx",
@@ -412,6 +432,26 @@
       "norm_label": "topbar()"
     },
     {
+      "label": "VideoGrid.jsx",
+      "file_type": "code",
+      "source_file": "frontend/src/components/VideoGrid.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "components_videogrid",
+      "community": 5,
+      "norm_label": "videogrid.jsx"
+    },
+    {
+      "label": "VideoGrid()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/VideoGrid.jsx",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "components_videogrid_videogrid",
+      "community": 5,
+      "norm_label": "videogrid()"
+    },
+    {
       "label": "fabric-eraser.js",
       "file_type": "code",
       "source_file": "frontend/src/fabric-eraser.js",
@@ -438,7 +478,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_pathlassosplit",
-      "community": 15,
+      "community": 5,
       "norm_label": "pathlassosplit.js"
     },
     {
@@ -448,7 +488,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_pathlassosplit_ispointinpolygon",
-      "community": 15,
+      "community": 5,
       "norm_label": "ispointinpolygon()"
     },
     {
@@ -458,7 +498,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_pathlassosplit_pathdatatosvgd",
-      "community": 15,
+      "community": 5,
       "norm_label": "pathdatatosvgd()"
     },
     {
@@ -468,7 +508,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "src_pathlassosplit_samplefabricpath",
-      "community": 15,
+      "community": 5,
       "norm_label": "samplefabricpath()"
     },
     {
@@ -478,7 +518,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "src_pathlassosplit_samplepathhitpoints",
-      "community": 15,
+      "community": 5,
       "norm_label": "samplepathhitpoints()"
     },
     {
@@ -488,7 +528,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "src_pathlassosplit_bboxcornersinpolygon",
-      "community": 15,
+      "community": 5,
       "norm_label": "bboxcornersinpolygon()"
     },
     {
@@ -498,7 +538,7 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "src_pathlassosplit_getpathselectionmode",
-      "community": 15,
+      "community": 5,
       "norm_label": "getpathselectionmode()"
     },
     {
@@ -508,7 +548,7 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "src_pathlassosplit_canvaspolygontolocal",
-      "community": 15,
+      "community": 5,
       "norm_label": "canvaspolygontolocal()"
     },
     {
@@ -518,7 +558,7 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "src_pathlassosplit_buildclippolygon",
-      "community": 15,
+      "community": 5,
       "norm_label": "buildclippolygon()"
     },
     {
@@ -528,7 +568,7 @@
       "source_location": "L148",
       "_origin": "ast",
       "id": "src_pathlassosplit_splitpathwithlasso",
-      "community": 15,
+      "community": 5,
       "norm_label": "splitpathwithlasso()"
     },
     {
@@ -922,10 +962,20 @@
       "norm_label": "user"
     },
     {
-      "label": "auth",
+      "label": "Message",
       "file_type": "code",
       "source_file": "server/index.js",
       "source_location": "L11",
+      "_origin": "ast",
+      "id": "server_index_message",
+      "community": 1,
+      "norm_label": "message"
+    },
+    {
+      "label": "auth",
+      "file_type": "code",
+      "source_file": "server/index.js",
+      "source_location": "L12",
       "_origin": "ast",
       "id": "server_index_auth",
       "community": 1,
@@ -935,7 +985,7 @@
       "label": "jwt",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L12",
+      "source_location": "L13",
       "_origin": "ast",
       "id": "server_index_jwt",
       "community": 1,
@@ -945,7 +995,7 @@
       "label": "bcrypt",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L13",
+      "source_location": "L14",
       "_origin": "ast",
       "id": "server_index_bcrypt",
       "community": 1,
@@ -955,7 +1005,7 @@
       "label": "rateLimit",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L14",
+      "source_location": "L15",
       "_origin": "ast",
       "id": "server_index_ratelimit",
       "community": 1,
@@ -965,7 +1015,7 @@
       "label": "redis",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L15",
+      "source_location": "L16",
       "_origin": "ast",
       "id": "server_index_redis",
       "community": 1,
@@ -975,7 +1025,7 @@
       "label": "{ createAdapter }",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L16",
+      "source_location": "L17",
       "_origin": "ast",
       "id": "server_index_createadapter",
       "community": 1,
@@ -985,7 +1035,7 @@
       "label": "multer",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L17",
+      "source_location": "L18",
       "_origin": "ast",
       "id": "server_index_multer",
       "community": 1,
@@ -995,7 +1045,7 @@
       "label": "path",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L18",
+      "source_location": "L19",
       "_origin": "ast",
       "id": "server_index_path",
       "community": 1,
@@ -1005,7 +1055,7 @@
       "label": "fs",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L19",
+      "source_location": "L20",
       "_origin": "ast",
       "id": "server_index_fs",
       "community": 1,
@@ -1015,7 +1065,7 @@
       "label": "uploadsDir",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L26",
+      "source_location": "L27",
       "_origin": "ast",
       "id": "server_index_uploadsdir",
       "community": 1,
@@ -1025,7 +1075,7 @@
       "label": "storage",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L32",
+      "source_location": "L33",
       "_origin": "ast",
       "id": "server_index_storage",
       "community": 1,
@@ -1035,7 +1085,7 @@
       "label": "upload",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L41",
+      "source_location": "L42",
       "_origin": "ast",
       "id": "server_index_upload",
       "community": 1,
@@ -1045,7 +1095,7 @@
       "label": "whiteboards",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L95",
+      "source_location": "L96",
       "_origin": "ast",
       "id": "server_index_whiteboards",
       "community": 1,
@@ -1055,7 +1105,7 @@
       "label": "authLimiter",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L110",
+      "source_location": "L111",
       "_origin": "ast",
       "id": "server_index_authlimiter",
       "community": 1,
@@ -1065,7 +1115,7 @@
       "label": "aiLimiter",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L469",
+      "source_location": "L470",
       "_origin": "ast",
       "id": "server_index_ailimiter",
       "community": 1,
@@ -1075,7 +1125,7 @@
       "label": "httpServer",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L630",
+      "source_location": "L645",
       "_origin": "ast",
       "id": "server_index_httpserver",
       "community": 1,
@@ -1085,7 +1135,7 @@
       "label": "io",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L631",
+      "source_location": "L646",
       "_origin": "ast",
       "id": "server_index_io",
       "community": 1,
@@ -1095,7 +1145,7 @@
       "label": "activeUsers",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L679",
+      "source_location": "L694",
       "_origin": "ast",
       "id": "server_index_activeusers",
       "community": 1,
@@ -1105,7 +1155,7 @@
       "label": "broadcastRoomUsers()",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L681",
+      "source_location": "L696",
       "_origin": "ast",
       "id": "server_index_broadcastroomusers",
       "community": 1,
@@ -1115,7 +1165,7 @@
       "label": "startServer()",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L859",
+      "source_location": "L940",
       "_origin": "ast",
       "id": "server_index_startserver",
       "community": 1,
@@ -1170,6 +1220,36 @@
       "id": "models_elementcontext_elementcontextschema",
       "community": 1,
       "norm_label": "elementcontextschema"
+    },
+    {
+      "label": "Message.js",
+      "file_type": "code",
+      "source_file": "server/models/Message.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "models_message",
+      "community": 1,
+      "norm_label": "message.js"
+    },
+    {
+      "label": "mongoose",
+      "file_type": "code",
+      "source_file": "server/models/Message.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "models_message_mongoose",
+      "community": 1,
+      "norm_label": "mongoose"
+    },
+    {
+      "label": "MessageSchema",
+      "file_type": "code",
+      "source_file": "server/models/Message.js",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "models_message_messageschema",
+      "community": 1,
+      "norm_label": "messageschema"
     },
     {
       "label": "User.js",
@@ -2399,6 +2479,28 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/App.jsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "src_app",
+      "target": "components_chatpanel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "src_app",
+      "target": "components_chatpanel_chatpanel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/App.jsx",
       "source_location": "L9",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -2549,6 +2651,28 @@
       "target": "components_topbar_topbar"
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "src_app",
+      "target": "components_videogrid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "src_app",
+      "target": "components_videogrid_videogrid",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/App.jsx",
@@ -2678,6 +2802,16 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ChatPanel.jsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "components_chatpanel",
+      "target": "components_chatpanel_chatpanel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "frontend/src/components/ContextPanel.jsx",
       "source_location": "L12",
       "weight": 1.0,
@@ -2754,6 +2888,16 @@
       "confidence_score": 1.0,
       "source": "components_topbar",
       "target": "components_topbar_topbar"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/VideoGrid.jsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "components_videogrid",
+      "target": "components_videogrid_videogrid",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -3271,6 +3415,17 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "server/index.js",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "server_index",
+      "target": "models_message",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/index.js",
       "source_location": "L10",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -3447,6 +3602,16 @@
       "confidence_score": 1.0,
       "source": "server_index",
       "target": "server_index_jwt"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/index.js",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "server_index",
+      "target": "server_index_message",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -3651,6 +3816,26 @@
       "confidence_score": 1.0,
       "source": "models_elementcontext",
       "target": "models_elementcontext_mongoose"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/models/Message.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "models_message",
+      "target": "models_message_messageschema",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/models/Message.js",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "models_message",
+      "target": "models_message_mongoose",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -4605,5 +4790,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "77fcebe3c8448ca3760236cc89f4c1242745f73f"
+  "built_at_commit": "79dbc236e4c524c87634e3fdaf31d89fdc3ed336"
 }
