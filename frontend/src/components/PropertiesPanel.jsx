@@ -313,32 +313,32 @@ export default function PropertiesPanel({
 
       {!isCollapsed && (
         <div className="panel-body">
-        {/* Stroke / Border Color */}
-        {!isReadOnly && (
+        {/* Stroke / Border Color (Hidden for Text elements) */}
+        {!isReadOnly && !isText && (
           <div className="property-group">
             <h3 className="section-title">Stroke Color</h3>
             <div className="color-grid">
-              {strokeColors.map((color) => (
+              {[...strokeColors, 'transparent'].map((color) => (
                 <button
                   key={color}
-                  className={`color-option ${properties.stroke === color ? 'active' : ''}`}
-                  style={{ backgroundColor: color }}
+                  className={`color-option ${properties.stroke === color ? 'active' : ''} ${color === 'transparent' ? 'transparent-color' : ''}`}
+                  style={{ backgroundColor: color === 'transparent' ? undefined : color }}
                   onClick={() => onChangeProperty('stroke', color)}
-                  title={color}
+                  title={color === 'transparent' ? 'Transparent' : color}
                 />
               ))}
               <div 
-                className={`color-option custom-color-btn ${!strokeColors.includes(properties.stroke) ? 'active' : ''}`} 
+                className={`color-option custom-color-btn ${properties.stroke !== 'transparent' && !strokeColors.includes(properties.stroke) ? 'active' : ''}`} 
                 title="Choose custom color"
-                style={{ backgroundColor: !strokeColors.includes(properties.stroke) ? properties.stroke : undefined }}
+                style={{ backgroundColor: properties.stroke !== 'transparent' && !strokeColors.includes(properties.stroke) ? properties.stroke : undefined }}
               >
                 <input 
                   type="color" 
-                  value={properties.stroke || '#000000'} 
+                  value={properties.stroke && properties.stroke !== 'transparent' ? properties.stroke : '#000000'} 
                   onChange={(e) => onChangeProperty('stroke', e.target.value)} 
                   style={{ opacity: 0, width: '100%', height: '100%', cursor: 'pointer' }}
                 />
-                <span style={{ position: 'absolute', pointerEvents: 'none', fontSize: '14px', color: !strokeColors.includes(properties.stroke) ? 'white' : 'inherit' }}>+</span>
+                <span style={{ position: 'absolute', pointerEvents: 'none', fontSize: '14px', color: properties.stroke !== 'transparent' && !strokeColors.includes(properties.stroke) ? 'white' : 'inherit' }}>+</span>
               </div>
             </div>
           </div>
@@ -391,6 +391,281 @@ export default function PropertiesPanel({
               <span className="slider-value">{properties.strokeWidth || 2}px</span>
             </div>
           </div>
+        )}
+
+        {/* Corner Roundness (Rectangles only) */}
+        {selectedObject.type === 'rect' && !isReadOnly && (
+          <div className="property-group">
+            <h3 className="section-title">Corner Roundness</h3>
+            <div className="slider-container">
+              <input
+                type="range"
+                min="0"
+                max="50"
+                step="1"
+                value={properties.rx || 0}
+                onChange={(e) => {
+                  const val = parseInt(e.target.value, 10)
+                  onChangeProperty('rx', val)
+                  onChangeProperty('ry', val)
+                }}
+              />
+              <span className="slider-value">{properties.rx || 0}px</span>
+            </div>
+          </div>
+        )}
+
+        {/* Text Settings Panel (Visible only for Text/iText elements) */}
+        {isText && !isReadOnly && (
+          <>
+            {/* Text Color */}
+            <div className="property-group">
+              <h3 className="section-title">Text Color</h3>
+              <div className="color-grid">
+                {strokeColors.map((color) => (
+                  <button
+                    key={color}
+                    className={`color-option ${properties.fill === color ? 'active' : ''}`}
+                    style={{ backgroundColor: color }}
+                    onClick={() => onChangeProperty('fill', color)}
+                    title={color}
+                  />
+                ))}
+                <div 
+                  className={`color-option custom-color-btn ${!strokeColors.includes(properties.fill) ? 'active' : ''}`} 
+                  title="Choose custom text color"
+                  style={{ backgroundColor: !strokeColors.includes(properties.fill) ? properties.fill : undefined }}
+                >
+                  <input 
+                    type="color" 
+                    value={properties.fill || '#000000'} 
+                    onChange={(e) => onChangeProperty('fill', e.target.value)} 
+                    style={{ opacity: 0, width: '100%', height: '100%', cursor: 'pointer' }}
+                  />
+                  <span style={{ position: 'absolute', pointerEvents: 'none', fontSize: '14px', color: !strokeColors.includes(properties.fill) ? 'white' : 'inherit' }}>+</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Font Family */}
+            <div className="property-group">
+              <h3 className="section-title">Font Family</h3>
+              <select
+                value={properties.fontFamily || 'Inter'}
+                onChange={(e) => onChangeProperty('fontFamily', e.target.value)}
+                className="btn btn-secondary btn-full"
+                style={{ textAlign: 'left', padding: '8px 12px', width: '100%', borderRadius: '8px', cursor: 'pointer' }}
+              >
+                <option value="Inter">Inter (Sans-serif)</option>
+                <option value="Outfit">Outfit (Modern)</option>
+                <option value="Georgia">Georgia (Serif)</option>
+                <option value="Courier New">Courier New (Monospace)</option>
+                <option value="Comic Sans MS">Comic Sans MS (Handwritten)</option>
+              </select>
+            </div>
+
+            {/* Font Size */}
+            <div className="property-group">
+              <h3 className="section-title">Font Size</h3>
+              <div className="slider-container">
+                <input
+                  type="range"
+                  min="12"
+                  max="120"
+                  step="1"
+                  value={properties.fontSize || 24}
+                  onChange={(e) => onChangeProperty('fontSize', parseInt(e.target.value, 10))}
+                />
+                <span className="slider-value">{properties.fontSize || 24}px</span>
+              </div>
+            </div>
+
+            {/* Text Styling Options */}
+            <div className="property-group">
+              <h3 className="section-title">Text Style</h3>
+              <div className="action-row" style={{ display: 'flex', gap: '8px' }}>
+                <button
+                  className={`btn btn-secondary ${properties.fontWeight === 'bold' ? 'active' : ''}`}
+                  onClick={() => onChangeProperty('fontWeight', properties.fontWeight === 'bold' ? 'normal' : 'bold')}
+                  style={{ flex: 1, fontWeight: 'bold' }}
+                  title="Toggle Bold"
+                >
+                  B
+                </button>
+                <button
+                  className={`btn btn-secondary ${properties.fontStyle === 'italic' ? 'active' : ''}`}
+                  onClick={() => onChangeProperty('fontStyle', properties.fontStyle === 'italic' ? 'normal' : 'italic')}
+                  style={{ flex: 1, fontStyle: 'italic' }}
+                  title="Toggle Italic"
+                >
+                  I
+                </button>
+                <button
+                  className={`btn btn-secondary ${properties.underline ? 'active' : ''}`}
+                  onClick={() => onChangeProperty('underline', !properties.underline)}
+                  style={{ flex: 1, textDecoration: 'underline' }}
+                  title="Toggle Underline"
+                >
+                  U
+                </button>
+              </div>
+            </div>
+
+            {/* Text Background Color */}
+            <div className="property-group">
+              <h3 className="section-title">Background Color</h3>
+              <div className="color-grid">
+                {fillColors.map((color) => (
+                  <button
+                    key={color}
+                    className={`color-option ${properties.backgroundColor === color ? 'active' : ''} ${color === 'transparent' ? 'transparent-color' : ''}`}
+                    style={{ backgroundColor: color === 'transparent' ? undefined : color }}
+                    onClick={() => onChangeProperty('backgroundColor', color)}
+                    title={color === 'transparent' ? 'Transparent' : color}
+                  />
+                ))}
+                <div 
+                  className={`color-option custom-color-btn ${properties.backgroundColor !== 'transparent' && !fillColors.includes(properties.backgroundColor) ? 'active' : ''}`} 
+                  title="Choose custom background color"
+                  style={{ backgroundColor: properties.backgroundColor !== 'transparent' && !fillColors.includes(properties.backgroundColor) ? properties.backgroundColor : undefined }}
+                >
+                  <input 
+                    type="color" 
+                    value={properties.backgroundColor && properties.backgroundColor !== 'transparent' ? properties.backgroundColor : '#ffffff'} 
+                    onChange={(e) => onChangeProperty('backgroundColor', e.target.value)} 
+                    style={{ opacity: 0, width: '100%', height: '100%', cursor: 'pointer' }}
+                  />
+                  <span style={{ position: 'absolute', pointerEvents: 'none', fontSize: '14px', color: properties.backgroundColor !== 'transparent' && !fillColors.includes(properties.backgroundColor) ? 'white' : 'inherit' }}>+</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Text Outline Color */}
+            <div className="property-group">
+              <h3 className="section-title">Outline Color</h3>
+              <div className="color-grid">
+                {[...strokeColors, 'transparent'].map((color) => (
+                  <button
+                    key={color}
+                    className={`color-option ${properties.stroke === color ? 'active' : ''} ${color === 'transparent' ? 'transparent-color' : ''}`}
+                    style={{ backgroundColor: color === 'transparent' ? undefined : color }}
+                    onClick={() => onChangeProperty('stroke', color)}
+                    title={color === 'transparent' ? 'Transparent' : color}
+                  />
+                ))}
+                <div 
+                  className={`color-option custom-color-btn ${properties.stroke !== 'transparent' && !strokeColors.includes(properties.stroke) ? 'active' : ''}`} 
+                  title="Choose custom outline color"
+                  style={{ backgroundColor: properties.stroke !== 'transparent' && !strokeColors.includes(properties.stroke) ? properties.stroke : undefined }}
+                >
+                  <input 
+                    type="color" 
+                    value={properties.stroke && properties.stroke !== 'transparent' ? properties.stroke : '#000000'} 
+                    onChange={(e) => onChangeProperty('stroke', e.target.value)} 
+                    style={{ opacity: 0, width: '100%', height: '100%', cursor: 'pointer' }}
+                  />
+                  <span style={{ position: 'absolute', pointerEvents: 'none', fontSize: '14px', color: properties.stroke !== 'transparent' && !strokeColors.includes(properties.stroke) ? 'white' : 'inherit' }}>+</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Text Outline Width */}
+            <div className="property-group">
+              <h3 className="section-title">Outline Width</h3>
+              <div className="slider-container">
+                <input
+                  type="range"
+                  min="0"
+                  max="4"
+                  step="0.5"
+                  value={properties.strokeWidth || 0}
+                  onChange={(e) => onChangeProperty('strokeWidth', parseFloat(e.target.value))}
+                />
+                <span className="slider-value">{properties.strokeWidth || 0}px</span>
+              </div>
+            </div>
+
+            {/* Text Box Border Color */}
+            <div className="property-group">
+              <h3 className="section-title">Box Border Color</h3>
+              <div className="color-grid">
+                {fillColors.map((color) => (
+                  <button
+                    key={color}
+                    className={`color-option ${properties.boxStroke === color ? 'active' : ''} ${color === 'transparent' ? 'transparent-color' : ''}`}
+                    style={{ backgroundColor: color === 'transparent' ? undefined : color }}
+                    onClick={() => onChangeProperty('boxStroke', color)}
+                    title={color === 'transparent' ? 'Transparent' : color}
+                  />
+                ))}
+                <div 
+                  className={`color-option custom-color-btn ${properties.boxStroke !== 'transparent' && !fillColors.includes(properties.boxStroke) ? 'active' : ''}`} 
+                  title="Choose custom box border color"
+                  style={{ backgroundColor: properties.boxStroke !== 'transparent' && !fillColors.includes(properties.boxStroke) ? properties.boxStroke : undefined }}
+                >
+                  <input 
+                    type="color" 
+                    value={properties.boxStroke && properties.boxStroke !== 'transparent' ? properties.boxStroke : '#ffffff'} 
+                    onChange={(e) => onChangeProperty('boxStroke', e.target.value)} 
+                    style={{ opacity: 0, width: '100%', height: '100%', cursor: 'pointer' }}
+                  />
+                  <span style={{ position: 'absolute', pointerEvents: 'none', fontSize: '14px', color: properties.boxStroke !== 'transparent' && !fillColors.includes(properties.boxStroke) ? 'white' : 'inherit' }}>+</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Text Box Border Width */}
+            <div className="property-group">
+              <h3 className="section-title">Box Border Width</h3>
+              <div className="slider-container">
+                <input
+                  type="range"
+                  min="0"
+                  max="12"
+                  step="1"
+                  value={properties.boxStrokeWidth || 0}
+                  onChange={(e) => onChangeProperty('boxStrokeWidth', parseInt(e.target.value, 10))}
+                />
+                <span className="slider-value">{properties.boxStrokeWidth || 0}px</span>
+              </div>
+            </div>
+
+            {/* Corner Roundness */}
+            <div className="property-group">
+              <h3 className="section-title">Box Corner Roundness</h3>
+              <div className="slider-container">
+                <input
+                  type="range"
+                  min="0"
+                  max="50"
+                  step="1"
+                  value={properties.rx || 0}
+                  onChange={(e) => {
+                    const val = parseInt(e.target.value, 10)
+                    onChangeProperty('rx', val)
+                    onChangeProperty('ry', val)
+                  }}
+                />
+                <span className="slider-value">{properties.rx || 0}px</span>
+              </div>
+            </div>
+
+            {/* Padding */}
+            <div className="property-group">
+              <h3 className="section-title">Box Padding</h3>
+              <div className="slider-container">
+                <input
+                  type="range"
+                  min="0"
+                  max="40"
+                  step="1"
+                  value={properties.padding || 0}
+                  onChange={(e) => onChangeProperty('padding', parseInt(e.target.value, 10))}
+                />
+                <span className="slider-value">{properties.padding || 0}px</span>
+              </div>
+            </div>
+          </>
         )}
 
         {/* Opacity */}

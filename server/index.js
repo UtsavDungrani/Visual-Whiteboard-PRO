@@ -415,6 +415,53 @@ app.post("/api/whiteboards/:id/share", auth, async (req, res) => {
   }
 });
 
+// POST toggle collaborator role (Full Access vs View-Only) by User ID
+app.post("/api/whiteboards/:id/permissions", auth, async (req, res) => {
+  const boardId = req.params.id;
+  try {
+    const board = await Whiteboard.findById(boardId);
+    if (!board) return res.status(404).json({ error: "Not found" });
+
+    // Only owner can change permissions
+    if (board.owner.toString() !== req.user.id) {
+      return res.status(403).json({ error: "forbidden_access_denied" });
+    }
+
+    const { userId, access } = req.body; // access: 'full' or 'view'
+    if (!userId) return res.status(400).json({ error: "missing_user_id" });
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ error: "user_not_found" });
+
+    const userObjectId = user._id;
+
+    if (access === 'full') {
+      if (!board.collaborators.map(c => c.toString()).includes(userId)) {
+        board.collaborators.push(userObjectId);
+        await board.save();
+      }
+    } else if (access === 'view') {
+      board.collaborators = board.collaborators.filter(c => c.toString() !== userId);
+      await board.save();
+    }
+
+    // Broadcast permission change event through sockets to all clients in the room
+    io.to(boardId).emit("board:permissions-update", {
+      owner: board.owner.toString(),
+      collaborators: board.collaborators.map(c => c.toString()),
+      isPublic: board.isPublic
+    });
+
+    return res.json({ 
+      success: true, 
+      collaborators: board.collaborators.map(c => c.toString()) 
+    });
+  } catch (err) {
+    console.error("Failed to update permissions", err);
+    return res.status(500).json({ error: "permissions_update_failed" });
+  }
+});
+
 // Serve /uploads static folder
 app.use("/uploads", express.static(uploadsDir));
 
@@ -635,7 +682,15 @@ function broadcastRoomUsers(roomId) {
   const roomUsers = [];
   for (const [sid, u] of activeUsers.entries()) {
     if (u.roomId === roomId) {
-      roomUsers.push({ id: sid, name: u.name, color: u.color, pageId: u.pageId });
+      roomUsers.push({ 
+        id: sid, 
+        name: u.name, 
+        color: u.color, 
+        pageId: u.pageId,
+        dbUserId: u.dbUserId || null,
+        isGuest: !!u.isGuest,
+        sessionAccess: u.sessionAccess || null
+      });
     }
   }
   io.to(roomId).emit("room:users", roomUsers);
@@ -691,7 +746,14 @@ io.on("connection", (socket) => {
     }
 
     socket.join(roomId);
-    activeUsers.set(socket.id, { roomId, name: user.name, color: user.color, pageId });
+    activeUsers.set(socket.id, { 
+      roomId, 
+      name: user.name, 
+      color: user.color, 
+      pageId,
+      dbUserId: socket.user && !socket.user.isGuest ? socket.user.id : null,
+      isGuest: !socket.user || socket.user.isGuest
+    });
     console.log(`socket ${socket.id} (${user.name}) joined ${roomId} (page: ${pageId})`);
 
     // Notify room of updated users list
@@ -737,6 +799,56 @@ io.on("connection", (socket) => {
   socket.on("board:structure-update", ({ roomId, pages, mode, pageSize }) => {
     const room = roomId || "global";
     socket.to(room).emit("board:structure-update", { pages, mode, pageSize });
+  });
+
+  socket.on("board:toggle-user-permission", async ({ roomId, targetSocketId, access }) => {
+    try {
+      const board = await Whiteboard.findById(roomId);
+      if (!board) return;
+      
+      const senderDbUserId = socket.user && !socket.user.isGuest ? socket.user.id : null;
+      if (board.owner.toString() !== senderDbUserId) {
+        console.warn("Unauthorized permission toggle attempt");
+        return;
+      }
+
+      const targetUser = activeUsers.get(targetSocketId);
+      if (targetUser) {
+        if (targetUser.dbUserId) {
+          // Prevent toggling board owner's own permissions
+          if (targetUser.dbUserId === board.owner.toString()) {
+            console.warn("Cannot toggle board owner permissions");
+            return;
+          }
+          const userObjectId = new mongoose.Types.ObjectId(targetUser.dbUserId);
+          if (access === 'full') {
+            if (!board.collaborators.map(c => c.toString()).includes(targetUser.dbUserId)) {
+              board.collaborators.push(userObjectId);
+              await board.save();
+            }
+          } else {
+            board.collaborators = board.collaborators.filter(c => c.toString() !== targetUser.dbUserId);
+            await board.save();
+          }
+        }
+        
+        targetUser.sessionAccess = access;
+        activeUsers.set(targetSocketId, targetUser);
+
+        io.to(roomId).emit("board:user-permission-changed", {
+          socketId: targetSocketId,
+          dbUserId: targetUser.dbUserId,
+          access: access,
+          owner: board.owner.toString(),
+          collaborators: board.collaborators.map(c => c.toString()),
+          isPublic: board.isPublic
+        });
+
+        broadcastRoomUsers(roomId);
+      }
+    } catch (err) {
+      console.error("Failed to toggle user socket permission:", err);
+    }
   });
 
   socket.on("disconnect", () => {

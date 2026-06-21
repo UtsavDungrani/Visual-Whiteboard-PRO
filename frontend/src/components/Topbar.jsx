@@ -16,7 +16,9 @@ export default function Topbar({
   isCleanupLoading = false,
   isAssistLoading = false,
   onExit,
-  isReadOnly = false
+  isReadOnly = false,
+  onOpenPermissionsPanel,
+  boardMeta = { owner: null, collaborators: [], isPublic: false }
 }) {
   const handleShare = () => {
     if (savedId) {
@@ -91,22 +93,31 @@ export default function Topbar({
           })}
         </div>
 
-        <button onClick={handleShare} className="btn btn-secondary">
-          <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 10.742l4.632-2.316m0 0a3 3 0 10-4.632-2.316 3 3 0 004.632 2.316zm0 0l-4.632 2.316m0 0a3 3 0 104.632 2.316 3 3 0 00-4.632-2.316zm0 0l4.632 2.316m0 0a3 3 0 104.632 2.316 3 3 0 00-4.632-2.316z"></path>
-          </svg>
-          Share
-        </button>
-
-        <button onClick={onExport} className="btn btn-secondary">
-          <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-          </svg>
-          Export
-        </button>
+        {savedId && boardMeta.owner === currentUser.dbUserId && (
+          <button onClick={onOpenPermissionsPanel} className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '6px' }} title="Manage collaborator permissions">
+            <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+            </svg>
+            Permissions
+          </button>
+        )}
 
         {!isReadOnly && (
           <>
+            <button onClick={handleShare} className="btn btn-secondary">
+              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 10.742l4.632-2.316m0 0a3 3 0 10-4.632-2.316 3 3 0 004.632 2.316zm0 0l-4.632 2.316m0 0a3 3 0 104.632 2.316 3 3 0 00-4.632-2.316zm0 0l4.632 2.316m0 0a3 3 0 104.632 2.316 3 3 0 00-4.632-2.316zm0 0l4.632 2.316m0 0a3 3 0 104.632 2.316 3 3 0 00-4.632-2.316z"></path>
+              </svg>
+              Share
+            </button>
+
+            <button onClick={onExport} className="btn btn-secondary">
+              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+              </svg>
+              Export
+            </button>
+
             <button onClick={onClearPage} className="btn btn-secondary btn-danger-hover" title="Clear all elements from current page">
               <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
@@ -140,15 +151,15 @@ export default function Topbar({
               </svg>
               Save
             </button>
+
+            <button onClick={onLoad} className="btn btn-secondary">
+              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+              </svg>
+              Load
+            </button>
           </>
         )}
-
-        <button onClick={onLoad} className="btn btn-secondary">
-          <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
-          </svg>
-          Load
-        </button>
       </div>
     </header>
   )

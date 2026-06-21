@@ -1,7 +1,7 @@
 # Graph Report - Visual Whiteboard Pro  (2026-06-21)
 
 ## Corpus Check
-- 49 files · ~37,572 words
+- 49 files · ~37,374 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary

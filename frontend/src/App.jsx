@@ -8,6 +8,7 @@ import PageStrip from './components/PageStrip'
 import ExportModal from './components/ExportModal'
 import ContextPanel from './components/ContextPanel'
 import AssistPanel from './components/AssistPanel'
+import PermissionsPanel from './components/PermissionsPanel'
 import './fabric-eraser'
 import {
   isPointInPolygon,
@@ -37,6 +38,10 @@ export default function App() {
   const [whiteboardsList, setWhiteboardsList] = useState([])
   const [searchQuery, setSearchQuery] = useState('')
   const [boardMeta, setBoardMeta] = useState({ owner: null, collaborators: [], isPublic: false })
+  const [showJoinModal, setShowJoinModal] = useState(false)
+  const [joinBoardId, setJoinBoardId] = useState('')
+  const [joinModalError, setJoinModalError] = useState('')
+  const [joinModalLoading, setJoinModalLoading] = useState(false)
 
   // State variables
   const [title, setTitle] = useState('My Whiteboard')
@@ -62,6 +67,8 @@ export default function App() {
   const [contextMap, setContextMap] = useState({})
   const [isContextPanelOpen, setIsContextPanelOpen] = useState(false)
   const [isAssistPanelOpen, setIsAssistPanelOpen] = useState(false)
+  const [isPermissionsPanelOpen, setIsPermissionsPanelOpen] = useState(false)
+  const [sessionAccess, setSessionAccess] = useState(null)
   const [suggestions, setSuggestions] = useState([])
   const [isCleanupLoading, setIsCleanupLoading] = useState(false)
   const [isAssistLoading, setIsAssistLoading] = useState(false)
@@ -71,6 +78,7 @@ export default function App() {
 
   // --- Canvas Management & Clipboard ---
   const handleClearPage = () => {
+    if (isReadOnly) return
     const canvas = fabricRef.current
     if (!canvas) return
     if (!window.confirm('Are you sure you want to clear this entire page? This can be undone.')) return
@@ -100,6 +108,7 @@ export default function App() {
   }
 
   const handleCut = () => {
+    if (isReadOnly) return
     const canvas = fabricRef.current
     if (!canvas) return
     const activeObj = canvas.getActiveObject()
@@ -123,6 +132,7 @@ export default function App() {
   }
 
   const handlePaste = () => {
+    if (isReadOnly) return
     const canvas = fabricRef.current
     if (!canvas || !clipboardRef.current) return
 
@@ -258,11 +268,26 @@ export default function App() {
 
   // Derived read-only permission check
   const isReadOnly = savedId ? (
-    boardMeta.owner !== user.id &&
-    !boardMeta.collaborators.includes(user.id)
+    sessionAccess ? (sessionAccess === 'view') : (
+      boardMeta.owner !== user.id &&
+      !boardMeta.collaborators.includes(user.id)
+    )
   ) : false
   const isReadOnlyRef = useRef(isReadOnly)
   useEffect(() => { isReadOnlyRef.current = isReadOnly }, [isReadOnly])
+
+  const lockObjectsIfReadOnly = (canvasInstance) => {
+    if (!canvasInstance) return
+    const readOnly = isReadOnlyRef.current
+    const selectionTools = ['lasso-select', 'square-select', 'circle-select']
+    const isSelectionTool = selectionTools.includes(activeToolRef.current)
+    canvasInstance.getObjects().forEach((obj) => {
+      if (obj.id !== 'page-boundary') {
+        obj.selectable = !readOnly && isSelectionTool
+        obj.evented = !readOnly && isSelectionTool
+      }
+    })
+  }
 
   // Auto-login verify token on mount
   useEffect(() => {
@@ -291,19 +316,34 @@ export default function App() {
   // Lock canvas shapes if read-only view (tool effect restores interactivity when editable)
   useEffect(() => {
     const canvas = fabricRef.current
-    if (!canvas || !isReadOnly) return
+    if (!canvas) return
 
-    canvas.forEachObject((obj) => {
-      if (obj.id !== 'page-boundary') {
-        obj.selectable = false
-        obj.evented = false
-      }
-    })
-    canvas.discardActiveObject()
-    canvas.selection = false
-    canvas.defaultCursor = 'default'
+    if (isReadOnly) {
+      canvas.forEachObject((obj) => {
+        if (obj.id !== 'page-boundary') {
+          obj.selectable = false
+          obj.evented = false
+        }
+      })
+      canvas.discardActiveObject()
+      canvas.selection = false
+      canvas.isDrawingMode = false
+      canvas.defaultCursor = 'default'
+      setActiveTool('pan')
+    } else {
+      // Restore interactivity for the active tool selection settings
+      const selectionTools = ['lasso-select', 'square-select', 'circle-select']
+      const isSelectionTool = selectionTools.includes(activeTool)
+      canvas.forEachObject((obj) => {
+        if (obj.id !== 'page-boundary') {
+          obj.selectable = isSelectionTool
+          obj.evented = isSelectionTool
+        }
+      })
+      canvas.defaultCursor = isSelectionTool ? 'default' : 'crosshair'
+    }
     canvas.requestRenderAll()
-  }, [isReadOnly])
+  }, [isReadOnly, activeTool])
 
   // Load whiteboards when screen is dashboard
   useEffect(() => {
@@ -392,7 +432,19 @@ export default function App() {
 
   const getCanvasJson = () => {
     if (!fabricRef.current) return { objects: [] }
-    const json = fabricRef.current.toJSON(['selectable', 'id', 'globalCompositeOperation', 'erasable', 'eraser', 'customType'])
+    const json = fabricRef.current.toJSON([
+      'selectable', 
+      'id', 
+      'globalCompositeOperation', 
+      'erasable', 
+      'eraser', 
+      'customType',
+      'rx',
+      'ry',
+      'boxStroke',
+      'boxStrokeWidth',
+      'padding'
+    ])
     if (json && json.objects) {
       json.objects = json.objects.filter(obj => obj.id !== 'page-boundary')
     }
@@ -455,6 +507,7 @@ export default function App() {
     canvas.discardActiveObject()
     canvas.loadFromJSON(targetPage.canvas_state, () => {
       canvas.getObjects().forEach((obj) => obj.setCoords())
+      lockObjectsIfReadOnly(canvas)
       renderPageBoundary(canvas, pageModeRef.current, pageSizeRef.current)
       canvas.requestRenderAll()
       applyingRemoteRef.current = false
@@ -537,6 +590,7 @@ export default function App() {
       canvas.discardActiveObject()
       canvas.loadFromJSON(remainingPage.canvas_state, () => {
         canvas.getObjects().forEach((obj) => obj.setCoords())
+        lockObjectsIfReadOnly(canvas)
         renderPageBoundary(canvas, pageModeRef.current, pageSizeRef.current)
         canvas.requestRenderAll()
         applyingRemoteRef.current = false
@@ -584,6 +638,7 @@ export default function App() {
     canvas.discardActiveObject()
     canvas.loadFromJSON(newPage.canvas_state, () => {
       canvas.getObjects().forEach((obj) => obj.setCoords())
+      lockObjectsIfReadOnly(canvas)
       renderPageBoundary(canvas, pageModeRef.current, pageSizeRef.current)
       canvas.requestRenderAll()
       applyingRemoteRef.current = false
@@ -871,6 +926,61 @@ export default function App() {
     setScreen('editor')
   }
 
+  const handleJoinBoard = async (e) => {
+    if (e) e.preventDefault()
+    const targetId = joinBoardId.trim()
+    if (!targetId) {
+      setJoinModalError('Please enter a board ID.')
+      return
+    }
+
+    // Basic MongoDB ObjectId format validation (24 hex characters)
+    const objectIdRegex = /^[0-9a-fA-F]{24}$/
+    if (!objectIdRegex.test(targetId)) {
+      setJoinModalError('Invalid Board ID format. Must be a 24-character hex string.')
+      return
+    }
+
+    setJoinModalLoading(true)
+    setJoinModalError('')
+
+    try {
+      const token = localStorage.getItem('wb_token')
+      const headers = { 'Content-Type': 'application/json' }
+      if (token) headers['Authorization'] = `Bearer ${token}`
+
+      const res = await fetch(`http://localhost:4000/api/whiteboards/${targetId}`, { headers })
+      if (!res.ok) {
+        if (res.status === 401 || res.status === 403) {
+          throw new Error('Board is not available/Private')
+        }
+        if (res.status === 404) {
+          throw new Error('Board not found')
+        }
+        throw new Error('Failed to load board metadata')
+      }
+
+      await loadBoardById(targetId)
+      setScreen('editor')
+      setShowJoinModal(false)
+      setJoinBoardId('')
+    } catch (err) {
+      console.error(err)
+      setJoinModalError(err.message)
+    } finally {
+      setJoinModalLoading(false)
+    }
+  }
+
+  const handleTogglePermission = async (targetSocketId, targetDbUserId, newAccess) => {
+    if (!socketRef.current) return
+    socketRef.current.emit('board:toggle-user-permission', {
+      roomId: savedId,
+      targetSocketId,
+      access: newAccess
+    })
+  }
+
   const handleExitEditor = () => {
     if (fabricRef.current) {
       fabricRef.current.discardActiveObject()
@@ -880,6 +990,7 @@ export default function App() {
     window.history.pushState({ path: newUrl }, '', newUrl)
 
     setSavedId(null)
+    setSessionAccess(null)
     setTitle('My Whiteboard')
     setPages([
       {
@@ -964,6 +1075,7 @@ export default function App() {
       fabricRef.current.discardActiveObject()
       fabricRef.current.loadFromJSON(state, () => {
         fabricRef.current.getObjects().forEach((obj) => obj.setCoords())
+        lockObjectsIfReadOnly(fabricRef.current)
         fabricRef.current.requestRenderAll()
         applyingRemoteRef.current = false
         setCanUndo(historyIndexRef.current > 0)
@@ -982,6 +1094,7 @@ export default function App() {
       fabricRef.current.discardActiveObject()
       fabricRef.current.loadFromJSON(state, () => {
         fabricRef.current.getObjects().forEach((obj) => obj.setCoords())
+        lockObjectsIfReadOnly(fabricRef.current)
         fabricRef.current.requestRenderAll()
         applyingRemoteRef.current = false
         setCanUndo(true)
@@ -1004,6 +1117,7 @@ export default function App() {
     canvas.discardActiveObject()
     canvas.loadFromJSON(json, () => {
       canvas.getObjects().forEach((obj) => obj.setCoords())
+      lockObjectsIfReadOnly(canvas)
       canvas.calcOffset()
       canvas.requestRenderAll()
       applyingRemoteRef.current = false
@@ -1043,7 +1157,21 @@ export default function App() {
       stroke: target.stroke || '#1E3A5F',
       fill: target.fill || '#FFFFFF',
       strokeWidth: target.strokeWidth || 2,
-      opacity: target.opacity || 1
+      opacity: target.opacity || 1,
+      // Text properties
+      fontFamily: target.fontFamily || 'Inter',
+      fontSize: target.fontSize || 24,
+      fontWeight: target.fontWeight || 'normal',
+      fontStyle: target.fontStyle || 'normal',
+      underline: target.underline || false,
+      backgroundColor: target.backgroundColor || 'transparent',
+      // Text box border and roundness/padding
+      boxStroke: target.boxStroke || 'transparent',
+      boxStrokeWidth: target.boxStrokeWidth || 0,
+      padding: target.padding || 0,
+      // Corner roundness
+      rx: target.rx || 0,
+      ry: target.ry || 0
     })
   }
 
@@ -1584,15 +1712,32 @@ export default function App() {
     }
 
     const onSelectionCreated = (e) => {
-      updateInspectorProperties(canvas.getActiveObject() || e.selected[0])
+      const activeObj = canvas.getActiveObject() || e.selected[0]
+      updateInspectorProperties(activeObj)
+
+      const targetTools = ['rect', 'circle', 'diamond', 'line', 'arrow']
+      if (targetTools.includes(activeToolRef.current)) {
+        setIsRightPanelCollapsed(false)
+      }
     }
 
     const onSelectionUpdated = (e) => {
-      updateInspectorProperties(canvas.getActiveObject() || e.selected[0])
+      const activeObj = canvas.getActiveObject() || e.selected[0]
+      updateInspectorProperties(activeObj)
+
+      const targetTools = ['rect', 'circle', 'diamond', 'line', 'arrow']
+      if (targetTools.includes(activeToolRef.current)) {
+        setIsRightPanelCollapsed(false)
+      }
     }
 
     const onSelectionCleared = () => {
       setSelectedObject(null)
+
+      const targetTools = ['rect', 'circle', 'diamond', 'line', 'arrow']
+      if (targetTools.includes(activeToolRef.current)) {
+        setIsRightPanelCollapsed(true)
+      }
     }
 
     const onObjectMoving = (options) => {
@@ -1607,13 +1752,13 @@ export default function App() {
     }
 
     const onObjectModified = () => {
-      if (applyingRemoteRef.current) return
+      if (applyingRemoteRef.current || isReadOnlyRef.current) return
       saveHistory()
       sendCanvasUpdate()
     }
 
     const onObjectAdded = (options) => {
-      if (applyingRemoteRef.current) return
+      if (applyingRemoteRef.current || isReadOnlyRef.current) return
       const obj = options?.target
       if (obj) {
         if (!obj.id) {
@@ -1639,7 +1784,7 @@ export default function App() {
     }
 
     const onObjectRemoved = () => {
-      if (applyingRemoteRef.current) return
+      if (applyingRemoteRef.current || isReadOnlyRef.current) return
       saveHistory()
       sendCanvasUpdate()
     }
@@ -1856,7 +2001,7 @@ export default function App() {
   function addNewElement(type) {
     const F = window.fabric
     const canvas = fabricRef.current
-    if (!F || !canvas) return
+    if (!F || !canvas || isReadOnly) return
 
     // Calculate canvas center point taking zoom/pan into account
     const vpt = canvas.viewportTransform
@@ -1962,12 +2107,16 @@ export default function App() {
       if (activeObject.type === 'activeSelection') {
         activeObject.forEachObject((obj) => {
           obj.set(name, value)
+          obj.dirty = true // Invalidate cache for custom properties
+          obj.setCoords() // Recalculate selection borders and handles
           if (obj.customType === 'arrow' && name === 'stroke') {
             obj.set('fill', value) // Keep head filled with stroke color
           }
         })
       } else {
         activeObject.set(name, value)
+        activeObject.dirty = true // Invalidate cache for custom properties
+        activeObject.setCoords() // Recalculate selection borders and handles
         if (activeObject.customType === 'arrow' && name === 'stroke') {
           activeObject.set('fill', value)
         }
@@ -2003,6 +2152,7 @@ export default function App() {
   }
 
   const handleDeleteElement = () => {
+    if (isReadOnly) return
     const canvas = fabricRef.current
     if (!canvas) return
     const activeObject = canvas.getActiveObject()
@@ -2586,6 +2736,7 @@ export default function App() {
   const sendCanvasUpdate = debounce(() => {
     if (!fabricRef.current || !socketRef.current) return
     if (applyingRemoteRef.current) return
+    if (isReadOnlyRef.current) return // Guard: read-only users cannot emit updates
     try {
       const json = getCanvasJson()
       const room = savedIdRef.current || 'global'
@@ -2633,6 +2784,63 @@ export default function App() {
     F.Object.prototype.cornerSize = 8
     F.Object.prototype.borderScaleFactor = 1.5
 
+    // Disable caching for Text objects to prevent blurry scaling and boundary ghost previews on resize
+    F.Text.prototype.objectCaching = false
+
+    // Override fabric.Text._renderBackground to support rounded corners and background border/padding
+    F.Text.prototype._renderBackground = function(ctx) {
+      if (!this.backgroundColor && !(this.boxStroke && this.boxStrokeWidth)) {
+        return
+      }
+      const dim = this._getNonTransformedDimensions()
+      const w = dim.x
+      const h = dim.y
+      
+      const padding = this.padding || 0
+      const x = -w / 2 - padding
+      const y = -h / 2 - padding
+      const width = w + padding * 2
+      const height = h + padding * 2
+      
+      const rx = this.rx || 0
+      const ry = this.ry || 0
+      
+      ctx.save()
+      if (this._removeShadow) {
+        this._removeShadow(ctx)
+      }
+      
+      ctx.beginPath()
+      if (ctx.roundRect) {
+        ctx.roundRect(x, y, width, height, [rx, ry, rx, ry])
+      } else {
+        // Fallback for environments lacking roundRect
+        ctx.moveTo(x + rx, y)
+        ctx.lineTo(x + width - rx, y)
+        ctx.arcTo(x + width, y, x + width, y + ry, ry)
+        ctx.lineTo(x + width, y + height - ry)
+        ctx.arcTo(x + width, y + height, x + width - rx, y + height, rx)
+        ctx.lineTo(x + rx, y + height)
+        ctx.arcTo(x, y + height, x, y + height - ry, ry)
+        ctx.lineTo(x, y + ry)
+        ctx.arcTo(x, y, x + rx, y, rx)
+        ctx.closePath()
+      }
+      
+      if (this.backgroundColor) {
+        ctx.fillStyle = this.backgroundColor
+        ctx.fill()
+      }
+      
+      if (this.boxStroke && this.boxStrokeWidth) {
+        ctx.strokeStyle = this.boxStroke
+        ctx.lineWidth = this.boxStrokeWidth
+        ctx.stroke()
+      }
+      
+      ctx.restore()
+    }
+
     fabricRef.current = canvas
     window.__fabricCanvas = canvas
 
@@ -2643,7 +2851,19 @@ export default function App() {
     const cleanupFabricListeners = attachFabricListeners(canvas)
 
     // Load existing pages if populated, else save initial history snapshot
-    const initialJson = canvas.toJSON(['selectable', 'id', 'globalCompositeOperation', 'erasable', 'eraser', 'customType'])
+    const initialJson = canvas.toJSON([
+      'selectable', 
+      'id', 
+      'globalCompositeOperation', 
+      'erasable', 
+      'eraser', 
+      'customType',
+      'rx',
+      'ry',
+      'boxStroke',
+      'boxStrokeWidth',
+      'padding'
+    ])
     if (initialJson && initialJson.objects) {
       initialJson.objects = initialJson.objects.filter(obj => obj.id !== 'page-boundary')
     }
@@ -2654,6 +2874,7 @@ export default function App() {
       canvas.discardActiveObject()
       canvas.loadFromJSON(activePage.canvas_state, () => {
         canvas.getObjects().forEach((obj) => obj.setCoords())
+        lockObjectsIfReadOnly(canvas)
         renderPageBoundary(canvas, pageModeRef.current, pageSizeRef.current)
         canvas.requestRenderAll()
         applyingRemoteRef.current = false
@@ -2687,6 +2908,28 @@ export default function App() {
       }
 
       const key = e.key.toLowerCase()
+
+      // Allow zooming shortcuts even if read-only
+      if (e.ctrlKey && e.key === '=') {
+        handleZoom(zoom + 0.1)
+        e.preventDefault()
+        return
+      }
+      if (e.ctrlKey && e.key === '-') {
+        handleZoom(zoom - 0.1)
+        e.preventDefault()
+        return
+      }
+      if (e.ctrlKey && e.key === '0') {
+        handleZoomReset()
+        e.preventDefault()
+        return
+      }
+
+      // If read-only, block all other shortcuts
+      if (isReadOnlyRef.current) {
+        return
+      }
 
       // Delete element (Delete or Backspace)
       if (e.key === 'Delete' || e.key === 'Backspace') {
@@ -2857,6 +3100,20 @@ export default function App() {
 
     socket.on('room:users', (users) => {
       setRoomUsers(users || [])
+    })
+
+    socket.on('board:permissions-update', ({ owner, collaborators, isPublic }) => {
+      setBoardMeta({ owner, collaborators, isPublic })
+    })
+
+    socket.on('board:user-permission-changed', ({ socketId, dbUserId, access, owner, collaborators, isPublic }) => {
+      setBoardMeta({ owner, collaborators, isPublic })
+      
+      const myId = socketRef.current?.id
+      const myDbUserId = user.id || user._id
+      if (socketId === myId || (dbUserId && dbUserId === myDbUserId)) {
+        setSessionAccess(access)
+      }
     })
 
     socket.on('cursor:update', ({ userId, name, color, pageId, x, y }) => {
@@ -3045,12 +3302,20 @@ export default function App() {
         <main className="dashboard-main">
           <div className="dashboard-toolbar">
             <h1 className="dashboard-title">Your Workspaces</h1>
-            <button className="btn btn-primary" onClick={handleCreateBoard}>
-              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4"></path>
-              </svg>
-              Create Board
-            </button>
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button className="btn btn-secondary" onClick={() => setShowJoinModal(true)}>
+                <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '6px' }}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                </svg>
+                Join Board by ID
+              </button>
+              <button className="btn btn-primary" onClick={handleCreateBoard}>
+                <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4"></path>
+                </svg>
+                Create Board
+              </button>
+            </div>
           </div>
 
           <div className="search-bar-container">
@@ -3141,6 +3406,77 @@ export default function App() {
             </div>
           )}
         </main>
+
+        {showJoinModal && (
+          <div className="modal-overlay" onClick={() => { setShowJoinModal(false); setJoinBoardId(''); setJoinModalError(''); }}>
+            <div className="modal-container" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '400px' }}>
+              <div className="modal-header">
+                <h3 className="modal-title">Join Board by ID</h3>
+                <button 
+                  className="modal-close-btn" 
+                  onClick={() => { setShowJoinModal(false); setJoinBoardId(''); setJoinModalError(''); }}
+                >
+                  &times;
+                </button>
+              </div>
+              <form onSubmit={handleJoinBoard} style={{ padding: '16px' }}>
+                {joinModalError && (
+                  <div style={{
+                    padding: '8px 12px',
+                    borderRadius: '6px',
+                    backgroundColor: '#FDEDEC',
+                    color: '#C0392B',
+                    fontSize: '13px',
+                    fontWeight: '500',
+                    border: '1px solid #FADBD8',
+                    marginBottom: '12px'
+                  }}>
+                    {joinModalError}
+                  </div>
+                )}
+                <div className="form-group" style={{ marginBottom: '16px' }}>
+                  <label className="form-label" style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>
+                    Board ID (24-character hex string)
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    style={{
+                      width: '100%',
+                      padding: '8px 12px',
+                      borderRadius: '6px',
+                      border: '1px solid #E0E0E0',
+                      fontSize: '14px',
+                      boxSizing: 'border-box'
+                    }}
+                    placeholder="e.g. 648f8c47b5..."
+                    value={joinBoardId}
+                    onChange={(e) => setJoinBoardId(e.target.value)}
+                    disabled={joinModalLoading}
+                    autoFocus
+                  />
+                </div>
+                <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '16px' }}>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => { setShowJoinModal(false); setJoinBoardId(''); setJoinModalError(''); }}
+                    disabled={joinModalLoading}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    disabled={joinModalLoading}
+                  >
+                    {joinModalLoading ? 'Joining...' : 'Join Board'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     )
   }
@@ -3156,7 +3492,7 @@ export default function App() {
         onClearPage={handleClearPage}
         savedId={savedId}
         roomUsers={roomUsers}
-        currentUser={{ id: socketRef.current?.id, ...user }}
+        currentUser={{ ...user, id: socketRef.current?.id, dbUserId: user.id || user._id }}
         onRenameUser={handleRenameUser}
         onExport={() => {
           // Synchronize current page state before opening export modal
@@ -3178,6 +3514,8 @@ export default function App() {
         isAssistLoading={isAssistLoading}
         onExit={handleExitEditor}
         isReadOnly={isReadOnly}
+        onOpenPermissionsPanel={() => setIsPermissionsPanelOpen(true)}
+        boardMeta={boardMeta}
       />
 
       {/* Main Workspace Area */}
@@ -3211,13 +3549,15 @@ export default function App() {
         )}
 
         {/* Toolbar Left Side */}
-        <Toolbar 
-          activeTool={activeTool} 
-          setActiveTool={setActiveTool} 
-          drawType={drawType}
-          setDrawType={setDrawType}
-          isReadOnly={isReadOnly} 
-        />
+        {!isReadOnly && (
+          <Toolbar 
+            activeTool={activeTool} 
+            setActiveTool={setActiveTool} 
+            drawType={drawType}
+            setDrawType={setDrawType}
+            isReadOnly={isReadOnly} 
+          />
+        )}
 
         {/* Central Canvas Viewport */}
         <div id="canvas-viewport" className="canvas-viewport">
@@ -3322,6 +3662,7 @@ export default function App() {
             onRedo={redo}
             canUndo={canUndo}
             canRedo={canRedo}
+            isReadOnly={isReadOnly}
           />
         </div>
 
@@ -3389,6 +3730,16 @@ export default function App() {
           setSuggestions={setSuggestions}
           onApplySuggestion={handleApplySuggestion}
           isLoading={isAssistLoading}
+        />
+
+        {/* Permissions Panel */}
+        <PermissionsPanel
+          isOpen={isPermissionsPanelOpen}
+          onClose={() => setIsPermissionsPanelOpen(false)}
+          whiteboardId={savedId}
+          roomUsers={roomUsers}
+          boardMeta={boardMeta}
+          onTogglePermission={handleTogglePermission}
         />
       </div>
 
