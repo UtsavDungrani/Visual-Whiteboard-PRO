@@ -149,7 +149,7 @@ app.post("/api/auth/register", authLimiter, async (req, res) => {
     const token = jwt.sign(
       { id: user._id, name: user.name, email: user.email, color: user.avatar_color },
       JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: "2d" }
     );
 
     return res.status(201).json({
@@ -189,7 +189,7 @@ app.post("/api/auth/login", authLimiter, async (req, res) => {
     const token = jwt.sign(
       { id: user._id, name: user.name, email: user.email, color: user.avatar_color },
       JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: "2d" }
     );
 
     return res.json({

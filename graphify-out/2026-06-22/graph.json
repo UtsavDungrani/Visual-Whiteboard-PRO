@@ -14,7 +14,7 @@
       },
       "_origin": "ast",
       "id": "husky",
-      "community": 10,
+      "community": 8,
       "norm_label": "husky.sh"
     },
     {
@@ -28,7 +28,7 @@
       },
       "_origin": "ast",
       "id": "d_projects_visual_whiteboard_pro_husky_husky_sh__entry",
-      "community": 10,
+      "community": 8,
       "norm_label": "husky.sh script"
     },
     {
@@ -438,7 +438,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_pathlassosplit",
-      "community": 15,
+      "community": 5,
       "norm_label": "pathlassosplit.js"
     },
     {
@@ -448,7 +448,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_pathlassosplit_ispointinpolygon",
-      "community": 15,
+      "community": 5,
       "norm_label": "ispointinpolygon()"
     },
     {
@@ -458,7 +458,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_pathlassosplit_pathdatatosvgd",
-      "community": 15,
+      "community": 5,
       "norm_label": "pathdatatosvgd()"
     },
     {
@@ -468,7 +468,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "src_pathlassosplit_samplefabricpath",
-      "community": 15,
+      "community": 5,
       "norm_label": "samplefabricpath()"
     },
     {
@@ -478,7 +478,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "src_pathlassosplit_samplepathhitpoints",
-      "community": 15,
+      "community": 5,
       "norm_label": "samplepathhitpoints()"
     },
     {
@@ -488,7 +488,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "src_pathlassosplit_bboxcornersinpolygon",
-      "community": 15,
+      "community": 5,
       "norm_label": "bboxcornersinpolygon()"
     },
     {
@@ -498,7 +498,7 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "src_pathlassosplit_getpathselectionmode",
-      "community": 15,
+      "community": 5,
       "norm_label": "getpathselectionmode()"
     },
     {
@@ -508,7 +508,7 @@
       "source_location": "L122",
       "_origin": "ast",
       "id": "src_pathlassosplit_getobjectselectionmode",
-      "community": 15,
+      "community": 5,
       "norm_label": "getobjectselectionmode()"
     },
     {
@@ -518,7 +518,7 @@
       "source_location": "L163",
       "_origin": "ast",
       "id": "src_pathlassosplit_canvaspolygontolocal",
-      "community": 15,
+      "community": 5,
       "norm_label": "canvaspolygontolocal()"
     },
     {
@@ -528,27 +528,17 @@
       "source_location": "L171",
       "_origin": "ast",
       "id": "src_pathlassosplit_buildclippolygon",
-      "community": 15,
+      "community": 5,
       "norm_label": "buildclippolygon()"
-    },
-    {
-      "label": "mergeClipPaths()",
-      "file_type": "code",
-      "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L190",
-      "_origin": "ast",
-      "id": "src_pathlassosplit_mergeclippaths",
-      "community": 15,
-      "norm_label": "mergeclippaths()"
     },
     {
       "label": "splitObjectWithLasso()",
       "file_type": "code",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L230",
+      "source_location": "L190",
       "_origin": "ast",
       "id": "src_pathlassosplit_splitobjectwithlasso",
-      "community": 15,
+      "community": 5,
       "norm_label": "splitobjectwithlasso()"
     },
     {
@@ -748,7 +738,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "package_devdependencies",
-      "community": 10,
+      "community": 8,
       "norm_label": "devdependencies"
     },
     {
@@ -758,7 +748,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "package_devdependencies_eslint",
-      "community": 10,
+      "community": 8,
       "norm_label": "eslint"
     },
     {
@@ -768,7 +758,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "package_devdependencies_husky",
-      "community": 10,
+      "community": 8,
       "norm_label": "husky"
     },
     {
@@ -778,7 +768,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "package_devdependencies_lint_staged",
-      "community": 10,
+      "community": 8,
       "norm_label": "lint-staged"
     },
     {
@@ -788,7 +778,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "package_devdependencies_prettier",
-      "community": 10,
+      "community": 8,
       "norm_label": "prettier"
     },
     {
@@ -1168,7 +1158,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "models_elementcontext",
-      "community": 1,
+      "community": 10,
       "norm_label": "elementcontext.js"
     },
     {
@@ -1178,7 +1168,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "models_elementcontext_mongoose",
-      "community": 1,
+      "community": 10,
       "norm_label": "mongoose"
     },
     {
@@ -1188,7 +1178,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "models_elementcontext_elementcontextschema",
-      "community": 1,
+      "community": 10,
       "norm_label": "elementcontextschema"
     },
     {
@@ -1228,7 +1218,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "models_whiteboard",
-      "community": 1,
+      "community": 10,
       "norm_label": "whiteboard.js"
     },
     {
@@ -1238,7 +1228,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "models_whiteboard_mongoose",
-      "community": 1,
+      "community": 10,
       "norm_label": "mongoose"
     },
     {
@@ -1248,7 +1238,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "models_whiteboard_whiteboardschema",
-      "community": 1,
+      "community": 10,
       "norm_label": "whiteboardschema"
     },
     {
@@ -1472,14 +1462,84 @@
       "norm_label": "jest"
     },
     {
-      "label": "supertest",
+      "label": "socket.io-client",
       "file_type": "code",
       "source_file": "server/package.json",
       "source_location": "L25",
       "_origin": "ast",
+      "id": "server_package_devdependencies_socket_io_client",
+      "community": 3,
+      "norm_label": "socket.io-client"
+    },
+    {
+      "label": "supertest",
+      "file_type": "code",
+      "source_file": "server/package.json",
+      "source_location": "L26",
+      "_origin": "ast",
       "id": "server_package_devdependencies_supertest",
       "community": 3,
       "norm_label": "supertest"
+    },
+    {
+      "label": "ai.test.js",
+      "file_type": "code",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_ai_test",
+      "community": 9,
+      "norm_label": "ai.test.js"
+    },
+    {
+      "label": "request",
+      "file_type": "code",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_ai_test_request",
+      "community": 9,
+      "norm_label": "request"
+    },
+    {
+      "label": "{ app }",
+      "file_type": "code",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L2",
+      "_origin": "ast",
+      "id": "tests_ai_test_app",
+      "community": 9,
+      "norm_label": "{ app }"
+    },
+    {
+      "label": "mongoose",
+      "file_type": "code",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "tests_ai_test_mongoose",
+      "community": 9,
+      "norm_label": "mongoose"
+    },
+    {
+      "label": "User",
+      "file_type": "code",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "tests_ai_test_user",
+      "community": 9,
+      "norm_label": "user"
+    },
+    {
+      "label": "jwt",
+      "file_type": "code",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "tests_ai_test_jwt",
+      "community": 9,
+      "norm_label": "jwt"
     },
     {
       "label": "auth.test.js",
@@ -1532,6 +1592,106 @@
       "norm_label": "user"
     },
     {
+      "label": "context.test.js",
+      "file_type": "code",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_context_test",
+      "community": 10,
+      "norm_label": "context.test.js"
+    },
+    {
+      "label": "request",
+      "file_type": "code",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_context_test_request",
+      "community": 10,
+      "norm_label": "request"
+    },
+    {
+      "label": "{ app }",
+      "file_type": "code",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L2",
+      "_origin": "ast",
+      "id": "tests_context_test_app",
+      "community": 10,
+      "norm_label": "{ app }"
+    },
+    {
+      "label": "mongoose",
+      "file_type": "code",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "tests_context_test_mongoose",
+      "community": 10,
+      "norm_label": "mongoose"
+    },
+    {
+      "label": "User",
+      "file_type": "code",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "tests_context_test_user",
+      "community": 10,
+      "norm_label": "user"
+    },
+    {
+      "label": "Whiteboard",
+      "file_type": "code",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "tests_context_test_whiteboard",
+      "community": 10,
+      "norm_label": "whiteboard"
+    },
+    {
+      "label": "ElementContext",
+      "file_type": "code",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "tests_context_test_elementcontext",
+      "community": 10,
+      "norm_label": "elementcontext"
+    },
+    {
+      "label": "jwt",
+      "file_type": "code",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "tests_context_test_jwt",
+      "community": 10,
+      "norm_label": "jwt"
+    },
+    {
+      "label": "fs",
+      "file_type": "code",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "tests_context_test_fs",
+      "community": 10,
+      "norm_label": "fs"
+    },
+    {
+      "label": "path",
+      "file_type": "code",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "tests_context_test_path",
+      "community": 10,
+      "norm_label": "path"
+    },
+    {
       "label": "health.test.js",
       "file_type": "code",
       "source_file": "server/tests/health.test.js",
@@ -1560,6 +1720,116 @@
       "id": "tests_health_test_app",
       "community": 9,
       "norm_label": "{ app }"
+    },
+    {
+      "label": "sockets.test.js",
+      "file_type": "code",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_sockets_test",
+      "community": 1,
+      "norm_label": "sockets.test.js"
+    },
+    {
+      "label": "ioClient",
+      "file_type": "code",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_sockets_test_ioclient",
+      "community": 1,
+      "norm_label": "ioclient"
+    },
+    {
+      "label": "http",
+      "file_type": "code",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L2",
+      "_origin": "ast",
+      "id": "tests_sockets_test_http",
+      "community": 1,
+      "norm_label": "http"
+    },
+    {
+      "label": "{ app, httpServer, io }",
+      "file_type": "code",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "tests_sockets_test_app_httpserver_io",
+      "community": 1,
+      "norm_label": "{ app, httpserver, io }"
+    },
+    {
+      "label": "whiteboards.test.js",
+      "file_type": "code",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_whiteboards_test",
+      "community": 9,
+      "norm_label": "whiteboards.test.js"
+    },
+    {
+      "label": "request",
+      "file_type": "code",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_whiteboards_test_request",
+      "community": 9,
+      "norm_label": "request"
+    },
+    {
+      "label": "{ app }",
+      "file_type": "code",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L2",
+      "_origin": "ast",
+      "id": "tests_whiteboards_test_app",
+      "community": 9,
+      "norm_label": "{ app }"
+    },
+    {
+      "label": "mongoose",
+      "file_type": "code",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "tests_whiteboards_test_mongoose",
+      "community": 9,
+      "norm_label": "mongoose"
+    },
+    {
+      "label": "User",
+      "file_type": "code",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "tests_whiteboards_test_user",
+      "community": 9,
+      "norm_label": "user"
+    },
+    {
+      "label": "Whiteboard",
+      "file_type": "code",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "tests_whiteboards_test_whiteboard",
+      "community": 9,
+      "norm_label": "whiteboard"
+    },
+    {
+      "label": "jwt",
+      "file_type": "code",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "tests_whiteboards_test_jwt",
+      "community": 9,
+      "norm_label": "jwt"
     },
     {
       "label": "graphify.md",
@@ -2180,7 +2450,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 10,
       "norm_label": "mongodb storage",
       "id": "concept_mongodb_store"
     },
@@ -2855,16 +3125,6 @@
       "confidence_score": 1.0,
       "source": "src_pathlassosplit",
       "target": "src_pathlassosplit_ispointinpolygon"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L190",
-      "weight": 1.0,
-      "source": "src_pathlassosplit",
-      "target": "src_pathlassosplit_mergeclippaths",
-      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -3655,12 +3915,34 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "tests_ai_test",
+      "target": "server_index",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "server/tests/auth.test.js",
       "source_location": "L2",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "tests_auth_test",
       "target": "server_index"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "tests_context_test",
+      "target": "server_index",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -3674,6 +3956,39 @@
       "target": "server_index"
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tests_sockets_test",
+      "target": "server_index",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "tests_whiteboards_test",
+      "target": "server_index",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "tests_ai_test",
+      "target": "server_index_app",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -3688,12 +4003,67 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "tests_context_test",
+      "target": "server_index_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "server/tests/health.test.js",
       "source_location": "L2",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "tests_health_test",
       "target": "server_index_app"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tests_sockets_test",
+      "target": "server_index_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "tests_whiteboards_test",
+      "target": "server_index_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tests_sockets_test",
+      "target": "server_index_httpserver",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tests_sockets_test",
+      "target": "server_index_io",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -3726,6 +4096,17 @@
       "target": "models_elementcontext_mongoose"
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "tests_context_test",
+      "target": "models_elementcontext",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "server/models/User.js",
@@ -3749,12 +4130,45 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "tests_ai_test",
+      "target": "models_user",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "server/tests/auth.test.js",
       "source_location": "L4",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "tests_auth_test",
       "target": "models_user"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "tests_context_test",
+      "target": "models_user",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "tests_whiteboards_test",
+      "target": "models_user",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -3785,6 +4199,28 @@
       "confidence_score": 1.0,
       "source": "models_whiteboard",
       "target": "models_whiteboard_whiteboardschema"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "tests_context_test",
+      "target": "models_whiteboard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "tests_whiteboards_test",
+      "target": "models_whiteboard",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -4002,9 +4438,69 @@
       "source_file": "server/package.json",
       "source_location": "L25",
       "weight": 1.0,
+      "source": "server_package_devdependencies",
+      "target": "server_package_devdependencies_socket_io_client",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/package.json",
+      "source_location": "L25",
+      "weight": 1.0,
       "confidence_score": 1.0,
       "source": "server_package_devdependencies",
       "target": "server_package_devdependencies_supertest"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "tests_ai_test",
+      "target": "tests_ai_test_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "tests_ai_test",
+      "target": "tests_ai_test_jwt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tests_ai_test",
+      "target": "tests_ai_test_mongoose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "tests_ai_test",
+      "target": "tests_ai_test_request",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "tests_ai_test",
+      "target": "tests_ai_test_user",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -4049,6 +4545,96 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "tests_context_test",
+      "target": "tests_context_test_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "tests_context_test",
+      "target": "tests_context_test_elementcontext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "tests_context_test",
+      "target": "tests_context_test_fs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "tests_context_test",
+      "target": "tests_context_test_jwt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tests_context_test",
+      "target": "tests_context_test_mongoose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "tests_context_test",
+      "target": "tests_context_test_path",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "tests_context_test",
+      "target": "tests_context_test_request",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "tests_context_test",
+      "target": "tests_context_test_user",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "tests_context_test",
+      "target": "tests_context_test_whiteboard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "server/tests/health.test.js",
       "source_location": "L2",
       "weight": 1.0,
@@ -4065,6 +4651,96 @@
       "confidence_score": 1.0,
       "source": "tests_health_test",
       "target": "tests_health_test_request"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tests_sockets_test",
+      "target": "tests_sockets_test_app_httpserver_io",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "tests_sockets_test",
+      "target": "tests_sockets_test_http",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "tests_sockets_test",
+      "target": "tests_sockets_test_ioclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "tests_whiteboards_test",
+      "target": "tests_whiteboards_test_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "tests_whiteboards_test",
+      "target": "tests_whiteboards_test_jwt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tests_whiteboards_test",
+      "target": "tests_whiteboards_test_mongoose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "tests_whiteboards_test",
+      "target": "tests_whiteboards_test_request",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "tests_whiteboards_test",
+      "target": "tests_whiteboards_test_user",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "tests_whiteboards_test",
+      "target": "tests_whiteboards_test_whiteboard",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -4678,5 +5354,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "ec81aa6e25483858f2fbc9fcf75ffd90a7977c3e"
+  "built_at_commit": "4f99cf364884ca82318ab7c4da78d6d5b70cb72e"
 }

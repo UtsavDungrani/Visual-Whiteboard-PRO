@@ -11,7 +11,7 @@ describe('Authentication API', () => {
   };
 
   beforeAll(async () => {
-    const mongo = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/visual-whiteboard-test";
+    const mongo = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/visual-whiteboard-test-auth";
     await mongoose.connect(mongo, { useNewUrlParser: true, useUnifiedTopology: true });
     await User.deleteMany({ email: testUser.email });
   });

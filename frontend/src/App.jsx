@@ -16,6 +16,8 @@ import {
   splitObjectWithLasso,
 } from './pathLassoSplit'
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+
 export default function App() {
   const canvasRef = useRef(null)
   const fabricRef = useRef(null)
@@ -293,7 +295,7 @@ export default function App() {
   useEffect(() => {
     const token = localStorage.getItem('wb_token')
     if (token) {
-      fetch('http://localhost:4000/api/auth/me', {
+      fetch(`${API_BASE_URL}/api/auth/me`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
         .then(res => {
@@ -742,7 +744,7 @@ export default function App() {
       const token = localStorage.getItem('wb_token')
       const headers = {}
       if (token) headers['Authorization'] = `Bearer ${token}`
-      const res = await fetch('http://localhost:4000/api/whiteboards', { headers })
+      const res = await fetch(`${API_BASE_URL}/api/whiteboards`, { headers })
       if (!res.ok) throw new Error('Failed to fetch whiteboards')
       const data = await res.json()
       setWhiteboardsList(data)
@@ -757,7 +759,7 @@ export default function App() {
       const token = localStorage.getItem('wb_token')
       const headers = {}
       if (token) headers['Authorization'] = `Bearer ${token}`
-      const res = await fetch(`http://localhost:4000/api/whiteboards/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/whiteboards/${id}`, {
         method: 'DELETE',
         headers
       })
@@ -779,7 +781,7 @@ export default function App() {
       const body = {}
       if (email) body.email = email
 
-      const res = await fetch(`http://localhost:4000/api/whiteboards/${id}/share`, {
+      const res = await fetch(`${API_BASE_URL}/api/whiteboards/${id}/share`, {
         method: 'POST',
         headers,
         body: JSON.stringify(body)
@@ -805,7 +807,7 @@ export default function App() {
     setAuthError('')
     setAuthLoading(true)
     try {
-      const res = await fetch('http://localhost:4000/api/auth/register', {
+      const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -834,7 +836,7 @@ export default function App() {
     setAuthError('')
     setAuthLoading(true)
     try {
-      const res = await fetch('http://localhost:4000/api/auth/login', {
+      const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -892,7 +894,7 @@ export default function App() {
     }
 
     try {
-      const res = await fetch('http://localhost:4000/api/whiteboards', {
+      const res = await fetch(`${API_BASE_URL}/api/whiteboards`, {
         method: 'POST',
         headers,
         body: JSON.stringify(payload)
@@ -949,7 +951,7 @@ export default function App() {
       const headers = { 'Content-Type': 'application/json' }
       if (token) headers['Authorization'] = `Bearer ${token}`
 
-      const res = await fetch(`http://localhost:4000/api/whiteboards/${targetId}`, { headers })
+      const res = await fetch(`${API_BASE_URL}/api/whiteboards/${targetId}`, { headers })
       if (!res.ok) {
         if (res.status === 401 || res.status === 403) {
           throw new Error('Board is not available/Private')
@@ -2278,7 +2280,7 @@ export default function App() {
       const token = localStorage.getItem('wb_token')
       const headers = { 'Content-Type': 'application/json' }
       if (token) headers['Authorization'] = `Bearer ${token}`
-      const res = await fetch('http://localhost:4000/api/ai/cleanup', {
+      const res = await fetch(`${API_BASE_URL}/api/ai/cleanup`, {
         method: 'POST',
         headers,
         body: JSON.stringify({ elements }),
@@ -2429,7 +2431,7 @@ export default function App() {
       const token = localStorage.getItem('wb_token')
       const headers = { 'Content-Type': 'application/json' }
       if (token) headers['Authorization'] = `Bearer ${token}`
-      const res = await fetch('http://localhost:4000/api/ai/assist', {
+      const res = await fetch(`${API_BASE_URL}/api/ai/assist`, {
         method: 'POST',
         headers,
         body: JSON.stringify({ elements, edges }),
@@ -2575,7 +2577,7 @@ export default function App() {
       const token = localStorage.getItem('wb_token')
       const headers = {}
       if (token) headers['Authorization'] = `Bearer ${token}`
-      const res = await fetch(`http://localhost:4000/api/context/${boardId}`, { headers })
+      const res = await fetch(`${API_BASE_URL}/api/context/${boardId}`, { headers })
       if (res.ok) {
         const data = await res.json()
         setContextMap(data)
@@ -2616,8 +2618,8 @@ export default function App() {
       if (token) headers['Authorization'] = `Bearer ${token}`
 
       const url = savedId
-        ? `http://localhost:4000/api/whiteboards/${savedId}`
-        : 'http://localhost:4000/api/whiteboards'
+        ? `${API_BASE_URL}/api/whiteboards/${savedId}`
+        : `${API_BASE_URL}/api/whiteboards`
       const method = savedId ? 'PUT' : 'POST'
 
       const res = await fetch(url, {
@@ -2665,7 +2667,7 @@ export default function App() {
       const headers = {}
       if (token) headers['Authorization'] = `Bearer ${token}`
 
-      const res = await fetch(`http://localhost:4000/api/whiteboards/${id}`, { headers })
+      const res = await fetch(`${API_BASE_URL}/api/whiteboards/${id}`, { headers })
       if (!res.ok) {
         if (res.status === 401 || res.status === 403) {
           throw new Error('authentication_required')
@@ -3072,7 +3074,7 @@ export default function App() {
     }
 
     const token = localStorage.getItem('wb_token')
-    const socket = io('http://localhost:4000', {
+    const socket = io(API_BASE_URL, {
       auth: { token }
     })
     socketRef.current = socket

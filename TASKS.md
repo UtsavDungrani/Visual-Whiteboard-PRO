@@ -45,7 +45,7 @@ This file lists project phases and concrete tasks (one after another) for review
 ## Phase 6 — Testing, Auth & Security
 
 - [c] **6.1 Auth:** implement JWT + bcrypt sign-up/login, protect APIs — **Priority:** High — **Estimate:** 5h
-- [/] **6.2 Tests:** unit tests for core components, integration tests for Socket flows, basic E2E smoke — **Priority:** Medium — **Estimate:** 12h (Jest/Supertest scaffolded; Health/Auth tests added)
+- [c] **6.2 Tests:** unit tests for core components, integration tests for Socket flows, basic E2E smoke — **Priority:** Medium — **Estimate:** 12h (All integration, AI, socket, and context tests fully implemented and passing)
 - [c] **6.3 Security & validation:** input validation, rate limiting on AI endpoints, CORS config — **Priority:** Medium — **Estimate:** 4h
 
 ## Phase 7 — Deployment & Monitoring

@@ -15,8 +15,8 @@
     "semantic_hash": "1805ad7bae3bf603446eed7431bab36a"
   },
   "server/index.js": {
-    "mtime": 1782056544.970622,
-    "ast_hash": "57d24d4b4626b3c0cbf8da713f6da02b",
+    "mtime": 1782097746.3819177,
+    "ast_hash": "3df602e37ab14b608ad45fc7b9f862df",
     "semantic_hash": ""
   },
   "server/models/Whiteboard.js": {
@@ -25,8 +25,8 @@
     "semantic_hash": ""
   },
   "server/package.json": {
-    "mtime": 1781604719.1088278,
-    "ast_hash": "cf81a2d2ad815802e22e9fd29fc9e36f",
+    "mtime": 1782098166.520271,
+    "ast_hash": "98c5893bcf8ecd93ffa6d27d01251b0f",
     "semantic_hash": ""
   },
   ".agents/rules/graphify.md": {
@@ -45,8 +45,8 @@
     "semantic_hash": "061c65932a362b25164f1fe90fbf79b4"
   },
   "TASKS.md": {
-    "mtime": 1781614078.0020692,
-    "ast_hash": "0644edb5c73584f245a7086ef907cecc",
+    "mtime": 1782098216.1412702,
+    "ast_hash": "f220f7d25914e9aec160795322520a50",
     "semantic_hash": ""
   },
   "description.txt": {
@@ -215,8 +215,8 @@
     "semantic_hash": ""
   },
   "frontend/src/pathLassoSplit.js": {
-    "mtime": 1782097375.7538815,
-    "ast_hash": "8052e379306c2ee4cc03ce238de1e6cf",
+    "mtime": 1782097459.6639028,
+    "ast_hash": "f06f7ce7082e96f5e853b94aa19c6932",
     "semantic_hash": ""
   },
   ".gemini/settings.json": {
@@ -230,8 +230,8 @@
     "semantic_hash": ""
   },
   "server/tests/auth.test.js": {
-    "mtime": 1781604955.863215,
-    "ast_hash": "53e967bbc5a6a5a286f51713fa1b33b0",
+    "mtime": 1782098108.1594434,
+    "ast_hash": "ea27a623b31a9f4d4ed1aba85b86bff6",
     "semantic_hash": ""
   },
   "server/tests/health.test.js": {
@@ -252,6 +252,26 @@
   "frontend/src/components/PermissionsPanel.jsx": {
     "mtime": 1782052813.4460278,
     "ast_hash": "5492ea59eeeafbf4ef404512685a1529",
+    "semantic_hash": ""
+  },
+  "server/tests/ai.test.js": {
+    "mtime": 1782098105.1304147,
+    "ast_hash": "de21d09b096f0c1ab5d14805ef98b8db",
+    "semantic_hash": ""
+  },
+  "server/tests/context.test.js": {
+    "mtime": 1782098055.8835707,
+    "ast_hash": "79166a561efb8167ef87184ae2f5a6de",
+    "semantic_hash": ""
+  },
+  "server/tests/sockets.test.js": {
+    "mtime": 1782098179.4325023,
+    "ast_hash": "02879cc9258fc2d2a6b55cea5e6d7983",
+    "semantic_hash": ""
+  },
+  "server/tests/whiteboards.test.js": {
+    "mtime": 1782098113.7017698,
+    "ast_hash": "4d62607e2dea6b3d4d437269829a089f",
     "semantic_hash": ""
   }
 }

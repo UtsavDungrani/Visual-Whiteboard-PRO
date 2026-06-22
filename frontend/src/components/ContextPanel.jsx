@@ -9,6 +9,8 @@ const LANGUAGES = [
   { value: 'plaintext', label: 'Plain Text' }
 ]
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+
 export default function ContextPanel({
   isOpen,
   onClose,
@@ -42,7 +44,7 @@ export default function ContextPanel({
         const token = localStorage.getItem('wb_token')
         const headers = {}
         if (token) headers['Authorization'] = `Bearer ${token}`
-        const res = await fetch(`http://localhost:4000/api/context/${whiteboardId}/${elementId}`, { headers })
+        const res = await fetch(`${API_BASE_URL}/api/context/${whiteboardId}/${elementId}`, { headers })
         if (!res.ok) throw new Error('Failed to load element details')
         const data = await res.json()
         setNotes(data.notes || '')
@@ -74,7 +76,7 @@ export default function ContextPanel({
       const token = localStorage.getItem('wb_token')
       const headers = { 'Content-Type': 'application/json' }
       if (token) headers['Authorization'] = `Bearer ${token}`
-      const res = await fetch(`http://localhost:4000/api/context/${whiteboardId}/${elementId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/context/${whiteboardId}/${elementId}`, {
         method: 'POST',
         headers,
         body: JSON.stringify({
@@ -129,7 +131,7 @@ export default function ContextPanel({
       const token = localStorage.getItem('wb_token')
       const headers = {}
       if (token) headers['Authorization'] = `Bearer ${token}`
-      const res = await fetch(`http://localhost:4000/api/context/${whiteboardId}/${elementId}/upload`, {
+      const res = await fetch(`${API_BASE_URL}/api/context/${whiteboardId}/${elementId}/upload`, {
         method: 'POST',
         headers,
         body: formData
@@ -184,7 +186,7 @@ export default function ContextPanel({
       const token = localStorage.getItem('wb_token')
       const headers = {}
       if (token) headers['Authorization'] = `Bearer ${token}`
-      const res = await fetch(`http://localhost:4000/api/context/${whiteboardId}/${elementId}/files/${fileId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/context/${whiteboardId}/${elementId}/files/${fileId}`, {
         method: 'DELETE',
         headers
       })
@@ -513,7 +515,7 @@ export default function ContextPanel({
                       <div className="file-meta">
                         <span className="file-name" title={file.name}>{file.name}</span>
                         <a 
-                          href={`http://localhost:4000${file.path}`} 
+                          href={`${API_BASE_URL}${file.path}`} 
                           target="_blank" 
                           rel="noopener noreferrer" 
                           className="file-download-link"

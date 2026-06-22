@@ -4,3 +4,7 @@ build/
 .env
 /.vscode/
 /server/uploads/
+.gemini/
+.cursor/
+.github/
+graphify-out/
