@@ -12,8 +12,8 @@ import PermissionsPanel from './components/PermissionsPanel'
 import './fabric-eraser'
 import {
   isPointInPolygon,
-  getPathSelectionMode,
-  splitPathWithLasso,
+  getObjectSelectionMode,
+  splitObjectWithLasso,
 } from './pathLassoSplit'
 
 export default function App() {
@@ -46,7 +46,7 @@ export default function App() {
   // State variables
   const [title, setTitle] = useState('My Whiteboard')
   const [savedId, setSavedId] = useState(null)
-  const [activeTool, setActiveTool] = useState('square-select') // square-select, circle-select, lasso-select, pan, draw, rect, circle, diamond, text, arrow
+  const [activeTool, setActiveTool] = useState('select') // select, square-select, circle-select, lasso-select, pan, draw, rect, circle, diamond, text, arrow
   const [drawType, setDrawType] = useState('pencil') // pencil, pen, highlighter, eraser
   const [drawSizes, setDrawSizes] = useState({
     pencil: 2,
@@ -279,7 +279,7 @@ export default function App() {
   const lockObjectsIfReadOnly = (canvasInstance) => {
     if (!canvasInstance) return
     const readOnly = isReadOnlyRef.current
-    const selectionTools = ['lasso-select', 'square-select', 'circle-select']
+    const selectionTools = ['select', 'lasso-select', 'square-select', 'circle-select']
     const isSelectionTool = selectionTools.includes(activeToolRef.current)
     canvasInstance.getObjects().forEach((obj) => {
       if (obj.id !== 'page-boundary') {
@@ -332,7 +332,7 @@ export default function App() {
       setActiveTool('pan')
     } else {
       // Restore interactivity for the active tool selection settings
-      const selectionTools = ['lasso-select', 'square-select', 'circle-select']
+      const selectionTools = ['select', 'lasso-select', 'square-select', 'circle-select']
       const isSelectionTool = selectionTools.includes(activeTool)
       canvas.forEachObject((obj) => {
         if (obj.id !== 'page-boundary') {
@@ -1179,7 +1179,7 @@ export default function App() {
   function attachFabricListeners(canvas) {
     const onMouseDown = (opt) => {
       const activeTool = activeToolRef.current
-      const selectionTools = ['lasso-select', 'square-select', 'circle-select']
+      const shapeSelectTools = ['lasso-select', 'square-select', 'circle-select']
       
       // Auto-collapse panels on interaction
       handleCanvasInteraction()
@@ -1196,7 +1196,7 @@ export default function App() {
       interactingRef.current = true
 
       // Custom selection tool drawing logic
-      if (selectionTools.includes(activeTool) && !isReadOnlyRef.current) {
+      if (shapeSelectTools.includes(activeTool) && !isReadOnlyRef.current) {
         const target = canvas.findTarget(opt.e)
 
         // Square/circle: click an object to select it directly
@@ -1652,27 +1652,15 @@ export default function App() {
                     ]
 
               for (const obj of candidates) {
-                if (obj.type === 'path') {
-                  const mode = getPathSelectionMode(obj, lassoPoly)
-                  if (mode === 'partial') {
-                    const part = await splitPathWithLasso(canvas, obj, lassoPoly)
-                    picked.push(part || obj)
-                  } else if (mode === 'full') {
-                    picked.push(obj)
+                const mode = getObjectSelectionMode(obj, lassoPoly)
+                if (mode === 'partial') {
+                  applyingRemoteRef.current = true
+                  const part = await splitObjectWithLasso(canvas, obj, lassoPoly)
+                  applyingRemoteRef.current = false
+                  if (part) {
+                    picked.push(part)
                   }
-                  continue
-                }
-
-                obj.setCoords()
-                const r = obj.getBoundingRect(true, true)
-                const corners = [
-                  { x: r.left, y: r.top },
-                  { x: r.left + r.width, y: r.top },
-                  { x: r.left, y: r.top + r.height },
-                  { x: r.left + r.width, y: r.top + r.height },
-                  { x: r.left + r.width / 2, y: r.top + r.height / 2 },
-                ]
-                if (corners.some((p) => isPointInPolygon(p, lassoPoly))) {
+                } else if (mode === 'full') {
                   picked.push(obj)
                 }
               }
@@ -1691,6 +1679,9 @@ export default function App() {
               }
             }
             tempSelectionShapeRef.current = null
+            setActiveTool('select')
+            saveHistory()
+            sendCanvasUpdate()
             canvas.requestRenderAll()
           }
 
@@ -1708,6 +1699,7 @@ export default function App() {
           }
         }
         tempSelectionShapeRef.current = null
+        setActiveTool('select')
         canvas.requestRenderAll()
       }
     }
@@ -1774,7 +1766,7 @@ export default function App() {
           obj.selectable = false
           obj.evented = false
         } else {
-          const selectionTools = ['lasso-select', 'square-select', 'circle-select']
+          const selectionTools = ['select', 'lasso-select', 'square-select', 'circle-select']
           const isSelectionTool = selectionTools.includes(activeToolRef.current)
           obj.selectable = isSelectionTool && !isReadOnly
           obj.evented = isSelectionTool && !isReadOnly
@@ -1871,14 +1863,17 @@ export default function App() {
     const canvas = fabricRef.current
     if (!canvas) return
 
-    canvas.discardActiveObject()
-    canvas.requestRenderAll()
+    const selectionTools = ['select', 'lasso-select', 'square-select', 'circle-select']
+    const isSelectionTool = selectionTools.includes(activeTool)
+
+    // Only discard active selection when switching to a non-selection tool
+    if (!isSelectionTool) {
+      canvas.discardActiveObject()
+      canvas.requestRenderAll()
+    }
 
     // Disable drawing mode by default
     canvas.isDrawingMode = false
-
-    const selectionTools = ['lasso-select', 'square-select', 'circle-select']
-    const isSelectionTool = selectionTools.includes(activeTool)
 
     if (activeTool === 'pan') {
       hideEraserCursor()
@@ -2785,6 +2780,30 @@ export default function App() {
     F.Object.prototype.cornerSize = 8
     F.Object.prototype.borderScaleFactor = 1.5
 
+    // Override containsPoint to respect clipPath boundaries (supports clean Lasso splitting of shapes)
+    const originalContainsPoint = F.Object.prototype.containsPoint
+    F.Object.prototype.containsPoint = function(point, alternate, drawWidth) {
+      if (!originalContainsPoint.call(this, point, alternate, drawWidth)) {
+        return false
+      }
+      if (this.lassoPoints && this.initialMatrix) {
+        // Convert current canvas point to current local coordinates
+        const localPoint = F.util.transformPoint(
+          point,
+          F.util.invertTransform(this.calcTransformMatrix())
+        )
+        // Convert local coordinates to initial canvas coordinates (at time of split)
+        const initialCanvasPoint = F.util.transformPoint(
+          localPoint,
+          this.initialMatrix
+        )
+        // Check if the point lies inside the original lasso polygon
+        const inside = isPointInPolygon(initialCanvasPoint, this.lassoPoints)
+        return this.isCutoutRemainder ? !inside : inside
+      }
+      return true
+    }
+
     // Disable caching for Text objects to prevent blurry scaling and boundary ghost previews on resize
     F.Text.prototype.objectCaching = false
 
@@ -3011,7 +3030,7 @@ export default function App() {
 
       // Tool shortcuts
       if (!e.ctrlKey) {
-        if (key === 'v') setActiveTool('square-select')
+        if (key === 'v') setActiveTool('select')
         if (key === 'c') setActiveTool('circle-select')
         if (key === 'l') setActiveTool('lasso-select')
         if (key === 'h') setActiveTool('pan')

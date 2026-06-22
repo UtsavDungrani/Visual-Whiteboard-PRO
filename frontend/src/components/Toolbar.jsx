@@ -23,8 +23,17 @@ export default function Toolbar({
       ),
       tools: [
         { 
+          id: 'select', 
+          label: 'Move / Select (V)',
+          icon: (
+            <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+              <path d="M10 10l5 5-2 1.5 3 3.5-1.5 1.2-3-3.5-2 2z" fill="currentColor" stroke="none" />
+            </svg>
+          )
+        },
+        { 
           id: 'square-select', 
-          label: 'Square Select (V)',
+          label: 'Square Select',
           icon: (
             <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
               <rect x="3" y="3" width="18" height="18" rx="2" strokeDasharray="3 3" />

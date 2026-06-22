@@ -1,5 +1,5 @@
 /**
- * Lasso partial selection helpers for fabric.Path free-draw strokes.
+ * Lasso partial selection helpers for fabric.Object shapes and fabric.Path strokes.
  */
 
 export function isPointInPolygon(p, polygon) {
@@ -118,9 +118,51 @@ export function getPathSelectionMode(path, polygon) {
   return bboxCornersInPolygon(path, polygon) ? 'full' : 'none'
 }
 
-function canvasPolygonToLocal(path, polygonCanvasPts) {
+/** Classifies selection mode for any object (Paths & standard shapes) */
+export function getObjectSelectionMode(obj, polygon) {
+  if (!polygon || polygon.length < 3) return 'none'
+
+  if (obj.type === 'path') {
+    return getPathSelectionMode(obj, polygon)
+  }
+
+  // Non-path shapes (Rect, Circle, Diamond, etc.)
+  obj.setCoords()
+  const r = obj.getBoundingRect(true, true)
+  const corners = [
+    { x: r.left, y: r.top },
+    { x: r.left + r.width, y: r.top },
+    { x: r.left, y: r.top + r.height },
+    { x: r.left + r.width, y: r.top + r.height }
+  ]
+
+  let insideCount = 0
+  for (const pt of corners) {
+    if (isPointInPolygon(pt, polygon)) insideCount++
+  }
+
+  if (insideCount === 4) {
+    return 'full'
+  }
+  if (insideCount > 0) {
+    return 'partial'
+  }
+
+  // Check if lasso is completely inside the shape boundary
+  const lassoInsideShape = polygon.some(p =>
+    p.x >= r.left && p.x <= r.left + r.width &&
+    p.y >= r.top && p.y <= r.top + r.height
+  )
+  if (lassoInsideShape) {
+    return 'partial'
+  }
+
+  return 'none'
+}
+
+function canvasPolygonToLocal(obj, polygonCanvasPts) {
   const F = window.fabric
-  const inv = F.util.invertTransform(path.calcTransformMatrix())
+  const inv = F.util.invertTransform(obj.calcTransformMatrix())
   return polygonCanvasPts.map((p) =>
     F.util.transformPoint(new F.Point(p.x, p.y), inv)
   )
@@ -142,24 +184,24 @@ function buildClipPolygon(localPoints) {
 }
 
 /**
- * Split a path at the lasso boundary: selected region becomes a new path object,
- * the original keeps everything outside the lasso.
+ * Split any shape object at the lasso boundary using clipPaths.
+ * The selected region becomes a new object; the original keeps the outside region.
  */
-export function splitPathWithLasso(canvas, path, polygonCanvasPts) {
+export function splitObjectWithLasso(canvas, obj, polygonCanvasPts) {
   const F = window.fabric
-  if (!canvas || !path || !F || polygonCanvasPts.length < 3) {
+  if (!canvas || !obj || !F || polygonCanvasPts.length < 3) {
     return Promise.resolve(null)
   }
 
   return new Promise((resolve) => {
-    path.clone(
+    obj.clone(
       (cloned) => {
         if (!cloned) {
           resolve(null)
           return
         }
 
-        const localPoly = canvasPolygonToLocal(path, polygonCanvasPts)
+        const localPoly = canvasPolygonToLocal(obj, polygonCanvasPts)
         const forwardClip = buildClipPolygon(localPoly)
         forwardClip.inverted = false
 
@@ -171,23 +213,36 @@ export function splitPathWithLasso(canvas, path, polygonCanvasPts) {
           clipPath: forwardClip,
           selectable: true,
           evented: true,
-          erasable: path.erasable !== false,
+          erasable: obj.erasable !== false,
+          objectCaching: false,
+          lassoPoints: polygonCanvasPts,
+          initialMatrix: cloned.calcTransformMatrix(),
         })
 
-        if (path.clipPath && F.util.mergeClipPaths) {
-          path.set({
-            clipPath: F.util.mergeClipPaths(inverseClip, path.clipPath),
+        if (obj.clipPath && F.util.mergeClipPaths) {
+          obj.set({
+            clipPath: F.util.mergeClipPaths(inverseClip, obj.clipPath),
+            objectCaching: false,
+            lassoPoints: polygonCanvasPts,
+            initialMatrix: obj.calcTransformMatrix(),
+            isCutoutRemainder: true,
           })
         } else {
-          path.set({ clipPath: inverseClip })
+          obj.set({
+            clipPath: inverseClip,
+            objectCaching: false,
+            lassoPoints: polygonCanvasPts,
+            initialMatrix: obj.calcTransformMatrix(),
+            isCutoutRemainder: true,
+          })
         }
 
-        path.dirty = true
+        obj.dirty = true
         cloned.dirty = true
         canvas.add(cloned)
         cloned.setCoords()
-        path.setCoords()
-        canvas.fire('object:modified', { target: path })
+        obj.setCoords()
+        canvas.fire('object:modified', { target: obj })
         resolve(cloned)
       },
       ['eraser', 'erasable', 'globalCompositeOperation']

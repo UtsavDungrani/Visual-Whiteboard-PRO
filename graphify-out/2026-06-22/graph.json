@@ -532,10 +532,20 @@
       "norm_label": "buildclippolygon()"
     },
     {
-      "label": "splitObjectWithLasso()",
+      "label": "mergeClipPaths()",
       "file_type": "code",
       "source_file": "frontend/src/pathLassoSplit.js",
       "source_location": "L190",
+      "_origin": "ast",
+      "id": "src_pathlassosplit_mergeclippaths",
+      "community": 15,
+      "norm_label": "mergeclippaths()"
+    },
+    {
+      "label": "splitObjectWithLasso()",
+      "file_type": "code",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L230",
       "_origin": "ast",
       "id": "src_pathlassosplit_splitobjectwithlasso",
       "community": 15,
@@ -2845,6 +2855,16 @@
       "confidence_score": 1.0,
       "source": "src_pathlassosplit",
       "target": "src_pathlassosplit_ispointinpolygon"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L190",
+      "weight": 1.0,
+      "source": "src_pathlassosplit",
+      "target": "src_pathlassosplit_mergeclippaths",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",

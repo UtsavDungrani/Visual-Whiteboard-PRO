@@ -90,6 +90,6 @@ This document outlines the pending technical tasks, optimizations, and feature i
 * **Objective:** Refactor selection tools to behave as structural drag/move tools seamlessly.
 * **Context/Scope:** Canvas Vector Interaction Engines.
 * **Action Items:**
-    * [ ] Upgrade Lasso Tool to capture vector nodes within paths, treating the bounded area as an object cutout that can be dragged/pasted.
-    * [ ] Adjust global selection mechanics: once an area is defined via any selection tool, the pointer automatically overrides into a `Move Tool` state to prevent accidental secondary selections.
+    * [c] Upgrade Lasso Tool to capture vector nodes within paths, treating the bounded area as an object cutout that can be dragged/pasted.
+    * [c] Adjust global selection mechanics: once an area is defined via any selection tool, the pointer automatically overrides into a `Move Tool` state to prevent accidental secondary selections.
 * **Acceptance Criteria:** Active selections can be directly repositioned without losing focus or accidentally drawing new artifacts.
