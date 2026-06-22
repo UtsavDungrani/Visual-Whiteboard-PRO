@@ -630,13 +630,7 @@ app.post("/api/ai/assist", auth, aiLimiter, (req, res) => {
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "http://localhost:5175",
-      "http://localhost:5176",
-      "http://localhost:4000",
-    ],
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
