@@ -16,7 +16,8 @@ import {
   splitObjectWithLasso,
 } from './pathLassoSplit'
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const rawApiUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_BASE_URL = rawApiUrl.endsWith('/') ? rawApiUrl.slice(0, -1) : rawApiUrl;
 
 export default function App() {
   const canvasRef = useRef(null)
