@@ -1,11 +1,11 @@
 # Graph Report - Visual Whiteboard Pro  (2026-06-22)
 
 ## Corpus Check
-- 53 files · ~40,832 words
+- 52 files · ~41,399 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 242 nodes · 282 edges · 15 communities (12 shown, 3 thin omitted)
+- 250 nodes · 290 edges · 15 communities (13 shown, 2 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
@@ -35,12 +35,12 @@
 2. `Project Description and Requirements` - 12 edges
 3. `Visual Whiteboard - Feature Backlog & Task Tracking` - 11 edges
 4. `Visual Whiteboard Pro — Phased Task Breakdown` - 10 edges
-5. `Drawing Canvas` - 8 edges
-6. `getPathSelectionMode()` - 7 edges
-7. `app` - 7 edges
-8. `isPointInPolygon()` - 5 edges
-9. `scripts` - 5 edges
-10. `scripts` - 4 edges
+5. `Visual Whiteboard Pro — Deployment Guide` - 9 edges
+6. `Drawing Canvas` - 8 edges
+7. `getPathSelectionMode()` - 7 edges
+8. `app` - 7 edges
+9. `isPointInPolygon()` - 5 edges
+10. `scripts` - 5 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `App()` --references--> `Real-time Collaboration`  [EXTRACTED]
@@ -51,7 +51,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (15 total, 3 thin omitted)
+## Communities (15 total, 2 thin omitted)
 
 ### Community 0 - "Frontend Package Configuration"
 Cohesion: 0.12
@@ -93,26 +93,30 @@ Nodes (20): mongoose, UserSchema, app, { app }, jwt, mongoose, request, User (+1
 Cohesion: 0.12
 Nodes (14): MongoDB Storage, ElementContextSchema, mongoose, mongoose, WhiteboardSchema, { app }, ElementContext, fs (+6 more)
 
+### Community 11 - "Community 11"
+Cohesion: 0.20
+Nodes (9): Architecture Overview, Pre-requisites & Accounts Needed, Step 1: Database Setup (MongoDB Atlas), Step 2: Caching Setup (Upstash Redis), Step 3: Backend Deployment (Render), Step 4: Frontend API Config, Step 5: Frontend Deployment (Vercel), Step 6: Post-Deployment Testing (+1 more)
+
 ### Community 12 - "Community 12"
 Cohesion: 0.17
 Nodes (11): 10. Advanced Lasso & Selection Tool Refactor (On-Demand Implementation), 1. Multi-Page Reordering & Sharing (Restricted Access), 2. Fixed Position Page Navigation UI, 3. Toolbar UX & Optimization, 4. Color Selection State Sync Bug, 5. Optimized PDF Export Pipeline (Sketchbook Book Style), 6. Collapsible Side Menus & Immersive Canvas Mode, 7. Board Loading by ID via Dashboard Input (+3 more)
 
 ## Knowledge Gaps
-- **152 isolated node(s):** `husky.sh script`, `name`, `version`, `private`, `dev` (+147 more)
+- **159 isolated node(s):** `husky.sh script`, `name`, `version`, `private`, `dev` (+154 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **3 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **2 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Real-time Collaboration` connect `Editor Specifications & Features` to `Backend Server Initialization`?**
-  _High betweenness centrality (0.160) - this node is a cross-community bridge._
+  _High betweenness centrality (0.150) - this node is a cross-community bridge._
 - **Why does `Project Description and Requirements` connect `Editor Specifications & Features` to `Community 10`?**
-  _High betweenness centrality (0.144) - this node is a cross-community bridge._
+  _High betweenness centrality (0.135) - this node is a cross-community bridge._
 - **Why does `App()` connect `Editor Specifications & Features` to `Frontend Application & Collaboration UI`?**
-  _High betweenness centrality (0.140) - this node is a cross-community bridge._
+  _High betweenness centrality (0.131) - this node is a cross-community bridge._
 - **What connects `husky.sh script`, `name`, `version` to the rest of the system?**
-  _152 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _159 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Frontend Package Configuration` be split into smaller, more focused modules?**
   _Cohesion score 0.125 - nodes in this community are weakly interconnected._
 - **Should `Backend Server Initialization` be split into smaller, more focused modules?**

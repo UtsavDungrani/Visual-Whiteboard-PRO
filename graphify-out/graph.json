@@ -215,7 +215,7 @@
       "label": "App()",
       "file_type": "code",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L21",
+      "source_location": "L22",
       "_origin": "ast",
       "id": "src_app_app",
       "community": 2,
@@ -285,7 +285,7 @@
       "label": "ContextPanel()",
       "file_type": "code",
       "source_file": "frontend/src/components/ContextPanel.jsx",
-      "source_location": "L14",
+      "source_location": "L15",
       "_origin": "ast",
       "id": "components_contextpanel_contextpanel",
       "community": 5,
@@ -1105,7 +1105,7 @@
       "label": "activeUsers",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L679",
+      "source_location": "L673",
       "_origin": "ast",
       "id": "server_index_activeusers",
       "community": 1,
@@ -1115,7 +1115,7 @@
       "label": "broadcastRoomUsers()",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L681",
+      "source_location": "L675",
       "_origin": "ast",
       "id": "server_index_broadcastroomusers",
       "community": 1,
@@ -1125,7 +1125,7 @@
       "label": "startServer()",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L865",
+      "source_location": "L859",
       "_origin": "ast",
       "id": "server_index_startserver",
       "community": 1,
@@ -5158,9 +5158,9 @@
       "source_file": "deploy.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "deploy",
-      "target": "deploy_visual_whiteboard_pro_deployment_guide",
-      "confidence_score": 1.0
+      "target": "deploy_visual_whiteboard_pro_deployment_guide"
     },
     {
       "relation": "contains",
@@ -5168,9 +5168,9 @@
       "source_file": "deploy.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "deploy_visual_whiteboard_pro_deployment_guide",
-      "target": "deploy_architecture_overview",
-      "confidence_score": 1.0
+      "target": "deploy_architecture_overview"
     },
     {
       "relation": "contains",
@@ -5178,9 +5178,9 @@
       "source_file": "deploy.md",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "deploy_visual_whiteboard_pro_deployment_guide",
-      "target": "deploy_pre_requisites_accounts_needed",
-      "confidence_score": 1.0
+      "target": "deploy_pre_requisites_accounts_needed"
     },
     {
       "relation": "contains",
@@ -5188,9 +5188,9 @@
       "source_file": "deploy.md",
       "source_location": "L41",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "deploy_visual_whiteboard_pro_deployment_guide",
-      "target": "deploy_step_1_database_setup_mongodb_atlas",
-      "confidence_score": 1.0
+      "target": "deploy_step_1_database_setup_mongodb_atlas"
     },
     {
       "relation": "contains",
@@ -5198,9 +5198,9 @@
       "source_file": "deploy.md",
       "source_location": "L55",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "deploy_visual_whiteboard_pro_deployment_guide",
-      "target": "deploy_step_2_caching_setup_upstash_redis",
-      "confidence_score": 1.0
+      "target": "deploy_step_2_caching_setup_upstash_redis"
     },
     {
       "relation": "contains",
@@ -5208,9 +5208,9 @@
       "source_file": "deploy.md",
       "source_location": "L65",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "deploy_visual_whiteboard_pro_deployment_guide",
-      "target": "deploy_step_3_backend_deployment_render",
-      "confidence_score": 1.0
+      "target": "deploy_step_3_backend_deployment_render"
     },
     {
       "relation": "contains",
@@ -5218,9 +5218,9 @@
       "source_file": "deploy.md",
       "source_location": "L93",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "deploy_visual_whiteboard_pro_deployment_guide",
-      "target": "deploy_step_4_frontend_api_config",
-      "confidence_score": 1.0
+      "target": "deploy_step_4_frontend_api_config"
     },
     {
       "relation": "contains",
@@ -5228,9 +5228,9 @@
       "source_file": "deploy.md",
       "source_location": "L113",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "deploy_visual_whiteboard_pro_deployment_guide",
-      "target": "deploy_step_5_frontend_deployment_vercel",
-      "confidence_score": 1.0
+      "target": "deploy_step_5_frontend_deployment_vercel"
     },
     {
       "relation": "contains",
@@ -5238,9 +5238,9 @@
       "source_file": "deploy.md",
       "source_location": "L131",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "deploy_visual_whiteboard_pro_deployment_guide",
-      "target": "deploy_step_6_post_deployment_testing",
-      "confidence_score": 1.0
+      "target": "deploy_step_6_post_deployment_testing"
     },
     {
       "relation": "contains",
@@ -5514,5 +5514,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "4f99cf364884ca82318ab7c4da78d6d5b70cb72e"
+  "built_at_commit": "caffa221336b37e5d6c873a9eafdda3c38446c58"
 }

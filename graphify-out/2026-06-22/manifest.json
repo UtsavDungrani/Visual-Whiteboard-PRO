@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "frontend/src/App.jsx": {
-    "mtime": 1782096828.3218508,
-    "ast_hash": "7dd1a79f93014f9853ff50eb71d25fc6",
+    "mtime": 1782098745.830381,
+    "ast_hash": "7462a6f1c4fd75effdba231235e72709",
     "semantic_hash": ""
   },
   "frontend/src/main.jsx": {
@@ -90,8 +90,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ContextPanel.jsx": {
-    "mtime": 1781514328.5135734,
-    "ast_hash": "becf5e9af6081d4a683f7cb309ad2de3",
+    "mtime": 1782098715.9161456,
+    "ast_hash": "a2aeff9e6bbcfad205b45b039c875331",
     "semantic_hash": ""
   },
   "server/models/ElementContext.js": {
@@ -272,6 +272,11 @@
   "server/tests/whiteboards.test.js": {
     "mtime": 1782098113.7017698,
     "ast_hash": "4d62607e2dea6b3d4d437269829a089f",
+    "semantic_hash": ""
+  },
+  "deploy.md": {
+    "mtime": 1782098692.178104,
+    "ast_hash": "4aa07c744aaafa28db4a1a9cdd4e6cf9",
     "semantic_hash": ""
   }
 }

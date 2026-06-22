@@ -215,7 +215,7 @@
       "label": "App()",
       "file_type": "code",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L19",
+      "source_location": "L21",
       "_origin": "ast",
       "id": "src_app_app",
       "community": 2,
@@ -285,7 +285,7 @@
       "label": "ContextPanel()",
       "file_type": "code",
       "source_file": "frontend/src/components/ContextPanel.jsx",
-      "source_location": "L12",
+      "source_location": "L14",
       "_origin": "ast",
       "id": "components_contextpanel_contextpanel",
       "community": 5,
@@ -1872,26 +1872,6 @@
       "norm_label": "workflow: graphify"
     },
     {
-      "label": "copilot-instructions.md",
-      "file_type": "document",
-      "source_file": ".github/copilot-instructions.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "github_copilot_instructions",
-      "community": 11,
-      "norm_label": "copilot-instructions.md"
-    },
-    {
-      "label": "graphify",
-      "file_type": "document",
-      "source_file": ".github/copilot-instructions.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "github_copilot_instructions_graphify",
-      "community": 11,
-      "norm_label": "graphify"
-    },
-    {
       "label": "GEMINI.md",
       "file_type": "document",
       "source_file": "GEMINI.md",
@@ -2190,6 +2170,106 @@
       "id": "tasks_pr_review_checklist",
       "community": 6,
       "norm_label": "pr / review checklist"
+    },
+    {
+      "label": "deploy.md",
+      "file_type": "document",
+      "source_file": "deploy.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "deploy",
+      "community": 11,
+      "norm_label": "deploy.md"
+    },
+    {
+      "label": "Visual Whiteboard Pro \u2014 Deployment Guide",
+      "file_type": "document",
+      "source_file": "deploy.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "deploy_visual_whiteboard_pro_deployment_guide",
+      "community": 11,
+      "norm_label": "visual whiteboard pro \u2014 deployment guide"
+    },
+    {
+      "label": "Architecture Overview",
+      "file_type": "document",
+      "source_file": "deploy.md",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "deploy_architecture_overview",
+      "community": 11,
+      "norm_label": "architecture overview"
+    },
+    {
+      "label": "Pre-requisites & Accounts Needed",
+      "file_type": "document",
+      "source_file": "deploy.md",
+      "source_location": "L32",
+      "_origin": "ast",
+      "id": "deploy_pre_requisites_accounts_needed",
+      "community": 11,
+      "norm_label": "pre-requisites & accounts needed"
+    },
+    {
+      "label": "Step 1: Database Setup (MongoDB Atlas)",
+      "file_type": "document",
+      "source_file": "deploy.md",
+      "source_location": "L41",
+      "_origin": "ast",
+      "id": "deploy_step_1_database_setup_mongodb_atlas",
+      "community": 11,
+      "norm_label": "step 1: database setup (mongodb atlas)"
+    },
+    {
+      "label": "Step 2: Caching Setup (Upstash Redis)",
+      "file_type": "document",
+      "source_file": "deploy.md",
+      "source_location": "L55",
+      "_origin": "ast",
+      "id": "deploy_step_2_caching_setup_upstash_redis",
+      "community": 11,
+      "norm_label": "step 2: caching setup (upstash redis)"
+    },
+    {
+      "label": "Step 3: Backend Deployment (Render)",
+      "file_type": "document",
+      "source_file": "deploy.md",
+      "source_location": "L65",
+      "_origin": "ast",
+      "id": "deploy_step_3_backend_deployment_render",
+      "community": 11,
+      "norm_label": "step 3: backend deployment (render)"
+    },
+    {
+      "label": "Step 4: Frontend API Config",
+      "file_type": "document",
+      "source_file": "deploy.md",
+      "source_location": "L93",
+      "_origin": "ast",
+      "id": "deploy_step_4_frontend_api_config",
+      "community": 11,
+      "norm_label": "step 4: frontend api config"
+    },
+    {
+      "label": "Step 5: Frontend Deployment (Vercel)",
+      "file_type": "document",
+      "source_file": "deploy.md",
+      "source_location": "L113",
+      "_origin": "ast",
+      "id": "deploy_step_5_frontend_deployment_vercel",
+      "community": 11,
+      "norm_label": "step 5: frontend deployment (vercel)"
+    },
+    {
+      "label": "Step 6: Post-Deployment Testing",
+      "file_type": "document",
+      "source_file": "deploy.md",
+      "source_location": "L131",
+      "_origin": "ast",
+      "id": "deploy_step_6_post_deployment_testing",
+      "community": 11,
+      "norm_label": "step 6: post-deployment testing"
     },
     {
       "label": "optimization.md",
@@ -3918,9 +3998,9 @@
       "source_file": "server/tests/ai.test.js",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_ai_test",
-      "target": "server_index",
-      "confidence_score": 1.0
+      "target": "server_index"
     },
     {
       "relation": "imports_from",
@@ -3940,9 +4020,9 @@
       "source_file": "server/tests/context.test.js",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_context_test",
-      "target": "server_index",
-      "confidence_score": 1.0
+      "target": "server_index"
     },
     {
       "relation": "imports_from",
@@ -3962,9 +4042,9 @@
       "source_file": "server/tests/sockets.test.js",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_sockets_test",
-      "target": "server_index",
-      "confidence_score": 1.0
+      "target": "server_index"
     },
     {
       "relation": "imports_from",
@@ -3973,9 +4053,9 @@
       "source_file": "server/tests/whiteboards.test.js",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_whiteboards_test",
-      "target": "server_index",
-      "confidence_score": 1.0
+      "target": "server_index"
     },
     {
       "relation": "imports",
@@ -3984,9 +4064,9 @@
       "source_file": "server/tests/ai.test.js",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_ai_test",
-      "target": "server_index_app",
-      "confidence_score": 1.0
+      "target": "server_index_app"
     },
     {
       "relation": "imports",
@@ -4006,9 +4086,9 @@
       "source_file": "server/tests/context.test.js",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_context_test",
-      "target": "server_index_app",
-      "confidence_score": 1.0
+      "target": "server_index_app"
     },
     {
       "relation": "imports",
@@ -4028,9 +4108,9 @@
       "source_file": "server/tests/sockets.test.js",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_sockets_test",
-      "target": "server_index_app",
-      "confidence_score": 1.0
+      "target": "server_index_app"
     },
     {
       "relation": "imports",
@@ -4039,9 +4119,9 @@
       "source_file": "server/tests/whiteboards.test.js",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_whiteboards_test",
-      "target": "server_index_app",
-      "confidence_score": 1.0
+      "target": "server_index_app"
     },
     {
       "relation": "imports",
@@ -4050,9 +4130,9 @@
       "source_file": "server/tests/sockets.test.js",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_sockets_test",
-      "target": "server_index_httpserver",
-      "confidence_score": 1.0
+      "target": "server_index_httpserver"
     },
     {
       "relation": "imports",
@@ -4061,9 +4141,9 @@
       "source_file": "server/tests/sockets.test.js",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_sockets_test",
-      "target": "server_index_io",
-      "confidence_score": 1.0
+      "target": "server_index_io"
     },
     {
       "relation": "contains",
@@ -4102,9 +4182,9 @@
       "source_file": "server/tests/context.test.js",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_context_test",
-      "target": "models_elementcontext",
-      "confidence_score": 1.0
+      "target": "models_elementcontext"
     },
     {
       "relation": "contains",
@@ -4133,9 +4213,9 @@
       "source_file": "server/tests/ai.test.js",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_ai_test",
-      "target": "models_user",
-      "confidence_score": 1.0
+      "target": "models_user"
     },
     {
       "relation": "imports_from",
@@ -4155,9 +4235,9 @@
       "source_file": "server/tests/context.test.js",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_context_test",
-      "target": "models_user",
-      "confidence_score": 1.0
+      "target": "models_user"
     },
     {
       "relation": "imports_from",
@@ -4166,9 +4246,9 @@
       "source_file": "server/tests/whiteboards.test.js",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_whiteboards_test",
-      "target": "models_user",
-      "confidence_score": 1.0
+      "target": "models_user"
     },
     {
       "relation": "references",
@@ -4207,9 +4287,9 @@
       "source_file": "server/tests/context.test.js",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_context_test",
-      "target": "models_whiteboard",
-      "confidence_score": 1.0
+      "target": "models_whiteboard"
     },
     {
       "relation": "imports_from",
@@ -4218,9 +4298,9 @@
       "source_file": "server/tests/whiteboards.test.js",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_whiteboards_test",
-      "target": "models_whiteboard",
-      "confidence_score": 1.0
+      "target": "models_whiteboard"
     },
     {
       "relation": "contains",
@@ -4438,9 +4518,9 @@
       "source_file": "server/package.json",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "server_package_devdependencies",
-      "target": "server_package_devdependencies_socket_io_client",
-      "confidence_score": 1.0
+      "target": "server_package_devdependencies_socket_io_client"
     },
     {
       "relation": "contains",
@@ -4458,9 +4538,9 @@
       "source_file": "server/tests/ai.test.js",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_ai_test",
-      "target": "tests_ai_test_app",
-      "confidence_score": 1.0
+      "target": "tests_ai_test_app"
     },
     {
       "relation": "contains",
@@ -4468,9 +4548,9 @@
       "source_file": "server/tests/ai.test.js",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_ai_test",
-      "target": "tests_ai_test_jwt",
-      "confidence_score": 1.0
+      "target": "tests_ai_test_jwt"
     },
     {
       "relation": "contains",
@@ -4478,9 +4558,9 @@
       "source_file": "server/tests/ai.test.js",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_ai_test",
-      "target": "tests_ai_test_mongoose",
-      "confidence_score": 1.0
+      "target": "tests_ai_test_mongoose"
     },
     {
       "relation": "contains",
@@ -4488,9 +4568,9 @@
       "source_file": "server/tests/ai.test.js",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_ai_test",
-      "target": "tests_ai_test_request",
-      "confidence_score": 1.0
+      "target": "tests_ai_test_request"
     },
     {
       "relation": "contains",
@@ -4498,9 +4578,9 @@
       "source_file": "server/tests/ai.test.js",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_ai_test",
-      "target": "tests_ai_test_user",
-      "confidence_score": 1.0
+      "target": "tests_ai_test_user"
     },
     {
       "relation": "contains",
@@ -4548,9 +4628,9 @@
       "source_file": "server/tests/context.test.js",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_context_test",
-      "target": "tests_context_test_app",
-      "confidence_score": 1.0
+      "target": "tests_context_test_app"
     },
     {
       "relation": "contains",
@@ -4558,9 +4638,9 @@
       "source_file": "server/tests/context.test.js",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_context_test",
-      "target": "tests_context_test_elementcontext",
-      "confidence_score": 1.0
+      "target": "tests_context_test_elementcontext"
     },
     {
       "relation": "contains",
@@ -4568,9 +4648,9 @@
       "source_file": "server/tests/context.test.js",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_context_test",
-      "target": "tests_context_test_fs",
-      "confidence_score": 1.0
+      "target": "tests_context_test_fs"
     },
     {
       "relation": "contains",
@@ -4578,9 +4658,9 @@
       "source_file": "server/tests/context.test.js",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_context_test",
-      "target": "tests_context_test_jwt",
-      "confidence_score": 1.0
+      "target": "tests_context_test_jwt"
     },
     {
       "relation": "contains",
@@ -4588,9 +4668,9 @@
       "source_file": "server/tests/context.test.js",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_context_test",
-      "target": "tests_context_test_mongoose",
-      "confidence_score": 1.0
+      "target": "tests_context_test_mongoose"
     },
     {
       "relation": "contains",
@@ -4598,9 +4678,9 @@
       "source_file": "server/tests/context.test.js",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_context_test",
-      "target": "tests_context_test_path",
-      "confidence_score": 1.0
+      "target": "tests_context_test_path"
     },
     {
       "relation": "contains",
@@ -4608,9 +4688,9 @@
       "source_file": "server/tests/context.test.js",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_context_test",
-      "target": "tests_context_test_request",
-      "confidence_score": 1.0
+      "target": "tests_context_test_request"
     },
     {
       "relation": "contains",
@@ -4618,9 +4698,9 @@
       "source_file": "server/tests/context.test.js",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_context_test",
-      "target": "tests_context_test_user",
-      "confidence_score": 1.0
+      "target": "tests_context_test_user"
     },
     {
       "relation": "contains",
@@ -4628,9 +4708,9 @@
       "source_file": "server/tests/context.test.js",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_context_test",
-      "target": "tests_context_test_whiteboard",
-      "confidence_score": 1.0
+      "target": "tests_context_test_whiteboard"
     },
     {
       "relation": "contains",
@@ -4658,9 +4738,9 @@
       "source_file": "server/tests/sockets.test.js",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_sockets_test",
-      "target": "tests_sockets_test_app_httpserver_io",
-      "confidence_score": 1.0
+      "target": "tests_sockets_test_app_httpserver_io"
     },
     {
       "relation": "contains",
@@ -4668,9 +4748,9 @@
       "source_file": "server/tests/sockets.test.js",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_sockets_test",
-      "target": "tests_sockets_test_http",
-      "confidence_score": 1.0
+      "target": "tests_sockets_test_http"
     },
     {
       "relation": "contains",
@@ -4678,9 +4758,9 @@
       "source_file": "server/tests/sockets.test.js",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_sockets_test",
-      "target": "tests_sockets_test_ioclient",
-      "confidence_score": 1.0
+      "target": "tests_sockets_test_ioclient"
     },
     {
       "relation": "contains",
@@ -4688,9 +4768,9 @@
       "source_file": "server/tests/whiteboards.test.js",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_whiteboards_test",
-      "target": "tests_whiteboards_test_app",
-      "confidence_score": 1.0
+      "target": "tests_whiteboards_test_app"
     },
     {
       "relation": "contains",
@@ -4698,9 +4778,9 @@
       "source_file": "server/tests/whiteboards.test.js",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_whiteboards_test",
-      "target": "tests_whiteboards_test_jwt",
-      "confidence_score": 1.0
+      "target": "tests_whiteboards_test_jwt"
     },
     {
       "relation": "contains",
@@ -4708,9 +4788,9 @@
       "source_file": "server/tests/whiteboards.test.js",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_whiteboards_test",
-      "target": "tests_whiteboards_test_mongoose",
-      "confidence_score": 1.0
+      "target": "tests_whiteboards_test_mongoose"
     },
     {
       "relation": "contains",
@@ -4718,9 +4798,9 @@
       "source_file": "server/tests/whiteboards.test.js",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_whiteboards_test",
-      "target": "tests_whiteboards_test_request",
-      "confidence_score": 1.0
+      "target": "tests_whiteboards_test_request"
     },
     {
       "relation": "contains",
@@ -4728,9 +4808,9 @@
       "source_file": "server/tests/whiteboards.test.js",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_whiteboards_test",
-      "target": "tests_whiteboards_test_user",
-      "confidence_score": 1.0
+      "target": "tests_whiteboards_test_user"
     },
     {
       "relation": "contains",
@@ -4738,9 +4818,9 @@
       "source_file": "server/tests/whiteboards.test.js",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_whiteboards_test",
-      "target": "tests_whiteboards_test_whiteboard",
-      "confidence_score": 1.0
+      "target": "tests_whiteboards_test_whiteboard"
     },
     {
       "relation": "contains",
@@ -4771,16 +4851,6 @@
       "confidence_score": 1.0,
       "source": "workflows_graphify",
       "target": "workflows_graphify_workflow_graphify"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": ".github/copilot-instructions.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "github_copilot_instructions",
-      "target": "github_copilot_instructions_graphify"
     },
     {
       "relation": "contains",
@@ -5081,6 +5151,96 @@
       "confidence_score": 1.0,
       "source": "tasks_visual_whiteboard_pro_phased_task_breakdown",
       "target": "tasks_pr_review_checklist"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "deploy",
+      "target": "deploy_visual_whiteboard_pro_deployment_guide",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "deploy_visual_whiteboard_pro_deployment_guide",
+      "target": "deploy_architecture_overview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy.md",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "deploy_visual_whiteboard_pro_deployment_guide",
+      "target": "deploy_pre_requisites_accounts_needed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy.md",
+      "source_location": "L41",
+      "weight": 1.0,
+      "source": "deploy_visual_whiteboard_pro_deployment_guide",
+      "target": "deploy_step_1_database_setup_mongodb_atlas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy.md",
+      "source_location": "L55",
+      "weight": 1.0,
+      "source": "deploy_visual_whiteboard_pro_deployment_guide",
+      "target": "deploy_step_2_caching_setup_upstash_redis",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy.md",
+      "source_location": "L65",
+      "weight": 1.0,
+      "source": "deploy_visual_whiteboard_pro_deployment_guide",
+      "target": "deploy_step_3_backend_deployment_render",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy.md",
+      "source_location": "L93",
+      "weight": 1.0,
+      "source": "deploy_visual_whiteboard_pro_deployment_guide",
+      "target": "deploy_step_4_frontend_api_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy.md",
+      "source_location": "L113",
+      "weight": 1.0,
+      "source": "deploy_visual_whiteboard_pro_deployment_guide",
+      "target": "deploy_step_5_frontend_deployment_vercel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "deploy.md",
+      "source_location": "L131",
+      "weight": 1.0,
+      "source": "deploy_visual_whiteboard_pro_deployment_guide",
+      "target": "deploy_step_6_post_deployment_testing",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
