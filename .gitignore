@@ -4,7 +4,9 @@ build/
 .env
 /.vscode/
 /server/uploads/
-.gemini/
+.agents/
 .cursor/
+.gemini/
 .github/
 graphify-out/
+deploy_data.txt

@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "frontend/src/App.jsx": {
-    "mtime": 1782101836.1714654,
-    "ast_hash": "bde8602b5dcccec2d9ecccee89b96ea9",
+    "mtime": 1782181795.7333698,
+    "ast_hash": "8464ef771b86086100b9b3a6e3382e33",
     "semantic_hash": ""
   },
   "frontend/src/main.jsx": {
@@ -60,8 +60,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/CanvasControls.jsx": {
-    "mtime": 1782101817.4953287,
-    "ast_hash": "2dd9d815423972b20a211bd8d7e1d779",
+    "mtime": 1782181581.9951928,
+    "ast_hash": "6e1de67a6c14ad097188a81a5c586993",
     "semantic_hash": ""
   },
   "frontend/src/components/PropertiesPanel.jsx": {
@@ -75,7 +75,7 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Topbar.jsx": {
-    "mtime": 1782142840.8805723,
+    "mtime": 1782182808.291933,
     "ast_hash": "48b52280430fbc22470aaa9089834bf4",
     "semantic_hash": ""
   },
@@ -215,8 +215,8 @@
     "semantic_hash": ""
   },
   "frontend/src/pathLassoSplit.js": {
-    "mtime": 1782101817.5025368,
-    "ast_hash": "880a633657df2fd96076aebc80802a76",
+    "mtime": 1782180919.4585266,
+    "ast_hash": "48b2d0e0cbab420cb514dedfd4e391ae",
     "semantic_hash": ""
   },
   ".gemini/settings.json": {
@@ -277,6 +277,11 @@
   "deploy.md": {
     "mtime": 1782101817.4886813,
     "ast_hash": "eea1cdf9907bcf3d0fcf2c8d43827740",
+    "semantic_hash": ""
+  },
+  "deploy_data.txt": {
+    "mtime": 1782180135.9359426,
+    "ast_hash": "aa5cd1075c9a9b9ae996d0a260f79b12",
     "semantic_hash": ""
   }
 }

@@ -208,9 +208,14 @@ export function splitObjectWithLasso(canvas, obj, polygonCanvasPts) {
         const inverseClip = buildClipPolygon(localPoly)
         inverseClip.inverted = true
 
+        let finalClonedClipPath = forwardClip
+        if (cloned.clipPath && F.util.mergeClipPaths) {
+          finalClonedClipPath = F.util.mergeClipPaths(forwardClip, cloned.clipPath)
+        }
+
         cloned.set({
           id: 'el-' + Date.now() + '-' + Math.round(Math.random() * 1e9),
-          clipPath: forwardClip,
+          clipPath: finalClonedClipPath,
           selectable: true,
           evented: true,
           erasable: obj.erasable !== false,
@@ -219,23 +224,46 @@ export function splitObjectWithLasso(canvas, obj, polygonCanvasPts) {
           initialMatrix: cloned.calcTransformMatrix(),
         })
 
-        if (obj.clipPath && F.util.mergeClipPaths) {
-          obj.set({
-            clipPath: F.util.mergeClipPaths(inverseClip, obj.clipPath),
+        let finalInverseClip
+        if (obj.clipPath) {
+          let existingPolygons = []
+          if (obj.clipPath.isType && obj.clipPath.isType('group')) {
+            existingPolygons = obj.clipPath.getObjects().map(p => {
+              p.set({ inverted: false })
+              return p
+            })
+          } else {
+            obj.clipPath.set({ inverted: false })
+            existingPolygons = [obj.clipPath]
+          }
+          
+          const excludePolygon = buildClipPolygon(localPoly)
+          excludePolygon.inverted = false
+          existingPolygons.push(excludePolygon)
+          
+          const group = new F.Group(existingPolygons, {
+            absolutePositioned: false,
+            originX: 'left',
+            originY: 'top',
             objectCaching: false,
-            lassoPoints: polygonCanvasPts,
-            initialMatrix: obj.calcTransformMatrix(),
-            isCutoutRemainder: true,
+            selectable: false,
+            evented: false,
           })
+          group.inverted = true
+          finalInverseClip = group
         } else {
-          obj.set({
-            clipPath: inverseClip,
-            objectCaching: false,
-            lassoPoints: polygonCanvasPts,
-            initialMatrix: obj.calcTransformMatrix(),
-            isCutoutRemainder: true,
-          })
+          const inverseClip = buildClipPolygon(localPoly)
+          inverseClip.inverted = true
+          finalInverseClip = inverseClip
         }
+
+        obj.set({
+          clipPath: finalInverseClip,
+          objectCaching: false,
+          lassoPoints: polygonCanvasPts,
+          initialMatrix: obj.calcTransformMatrix(),
+          isCutoutRemainder: true,
+        })
 
         obj.dirty = true
         cloned.dirty = true

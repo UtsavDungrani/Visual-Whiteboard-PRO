@@ -213,15 +213,16 @@ export default function App() {
 
   // Collapsible Panel States (Item 6)
   const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(false)
-  const [isRightPanelCollapsed, setIsRightPanelCollapsed] = useState(false)
+  const [isRightPanelCollapsed, setIsRightPanelCollapsed] = useState(true)
 
   const toggleLeftPanel = () => setIsLeftPanelCollapsed(prev => !prev)
   const toggleRightPanel = () => setIsRightPanelCollapsed(prev => !prev)
 
   // Auto-collapse logic when interacting with canvas
   const handleCanvasInteraction = () => {
-    if (!isLeftPanelCollapsed) setIsLeftPanelCollapsed(true)
-    if (!isRightPanelCollapsed) setIsRightPanelCollapsed(true)
+    setIsLeftPanelCollapsed(true)
+    setIsRightPanelCollapsed(true)
+    setIsPermissionsPanelOpen(false)
   }
 
   // Refs for callbacks & listeners to avoid stale states
@@ -2789,20 +2790,17 @@ export default function App() {
       if (!originalContainsPoint.call(this, point, alternate, drawWidth)) {
         return false
       }
-      if (this.lassoPoints && this.initialMatrix) {
-        // Convert current canvas point to current local coordinates
-        const localPoint = F.util.transformPoint(
-          point,
-          F.util.invertTransform(this.calcTransformMatrix())
-        )
-        // Convert local coordinates to initial canvas coordinates (at time of split)
-        const initialCanvasPoint = F.util.transformPoint(
-          localPoint,
-          this.initialMatrix
-        )
-        // Check if the point lies inside the original lasso polygon
-        const inside = isPointInPolygon(initialCanvasPoint, this.lassoPoints)
-        return this.isCutoutRemainder ? !inside : inside
+      if (this.clipPath) {
+        let testPoint = point
+        if (!this.clipPath.absolutePositioned) {
+          const invMatrix = F.util.invertTransform(this.calcTransformMatrix())
+          testPoint = F.util.transformPoint(point, invMatrix)
+        }
+        let isInside = this.clipPath.containsPoint(testPoint, alternate, drawWidth)
+        if (this.clipPath.inverted) {
+          isInside = !isInside
+        }
+        return isInside
       }
       return true
     }
@@ -3537,7 +3535,7 @@ export default function App() {
         isAssistLoading={isAssistLoading}
         onExit={handleExitEditor}
         isReadOnly={isReadOnly}
-        onOpenPermissionsPanel={() => setIsPermissionsPanelOpen(true)}
+        onOpenPermissionsPanel={() => setIsPermissionsPanelOpen(prev => !prev)}
         boardMeta={boardMeta}
       />
 
