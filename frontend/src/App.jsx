@@ -3170,7 +3170,6 @@ export default function App() {
 
         <main className="landing-main">
           <section className="hero-section">
-            <div className="hero-badge">PHASE 6: SECURE CLOUD COLLABORATION</div>
             <h1 className="hero-title">Collaborate, Design & Align in Real-Time</h1>
             <p className="hero-subtitle">
               A premium, interactive digital canvas featuring instant static layouts, multi-page slide exports, dynamic context notes, and bank-grade session security.
