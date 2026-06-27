@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "frontend/src/App.jsx": {
-    "mtime": 1782181795.7333698,
-    "ast_hash": "8464ef771b86086100b9b3a6e3382e33",
+    "mtime": 1782270553.2979612,
+    "ast_hash": "84d0590b0544a5f8c1bc611bbf1aa2ee",
     "semantic_hash": ""
   },
   "frontend/src/main.jsx": {
@@ -15,7 +15,7 @@
     "semantic_hash": "1805ad7bae3bf603446eed7431bab36a"
   },
   "server/index.js": {
-    "mtime": 1782102858.3653412,
+    "mtime": 1782270099.3951063,
     "ast_hash": "e3f8d300c296a9ed38704caa1d5bdd49",
     "semantic_hash": ""
   },
@@ -60,7 +60,7 @@
     "semantic_hash": ""
   },
   "frontend/src/components/CanvasControls.jsx": {
-    "mtime": 1782181581.9951928,
+    "mtime": 1782183397.9138782,
     "ast_hash": "6e1de67a6c14ad097188a81a5c586993",
     "semantic_hash": ""
   },
@@ -75,7 +75,7 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Topbar.jsx": {
-    "mtime": 1782182808.291933,
+    "mtime": 1782270099.3923495,
     "ast_hash": "48b52280430fbc22470aaa9089834bf4",
     "semantic_hash": ""
   },
@@ -215,7 +215,7 @@
     "semantic_hash": ""
   },
   "frontend/src/pathLassoSplit.js": {
-    "mtime": 1782180919.4585266,
+    "mtime": 1782183397.9144094,
     "ast_hash": "48b2d0e0cbab420cb514dedfd4e391ae",
     "semantic_hash": ""
   },
@@ -250,7 +250,7 @@
     "semantic_hash": ""
   },
   "frontend/src/components/PermissionsPanel.jsx": {
-    "mtime": 1782101817.497837,
+    "mtime": 1782268920.0400226,
     "ast_hash": "96d531b07983513486263ea86e4eba46",
     "semantic_hash": ""
   },

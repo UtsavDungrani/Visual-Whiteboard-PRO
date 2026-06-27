@@ -1,16 +1,16 @@
-# Graph Report - Visual Whiteboard Pro  (2026-06-22)
+# Graph Report - Visual Whiteboard Pro  (2026-06-24)
 
 ## Corpus Check
-- 52 files · ~41,391 words
+- 50 files · ~41,272 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 250 nodes · 290 edges · 15 communities (13 shown, 2 thin omitted)
+- 246 nodes · 287 edges · 14 communities (13 shown, 1 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `caffa221`
+- Built from commit: `acea3c28`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -22,7 +22,6 @@
 - [[_COMMUNITY_Backend Server Dependencies|Backend Server Dependencies]]
 - [[_COMMUNITY_Frontend Application & Collaboration UI|Frontend Application & Collaboration UI]]
 - [[_COMMUNITY_Database Schema & Persistence|Database Schema & Persistence]]
-- [[_COMMUNITY_Graphify Knowledge Graph Configuration|Graphify Knowledge Graph Configuration]]
 - [[_COMMUNITY_Community 8|Community 8]]
 - [[_COMMUNITY_Community 9|Community 9]]
 - [[_COMMUNITY_Community 10|Community 10]]
@@ -51,7 +50,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (15 total, 2 thin omitted)
+## Communities (14 total, 1 thin omitted)
 
 ### Community 0 - "Frontend Package Configuration"
 Cohesion: 0.12
@@ -102,21 +101,21 @@ Cohesion: 0.17
 Nodes (11): 10. Advanced Lasso & Selection Tool Refactor (On-Demand Implementation), 1. Multi-Page Reordering & Sharing (Restricted Access), 2. Fixed Position Page Navigation UI, 3. Toolbar UX & Optimization, 4. Color Selection State Sync Bug, 5. Optimized PDF Export Pipeline (Sketchbook Book Style), 6. Collapsible Side Menus & Immersive Canvas Mode, 7. Board Loading by ID via Dashboard Input (+3 more)
 
 ## Knowledge Gaps
-- **159 isolated node(s):** `husky.sh script`, `name`, `version`, `private`, `dev` (+154 more)
+- **157 isolated node(s):** `husky.sh script`, `name`, `version`, `private`, `dev` (+152 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **2 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **1 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Real-time Collaboration` connect `Editor Specifications & Features` to `Backend Server Initialization`?**
-  _High betweenness centrality (0.150) - this node is a cross-community bridge._
+  _High betweenness centrality (0.155) - this node is a cross-community bridge._
 - **Why does `Project Description and Requirements` connect `Editor Specifications & Features` to `Community 10`?**
-  _High betweenness centrality (0.135) - this node is a cross-community bridge._
+  _High betweenness centrality (0.139) - this node is a cross-community bridge._
 - **Why does `App()` connect `Editor Specifications & Features` to `Frontend Application & Collaboration UI`?**
-  _High betweenness centrality (0.131) - this node is a cross-community bridge._
+  _High betweenness centrality (0.135) - this node is a cross-community bridge._
 - **What connects `husky.sh script`, `name`, `version` to the rest of the system?**
-  _159 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _157 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Frontend Package Configuration` be split into smaller, more focused modules?**
   _Cohesion score 0.125 - nodes in this community are weakly interconnected._
 - **Should `Backend Server Initialization` be split into smaller, more focused modules?**
