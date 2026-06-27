@@ -596,12 +596,13 @@ app.delete(
 // POST static layout cleanup snap & distribute
 app.post("/api/ai/cleanup", auth, aiLimiter, (req, res) => {
   try {
-    const { elements } = req.body;
+    const { elements, connectors } = req.body;
+    console.log("[Server Cleanup API] Elements received:", elements?.length, "Connectors received:", connectors?.length);
     if (!elements || !Array.isArray(elements)) {
       return res.status(400).json({ error: "missing_elements_array" });
     }
     const { cleanupLayout } = require("./ai.service");
-    const cleaned = cleanupLayout(elements);
+    const cleaned = cleanupLayout(elements, connectors || []);
     return res.json({ elements: cleaned });
   } catch (err) {
     console.error("Static layout cleanup failed", err);

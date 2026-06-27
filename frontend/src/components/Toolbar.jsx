@@ -127,6 +127,17 @@ export default function Toolbar({
       ),
       tools: [
         { 
+          id: 'connector', 
+          label: 'Magnetic Connector (X)',
+          icon: (
+            <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+              <rect x="3" y="14" width="6" height="6" rx="1" />
+              <rect x="15" y="4" width="6" height="6" rx="1" />
+              <path d="M9 17h3a2 2 0 002-2V9a2 2 0 012-2h3" strokeDasharray="3 3" />
+            </svg>
+          )
+        },
+        { 
           id: 'arrow', 
           label: 'Arrow (A)',
           icon: <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>

@@ -15,6 +15,11 @@ import {
   getObjectSelectionMode,
   splitObjectWithLasso,
 } from './pathLassoSplit'
+import { ConnectorLine } from './tools/ConnectorLine'
+import CanvasOverlay from './components/CanvasOverlay'
+import { useConnectorTool } from './tools/useConnectorTool'
+import { useConnectorSync, updateAllConnectors } from './hooks/useConnectorSync'
+import { getAnchorPoint } from './utils/anchorPoints'
 
 const rawApiUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 const API_BASE_URL = rawApiUrl.endsWith('/') ? rawApiUrl.slice(0, -1) : rawApiUrl;
@@ -23,6 +28,8 @@ export default function App() {
   const canvasRef = useRef(null)
   const fabricRef = useRef(null)
   const socketRef = useRef(null)
+  const overlayCanvasRef = useRef(null)
+  const [canvasInstance, setCanvasInstance] = useState(null)
 
   // Screen and Authentication state
   const [screen, setScreen] = useState(() => {
@@ -288,7 +295,7 @@ export default function App() {
     canvasInstance.getObjects().forEach((obj) => {
       if (obj.id !== 'page-boundary') {
         obj.selectable = !readOnly && isSelectionTool
-        obj.evented = !readOnly && isSelectionTool
+        obj.evented = !readOnly && (isSelectionTool || activeToolRef.current === 'connector')
       }
     })
   }
@@ -339,15 +346,29 @@ export default function App() {
       const selectionTools = ['select', 'lasso-select', 'square-select', 'circle-select']
       const isSelectionTool = selectionTools.includes(activeTool)
       canvas.forEachObject((obj) => {
-        if (obj.id !== 'page-boundary') {
+        if (obj.id !== 'page-boundary' && obj.type !== 'connector') {
           obj.selectable = isSelectionTool
-          obj.evented = isSelectionTool
+          obj.evented = isSelectionTool || activeTool === 'connector'
         }
       })
       canvas.defaultCursor = isSelectionTool ? 'default' : 'crosshair'
     }
     canvas.requestRenderAll()
   }, [isReadOnly, activeTool])
+
+  // Connectors sync on shapes move/resize/rotate
+  useConnectorSync(canvasInstance)
+
+  // Connector drawing tool state machine
+  useConnectorTool({
+    canvas: canvasInstance,
+    activeTool,
+    overlayRef: overlayCanvasRef,
+    onConnectorAdded: () => {
+      saveHistory()
+      sendCanvasUpdate()
+    }
+  })
 
   // Load whiteboards when screen is dashboard
   useEffect(() => {
@@ -447,7 +468,8 @@ export default function App() {
       'ry',
       'boxStroke',
       'boxStrokeWidth',
-      'padding'
+      'padding',
+      'data'
     ])
     if (json && json.objects) {
       json.objects = json.objects.filter(obj => obj.id !== 'page-boundary')
@@ -513,6 +535,7 @@ export default function App() {
       canvas.getObjects().forEach((obj) => obj.setCoords())
       lockObjectsIfReadOnly(canvas)
       renderPageBoundary(canvas, pageModeRef.current, pageSizeRef.current)
+      updateAllConnectors(canvas)
       canvas.requestRenderAll()
       applyingRemoteRef.current = false
 
@@ -596,6 +619,7 @@ export default function App() {
         canvas.getObjects().forEach((obj) => obj.setCoords())
         lockObjectsIfReadOnly(canvas)
         renderPageBoundary(canvas, pageModeRef.current, pageSizeRef.current)
+        updateAllConnectors(canvas)
         canvas.requestRenderAll()
         applyingRemoteRef.current = false
 
@@ -644,6 +668,7 @@ export default function App() {
       canvas.getObjects().forEach((obj) => obj.setCoords())
       lockObjectsIfReadOnly(canvas)
       renderPageBoundary(canvas, pageModeRef.current, pageSizeRef.current)
+      updateAllConnectors(canvas)
       canvas.requestRenderAll()
       applyingRemoteRef.current = false
 
@@ -1080,6 +1105,7 @@ export default function App() {
       fabricRef.current.loadFromJSON(state, () => {
         fabricRef.current.getObjects().forEach((obj) => obj.setCoords())
         lockObjectsIfReadOnly(fabricRef.current)
+        updateAllConnectors(fabricRef.current)
         fabricRef.current.requestRenderAll()
         applyingRemoteRef.current = false
         setCanUndo(historyIndexRef.current > 0)
@@ -1099,6 +1125,7 @@ export default function App() {
       fabricRef.current.loadFromJSON(state, () => {
         fabricRef.current.getObjects().forEach((obj) => obj.setCoords())
         lockObjectsIfReadOnly(fabricRef.current)
+        updateAllConnectors(fabricRef.current)
         fabricRef.current.requestRenderAll()
         applyingRemoteRef.current = false
         setCanUndo(true)
@@ -1122,6 +1149,7 @@ export default function App() {
     canvas.loadFromJSON(json, () => {
       canvas.getObjects().forEach((obj) => obj.setCoords())
       lockObjectsIfReadOnly(canvas)
+      updateAllConnectors(canvas)
       canvas.calcOffset()
       canvas.requestRenderAll()
       applyingRemoteRef.current = false
@@ -1773,14 +1801,23 @@ export default function App() {
           const selectionTools = ['select', 'lasso-select', 'square-select', 'circle-select']
           const isSelectionTool = selectionTools.includes(activeToolRef.current)
           obj.selectable = isSelectionTool && !isReadOnly
-          obj.evented = isSelectionTool && !isReadOnly
+          obj.evented = (isSelectionTool || activeToolRef.current === 'connector') && !isReadOnly
         }
       }
       saveHistory()
       sendCanvasUpdate()
     }
 
-    const onObjectRemoved = () => {
+    const onObjectRemoved = (options) => {
+      const removedObj = options?.target
+      if (removedObj && removedObj.type !== 'connector' && removedObj.id !== 'page-boundary') {
+        const connectors = canvas.getObjects().filter(obj => obj.type === 'connector')
+        connectors.forEach(conn => {
+          if (conn.data && (conn.data.sourceId === removedObj.id || conn.data.targetId === removedObj.id)) {
+            canvas.remove(conn)
+          }
+        })
+      }
       if (applyingRemoteRef.current || isReadOnlyRef.current) return
       saveHistory()
       sendCanvasUpdate()
@@ -1917,7 +1954,7 @@ export default function App() {
 
       canvas.forEachObject((obj) => {
         obj.selectable = false
-        obj.evented = false
+        obj.evented = activeTool === 'connector'
       })
 
       // If text tool is selected, we still use click-to-drop or a simple placement logic
@@ -2253,11 +2290,20 @@ export default function App() {
     const canvas = fabricRef.current
     if (!canvas) return
 
-    const rawObjects = canvas.getObjects().filter(obj => obj.id && obj.id !== 'page-boundary')
+    const rawObjects = canvas.getObjects().filter(obj => obj.id && obj.id !== 'page-boundary' && obj.type !== 'connector')
     if (rawObjects.length === 0) {
       alert('Draw some shapes on the canvas first before cleaning them up!')
       return
     }
+
+    const rawConnectors = canvas.getObjects().filter(obj => obj.type === 'connector')
+    const connectors = rawConnectors.map(obj => ({
+      id: obj.data?.id || obj.id,
+      sourceId: obj.data?.sourceId,
+      sourceAnchor: obj.data?.sourceAnchor,
+      targetId: obj.data?.targetId,
+      targetAnchor: obj.data?.targetAnchor
+    }))
 
     // Save history state before cleanup so it can be undone
     saveHistory()
@@ -2285,7 +2331,7 @@ export default function App() {
       const res = await fetch(`${API_BASE_URL}/api/ai/cleanup`, {
         method: 'POST',
         headers,
-        body: JSON.stringify({ elements }),
+        body: JSON.stringify({ elements, connectors }),
         signal: controller.signal
       })
       clearTimeout(timeoutId)
@@ -2314,12 +2360,30 @@ export default function App() {
             onChange: (value) => {
               obj.set('left', startLeft + (endLeft - startLeft) * value)
               obj.set('top', startTop + (endTop - startTop) * value)
+              
+              // Recalculate attached connectors on each animation frame
+              const canvasConnectors = canvas.getObjects().filter(c => c.type === 'connector')
+              canvasConnectors.forEach(conn => {
+                if (conn.data) {
+                  if (conn.data.sourceId === obj.id) {
+                    const pt = getAnchorPoint(obj, conn.data.sourceAnchor, true)
+                    conn.set({ x1: pt.x, y1: pt.y })
+                    conn.setCoords()
+                  }
+                  if (conn.data.targetId === obj.id) {
+                    const pt = getAnchorPoint(obj, conn.data.targetAnchor, true)
+                    conn.set({ x2: pt.x, y2: pt.y })
+                    conn.setCoords()
+                  }
+                }
+              })
               canvas.requestRenderAll()
             },
             onComplete: () => {
               obj.setCoords()
               completedCount++
               if (completedCount === cleaned.length) {
+                updateAllConnectors(canvas)
                 applyingRemoteRef.current = false
                 saveHistory()
                 sendCanvasUpdate()
@@ -2864,6 +2928,7 @@ export default function App() {
 
     fabricRef.current = canvas
     window.__fabricCanvas = canvas
+    setCanvasInstance(canvas)
 
     // Initial page boundary rendering
     renderPageBoundary(canvas, pageModeRef.current, pageSizeRef.current)
@@ -2897,8 +2962,10 @@ export default function App() {
         canvas.getObjects().forEach((obj) => obj.setCoords())
         lockObjectsIfReadOnly(canvas)
         renderPageBoundary(canvas, pageModeRef.current, pageSizeRef.current)
+        updateAllConnectors(canvas)
         canvas.requestRenderAll()
         applyingRemoteRef.current = false
+        setCanvasInstance(canvas)
 
         historyRef.current = [activePage.canvas_state]
         historyIndexRef.current = 0
@@ -3046,6 +3113,7 @@ export default function App() {
         if (key === 't') setActiveTool('text')
         if (key === 'a') setActiveTool('arrow')
         if (key === 's') setActiveTool('line')
+        if (key === 'x') setActiveTool('connector')
       }
     }
     window.addEventListener('keydown', onKeyDown)
@@ -3057,6 +3125,7 @@ export default function App() {
       }
       canvas.dispose()
       fabricRef.current = null
+      setCanvasInstance(null)
       window.removeEventListener('resize', onResize)
       window.removeEventListener('keydown', onKeyDown)
     }
@@ -3579,13 +3648,13 @@ export default function App() {
           />
         )}
 
-        {/* Central Canvas Viewport */}
         <div id="canvas-viewport" className="canvas-viewport">
           <div
             id="canvas-wrapper"
             className={`canvas-wrapper ${activeTool === 'pan' ? 'pan-mode' : ''} ${activeTool === 'draw' && drawType === 'eraser' ? 'eraser-mode' : ''}`}
           >
             <canvas id="whiteboard-canvas" />
+            <CanvasOverlay fabricCanvas={canvasInstance} overlayRef={overlayCanvasRef} />
 
             {/* Eraser brush size preview ring */}
             <div

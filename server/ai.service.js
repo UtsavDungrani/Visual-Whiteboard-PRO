@@ -10,12 +10,12 @@
  * @param {Array} elements - Canvas elements with coordinates and sizes.
  * @returns {Array} List of elements with updated left/top coordinates.
  */
-function cleanupLayout(elements) {
+function cleanupLayout(elements, connectors = []) {
   if (!elements || !Array.isArray(elements) || elements.length === 0) {
     return [];
   }
 
-  // 1. Initial Data Prep & Grid Snap
+  // 1. Initial Data Prep
   let items = elements.map(el => {
     const w = el.width * (el.scaleX || 1);
     const h = el.height * (el.scaleY || 1);
@@ -33,97 +33,190 @@ function cleanupLayout(elements) {
   });
 
   const GRID_SIZE = 20;
-  const GAP_SIZE = 60;
-  const CLUSTER_TOLERANCE = 150;
 
-  // 2. Cluster Detection & Alignment
-  // Detect if elements are primarily in a row or column
-  const movableItems = items.filter(i => !i.isLocked);
-  if (movableItems.length === 0) return [];
+  // Check if we have connections to preserve layout topology
+  const validEdges = (connectors || []).map(conn => ({
+    sourceId: conn.sourceId,
+    targetId: conn.targetId
+  })).filter(e => e.sourceId && e.targetId);
 
-  const minX = Math.min(...items.map(i => i.left));
-  const maxX = Math.max(...items.map(i => i.left + i.width));
-  const minY = Math.min(...items.map(i => i.top));
-  const maxY = Math.max(...items.map(i => i.top + i.height));
+  const hasConnections = validEdges.length > 0;
+  console.log("[cleanupLayout] Elements:", elements.length, "Connectors:", connectors.length, "Valid Edges:", validEdges.length, "hasConnections:", hasConnections);
 
-  const totalWidth = maxX - minX;
-  const totalHeight = maxY - minY;
+  if (hasConnections) {
+    // GRAPH LAYOUT: Force-directed diagram spacing optimizer
+    const movableItems = items.filter(i => !i.isLocked);
+    if (movableItems.length > 0) {
+      const iterations = 80;
+      
+      for (let iter = 0; iter < iterations; iter++) {
+        // Initialize forces
+        const forces = {};
+        items.forEach(item => {
+          forces[item.id] = { fx: 0, fy: 0 };
+        });
 
-  const isRow = totalWidth >= totalHeight;
+        // 1. Repulsive forces between ALL items (to prevent overlaps and space them out)
+        for (let i = 0; i < items.length; i++) {
+          for (let j = i + 1; j < items.length; j++) {
+            const a = items[i];
+            const b = items[j];
 
-  if (isRow) {
-    // ROW ALIGNMENT: Align to mean Y of ALL items, but only move movable ones
-    const meanY = items.reduce((sum, i) => sum + i.centerY, 0) / items.length;
-    movableItems.forEach(item => {
-      item.top = Math.round((meanY - item.height / 2) / GRID_SIZE) * GRID_SIZE;
-      item.centerY = item.top + item.height / 2;
-    });
+            const dx = b.centerX - a.centerX;
+            const dy = b.centerY - a.centerY;
+            const d = Math.hypot(dx, dy) || 1;
 
-    // Uniform horizontal distribution for movable items
-    movableItems.sort((a, b) => a.left - b.left);
-    let currentX = Math.round(minX / GRID_SIZE) * GRID_SIZE;
-    movableItems.forEach((item, idx) => {
-      // If a locked item is in the way, we might want to jump over it, 
-      // but for simplicity, we just distribute movable ones sequentially.
-      item.left = currentX;
-      item.centerX = item.left + item.width / 2;
-      currentX += item.width + GAP_SIZE;
-      currentX = Math.round(currentX / GRID_SIZE) * GRID_SIZE;
-    });
-  } else {
-    // COLUMN ALIGNMENT: Align to mean X
-    const meanX = items.reduce((sum, i) => sum + i.centerX, 0) / items.length;
-    movableItems.forEach(item => {
-      item.left = Math.round((meanX - item.width / 2) / GRID_SIZE) * GRID_SIZE;
-      item.centerX = item.left + item.width / 2;
-    });
+            // Desired buffer spacing based on shape sizes
+            const desiredDist = (a.width + b.width) / 2 + 100; // Keep at least 100px gap
+            if (d < desiredDist) {
+              const forceMag = (desiredDist - d) / d * 0.4;
+              const pushX = dx * forceMag;
+              const pushY = dy * forceMag;
 
-    // Uniform vertical distribution
-    movableItems.sort((a, b) => a.top - b.top);
-    let currentY = Math.round(minY / GRID_SIZE) * GRID_SIZE;
-    movableItems.forEach((item, idx) => {
-      item.top = currentY;
-      item.centerY = item.top + item.height / 2;
-      currentY += item.height + GAP_SIZE;
-      currentY = Math.round(currentY / GRID_SIZE) * GRID_SIZE;
-    });
-  }
-
-  // 3. Multi-pass Overlap Resolution (Push-away logic)
-  for (let pass = 0; pass < 3; pass++) {
-    for (let i = 0; i < items.length; i++) {
-      for (let j = 0; j < items.length; j++) {
-        if (i === j) continue;
-        const a = items[i];
-        const b = items[j];
-
-        const overlapX = (a.left < b.left + b.width) && (a.left + a.width > b.left);
-        const overlapY = (a.top < b.top + b.height) && (a.top + a.height > b.top);
-
-        if (overlapX && overlapY) {
-          // Resolve based on axis of primary direction
-          if (isRow) {
-            if (b.centerX > a.centerX) {
-              b.left = Math.round((a.left + a.width + 40) / GRID_SIZE) * GRID_SIZE;
-            } else {
-              a.left = Math.round((b.left + b.width + 40) / GRID_SIZE) * GRID_SIZE;
-            }
-          } else {
-            if (b.centerY > a.centerY) {
-              b.top = Math.round((a.top + a.height + 40) / GRID_SIZE) * GRID_SIZE;
-            } else {
-              a.top = Math.round((b.top + b.height + 40) / GRID_SIZE) * GRID_SIZE;
+              if (!a.isLocked) {
+                forces[a.id].fx -= pushX;
+                forces[a.id].fy -= pushY;
+              }
+              if (!b.isLocked) {
+                forces[b.id].fx += pushX;
+                forces[b.id].fy += pushY;
+              }
             }
           }
-          // Sync center points
-          a.centerX = a.left + a.width / 2;
-          a.centerY = a.top + a.height / 2;
-          b.centerX = b.left + b.width / 2;
-          b.centerY = b.top + b.height / 2;
+        }
+
+        // 2. Attractive / spring forces along edges (connectors) to keep layout structured
+        validEdges.forEach(edge => {
+          const a = items.find(item => item.id === edge.sourceId);
+          const b = items.find(item => item.id === edge.targetId);
+          if (!a || !b) return;
+
+          const dx = b.centerX - a.centerX;
+          const dy = b.centerY - a.centerY;
+          const d = Math.hypot(dx, dy) || 1;
+
+          const idealLength = 220; // Natural connection distance
+          const springStrength = 0.08;
+          const forceMag = (d - idealLength) / d * springStrength;
+          const pullX = dx * forceMag;
+          const pullY = dy * forceMag;
+
+          if (!a.isLocked) {
+            forces[a.id].fx += pullX;
+            forces[a.id].fy += pullY;
+          }
+          if (!b.isLocked) {
+            forces[b.id].fx -= pullX;
+            forces[b.id].fy -= pullY;
+          }
+        });
+
+        // 3. Apply forces to update positions
+        movableItems.forEach(item => {
+          const f = forces[item.id];
+          // Limit maximum displacement per iteration to avoid instability
+          const maxDisplacement = 40;
+          const dispX = Math.max(-maxDisplacement, Math.min(maxDisplacement, f.fx));
+          const dispY = Math.max(-maxDisplacement, Math.min(maxDisplacement, f.fy));
+
+          item.left += dispX;
+          item.top += dispY;
+          item.centerX = item.left + item.width / 2;
+          item.centerY = item.top + item.height / 2;
+        });
+      }
+    }
+  } else {
+    // Existing ROW/COLUMN alignment for unconnected shapes
+    const GAP_SIZE = 60;
+    const movableItems = items.filter(i => !i.isLocked);
+    if (movableItems.length === 0) return [];
+
+    const minX = Math.min(...items.map(i => i.left));
+    const maxX = Math.max(...items.map(i => i.left + i.width));
+    const minY = Math.min(...items.map(i => i.top));
+    const maxY = Math.max(...items.map(i => i.top + i.height));
+
+    const totalWidth = maxX - minX;
+    const totalHeight = maxY - minY;
+    const isRow = totalWidth >= totalHeight;
+
+    if (isRow) {
+      // ROW ALIGNMENT: Align to mean Y of ALL items
+      const meanY = items.reduce((sum, i) => sum + i.centerY, 0) / items.length;
+      movableItems.forEach(item => {
+        item.top = meanY - item.height / 2;
+        item.centerY = item.top + item.height / 2;
+      });
+
+      // Uniform horizontal distribution
+      movableItems.sort((a, b) => a.left - b.left);
+      let currentX = minX;
+      movableItems.forEach((item) => {
+        item.left = currentX;
+        item.centerX = item.left + item.width / 2;
+        currentX += item.width + GAP_SIZE;
+      });
+    } else {
+      // COLUMN ALIGNMENT: Align to mean X
+      const meanX = items.reduce((sum, i) => sum + i.centerX, 0) / items.length;
+      movableItems.forEach(item => {
+        item.left = meanX - item.width / 2;
+        item.centerX = item.left + item.width / 2;
+      });
+
+      // Uniform vertical distribution
+      movableItems.sort((a, b) => a.top - b.top);
+      let currentY = minY;
+      movableItems.forEach((item) => {
+        item.top = currentY;
+        item.centerY = item.top + item.height / 2;
+        currentY += item.height + GAP_SIZE;
+      });
+    }
+
+    // Overlap push-away resolution for unconnected
+    for (let pass = 0; pass < 3; pass++) {
+      for (let i = 0; i < items.length; i++) {
+        for (let j = 0; j < items.length; j++) {
+          if (i === j) continue;
+          const a = items[i];
+          const b = items[j];
+
+          const overlapX = (a.left < b.left + b.width) && (a.left + a.width > b.left);
+          const overlapY = (a.top < b.top + b.height) && (a.top + a.height > b.top);
+
+          if (overlapX && overlapY) {
+            if (isRow) {
+              if (b.centerX > a.centerX) {
+                b.left = a.left + a.width + 40;
+              } else {
+                a.left = b.left + b.width + 40;
+              }
+            } else {
+              if (b.centerY > a.centerY) {
+                b.top = a.top + a.height + 40;
+              } else {
+                a.top = b.top + b.height + 40;
+              }
+            }
+            a.centerX = a.left + a.width / 2;
+            a.centerY = a.top + a.height / 2;
+            b.centerX = b.left + b.width / 2;
+            b.centerY = b.top + b.height / 2;
+          }
         }
       }
     }
   }
+
+  // Snap all elements to the grid size at the end (for all alignment algorithms)
+  items.forEach(item => {
+    if (!item.isLocked) {
+      item.left = Math.round(item.left / GRID_SIZE) * GRID_SIZE;
+      item.top = Math.round(item.top / GRID_SIZE) * GRID_SIZE;
+    }
+  });
 
   return items.map(item => ({
     id: item.id,

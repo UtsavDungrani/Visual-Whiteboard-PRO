@@ -215,10 +215,10 @@
       "label": "App()",
       "file_type": "code",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L22",
+      "source_location": "L27",
       "_origin": "ast",
       "id": "src_app_app",
-      "community": 2,
+      "community": 5,
       "norm_label": "app()"
     },
     {
@@ -260,6 +260,26 @@
       "id": "components_canvascontrols_canvascontrols",
       "community": 5,
       "norm_label": "canvascontrols()"
+    },
+    {
+      "label": "CanvasOverlay.jsx",
+      "file_type": "code",
+      "source_file": "frontend/src/components/CanvasOverlay.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "components_canvasoverlay",
+      "community": 5,
+      "norm_label": "canvasoverlay.jsx"
+    },
+    {
+      "label": "CanvasOverlay()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/CanvasOverlay.jsx",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "components_canvasoverlay_canvasoverlay",
+      "community": 5,
+      "norm_label": "canvasoverlay()"
     },
     {
       "label": "ContextPanel.jsx",
@@ -422,13 +442,43 @@
       "norm_label": "fabric-eraser.js"
     },
     {
+      "label": "useConnectorSync.js",
+      "file_type": "code",
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "hooks_useconnectorsync",
+      "community": 5,
+      "norm_label": "useconnectorsync.js"
+    },
+    {
+      "label": "useConnectorSync()",
+      "file_type": "code",
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "hooks_useconnectorsync_useconnectorsync",
+      "community": 5,
+      "norm_label": "useconnectorsync()"
+    },
+    {
+      "label": "updateAllConnectors()",
+      "file_type": "code",
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L63",
+      "_origin": "ast",
+      "id": "hooks_useconnectorsync_updateallconnectors",
+      "community": 5,
+      "norm_label": "updateallconnectors()"
+    },
+    {
       "label": "main.jsx",
       "file_type": "code",
       "source_file": "frontend/src/main.jsx",
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_main",
-      "community": 2,
+      "community": 5,
       "norm_label": "main.jsx"
     },
     {
@@ -540,6 +590,86 @@
       "id": "src_pathlassosplit_splitobjectwithlasso",
       "community": 5,
       "norm_label": "splitobjectwithlasso()"
+    },
+    {
+      "label": "ConnectorLine.js",
+      "file_type": "code",
+      "source_file": "frontend/src/tools/ConnectorLine.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tools_connectorline",
+      "community": 5,
+      "norm_label": "connectorline.js"
+    },
+    {
+      "label": "ConnectorLine",
+      "file_type": "code",
+      "source_file": "frontend/src/tools/ConnectorLine.js",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "tools_connectorline_connectorline",
+      "community": 5,
+      "norm_label": "connectorline"
+    },
+    {
+      "label": "useConnectorTool.js",
+      "file_type": "code",
+      "source_file": "frontend/src/tools/useConnectorTool.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tools_useconnectortool",
+      "community": 5,
+      "norm_label": "useconnectortool.js"
+    },
+    {
+      "label": "useConnectorTool()",
+      "file_type": "code",
+      "source_file": "frontend/src/tools/useConnectorTool.js",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "tools_useconnectortool_useconnectortool",
+      "community": 5,
+      "norm_label": "useconnectortool()"
+    },
+    {
+      "label": "anchorPoints.js",
+      "file_type": "code",
+      "source_file": "frontend/src/utils/anchorPoints.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "utils_anchorpoints",
+      "community": 5,
+      "norm_label": "anchorpoints.js"
+    },
+    {
+      "label": "getAnchorPoint()",
+      "file_type": "code",
+      "source_file": "frontend/src/utils/anchorPoints.js",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "utils_anchorpoints_getanchorpoint",
+      "community": 5,
+      "norm_label": "getanchorpoint()"
+    },
+    {
+      "label": "getObjectAnchors()",
+      "file_type": "code",
+      "source_file": "frontend/src/utils/anchorPoints.js",
+      "source_location": "L35",
+      "_origin": "ast",
+      "id": "utils_anchorpoints_getobjectanchors",
+      "community": 5,
+      "norm_label": "getobjectanchors()"
+    },
+    {
+      "label": "findClosestAnchor()",
+      "file_type": "code",
+      "source_file": "frontend/src/utils/anchorPoints.js",
+      "source_location": "L51",
+      "_origin": "ast",
+      "id": "utils_anchorpoints_findclosestanchor",
+      "community": 5,
+      "norm_label": "findclosestanchor()"
     },
     {
       "label": "package.json",
@@ -825,7 +955,7 @@
       "label": "architectureAssist()",
       "file_type": "code",
       "source_file": "server/ai.service.js",
-      "source_location": "L141",
+      "source_location": "L234",
       "_origin": "ast",
       "id": "server_ai_service_architectureassist",
       "community": 1,
@@ -1085,7 +1215,7 @@
       "label": "httpServer",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L630",
+      "source_location": "L631",
       "_origin": "ast",
       "id": "server_index_httpserver",
       "community": 1,
@@ -1095,7 +1225,7 @@
       "label": "io",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L631",
+      "source_location": "L632",
       "_origin": "ast",
       "id": "server_index_io",
       "community": 1,
@@ -1105,7 +1235,7 @@
       "label": "activeUsers",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L673",
+      "source_location": "L674",
       "_origin": "ast",
       "id": "server_index_activeusers",
       "community": 1,
@@ -1115,7 +1245,7 @@
       "label": "broadcastRoomUsers()",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L675",
+      "source_location": "L676",
       "_origin": "ast",
       "id": "server_index_broadcastroomusers",
       "community": 1,
@@ -1125,7 +1255,7 @@
       "label": "startServer()",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L859",
+      "source_location": "L860",
       "_origin": "ast",
       "id": "server_index_startserver",
       "community": 1,
@@ -2373,7 +2503,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 2,
+      "community": 5,
       "norm_label": "index.html",
       "id": "frontend_index"
     },
@@ -2399,7 +2529,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 2,
+      "community": 5,
       "norm_label": "real-time collaboration",
       "id": "concept_collaboration"
     },
@@ -2729,6 +2859,28 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/App.jsx",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "components_canvasoverlay"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "components_canvasoverlay_canvasoverlay"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/App.jsx",
       "source_location": "L9",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -2879,6 +3031,39 @@
       "target": "components_topbar_topbar"
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "hooks_useconnectorsync"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "hooks_useconnectorsync_updateallconnectors"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "hooks_useconnectorsync_useconnectorsync"
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/App.jsx",
@@ -2958,6 +3143,72 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "tools_connectorline"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "tools_connectorline_connectorline"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "tools_useconnectortool"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "tools_useconnectortool_useconnectortool"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "utils_anchorpoints"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "utils_anchorpoints_getanchorpoint"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "frontend/src/main.jsx",
       "source_location": "L3",
       "weight": 1.0,
@@ -2984,6 +3235,28 @@
       "weight": 1.0,
       "source": "src_app_app",
       "target": "concept_drawing_canvas"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L360",
+      "weight": 1.0,
+      "source": "src_app_app",
+      "target": "hooks_useconnectorsync_useconnectorsync"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L363",
+      "weight": 1.0,
+      "source": "src_app_app",
+      "target": "tools_useconnectortool_useconnectortool"
     },
     {
       "relation": "references",
@@ -3015,6 +3288,16 @@
       "confidence_score": 1.0,
       "source": "components_canvascontrols",
       "target": "components_canvascontrols_canvascontrols"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CanvasOverlay.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_canvasoverlay",
+      "target": "components_canvasoverlay_canvasoverlay"
     },
     {
       "relation": "contains",
@@ -3095,6 +3378,59 @@
       "confidence_score": 1.0,
       "source": "components_topbar",
       "target": "components_topbar_topbar"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L63",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "hooks_useconnectorsync",
+      "target": "hooks_useconnectorsync_updateallconnectors"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "hooks_useconnectorsync",
+      "target": "hooks_useconnectorsync_useconnectorsync"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "hooks_useconnectorsync",
+      "target": "utils_anchorpoints"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "hooks_useconnectorsync",
+      "target": "utils_anchorpoints_getanchorpoint"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "hooks_useconnectorsync_updateallconnectors",
+      "target": "utils_anchorpoints_getanchorpoint"
     },
     {
       "relation": "references",
@@ -3293,6 +3629,144 @@
       "confidence_score": 1.0,
       "source": "src_pathlassosplit_getobjectselectionmode",
       "target": "src_pathlassosplit_getpathselectionmode"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/tools/ConnectorLine.js",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_connectorline",
+      "target": "tools_connectorline_connectorline"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/tools/useConnectorTool.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_useconnectortool",
+      "target": "tools_connectorline"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/tools/useConnectorTool.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_useconnectortool",
+      "target": "tools_connectorline_connectorline"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/tools/useConnectorTool.js",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_useconnectortool",
+      "target": "tools_useconnectortool_useconnectortool"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/tools/useConnectorTool.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_useconnectortool",
+      "target": "utils_anchorpoints"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/tools/useConnectorTool.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_useconnectortool",
+      "target": "utils_anchorpoints_findclosestanchor"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/tools/useConnectorTool.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_useconnectortool",
+      "target": "utils_anchorpoints_getanchorpoint"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/anchorPoints.js",
+      "source_location": "L51",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "utils_anchorpoints",
+      "target": "utils_anchorpoints_findclosestanchor"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/anchorPoints.js",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "utils_anchorpoints",
+      "target": "utils_anchorpoints_getanchorpoint"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/anchorPoints.js",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "utils_anchorpoints",
+      "target": "utils_anchorpoints_getobjectanchors"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/anchorPoints.js",
+      "source_location": "L78",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "utils_anchorpoints_findclosestanchor",
+      "target": "utils_anchorpoints_getanchorpoint"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/anchorPoints.js",
+      "source_location": "L37",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "utils_anchorpoints_getobjectanchors",
+      "target": "utils_anchorpoints_getanchorpoint"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/utils/anchorPoints.js",
+      "source_location": "L69",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "utils_anchorpoints_findclosestanchor",
+      "target": "utils_anchorpoints_getobjectanchors"
     },
     {
       "relation": "contains",
@@ -5444,5 +5918,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "acea3c2824df187cab590a9be928e700e03a5b85"
+  "built_at_commit": "fb0de6520394f040a8c4ddab3fbcd088e812491f"
 }

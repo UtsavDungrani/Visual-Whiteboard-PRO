@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "frontend/src/App.jsx": {
-    "mtime": 1782270553.2979612,
-    "ast_hash": "84d0590b0544a5f8c1bc611bbf1aa2ee",
+    "mtime": 1782537925.13733,
+    "ast_hash": "0995f592e5d24963c89d371d7f6d6406",
     "semantic_hash": ""
   },
   "frontend/src/main.jsx": {
@@ -15,8 +15,8 @@
     "semantic_hash": "1805ad7bae3bf603446eed7431bab36a"
   },
   "server/index.js": {
-    "mtime": 1782270099.3951063,
-    "ast_hash": "e3f8d300c296a9ed38704caa1d5bdd49",
+    "mtime": 1782539157.303606,
+    "ast_hash": "c056385fe42bea3293714eb16b59d6eb",
     "semantic_hash": ""
   },
   "server/models/Whiteboard.js": {
@@ -70,8 +70,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Toolbar.jsx": {
-    "mtime": 1782101817.4993887,
-    "ast_hash": "a5f08ebaa86bb02302b6d248943cdb00",
+    "mtime": 1782537528.5079079,
+    "ast_hash": "b558d5a37f42ad5f66163246930f293a",
     "semantic_hash": ""
   },
   "frontend/src/components/Topbar.jsx": {
@@ -105,8 +105,8 @@
     "semantic_hash": ""
   },
   "server/ai.service.js": {
-    "mtime": 1782101817.557379,
-    "ast_hash": "0792461c7731b45a897c8151a3856c77",
+    "mtime": 1782539165.806718,
+    "ast_hash": "1207c7d6eb2cbaa9428d49859a64ed6b",
     "semantic_hash": ""
   },
   ".husky/_/applypatch-msg": {
@@ -282,6 +282,31 @@
   "deploy_data.txt": {
     "mtime": 1782180135.9359426,
     "ast_hash": "aa5cd1075c9a9b9ae996d0a260f79b12",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/CanvasOverlay.jsx": {
+    "mtime": 1782537705.9240599,
+    "ast_hash": "5565b7c00341097a9e4a6972b2fbfd54",
+    "semantic_hash": ""
+  },
+  "frontend/src/hooks/useConnectorSync.js": {
+    "mtime": 1782537505.658313,
+    "ast_hash": "fb1ec16b583bd9f267ca9c1b3705691d",
+    "semantic_hash": ""
+  },
+  "frontend/src/tools/ConnectorLine.js": {
+    "mtime": 1782538552.6738672,
+    "ast_hash": "1fd52602ce6476b7f1cd2ac6a4d4f80d",
+    "semantic_hash": ""
+  },
+  "frontend/src/tools/useConnectorTool.js": {
+    "mtime": 1782538309.153427,
+    "ast_hash": "c990a042f2ba547336b5f932d5043934",
+    "semantic_hash": ""
+  },
+  "frontend/src/utils/anchorPoints.js": {
+    "mtime": 1782538192.0628977,
+    "ast_hash": "f94d83ff5fe5f505edc0da9cf176a2a0",
     "semantic_hash": ""
   }
 }
