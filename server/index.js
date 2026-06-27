@@ -3,6 +3,7 @@ const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
 const app = express();
+app.set("trust proxy", 1); // Trust Render load balancers for rate-limiting IP mapping
 require("dotenv").config();
 const mongoose = require("mongoose");
 const Whiteboard = require("./models/Whiteboard");
