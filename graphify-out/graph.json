@@ -488,7 +488,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_pathlassosplit",
-      "community": 5,
+      "community": 15,
       "norm_label": "pathlassosplit.js"
     },
     {
@@ -498,7 +498,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_pathlassosplit_ispointinpolygon",
-      "community": 5,
+      "community": 15,
       "norm_label": "ispointinpolygon()"
     },
     {
@@ -508,7 +508,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_pathlassosplit_pathdatatosvgd",
-      "community": 5,
+      "community": 15,
       "norm_label": "pathdatatosvgd()"
     },
     {
@@ -518,7 +518,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "src_pathlassosplit_samplefabricpath",
-      "community": 5,
+      "community": 15,
       "norm_label": "samplefabricpath()"
     },
     {
@@ -528,7 +528,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "src_pathlassosplit_samplepathhitpoints",
-      "community": 5,
+      "community": 15,
       "norm_label": "samplepathhitpoints()"
     },
     {
@@ -538,7 +538,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "src_pathlassosplit_bboxcornersinpolygon",
-      "community": 5,
+      "community": 15,
       "norm_label": "bboxcornersinpolygon()"
     },
     {
@@ -548,7 +548,7 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "src_pathlassosplit_getpathselectionmode",
-      "community": 5,
+      "community": 15,
       "norm_label": "getpathselectionmode()"
     },
     {
@@ -558,7 +558,7 @@
       "source_location": "L122",
       "_origin": "ast",
       "id": "src_pathlassosplit_getobjectselectionmode",
-      "community": 5,
+      "community": 15,
       "norm_label": "getobjectselectionmode()"
     },
     {
@@ -568,7 +568,7 @@
       "source_location": "L163",
       "_origin": "ast",
       "id": "src_pathlassosplit_canvaspolygontolocal",
-      "community": 5,
+      "community": 15,
       "norm_label": "canvaspolygontolocal()"
     },
     {
@@ -578,7 +578,7 @@
       "source_location": "L171",
       "_origin": "ast",
       "id": "src_pathlassosplit_buildclippolygon",
-      "community": 5,
+      "community": 15,
       "norm_label": "buildclippolygon()"
     },
     {
@@ -588,7 +588,7 @@
       "source_location": "L190",
       "_origin": "ast",
       "id": "src_pathlassosplit_splitobjectwithlasso",
-      "community": 5,
+      "community": 15,
       "norm_label": "splitobjectwithlasso()"
     },
     {
@@ -932,6 +932,126 @@
       "norm_label": "*.{js,jsx}"
     },
     {
+      "label": "admin.js",
+      "file_type": "code",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "admin_admin",
+      "community": 7,
+      "norm_label": "admin.js"
+    },
+    {
+      "label": "switchTab()",
+      "file_type": "code",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L28",
+      "_origin": "ast",
+      "id": "admin_admin_switchtab",
+      "community": 7,
+      "norm_label": "switchtab()"
+    },
+    {
+      "label": "getHeaders()",
+      "file_type": "code",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L47",
+      "_origin": "ast",
+      "id": "admin_admin_getheaders",
+      "community": 7,
+      "norm_label": "getheaders()"
+    },
+    {
+      "label": "handleResponse()",
+      "file_type": "code",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L54",
+      "_origin": "ast",
+      "id": "admin_admin_handleresponse",
+      "community": 7,
+      "norm_label": "handleresponse()"
+    },
+    {
+      "label": "loadDashboardStats()",
+      "file_type": "code",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L69",
+      "_origin": "ast",
+      "id": "admin_admin_loaddashboardstats",
+      "community": 7,
+      "norm_label": "loaddashboardstats()"
+    },
+    {
+      "label": "loadUsersList()",
+      "file_type": "code",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L101",
+      "_origin": "ast",
+      "id": "admin_admin_loaduserslist",
+      "community": 7,
+      "norm_label": "loaduserslist()"
+    },
+    {
+      "label": "loadBoardsList()",
+      "file_type": "code",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L155",
+      "_origin": "ast",
+      "id": "admin_admin_loadboardslist",
+      "community": 7,
+      "norm_label": "loadboardslist()"
+    },
+    {
+      "label": "updateRole()",
+      "file_type": "code",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L202",
+      "_origin": "ast",
+      "id": "admin_admin_updaterole",
+      "community": 7,
+      "norm_label": "updaterole()"
+    },
+    {
+      "label": "deleteUser()",
+      "file_type": "code",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L220",
+      "_origin": "ast",
+      "id": "admin_admin_deleteuser",
+      "community": 7,
+      "norm_label": "deleteuser()"
+    },
+    {
+      "label": "deleteBoard()",
+      "file_type": "code",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L236",
+      "_origin": "ast",
+      "id": "admin_admin_deleteboard",
+      "community": 7,
+      "norm_label": "deleteboard()"
+    },
+    {
+      "label": "loadAllData()",
+      "file_type": "code",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L276",
+      "_origin": "ast",
+      "id": "admin_admin_loadalldata",
+      "community": 7,
+      "norm_label": "loadalldata()"
+    },
+    {
+      "label": "showError()",
+      "file_type": "code",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L281",
+      "_origin": "ast",
+      "id": "admin_admin_showerror",
+      "community": 7,
+      "norm_label": "showerror()"
+    },
+    {
       "label": "ai.service.js",
       "file_type": "code",
       "source_file": "server/ai.service.js",
@@ -1025,7 +1145,7 @@
       "label": "mongoose",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L8",
+      "source_location": "L9",
       "_origin": "ast",
       "id": "server_index_mongoose",
       "community": 1,
@@ -1035,7 +1155,7 @@
       "label": "Whiteboard",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L9",
+      "source_location": "L10",
       "_origin": "ast",
       "id": "server_index_whiteboard",
       "community": 1,
@@ -1045,7 +1165,7 @@
       "label": "ElementContext",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L10",
+      "source_location": "L11",
       "_origin": "ast",
       "id": "server_index_elementcontext",
       "community": 1,
@@ -1055,7 +1175,7 @@
       "label": "User",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L11",
+      "source_location": "L12",
       "_origin": "ast",
       "id": "server_index_user",
       "community": 1,
@@ -1065,17 +1185,27 @@
       "label": "auth",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L12",
+      "source_location": "L13",
       "_origin": "ast",
       "id": "server_index_auth",
       "community": 1,
       "norm_label": "auth"
     },
     {
+      "label": "admin",
+      "file_type": "code",
+      "source_file": "server/index.js",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "server_index_admin",
+      "community": 1,
+      "norm_label": "admin"
+    },
+    {
       "label": "jwt",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L13",
+      "source_location": "L15",
       "_origin": "ast",
       "id": "server_index_jwt",
       "community": 1,
@@ -1085,7 +1215,7 @@
       "label": "bcrypt",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L14",
+      "source_location": "L16",
       "_origin": "ast",
       "id": "server_index_bcrypt",
       "community": 1,
@@ -1095,7 +1225,7 @@
       "label": "rateLimit",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L15",
+      "source_location": "L17",
       "_origin": "ast",
       "id": "server_index_ratelimit",
       "community": 1,
@@ -1105,7 +1235,7 @@
       "label": "redis",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L16",
+      "source_location": "L18",
       "_origin": "ast",
       "id": "server_index_redis",
       "community": 1,
@@ -1115,7 +1245,7 @@
       "label": "{ createAdapter }",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L17",
+      "source_location": "L19",
       "_origin": "ast",
       "id": "server_index_createadapter",
       "community": 1,
@@ -1125,7 +1255,7 @@
       "label": "multer",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L18",
+      "source_location": "L20",
       "_origin": "ast",
       "id": "server_index_multer",
       "community": 1,
@@ -1135,7 +1265,7 @@
       "label": "path",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L19",
+      "source_location": "L21",
       "_origin": "ast",
       "id": "server_index_path",
       "community": 1,
@@ -1145,7 +1275,7 @@
       "label": "fs",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L20",
+      "source_location": "L22",
       "_origin": "ast",
       "id": "server_index_fs",
       "community": 1,
@@ -1155,7 +1285,7 @@
       "label": "uploadsDir",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L27",
+      "source_location": "L29",
       "_origin": "ast",
       "id": "server_index_uploadsdir",
       "community": 1,
@@ -1165,7 +1295,7 @@
       "label": "storage",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L33",
+      "source_location": "L35",
       "_origin": "ast",
       "id": "server_index_storage",
       "community": 1,
@@ -1175,17 +1305,27 @@
       "label": "upload",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L42",
+      "source_location": "L44",
       "_origin": "ast",
       "id": "server_index_upload",
       "community": 1,
       "norm_label": "upload"
     },
     {
+      "label": "isRedisEnabled()",
+      "file_type": "code",
+      "source_file": "server/index.js",
+      "source_location": "L97",
+      "_origin": "ast",
+      "id": "server_index_isredisenabled",
+      "community": 1,
+      "norm_label": "isredisenabled()"
+    },
+    {
       "label": "whiteboards",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L96",
+      "source_location": "L102",
       "_origin": "ast",
       "id": "server_index_whiteboards",
       "community": 1,
@@ -1195,7 +1335,7 @@
       "label": "authLimiter",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L111",
+      "source_location": "L117",
       "_origin": "ast",
       "id": "server_index_authlimiter",
       "community": 1,
@@ -1205,7 +1345,7 @@
       "label": "aiLimiter",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L470",
+      "source_location": "L482",
       "_origin": "ast",
       "id": "server_index_ailimiter",
       "community": 1,
@@ -1215,7 +1355,7 @@
       "label": "httpServer",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L632",
+      "source_location": "L763",
       "_origin": "ast",
       "id": "server_index_httpserver",
       "community": 1,
@@ -1225,7 +1365,7 @@
       "label": "io",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L633",
+      "source_location": "L764",
       "_origin": "ast",
       "id": "server_index_io",
       "community": 1,
@@ -1235,7 +1375,7 @@
       "label": "activeUsers",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L675",
+      "source_location": "L806",
       "_origin": "ast",
       "id": "server_index_activeusers",
       "community": 1,
@@ -1245,7 +1385,7 @@
       "label": "broadcastRoomUsers()",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L677",
+      "source_location": "L808",
       "_origin": "ast",
       "id": "server_index_broadcastroomusers",
       "community": 1,
@@ -1255,11 +1395,31 @@
       "label": "startServer()",
       "file_type": "code",
       "source_file": "server/index.js",
-      "source_location": "L861",
+      "source_location": "L992",
       "_origin": "ast",
       "id": "server_index_startserver",
       "community": 1,
       "norm_label": "startserver()"
+    },
+    {
+      "label": "seedAdminUser()",
+      "file_type": "code",
+      "source_file": "server/index.js",
+      "source_location": "L1031",
+      "_origin": "ast",
+      "id": "server_index_seedadminuser",
+      "community": 1,
+      "norm_label": "seedadminuser()"
+    },
+    {
+      "label": "admin.js",
+      "file_type": "code",
+      "source_file": "server/middleware/admin.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "middleware_admin",
+      "community": 1,
+      "norm_label": "admin.js"
     },
     {
       "label": "auth.js",
@@ -2529,7 +2689,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 5,
+      "community": 2,
       "norm_label": "real-time collaboration",
       "id": "concept_collaboration"
     },
@@ -4021,6 +4181,347 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L236",
+      "weight": 1.0,
+      "source": "admin_admin",
+      "target": "admin_admin_deleteboard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L220",
+      "weight": 1.0,
+      "source": "admin_admin",
+      "target": "admin_admin_deleteuser",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L47",
+      "weight": 1.0,
+      "source": "admin_admin",
+      "target": "admin_admin_getheaders",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L54",
+      "weight": 1.0,
+      "source": "admin_admin",
+      "target": "admin_admin_handleresponse",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L276",
+      "weight": 1.0,
+      "source": "admin_admin",
+      "target": "admin_admin_loadalldata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L155",
+      "weight": 1.0,
+      "source": "admin_admin",
+      "target": "admin_admin_loadboardslist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L69",
+      "weight": 1.0,
+      "source": "admin_admin",
+      "target": "admin_admin_loaddashboardstats",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L101",
+      "weight": 1.0,
+      "source": "admin_admin",
+      "target": "admin_admin_loaduserslist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L281",
+      "weight": 1.0,
+      "source": "admin_admin",
+      "target": "admin_admin_showerror",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "admin_admin",
+      "target": "admin_admin_switchtab",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L202",
+      "weight": 1.0,
+      "source": "admin_admin",
+      "target": "admin_admin_updaterole",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L242",
+      "weight": 1.0,
+      "source": "admin_admin_deleteboard",
+      "target": "admin_admin_getheaders",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L226",
+      "weight": 1.0,
+      "source": "admin_admin_deleteuser",
+      "target": "admin_admin_getheaders",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L157",
+      "weight": 1.0,
+      "source": "admin_admin_loadboardslist",
+      "target": "admin_admin_getheaders",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "admin_admin_loaddashboardstats",
+      "target": "admin_admin_getheaders",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L103",
+      "weight": 1.0,
+      "source": "admin_admin_loaduserslist",
+      "target": "admin_admin_getheaders",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L209",
+      "weight": 1.0,
+      "source": "admin_admin_updaterole",
+      "target": "admin_admin_getheaders",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L244",
+      "weight": 1.0,
+      "source": "admin_admin_deleteboard",
+      "target": "admin_admin_handleresponse",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L228",
+      "weight": 1.0,
+      "source": "admin_admin_deleteuser",
+      "target": "admin_admin_handleresponse",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L158",
+      "weight": 1.0,
+      "source": "admin_admin_loadboardslist",
+      "target": "admin_admin_handleresponse",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L72",
+      "weight": 1.0,
+      "source": "admin_admin_loaddashboardstats",
+      "target": "admin_admin_handleresponse",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L104",
+      "weight": 1.0,
+      "source": "admin_admin_loaduserslist",
+      "target": "admin_admin_handleresponse",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L212",
+      "weight": 1.0,
+      "source": "admin_admin_updaterole",
+      "target": "admin_admin_handleresponse",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L278",
+      "weight": 1.0,
+      "source": "admin_admin_loadalldata",
+      "target": "admin_admin_loaddashboardstats",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L96",
+      "weight": 1.0,
+      "source": "admin_admin_loaddashboardstats",
+      "target": "admin_admin_showerror",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L278",
+      "weight": 1.0,
+      "source": "admin_admin_loadalldata",
+      "target": "admin_admin_loaduserslist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L150",
+      "weight": 1.0,
+      "source": "admin_admin_loaduserslist",
+      "target": "admin_admin_showerror",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L213",
+      "weight": 1.0,
+      "source": "admin_admin_updaterole",
+      "target": "admin_admin_loaduserslist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L278",
+      "weight": 1.0,
+      "source": "admin_admin_loadalldata",
+      "target": "admin_admin_loadboardslist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L197",
+      "weight": 1.0,
+      "source": "admin_admin_loadboardslist",
+      "target": "admin_admin_showerror",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L229",
+      "weight": 1.0,
+      "source": "admin_admin_deleteuser",
+      "target": "admin_admin_loadalldata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L245",
+      "weight": 1.0,
+      "source": "admin_admin_deleteboard",
+      "target": "admin_admin_loadalldata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "server/ai.service.js",
       "source_location": "L145",
       "weight": 1.0,
@@ -4096,6 +4597,17 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "server/index.js",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "server_index",
+      "target": "middleware_admin"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/index.js",
       "source_location": "L11",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -4144,6 +4656,16 @@
       "confidence_score": 1.0,
       "source": "server_index",
       "target": "server_index_activeusers"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/index.js",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "server_index",
+      "target": "server_index_admin"
     },
     {
       "relation": "contains",
@@ -4289,6 +4811,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "server/index.js",
+      "source_location": "L97",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "server_index",
+      "target": "server_index_isredisenabled"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/index.js",
       "source_location": "L12",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -4344,6 +4876,16 @@
       "confidence_score": 1.0,
       "source": "server_index",
       "target": "server_index_redis"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/index.js",
+      "source_location": "L1028",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "server_index",
+      "target": "server_index_seedadminuser"
     },
     {
       "relation": "contains",
@@ -5918,5 +6460,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "620b54942f549b30a8ce4b7a201abff74a60be52"
+  "built_at_commit": "b70da5be78e00e6a70442b1b197c7ce656a0865d"
 }

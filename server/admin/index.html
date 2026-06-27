@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Console - Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="admin-container">
+    <!-- Header Navbar -->
+    <header class="admin-header">
+      <div class="admin-brand">
+        <div class="admin-logo">A</div>
+        <div>
+          <span class="admin-title">System Console</span>
+          <span class="admin-subtitle">Administrator Panel</span>
+        </div>
+      </div>
+      <div class="admin-actions">
+        <span class="admin-username-tag" id="admin-display-name">Admin</span>
+        <button class="btn btn-secondary btn-sm" id="logout-btn">Log Out</button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <div class="admin-main">
+      <!-- Sidebar Nav -->
+      <aside class="admin-sidebar">
+        <button class="sidebar-link active" id="tab-dashboard-btn">📊 System Dashboard</button>
+        <button class="sidebar-link" id="tab-users-btn">👥 User Management</button>
+        <button class="sidebar-link" id="tab-boards-btn">📋 Workspaces & Boards</button>
+      </aside>
+
+      <!-- Content Area -->
+      <main class="admin-content">
+        <div id="alert-box" class="alert error" style="display: none; margin-bottom: 24px;"></div>
+
+        <!-- Tab 1: Dashboard Stats -->
+        <section id="tab-dashboard" class="tab-section">
+          <div class="stats-grid">
+            <div class="stats-card">
+              <div class="stats-label">Total Registered Users</div>
+              <div class="stats-val" id="stat-users">0</div>
+            </div>
+            <div class="stats-card">
+              <div class="stats-label">Active Whiteboards</div>
+              <div class="stats-val" id="stat-boards">0</div>
+            </div>
+            <div class="stats-card">
+              <div class="stats-label">Live Active Connections</div>
+              <div class="stats-val" id="stat-sockets">0</div>
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <h3 class="settings-title">Real-Time Cache Configuration</h3>
+            <p class="settings-desc">
+              Toggle dynamically between the high-performance **Redis Cache** cluster and the in-memory **Local Fallback** storage mode without restarting the server.
+            </p>
+
+            <div class="settings-row">
+              <div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span class="status-label">Redis Health Status:</span>
+                  <span id="redis-health-badge" class="badge danger">Checking status...</span>
+                </div>
+                <div style="margin-top: 8px; color: #9CA3AF; font-size: 13px;">
+                  Active Cache Mode: <strong id="active-cache-mode-label" style="color: #8B5CF6;">REDIS</strong>
+                </div>
+              </div>
+
+              <div class="toggle-switch-container">
+                <label class="toggle-switch">
+                  <input type="checkbox" id="cache-mode-toggle" disabled>
+                  <span class="slider rounded"></span>
+                </label>
+                <span id="toggle-status-text" style="font-size: 14px; font-weight: 500;">Bypassed</span>
+              </div>
+            </div>
+
+            <div id="redis-warning-alert" class="alert info" style="display: none; margin-top: 16px;">
+              💡 Redis server is currently offline. The caching layer has automatically fallen back to Local Memory mode.
+            </div>
+          </div>
+        </section>
+
+        <!-- Tab 2: User Directory -->
+        <section id="tab-users" class="tab-section" style="display: none;">
+          <h2 class="section-title">User Account Directory</h2>
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Date Joined</th>
+                <th>Role</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="users-table-body">
+              <tr>
+                <td colspan="5" style="text-align: center; color: #9CA3AF;">Loading users list...</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Tab 3: Whiteboards Directory -->
+        <section id="tab-boards" class="tab-section" style="display: none;">
+          <h2 class="section-title">System Whiteboard Catalog</h2>
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Owner</th>
+                <th>Permissions</th>
+                <th>Created</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="boards-table-body">
+              <tr>
+                <td colspan="5" style="text-align: center; color: #9CA3AF;">Loading whiteboards...</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

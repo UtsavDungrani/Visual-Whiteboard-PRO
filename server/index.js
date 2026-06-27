@@ -4,12 +4,14 @@ const http = require("http");
 const { Server } = require("socket.io");
 const app = express();
 app.set("trust proxy", 1); // Trust Render load balancers for rate-limiting IP mapping
+global.activeCacheMode = process.env.DEFAULT_CACHE_MODE || "redis"; // "redis" or "memory"
 require("dotenv").config();
 const mongoose = require("mongoose");
 const Whiteboard = require("./models/Whiteboard");
 const ElementContext = require("./models/ElementContext");
 const User = require("./models/User");
 const auth = require("./middleware/auth");
+const admin = require("./middleware/admin");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const rateLimit = require("express-rate-limit");
@@ -92,6 +94,10 @@ const REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
   }
 })();
 
+function isRedisEnabled() {
+  return global.activeCacheMode === "redis" && !!(redisClient && redisClient.isReady);
+}
+
 // Simple in-memory store fallback for demo purposes
 const whiteboards = new Map();
 
@@ -148,7 +154,7 @@ app.post("/api/auth/register", authLimiter, async (req, res) => {
 
     // Generate token
     const token = jwt.sign(
-      { id: user._id, name: user.name, email: user.email, color: user.avatar_color },
+      { id: user._id, name: user.name, email: user.email, color: user.avatar_color, role: user.role },
       JWT_SECRET,
       { expiresIn: "2d" }
     );
@@ -159,7 +165,8 @@ app.post("/api/auth/register", authLimiter, async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        color: user.avatar_color
+        color: user.avatar_color,
+        role: user.role
       }
     });
   } catch (err) {
@@ -188,7 +195,7 @@ app.post("/api/auth/login", authLimiter, async (req, res) => {
 
     // Generate token
     const token = jwt.sign(
-      { id: user._id, name: user.name, email: user.email, color: user.avatar_color },
+      { id: user._id, name: user.name, email: user.email, color: user.avatar_color, role: user.role },
       JWT_SECRET,
       { expiresIn: "2d" }
     );
@@ -199,7 +206,8 @@ app.post("/api/auth/login", authLimiter, async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        color: user.avatar_color
+        color: user.avatar_color,
+        role: user.role
       }
     });
   } catch (err) {
@@ -216,7 +224,8 @@ app.get("/api/auth/me", auth, async (req, res) => {
       id: user._id,
       name: user.name,
       email: user.email,
-      color: user.avatar_color
+      color: user.avatar_color,
+      role: user.role
     });
   } catch (err) {
     console.error("Fetch profile error:", err);
@@ -257,7 +266,7 @@ app.post("/api/whiteboards", auth, async (req, res) => {
     const boardId = doc._id.toString();
 
     // Cache in Redis
-    if (redisClient && redisClient.isReady) {
+    if (isRedisEnabled()) {
       await redisClient.setEx(`board:${boardId}:state`, 86400, JSON.stringify(req.body));
     }
 
@@ -298,7 +307,7 @@ app.get("/api/whiteboards/:id", async (req, res) => {
     }
 
     // Cache in Redis for subsequent loads
-    if (redisClient && redisClient.isReady) {
+    if (isRedisEnabled()) {
       await redisClient.setEx(`board:${boardId}:state`, 86400, JSON.stringify(board.content));
     }
 
@@ -340,7 +349,7 @@ app.put("/api/whiteboards/:id", auth, async (req, res) => {
     await board.save();
 
     // Cache updated canvas JSON in Redis
-    if (redisClient && redisClient.isReady) {
+    if (isRedisEnabled()) {
       await redisClient.setEx(`board:${boardId}:state`, 86400, JSON.stringify(req.body));
     }
 
@@ -366,7 +375,7 @@ app.delete("/api/whiteboards/:id", auth, async (req, res) => {
     await board.deleteOne();
     
     // Clear Redis Cache
-    if (redisClient && redisClient.isReady) {
+    if (isRedisEnabled()) {
       await redisClient.del(`board:${boardId}:state`);
     }
 
@@ -465,6 +474,9 @@ app.post("/api/whiteboards/:id/permissions", auth, async (req, res) => {
 
 // Serve /uploads static folder
 app.use("/uploads", express.static(uploadsDir));
+
+// Serve /admin static folder for separate Admin Panel app
+app.use("/admin", express.static(path.join(__dirname, "admin")));
 
 // Rate limiter for AI endpoints
 const aiLimiter = rateLimit({
@@ -627,6 +639,125 @@ app.post("/api/ai/assist", auth, aiLimiter, (req, res) => {
   }
 });
 
+// --- Administrator Panel REST Endpoints (Protected by auth and admin middleware) ---
+
+app.get("/api/admin/stats", auth, admin, async (req, res) => {
+  try {
+    const userCount = await User.countDocuments();
+    const boardCount = await Whiteboard.countDocuments();
+    const activeSocketCount = io.sockets.sockets.size;
+    
+    return res.json({
+      userCount,
+      boardCount,
+      activeSocketCount,
+      activeCacheMode: global.activeCacheMode,
+      redisConnected: !!(redisClient && redisClient.isReady)
+    });
+  } catch (err) {
+    console.error("Admin stats failed:", err);
+    return res.status(500).json({ error: "admin_stats_failed" });
+  }
+});
+
+app.get("/api/admin/users", auth, admin, async (req, res) => {
+  try {
+    const users = await User.find({}, "name email avatar_color role createdAt").lean();
+    return res.json(users);
+  } catch (err) {
+    console.error("Admin list users failed:", err);
+    return res.status(500).json({ error: "list_users_failed" });
+  }
+});
+
+app.put("/api/admin/users/:id/role", auth, admin, async (req, res) => {
+  try {
+    const { role } = req.body;
+    if (role !== "user" && role !== "admin") {
+      return res.status(400).json({ error: "invalid_role" });
+    }
+    
+    if (req.user.id === req.params.id) {
+      return res.status(400).json({ error: "cannot_modify_own_role" });
+    }
+    
+    const user = await User.findByIdAndUpdate(req.params.id, { role }, { new: true });
+    if (!user) return res.status(404).json({ error: "user_not_found" });
+    
+    return res.json({ success: true, user: { id: user._id, role: user.role } });
+  } catch (err) {
+    console.error("Admin role change failed:", err);
+    return res.status(500).json({ error: "role_change_failed" });
+  }
+});
+
+app.delete("/api/admin/users/:id", auth, admin, async (req, res) => {
+  try {
+    if (req.user.id === req.params.id) {
+      return res.status(400).json({ error: "cannot_delete_own_account" });
+    }
+
+    const targetUser = await User.findById(req.params.id);
+    if (!targetUser) return res.status(404).json({ error: "user_not_found" });
+
+    await Whiteboard.deleteMany({ owner: req.params.id });
+    await User.findByIdAndDelete(req.params.id);
+
+    return res.json({ success: true });
+  } catch (err) {
+    console.error("Admin user delete failed:", err);
+    return res.status(500).json({ error: "delete_user_failed" });
+  }
+});
+
+app.get("/api/admin/boards", auth, admin, async (req, res) => {
+  try {
+    const boards = await Whiteboard.find({}, "title owner collaborators isPublic createdAt updatedAt")
+      .populate("owner", "name email")
+      .lean();
+    return res.json(boards);
+  } catch (err) {
+    console.error("Admin list boards failed:", err);
+    return res.status(500).json({ error: "list_boards_failed" });
+  }
+});
+
+app.delete("/api/admin/boards/:id", auth, admin, async (req, res) => {
+  try {
+    const board = await Whiteboard.findByIdAndDelete(req.params.id);
+    if (!board) return res.status(404).json({ error: "board_not_found" });
+
+    if (isRedisEnabled()) {
+      const cacheKey = `board:${req.params.id}:state`;
+      await redisClient.del(cacheKey);
+    }
+
+    return res.json({ success: true });
+  } catch (err) {
+    console.error("Admin board delete failed:", err);
+    return res.status(500).json({ error: "delete_board_failed" });
+  }
+});
+
+app.get("/api/admin/config", auth, admin, (req, res) => {
+  return res.json({
+    activeCacheMode: global.activeCacheMode,
+    redisConnected: !!(redisClient && redisClient.isReady),
+    redisUrl: process.env.REDIS_URL ? "Configured" : "Not Configured"
+  });
+});
+
+app.post("/api/admin/config", auth, admin, (req, res) => {
+  const { mode } = req.body;
+  if (mode !== "redis" && mode !== "memory") {
+    return res.status(400).json({ error: "invalid_cache_mode" });
+  }
+  global.activeCacheMode = mode;
+  console.log(`[Admin] Cache mode dynamically switched to: ${mode}`);
+  io.emit("admin:cache-mode-changed", { activeCacheMode: global.activeCacheMode });
+  return res.json({ success: true, activeCacheMode: global.activeCacheMode });
+});
+
 // Start server with EADDRINUSE handling: try next ports up to 5 times
 // Create HTTP server and attach Socket.io
 const httpServer = http.createServer(app);
@@ -762,7 +893,7 @@ io.on("connection", (socket) => {
     socket.to(room).emit("canvas:update", { roomId: room, pageId, json });
 
     // Cache updated canvas JSON in Redis
-    if (redisClient && redisClient.isReady) {
+    if (isRedisEnabled()) {
       redisClient.setEx(`board:${room}:page:${pageId}:state`, 86400, JSON.stringify(json))
         .catch(err => console.error("Redis cache save error", err));
     }
@@ -885,8 +1016,9 @@ if (require.main === module) {
     process.env.MONGO_URI || "mongodb://127.0.0.1:27017/visual-whiteboard";
   mongoose
     .connect(mongo, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => {
+    .then(async () => {
       console.log("Connected to MongoDB");
+      await seedAdminUser();
       startServer(DEFAULT_PORT);
     })
     .catch((err) => {
@@ -894,4 +1026,27 @@ if (require.main === module) {
       // start server anyway (fallback to ephemeral in-memory behavior was removed)
       startServer(DEFAULT_PORT);
     });
+}
+
+async function seedAdminUser() {
+  try {
+    const adminEmail = "admin@whiteboard.com";
+    const existingAdmin = await User.findOne({ email: adminEmail });
+    if (!existingAdmin) {
+      const hashedPassword = await bcrypt.hash("adminpassword", 10);
+      const admin = new User({
+        name: "System Administrator",
+        email: adminEmail,
+        password: hashedPassword,
+        avatar_color: "#1E3A8A",
+        role: "admin"
+      });
+      await admin.save();
+      console.log("[Seeder] Default Admin user created: admin@whiteboard.com / adminpassword");
+    } else {
+      console.log("[Seeder] Admin user already exists: admin@whiteboard.com");
+    }
+  } catch (err) {
+    console.error("[Seeder] Error seeding admin user:", err);
+  }
 }

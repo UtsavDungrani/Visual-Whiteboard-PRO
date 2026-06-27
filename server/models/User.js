@@ -7,6 +7,7 @@ const UserSchema = new Schema(
     email: { type: String, unique: true, required: true, index: true },
     password: { type: String, required: true },
     avatar_color: { type: String, default: "#6B7280" },
+    role: { type: String, default: "user", enum: ["user", "admin"] },
     whiteboards: [{ type: Schema.Types.ObjectId, ref: "Whiteboard" }]
   },
   { timestamps: true }

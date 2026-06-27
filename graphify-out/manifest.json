@@ -5,7 +5,7 @@
     "semantic_hash": ""
   },
   "frontend/src/App.jsx": {
-    "mtime": 1782537925.13733,
+    "mtime": 1782540704.5715756,
     "ast_hash": "0995f592e5d24963c89d371d7f6d6406",
     "semantic_hash": ""
   },
@@ -15,8 +15,8 @@
     "semantic_hash": "1805ad7bae3bf603446eed7431bab36a"
   },
   "server/index.js": {
-    "mtime": 1782539821.330233,
-    "ast_hash": "231b89a190c8a64a8cfe67f046bbc884",
+    "mtime": 1782540743.4849803,
+    "ast_hash": "fffb7f0c33124844978785823e5f55a8",
     "semantic_hash": ""
   },
   "server/models/Whiteboard.js": {
@@ -205,8 +205,8 @@
     "semantic_hash": ""
   },
   "server/models/User.js": {
-    "mtime": 1782101817.5603783,
-    "ast_hash": "21b8d0f14cd25c9e1e0cdeabfc7f3ae5",
+    "mtime": 1782540068.7880933,
+    "ast_hash": "5c1b9f54b47b11867f07e4b6edc8d7d7",
     "semantic_hash": ""
   },
   "frontend/src/fabric-eraser.js": {
@@ -307,6 +307,26 @@
   "frontend/src/utils/anchorPoints.js": {
     "mtime": 1782538192.0628977,
     "ast_hash": "f94d83ff5fe5f505edc0da9cf176a2a0",
+    "semantic_hash": ""
+  },
+  "server/middleware/admin.js": {
+    "mtime": 1782540087.7776034,
+    "ast_hash": "b19e32a034f83ac1431b34921ac15d44",
+    "semantic_hash": ""
+  },
+  "server/admin/admin.js": {
+    "mtime": 1782540930.0603156,
+    "ast_hash": "8d45e40a584f409eecb7b9ab93c8ee86",
+    "semantic_hash": ""
+  },
+  "server/admin/index.html": {
+    "mtime": 1782540723.8371873,
+    "ast_hash": "e465ba9d20f404cdb0f0c7345d215d0f",
+    "semantic_hash": ""
+  },
+  "server/admin/login.html": {
+    "mtime": 1782540719.8972375,
+    "ast_hash": "abbcc6c229454a2c92cc4fd62b9f04f6",
     "semantic_hash": ""
   }
 }
