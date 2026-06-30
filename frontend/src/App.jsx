@@ -296,6 +296,7 @@ export default function App() {
       if (obj.id !== 'page-boundary') {
         obj.selectable = !readOnly && isSelectionTool
         obj.evented = !readOnly && (isSelectionTool || isAreaSelectTool || activeToolRef.current === 'connector')
+        obj.hoverCursor = isSelectionTool ? (obj.lockMovementX ? 'default' : 'move') : (activeToolRef.current === 'connector' ? 'default' : 'crosshair')
       }
     })
   }
@@ -1797,11 +1798,13 @@ export default function App() {
         if (activeToolRef.current === 'draw') {
           obj.selectable = false
           obj.evented = false
+          obj.hoverCursor = 'crosshair'
         } else {
           const isSelectionTool = activeToolRef.current === 'select'
           const isAreaSelectTool = ['lasso-select', 'square-select', 'circle-select'].includes(activeToolRef.current)
           obj.selectable = isSelectionTool && !isReadOnly
           obj.evented = (isSelectionTool || isAreaSelectTool || activeToolRef.current === 'connector') && !isReadOnly
+          obj.hoverCursor = isSelectionTool ? (obj.lockMovementX ? 'default' : 'move') : (activeToolRef.current === 'connector' ? 'default' : 'crosshair')
         }
       }
       saveHistory()
@@ -1938,13 +1941,14 @@ export default function App() {
     } else if (isSelectionTool) {
       hideEraserCursor()
       canvas.selection = false // We handle selection drawing manually
-      canvas.defaultCursor = 'default'
       const isSelectTool = activeTool === 'select'
       const isAreaSelectTool = ['lasso-select', 'square-select', 'circle-select'].includes(activeTool)
+      canvas.defaultCursor = isSelectTool ? 'default' : 'crosshair'
       canvas.forEachObject((obj) => {
         if (obj.id !== 'page-boundary' && obj.type !== 'connector') {
           obj.selectable = !isReadOnly && isSelectTool
           obj.evented = !isReadOnly && (isSelectTool || isAreaSelectTool || activeTool === 'connector')
+          obj.hoverCursor = isSelectTool ? (obj.lockMovementX ? 'default' : 'move') : 'crosshair'
         }
       })
     } else {
@@ -1955,8 +1959,11 @@ export default function App() {
       canvas.defaultCursor = isShapeTool ? 'crosshair' : 'default'
 
       canvas.forEachObject((obj) => {
-        obj.selectable = false
-        obj.evented = activeTool === 'connector'
+        if (obj.id !== 'page-boundary' && obj.type !== 'connector') {
+          obj.selectable = false
+          obj.evented = activeTool === 'connector'
+          obj.hoverCursor = activeTool === 'connector' ? 'default' : 'crosshair'
+        }
       })
 
       // If text tool is selected, we still use click-to-drop or a simple placement logic
