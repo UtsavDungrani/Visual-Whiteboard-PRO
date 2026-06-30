@@ -290,12 +290,12 @@ export default function App() {
   const lockObjectsIfReadOnly = (canvasInstance) => {
     if (!canvasInstance) return
     const readOnly = isReadOnlyRef.current
-    const selectionTools = ['select', 'lasso-select', 'square-select', 'circle-select']
-    const isSelectionTool = selectionTools.includes(activeToolRef.current)
+    const isSelectionTool = activeToolRef.current === 'select'
+    const isAreaSelectTool = ['lasso-select', 'square-select', 'circle-select'].includes(activeToolRef.current)
     canvasInstance.getObjects().forEach((obj) => {
       if (obj.id !== 'page-boundary') {
         obj.selectable = !readOnly && isSelectionTool
-        obj.evented = !readOnly && (isSelectionTool || activeToolRef.current === 'connector')
+        obj.evented = !readOnly && (isSelectionTool || isAreaSelectTool || activeToolRef.current === 'connector')
       }
     })
   }
@@ -343,15 +343,15 @@ export default function App() {
       setActiveTool('pan')
     } else {
       // Restore interactivity for the active tool selection settings
-      const selectionTools = ['select', 'lasso-select', 'square-select', 'circle-select']
-      const isSelectionTool = selectionTools.includes(activeTool)
+      const isSelectionTool = activeTool === 'select'
+      const isAreaSelectTool = ['lasso-select', 'square-select', 'circle-select'].includes(activeTool)
       canvas.forEachObject((obj) => {
         if (obj.id !== 'page-boundary' && obj.type !== 'connector') {
           obj.selectable = isSelectionTool
-          obj.evented = isSelectionTool || activeTool === 'connector'
+          obj.evented = isSelectionTool || isAreaSelectTool || activeTool === 'connector'
         }
       })
-      canvas.defaultCursor = isSelectionTool ? 'default' : 'crosshair'
+      canvas.defaultCursor = (isSelectionTool || isAreaSelectTool) ? 'default' : 'crosshair'
     }
     canvas.requestRenderAll()
   }, [isReadOnly, activeTool])
@@ -1798,10 +1798,10 @@ export default function App() {
           obj.selectable = false
           obj.evented = false
         } else {
-          const selectionTools = ['select', 'lasso-select', 'square-select', 'circle-select']
-          const isSelectionTool = selectionTools.includes(activeToolRef.current)
+          const isSelectionTool = activeToolRef.current === 'select'
+          const isAreaSelectTool = ['lasso-select', 'square-select', 'circle-select'].includes(activeToolRef.current)
           obj.selectable = isSelectionTool && !isReadOnly
-          obj.evented = (isSelectionTool || activeToolRef.current === 'connector') && !isReadOnly
+          obj.evented = (isSelectionTool || isAreaSelectTool || activeToolRef.current === 'connector') && !isReadOnly
         }
       }
       saveHistory()
@@ -1907,8 +1907,8 @@ export default function App() {
     const selectionTools = ['select', 'lasso-select', 'square-select', 'circle-select']
     const isSelectionTool = selectionTools.includes(activeTool)
 
-    // Only discard active selection when switching to a non-selection tool
-    if (!isSelectionTool) {
+    // Only keep active selections for the default select pointer tool
+    if (activeTool !== 'select') {
       canvas.discardActiveObject()
       canvas.requestRenderAll()
     }
@@ -1939,10 +1939,12 @@ export default function App() {
       hideEraserCursor()
       canvas.selection = false // We handle selection drawing manually
       canvas.defaultCursor = 'default'
+      const isSelectTool = activeTool === 'select'
+      const isAreaSelectTool = ['lasso-select', 'square-select', 'circle-select'].includes(activeTool)
       canvas.forEachObject((obj) => {
-        if (obj.id !== 'page-boundary') {
-          obj.selectable = !isReadOnly
-          obj.evented = !isReadOnly
+        if (obj.id !== 'page-boundary' && obj.type !== 'connector') {
+          obj.selectable = !isReadOnly && isSelectTool
+          obj.evented = !isReadOnly && (isSelectTool || isAreaSelectTool || activeTool === 'connector')
         }
       })
     } else {
