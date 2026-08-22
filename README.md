@@ -4,6 +4,8 @@ Visual Whiteboard Pro is a real-time whiteboard for collaborative diagramming, b
 
 The broader product vision is documented in [description.txt](description.txt) and the phase breakdown in [TASKS.md](TASKS.md). This README focuses on what is in the repository now, how to run it, and how the pieces fit together.
 
+## Live Url: https://visual-whiteboard-pro.vercel.app/
+
 ## What It Does Today
 
 - React + Vite frontend with a FabricJS canvas loaded through the CDN in [frontend/index.html](frontend/index.html).
