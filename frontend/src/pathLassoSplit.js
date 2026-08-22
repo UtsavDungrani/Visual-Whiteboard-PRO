@@ -115,15 +115,46 @@ export function getPathSelectionMode(path, polygon) {
     return 'partial'
   }
 
-  return bboxCornersInPolygon(path, polygon) ? 'full' : 'none'
+  // ponytail: no stroke hits at all — treat as 'none' even if bbox corner is inside.
+  // Earlier code returned 'full' here, which wrongly selected paths the lasso didn't touch.
+  return 'none'
 }
 
-/** Classifies selection mode for any object (Paths & standard shapes) */
+/** Compute transformed canvas-space endpoints for a fabric.Line. */
+export function getLineEndpoints(line) {
+  const F = window.fabric
+  if (line && typeof line.calcLinePoints === 'function' && typeof line.calcTransformMatrix === 'function' && F) {
+    const pts = line.calcLinePoints()
+    const matrix = line.calcTransformMatrix()
+    const p1 = F.util.transformPoint(new F.Point(pts.x1, pts.y1), matrix)
+    const p2 = F.util.transformPoint(new F.Point(pts.x2, pts.y2), matrix)
+    return { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y }
+  }
+  return {
+    x1: line.x1 != null ? line.x1 : (line.left || 0),
+    y1: line.y1 != null ? line.y1 : (line.top || 0),
+    x2: line.x2 != null ? line.x2 : (line.left || 0),
+    y2: line.y2 != null ? line.y2 : (line.top || 0),
+  }
+}
+
+/** Classifies selection mode for any object (Paths, Lines & standard shapes) */
 export function getObjectSelectionMode(obj, polygon) {
   if (!polygon || polygon.length < 3) return 'none'
 
   if (obj.type === 'path') {
     return getPathSelectionMode(obj, polygon)
+  }
+
+  // ponytail: a Line is 1px-wide — its bbox corners almost never land on the stroke,
+  // so the corner-based "partial" check below misses it. We compute the segment
+  // crossing count directly using transformed canvas-space endpoints.
+  if (obj.type === 'line' || obj.customType === 'line') {
+    const { x1, y1, x2, y2 } = getLineEndpoints(obj)
+    const { inside, outside } = splitSegmentByPolygon(x1, y1, x2, y2, polygon)
+    if (inside.length === 0) return 'none'
+    if (outside.length === 0) return 'full'
+    return 'partial'
   }
 
   // Non-path shapes (Rect, Circle, Diamond, etc.)
@@ -148,14 +179,17 @@ export function getObjectSelectionMode(obj, polygon) {
     return 'partial'
   }
 
-  // Check if lasso is completely inside the shape boundary
-  const lassoInsideShape = polygon.some(p =>
-    p.x >= r.left && p.x <= r.left + r.width &&
-    p.y >= r.top && p.y <= r.top + r.height
-  )
-  if (lassoInsideShape) {
+  // Check if lasso actually overlaps the drawn shape (not just the bbox).
+  // For curved shapes (Circle, Diamond, Polygon) the bbox can contain empty space,
+  // so we use fabric's own containsPoint on a few sample points of the lasso.
+  const F = window.fabric
+  const sample = polygon[0]
+  if (obj.containsPoint && obj.containsPoint(new F.Point(sample.x, sample.y))) {
     return 'partial'
   }
+  // ponytail: a polygon vertex inside the bbox isn't enough — round/diamond shapes
+  // have empty corners. Falling back to 'none' here prevents splitting shapes
+  // when the lasso was drawn in empty space inside their bbox.
 
   return 'none'
 }
@@ -181,6 +215,122 @@ function buildClipPolygon(localPoints) {
       evented: false,
     }
   )
+}
+
+function lineLineIntersection(x1, y1, x2, y2, x3, y3, x4, y4) {
+  const denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
+  if (Math.abs(denom) < 1e-9) return null
+  const t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / denom
+  const u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / denom
+  // t and u both in [0,1] -> segments actually cross
+  if (t < 0 || t > 1 || u < 0 || u > 1) return null
+  return { x: x1 + t * (x2 - x1), y: y1 + t * (y2 - y1), t }
+}
+
+/**
+ * Walk a line segment along a polygon edge list and split it into inside/outside pieces.
+ * Returns { inside: [{x1,y1,x2,y2}, ...], outside: [...] }.
+ * General (non-convex) polygons: Weiler-Atherton would be textbook, but for lasso
+ * tool UX, general (potentially self-intersecting) polygons are rare — we use a
+ * parametric approach that handles them correctly anyway:
+ *   - For each polygon edge, compute t-values where the segment crosses that edge.
+ *   - Sort intersection t-values; alternate inside/outside between them.
+ */
+function splitSegmentByPolygon(x1, y1, x2, y2, polygon) {
+  const ts = []
+  for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+    const hit = lineLineIntersection(
+      x1, y1, x2, y2,
+      polygon[j].x, polygon[j].y, polygon[i].x, polygon[i].y
+    )
+    if (hit) ts.push(hit.t)
+  }
+  ts.sort((a, b) => a - b)
+
+  const inside = []
+  const outside = []
+  const EPS = 1e-6
+  const cuts = [0, ...ts, 1]
+  for (let k = 0; k < cuts.length - 1; k++) {
+    const a = cuts[k]
+    const b = cuts[k + 1]
+    if (b - a < EPS) continue
+    const midT = (a + b) / 2
+    const mx = x1 + midT * (x2 - x1)
+    const my = y1 + midT * (y2 - y1)
+    const isIn = isPointInPolygon({ x: mx, y: my }, polygon)
+    const seg = {
+      x1: x1 + a * (x2 - x1),
+      y1: y1 + a * (y2 - y1),
+      x2: x1 + b * (x2 - x1),
+      y2: y1 + b * (y2 - y1),
+    }
+    if (seg.x1 === seg.x2 && seg.y1 === seg.y2) continue
+    ;(isIn ? inside : outside).push(seg)
+  }
+  return { inside, outside }
+}
+
+/**
+ * Split a fabric.Line at the lasso boundary.
+ * Replaces the original line with: 0+ outside-pieces (stays in canvas) and
+ * 0+ inside-pieces (returned in `picked` and added to the canvas).
+ * Returns the array of new inside line objects to add to the selection.
+ */
+export function splitLineWithLasso(canvas, line, polygonCanvasPts) {
+  const F = window.fabric
+  if (!canvas || !line || !F || polygonCanvasPts.length < 3) return []
+
+  const { x1, y1, x2, y2 } = getLineEndpoints(line)
+  const { inside, outside } = splitSegmentByPolygon(
+    x1, y1, x2, y2, polygonCanvasPts
+  )
+
+  if (inside.length === 0) return [] // line is fully outside the lasso
+  if (outside.length === 0) return [line] // line is fully inside
+
+  // ponytail: build a fresh Line for each inside and outside piece rather than
+  // mutating the original — fabric's internal caches (coords, dims) don't
+  // recompute on a `set({x1,y1,x2,y2})` reliably, and a stale object is the
+  // #1 cause of "selection doesn't show, whole thing moves" reports.
+
+  // Snapshot visual props from the original line.
+  const visualProps = {
+    stroke: line.stroke,
+    strokeWidth: line.strokeWidth,
+    strokeUniform: line.strokeUniform,
+    strokeLineCap: line.strokeLineCap,
+    strokeDashArray: line.strokeDashArray ? [...line.strokeDashArray] : null,
+    strokeLineJoin: line.strokeLineJoin,
+    customType: line.customType || 'line',
+    erasable: line.erasable !== false,
+    opacity: line.opacity,
+    fill: line.fill,
+    shadow: line.shadow,
+    globalCompositeOperation: line.globalCompositeOperation,
+  }
+
+  const makeLine = (seg) => {
+    const nl = new F.Line([seg.x1, seg.y1, seg.x2, seg.y2], visualProps)
+    nl.set({
+      id: 'el-' + Date.now() + '-' + Math.round(Math.random() * 1e9),
+      selectable: true,
+      evented: true,
+    })
+    nl.setCoords()
+    return nl
+  }
+
+  // Remove the original line, add the new pieces.
+  canvas.remove(line)
+  const insideLines = inside.map(makeLine)
+  const outsideLines = outside.map(makeLine)
+  for (const l of [...outsideLines, ...insideLines]) {
+    canvas.add(l)
+    l.setCoords()
+  }
+
+  return insideLines
 }
 
 /**

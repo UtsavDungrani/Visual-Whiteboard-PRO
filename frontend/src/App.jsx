@@ -14,6 +14,7 @@ import {
   isPointInPolygon,
   getObjectSelectionMode,
   splitObjectWithLasso,
+  splitLineWithLasso,
 } from './pathLassoSplit'
 import { ConnectorLine } from './tools/ConnectorLine'
 import CanvasOverlay from './components/CanvasOverlay'
@@ -1621,6 +1622,9 @@ export default function App() {
         const candidates = canvas.getObjects().filter(
           obj => obj.id !== 'page-boundary' && obj.id !== 'temp-selection-shape'
         )
+        // ponytail: lasso-split only works on shapes that honor clipPath.
+        // Text, images, and active-selection groups crash or ghost-select otherwise.
+        const LASSO_SPLITTABLE = new Set(['rect', 'circle', 'ellipse', 'triangle', 'path', 'polygon', 'polyline'])
         
         if (activeTool === 'square-select') {
           const left = Math.min(startX, pointer.x)
@@ -1663,14 +1667,14 @@ export default function App() {
           const pts = selectionPointsRef.current
           const finalizeLassoSelection = async () => {
             const picked = []
-            const endPointer = canvas.getPointer(opt.e)
-            const dragDist = Math.hypot(
-              endPointer.x - startX,
-              endPointer.y - startY
-            )
+            // Calculate total travel distance along the lasso stroke
+            let totalTravel = 0
+            for (let i = 1; i < pts.length; i++) {
+              totalTravel += Math.hypot(pts[i].x - pts[i - 1].x, pts[i].y - pts[i - 1].y)
+            }
 
             // Short click without drag — select object under cursor
-            if (dragDist < 5 && lassoClickTargetRef.current) {
+            if (totalTravel < 5 && lassoClickTargetRef.current) {
               picked.push(lassoClickTargetRef.current)
             } else if (pts.length >= 2) {
               // Close the lasso (2-point drag becomes a thin rectangle)
@@ -1687,6 +1691,20 @@ export default function App() {
               for (const obj of candidates) {
                 const mode = getObjectSelectionMode(obj, lassoPoly)
                 if (mode === 'partial') {
+                  // ponytail: lines don't honor clipPath, so use a segment clipper
+                  // for them. Everything else (rect, circle, path, polygon, etc.)
+                  // goes through the shared clipPath-based splitter.
+                  if (obj.type === 'line' || obj.customType === 'line') {
+                    applyingRemoteRef.current = true
+                    const parts = splitLineWithLasso(canvas, obj, lassoPoly)
+                    applyingRemoteRef.current = false
+                    for (const p of parts) picked.push(p)
+                    continue
+                  }
+                  if (!LASSO_SPLITTABLE.has(obj.type)) {
+                    picked.push(obj)
+                    continue
+                  }
                   applyingRemoteRef.current = true
                   const part = await splitObjectWithLasso(canvas, obj, lassoPoly)
                   applyingRemoteRef.current = false
