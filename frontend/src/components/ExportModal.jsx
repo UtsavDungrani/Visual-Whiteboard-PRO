@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { jsPDF } from 'jspdf'
 import JSZip from 'jszip'
+import { updateAllConnectors } from '../hooks/useConnectorSync'
 
 export default function ExportModal({
   isOpen,
@@ -106,6 +107,7 @@ export default function ExportModal({
                 obj.setCoords()
               }
             })
+            updateAllConnectors(tempCanvas)
             
             // Calculate Bounding Box for Auto-Fit
             const objects = tempCanvas.getObjects()
@@ -367,6 +369,7 @@ export default function ExportModal({
                 obj.setCoords()
               }
             })
+            updateAllConnectors(tempCanvas)
 
             // 2. Calculate drawing bounds
             const objects = tempCanvas.getObjects()

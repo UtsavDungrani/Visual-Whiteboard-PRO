@@ -565,7 +565,7 @@
       "file_type": "code",
       "norm_label": "exportmodal()",
       "source_file": "frontend/src/components/ExportModal.jsx",
-      "source_location": "L5"
+      "source_location": "L6"
     },
     {
       "id": "frontend_src_components_pagestrip_pagestrip",
@@ -661,7 +661,7 @@
       "file_type": "code",
       "norm_label": "fromobjectfn()",
       "source_file": "frontend/src/tools/ConnectorLine.js",
-      "source_location": "L126"
+      "source_location": "L144"
     },
     {
       "id": "frontend_src_tools_useconnectortool_useconnectortool",
@@ -3879,6 +3879,18 @@
       "weight": 1.0
     },
     {
+      "source": "frontend_src_components_exportmodal_exportmodal",
+      "target": "frontend_src_hooks_useconnectorsync_updateallconnectors",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/src/components/ExportModal.jsx",
+      "source_location": "L110",
+      "weight": 1.0
+    },
+    {
       "source": "frontend_src_hooks_useconnectorsync_updateallconnectors",
       "target": "frontend_src_utils_anchorpoints_getanchorpoint",
       "relation": "calls",
@@ -4839,6 +4851,18 @@
       "weight": 1.0
     },
     {
+      "source": "frontend_src_components_exportmodal",
+      "target": "frontend_src_hooks_useconnectorsync_updateallconnectors",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/components/ExportModal.jsx",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
       "source": "frontend_src_hooks_useconnectorsync",
       "target": "frontend_src_utils_anchorpoints_getanchorpoint",
       "relation": "imports",
@@ -5424,6 +5448,18 @@
       "context": "import",
       "source_file": "frontend/src/App.jsx",
       "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_components_exportmodal",
+      "target": "frontend_src_hooks_useconnectorsync",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/components/ExportModal.jsx",
+      "source_location": "L4",
       "weight": 1.0
     },
     {
@@ -6106,7 +6142,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/components/ExportModal.jsx",
-      "source_location": "L5",
+      "source_location": "L6",
       "weight": 1.0
     },
     {
@@ -6348,7 +6384,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/tools/ConnectorLine.js",
-      "source_location": "L126",
+      "source_location": "L144",
       "weight": 1.0
     },
     {
@@ -8489,5 +8525,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "7a268f6215ebe924960baa7b7f5592ac2291b751"
+  "built_at_commit": "87ac2aae0652878bbf6522119ff527482b949fcc"
 }

@@ -33,7 +33,7 @@ export const ConnectorLine = fabric.util.createClass(fabric.Line, {
     }
   },
 
-  _render: function(ctx) {
+  _getConnectorGeometry: function() {
     const pts = this.calcLinePoints()
     const r = { x: pts.x1, y: pts.y1 }
     const i = { x: pts.x2, y: pts.y2 }
@@ -69,6 +69,17 @@ export const ConnectorLine = fabric.util.createClass(fabric.Line, {
     }
     path.push({ x: i.x, y: i.y })
 
+    const secondToLast = path[path.length - 2] || path[0]
+    const dx = i.x - secondToLast.x
+    const dy = i.y - secondToLast.y
+    const angle = Math.atan2(dy, dx)
+
+    return { path, endPoint: i, angle }
+  },
+
+  _render: function(ctx) {
+    const { path, endPoint, angle } = this._getConnectorGeometry()
+
     // Draw the main line/elbow route path
     ctx.beginPath()
     ctx.moveTo(path[0].x, path[0].y)
@@ -91,15 +102,9 @@ export const ConnectorLine = fabric.util.createClass(fabric.Line, {
     ctx.stroke()
     ctx.restore()
 
-    // Draw arrow head at the target end point i
-    // Find direction of final segment entering point i
-    const secondToLast = path[path.length - 2]
-    const dx = i.x - secondToLast.x
-    const dy = i.y - secondToLast.y
-    const angle = Math.atan2(dy, dx)
-
+    // Draw arrow head at the target end point
     ctx.save()
-    ctx.translate(i.x, i.y)
+    ctx.translate(endPoint.x, endPoint.y)
     ctx.rotate(angle)
     ctx.beginPath()
     ctx.moveTo(0, 0)
@@ -109,6 +114,19 @@ export const ConnectorLine = fabric.util.createClass(fabric.Line, {
     ctx.fillStyle = isActive ? '#E74C3C' : (this.stroke || '#1A1A2E')
     ctx.fill()
     ctx.restore()
+  },
+
+  _toSVG: function() {
+    const { path, endPoint, angle } = this._getConnectorGeometry()
+    const d = path.map((p, idx) => (idx === 0 ? 'M ' : 'L ') + p.x + ' ' + p.y).join(' ')
+    const color = this.stroke || '#1A1A2E'
+    const strokeWidth = this.strokeWidth || 2
+    const angleDeg = (angle * 180) / Math.PI
+
+    return [
+      '<path d="' + d + '" fill="none" stroke="' + color + '" stroke-width="' + strokeWidth + '" stroke-linecap="round" stroke-linejoin="round" />\n',
+      '<polygon points="0,0 -10,-5 -10,5" fill="' + color + '" transform="translate(' + endPoint.x + ',' + endPoint.y + ') rotate(' + angleDeg + ')" />\n'
+    ]
   },
 
   toJSON: function() {

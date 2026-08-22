@@ -1,16 +1,16 @@
 # Graph Report - Visual Whiteboard Pro  (2026-08-22)
 
 ## Corpus Check
-- 46 files · ~47,891 words
+- 46 files · ~48,012 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 322 nodes · 418 edges · 19 communities (14 shown, 5 thin omitted)
+- 322 nodes · 421 edges · 19 communities (14 shown, 5 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 8 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `7a268f62`
+- Built from commit: `87ac2aae`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -41,9 +41,9 @@
 5. `getAnchorPoint()` - 10 edges
 6. `Visual Whiteboard Pro — Phased Task Breakdown` - 10 edges
 7. `Visual Whiteboard Pro — Deployment Guide` - 9 edges
-8. `isPointInPolygon()` - 7 edges
-9. `getObjectSelectionMode()` - 7 edges
-10. `getHeaders()` - 7 edges
+8. `updateAllConnectors()` - 7 edges
+9. `isPointInPolygon()` - 7 edges
+10. `getObjectSelectionMode()` - 7 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `attachFabricListeners()` --calls--> `getObjectSelectionMode()`  [EXTRACTED]
