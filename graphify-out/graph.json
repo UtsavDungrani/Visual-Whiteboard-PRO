@@ -85,7 +85,7 @@
       "file_type": "code",
       "norm_label": "app()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L27"
+      "source_location": "L32"
     },
     {
       "id": "frontend_src_app_app_addnewelement",
@@ -97,7 +97,7 @@
       "file_type": "code",
       "norm_label": "addnewelement()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2064"
+      "source_location": "L2332"
     },
     {
       "id": "frontend_src_app_app_applyremotecanvas",
@@ -109,7 +109,7 @@
       "file_type": "code",
       "norm_label": "applyremotecanvas()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1140"
+      "source_location": "L1289"
     },
     {
       "id": "frontend_src_app_app_attachfabriclisteners",
@@ -121,7 +121,7 @@
       "file_type": "code",
       "norm_label": "attachfabriclisteners()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1212"
+      "source_location": "L1366"
     },
     {
       "id": "frontend_src_app_app_debounce",
@@ -133,7 +133,7 @@
       "file_type": "code",
       "norm_label": "debounce()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1039"
+      "source_location": "L1182"
     },
     {
       "id": "frontend_src_app_app_flushpendingremotecanvas",
@@ -145,7 +145,7 @@
       "file_type": "code",
       "norm_label": "flushpendingremotecanvas()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1166"
+      "source_location": "L1315"
     },
     {
       "id": "frontend_src_app_app_loadboard",
@@ -157,7 +157,7 @@
       "file_type": "code",
       "norm_label": "loadboard()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2733"
+      "source_location": "L3070"
     },
     {
       "id": "frontend_src_app_app_loadboardbyid",
@@ -169,7 +169,7 @@
       "file_type": "code",
       "norm_label": "loadboardbyid()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2739"
+      "source_location": "L3076"
     },
     {
       "id": "frontend_src_app_app_saveboard",
@@ -181,7 +181,7 @@
       "file_type": "code",
       "norm_label": "saveboard()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2666"
+      "source_location": "L2999"
     },
     {
       "id": "frontend_src_app_app_throttle",
@@ -193,7 +193,7 @@
       "file_type": "code",
       "norm_label": "throttle()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1048"
+      "source_location": "L1191"
     },
     {
       "id": "frontend_src_app_app_updateinspectorproperties",
@@ -205,7 +205,7 @@
       "file_type": "code",
       "norm_label": "updateinspectorproperties()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1174"
+      "source_location": "L1323"
     },
     {
       "id": "frontend_src_pathlassosplit_bboxcornersinpolygon",
@@ -637,7 +637,7 @@
       "file_type": "code",
       "norm_label": "applyconnectoranchors()",
       "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L37"
+      "source_location": "L41"
     },
     {
       "id": "frontend_src_hooks_useconnectorsync_collectmovedshapes",
@@ -661,7 +661,7 @@
       "file_type": "code",
       "norm_label": "shapesmapfromcanvas()",
       "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L64"
+      "source_location": "L80"
     },
     {
       "id": "frontend_src_hooks_useconnectorsync_stripconnectorsfromselection",
@@ -673,7 +673,7 @@
       "file_type": "code",
       "norm_label": "stripconnectorsfromselection()",
       "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L18"
+      "source_location": "L20"
     },
     {
       "id": "frontend_src_hooks_useconnectorsync_updateallconnectors",
@@ -685,7 +685,7 @@
       "file_type": "code",
       "norm_label": "updateallconnectors()",
       "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L118"
+      "source_location": "L138"
     },
     {
       "id": "frontend_src_hooks_useconnectorsync_useconnectorsync",
@@ -697,7 +697,7 @@
       "file_type": "code",
       "norm_label": "useconnectorsync()",
       "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L72"
+      "source_location": "L92"
     },
     {
       "id": "frontend_src_tools_connectorline_fromobjectfn",
@@ -709,7 +709,7 @@
       "file_type": "code",
       "norm_label": "fromobjectfn()",
       "source_file": "frontend/src/tools/ConnectorLine.js",
-      "source_location": "L172"
+      "source_location": "L189"
     },
     {
       "id": "frontend_src_tools_useconnectortool_useconnectortool",
@@ -721,7 +721,7 @@
       "file_type": "code",
       "norm_label": "useconnectortool()",
       "source_file": "frontend/src/tools/useConnectorTool.js",
-      "source_location": "L8"
+      "source_location": "L12"
     },
     {
       "id": "frontend_src_utils_anchorpoints_canvastoscreen",
@@ -745,7 +745,7 @@
       "file_type": "code",
       "norm_label": "findclosestanchor()",
       "source_file": "frontend/src/utils/anchorPoints.js",
-      "source_location": "L48"
+      "source_location": "L55"
     },
     {
       "id": "frontend_src_utils_anchorpoints_getanchorpoint",
@@ -757,7 +757,7 @@
       "file_type": "code",
       "norm_label": "getanchorpoint()",
       "source_file": "frontend/src/utils/anchorPoints.js",
-      "source_location": "L35"
+      "source_location": "L38"
     },
     {
       "id": "frontend_src_utils_anchorpoints_localanchoroffset",
@@ -1990,17 +1990,6 @@
       "source_location": "L1"
     },
     {
-      "id": "server_package",
-      "label": "server/package.json",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "dependencies",
-      "file_type": "code",
-      "norm_label": "server/package.json",
-      "source_file": "server/package.json",
-      "source_location": "L1"
-    },
-    {
       "id": "server_package_dependencies",
       "label": "dependencies",
       "_origin": "ast",
@@ -2133,127 +2122,6 @@
       "source_location": "L11"
     },
     {
-      "id": "server_package_devdependencies",
-      "label": "devDependencies",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "dependencies",
-      "file_type": "code",
-      "norm_label": "devdependencies",
-      "source_file": "server/package.json",
-      "source_location": "L23"
-    },
-    {
-      "id": "server_package_devdependencies_jest",
-      "label": "jest",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "dependencies",
-      "file_type": "code",
-      "norm_label": "jest",
-      "source_file": "server/package.json",
-      "source_location": "L24"
-    },
-    {
-      "id": "server_package_devdependencies_socket_io_client",
-      "label": "socket.io-client",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "dependencies",
-      "file_type": "code",
-      "norm_label": "socket.io-client",
-      "source_file": "server/package.json",
-      "source_location": "L25"
-    },
-    {
-      "id": "server_package_devdependencies_supertest",
-      "label": "supertest",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "dependencies",
-      "file_type": "code",
-      "norm_label": "supertest",
-      "source_file": "server/package.json",
-      "source_location": "L26"
-    },
-    {
-      "id": "server_package_main",
-      "label": "main",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "dependencies",
-      "file_type": "code",
-      "norm_label": "main",
-      "source_file": "server/package.json",
-      "source_location": "L5"
-    },
-    {
-      "id": "server_package_name",
-      "label": "name",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "dependencies",
-      "file_type": "code",
-      "norm_label": "name",
-      "source_file": "server/package.json",
-      "source_location": "L2"
-    },
-    {
-      "id": "server_package_private",
-      "label": "private",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "dependencies",
-      "file_type": "code",
-      "norm_label": "private",
-      "source_file": "server/package.json",
-      "source_location": "L4"
-    },
-    {
-      "id": "server_package_scripts",
-      "label": "scripts",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "dependencies",
-      "file_type": "code",
-      "norm_label": "scripts",
-      "source_file": "server/package.json",
-      "source_location": "L6"
-    },
-    {
-      "id": "server_package_scripts_start",
-      "label": "start",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "dependencies",
-      "file_type": "code",
-      "norm_label": "start",
-      "source_file": "server/package.json",
-      "source_location": "L7"
-    },
-    {
-      "id": "server_package_scripts_test",
-      "label": "test",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "dependencies",
-      "file_type": "code",
-      "norm_label": "test",
-      "source_file": "server/package.json",
-      "source_location": "L8"
-    },
-    {
-      "id": "server_package_version",
-      "label": "version",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "dependencies",
-      "file_type": "code",
-      "norm_label": "version",
-      "source_file": "server/package.json",
-      "source_location": "L3"
-    },
-    {
       "id": "bcryptjs",
       "label": "bcryptjs",
       "_origin": "ast",
@@ -2309,17 +2177,6 @@
       "source_location": "L16"
     },
     {
-      "id": "jest",
-      "label": "jest",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "dependencies",
-      "file_type": "concept",
-      "norm_label": "jest",
-      "source_file": "server/package.json",
-      "source_location": "L24"
-    },
-    {
       "id": "jsonwebtoken",
       "label": "jsonwebtoken",
       "_origin": "ast",
@@ -2364,17 +2221,6 @@
       "source_location": "L20"
     },
     {
-      "id": "server_package_json_socket_io_client",
-      "label": "socket.io-client",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "dependencies",
-      "file_type": "concept",
-      "norm_label": "socket.io-client",
-      "source_file": "server/package.json",
-      "source_location": "L25"
-    },
-    {
       "id": "socket_io",
       "label": "socket.io",
       "_origin": "ast",
@@ -2395,17 +2241,6 @@
       "norm_label": "@socket.io/redis-adapter",
       "source_file": "server/package.json",
       "source_location": "L11"
-    },
-    {
-      "id": "supertest",
-      "label": "supertest",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "dependencies",
-      "file_type": "concept",
-      "norm_label": "supertest",
-      "source_file": "server/package.json",
-      "source_location": "L26"
     },
     {
       "id": "readme_api_surface",
@@ -2810,6 +2645,171 @@
       "source_location": "L1"
     },
     {
+      "id": "server_package",
+      "label": "server/package.json",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "server/package.json",
+      "file_type": "code",
+      "norm_label": "server/package.json",
+      "source_file": "server/package.json",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_package_devdependencies",
+      "label": "devDependencies",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "server/package.json",
+      "file_type": "code",
+      "norm_label": "devdependencies",
+      "source_file": "server/package.json",
+      "source_location": "L23"
+    },
+    {
+      "id": "server_package_devdependencies_jest",
+      "label": "jest",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "server/package.json",
+      "file_type": "code",
+      "norm_label": "jest",
+      "source_file": "server/package.json",
+      "source_location": "L24"
+    },
+    {
+      "id": "server_package_devdependencies_socket_io_client",
+      "label": "socket.io-client",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "server/package.json",
+      "file_type": "code",
+      "norm_label": "socket.io-client",
+      "source_file": "server/package.json",
+      "source_location": "L25"
+    },
+    {
+      "id": "server_package_devdependencies_supertest",
+      "label": "supertest",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "server/package.json",
+      "file_type": "code",
+      "norm_label": "supertest",
+      "source_file": "server/package.json",
+      "source_location": "L26"
+    },
+    {
+      "id": "server_package_main",
+      "label": "main",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "server/package.json",
+      "file_type": "code",
+      "norm_label": "main",
+      "source_file": "server/package.json",
+      "source_location": "L5"
+    },
+    {
+      "id": "server_package_name",
+      "label": "name",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "server/package.json",
+      "file_type": "code",
+      "norm_label": "name",
+      "source_file": "server/package.json",
+      "source_location": "L2"
+    },
+    {
+      "id": "server_package_private",
+      "label": "private",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "server/package.json",
+      "file_type": "code",
+      "norm_label": "private",
+      "source_file": "server/package.json",
+      "source_location": "L4"
+    },
+    {
+      "id": "server_package_scripts",
+      "label": "scripts",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "server/package.json",
+      "file_type": "code",
+      "norm_label": "scripts",
+      "source_file": "server/package.json",
+      "source_location": "L6"
+    },
+    {
+      "id": "server_package_scripts_start",
+      "label": "start",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "server/package.json",
+      "file_type": "code",
+      "norm_label": "start",
+      "source_file": "server/package.json",
+      "source_location": "L7"
+    },
+    {
+      "id": "server_package_scripts_test",
+      "label": "test",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "server/package.json",
+      "file_type": "code",
+      "norm_label": "test",
+      "source_file": "server/package.json",
+      "source_location": "L8"
+    },
+    {
+      "id": "server_package_version",
+      "label": "version",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "server/package.json",
+      "file_type": "code",
+      "norm_label": "version",
+      "source_file": "server/package.json",
+      "source_location": "L3"
+    },
+    {
+      "id": "jest",
+      "label": "jest",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "server/package.json",
+      "file_type": "concept",
+      "norm_label": "jest",
+      "source_file": "server/package.json",
+      "source_location": "L24"
+    },
+    {
+      "id": "server_package_json_socket_io_client",
+      "label": "socket.io-client",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "server/package.json",
+      "file_type": "concept",
+      "norm_label": "socket.io-client",
+      "source_file": "server/package.json",
+      "source_location": "L25"
+    },
+    {
+      "id": "supertest",
+      "label": "supertest",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "server/package.json",
+      "file_type": "concept",
+      "norm_label": "supertest",
+      "source_file": "server/package.json",
+      "source_location": "L26"
+    },
+    {
       "id": "package",
       "label": "package.json",
       "_origin": "ast",
@@ -2972,7 +2972,18 @@
       "file_type": "code",
       "norm_label": "*.{js,jsx}",
       "source_file": "package.json",
-      "source_location": "L31"
+      "source_location": "L30"
+    },
+    {
+      "id": "package_lint_staged_json_css_md",
+      "label": "*.{json,css,md}",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "package.json",
+      "file_type": "code",
+      "norm_label": "*.{json,css,md}",
+      "source_file": "package.json",
+      "source_location": "L34"
     },
     {
       "id": "package_main",
@@ -3148,7 +3159,7 @@
       "file_type": "concept",
       "norm_label": "eslint --fix",
       "source_file": "package.json",
-      "source_location": "L31"
+      "source_location": "L30"
     },
     {
       "id": "ref_prettier_write",
@@ -3159,7 +3170,7 @@
       "file_type": "concept",
       "norm_label": "prettier --write",
       "source_file": "package.json",
-      "source_location": "L31"
+      "source_location": "L30"
     },
     {
       "id": "server_index_app",
@@ -3803,7 +3814,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L361",
+      "source_location": "L458",
       "weight": 1.0
     },
     {
@@ -3815,7 +3826,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L364",
+      "source_location": "L461",
       "weight": 1.0
     },
     {
@@ -3827,7 +3838,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L539",
+      "source_location": "L640",
       "weight": 1.0
     },
     {
@@ -3839,7 +3850,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1153",
+      "source_location": "L1302",
       "weight": 1.0
     },
     {
@@ -3851,7 +3862,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1238",
+      "source_location": "L1400",
       "weight": 1.0
     },
     {
@@ -3863,7 +3874,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1481",
+      "source_location": "L1662",
       "weight": 1.0
     },
     {
@@ -3875,7 +3886,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1691",
+      "source_location": "L1899",
       "weight": 1.0
     },
     {
@@ -3887,7 +3898,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1698",
+      "source_location": "L1906",
       "weight": 1.0
     },
     {
@@ -3899,7 +3910,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1708",
+      "source_location": "L1916",
       "weight": 1.0
     },
     {
@@ -3911,7 +3922,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1170",
+      "source_location": "L1319",
       "weight": 1.0
     },
     {
@@ -3923,7 +3934,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2736",
+      "source_location": "L3073",
       "weight": 1.0
     },
     {
@@ -3935,7 +3946,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2772",
+      "source_location": "L3111",
       "weight": 1.0
     },
     {
@@ -3959,7 +3970,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L44",
+      "source_location": "L49",
       "weight": 1.0
     },
     {
@@ -3971,7 +3982,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L121",
+      "source_location": "L141",
       "weight": 1.0
     },
     {
@@ -3983,19 +3994,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L126",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_src_hooks_useconnectorsync_useconnectorsync",
-      "target": "frontend_src_hooks_useconnectorsync_collectmovedshapes",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L77",
+      "source_location": "L146",
       "weight": 1.0
     },
     {
@@ -4007,7 +4006,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L81",
+      "source_location": "L101",
       "weight": 1.0
     },
     {
@@ -4019,7 +4018,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L88",
+      "source_location": "L108",
       "weight": 1.0
     },
     {
@@ -4031,7 +4030,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L98",
+      "source_location": "L118",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_hooks_useconnectorsync_useconnectorsync",
+      "target": "frontend_src_hooks_useconnectorsync_collectmovedshapes",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L97",
       "weight": 1.0
     },
     {
@@ -4247,7 +4258,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/tools/useConnectorTool.js",
-      "source_location": "L122",
+      "source_location": "L138",
       "weight": 1.0
     },
     {
@@ -4259,7 +4270,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/tools/useConnectorTool.js",
-      "source_location": "L75",
+      "source_location": "L84",
       "weight": 1.0
     },
     {
@@ -4271,7 +4282,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/tools/useConnectorTool.js",
-      "source_location": "L76",
+      "source_location": "L85",
       "weight": 1.0
     },
     {
@@ -4283,7 +4294,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/utils/anchorPoints.js",
-      "source_location": "L60",
+      "source_location": "L71",
       "weight": 1.0
     },
     {
@@ -4295,7 +4306,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/utils/anchorPoints.js",
-      "source_location": "L64",
+      "source_location": "L78",
       "weight": 1.0
     },
     {
@@ -4307,7 +4318,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/utils/anchorPoints.js",
-      "source_location": "L37",
+      "source_location": "L40",
       "weight": 1.0
     },
     {
@@ -4595,7 +4606,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1039",
+      "source_location": "L1182",
       "weight": 1.0
     },
     {
@@ -4607,7 +4618,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1048",
+      "source_location": "L1191",
       "weight": 1.0
     },
     {
@@ -4619,7 +4630,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1140",
+      "source_location": "L1289",
       "weight": 1.0
     },
     {
@@ -4631,7 +4642,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1174",
+      "source_location": "L1323",
       "weight": 1.0
     },
     {
@@ -4643,7 +4654,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1212",
+      "source_location": "L1366",
       "weight": 1.0
     },
     {
@@ -4655,7 +4666,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2064",
+      "source_location": "L2332",
       "weight": 1.0
     },
     {
@@ -4667,7 +4678,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2739",
+      "source_location": "L3076",
       "weight": 1.0
     },
     {
@@ -4679,7 +4690,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "package.json",
-      "source_location": "L31",
+      "source_location": "L30",
       "weight": 1.0
     },
     {
@@ -4691,7 +4702,19 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "package.json",
-      "source_location": "L31",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "package_lint_staged_json_css_md",
+      "target": "ref_prettier_write",
+      "relation": "extends",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "package.json",
+      "source_location": "L34",
       "weight": 1.0
     },
     {
@@ -5063,7 +5086,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "frontend/src/tools/useConnectorTool.js",
-      "source_location": "L3",
+      "source_location": "L7",
       "weight": 1.0
     },
     {
@@ -5639,7 +5662,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "frontend/src/tools/useConnectorTool.js",
-      "source_location": "L3",
+      "source_location": "L7",
       "weight": 1.0
     },
     {
@@ -6175,7 +6198,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L27",
+      "source_location": "L32",
       "weight": 1.0
     },
     {
@@ -6186,7 +6209,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1166",
+      "source_location": "L1315",
       "weight": 1.0
     },
     {
@@ -6197,7 +6220,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2666",
+      "source_location": "L2999",
       "weight": 1.0
     },
     {
@@ -6208,7 +6231,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2733",
+      "source_location": "L3070",
       "weight": 1.0
     },
     {
@@ -6340,7 +6363,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L118",
+      "source_location": "L138",
       "weight": 1.0
     },
     {
@@ -6351,18 +6374,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L18",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_src_hooks_useconnectorsync",
-      "target": "frontend_src_hooks_useconnectorsync_applyconnectoranchors",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L37",
+      "source_location": "L20",
       "weight": 1.0
     },
     {
@@ -6378,13 +6390,24 @@
     },
     {
       "source": "frontend_src_hooks_useconnectorsync",
+      "target": "frontend_src_hooks_useconnectorsync_applyconnectoranchors",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L41",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_hooks_useconnectorsync",
       "target": "frontend_src_hooks_useconnectorsync_shapesmapfromcanvas",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L64",
+      "source_location": "L80",
       "weight": 1.0
     },
     {
@@ -6395,7 +6418,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L72",
+      "source_location": "L92",
       "weight": 1.0
     },
     {
@@ -6560,7 +6583,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/tools/ConnectorLine.js",
-      "source_location": "L172",
+      "source_location": "L189",
       "weight": 1.0
     },
     {
@@ -6582,7 +6605,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/tools/useConnectorTool.js",
-      "source_location": "L8",
+      "source_location": "L12",
       "weight": 1.0
     },
     {
@@ -6604,7 +6627,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/utils/anchorPoints.js",
-      "source_location": "L35",
+      "source_location": "L38",
       "weight": 1.0
     },
     {
@@ -6615,7 +6638,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/utils/anchorPoints.js",
-      "source_location": "L48",
+      "source_location": "L55",
       "weight": 1.0
     },
     {
@@ -6978,7 +7001,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "package.json",
-      "source_location": "L31",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "package_lint_staged",
+      "target": "package_lint_staged_json_css_md",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L34",
       "weight": 1.0
     },
     {
@@ -8723,5 +8757,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "415ed8370970fd9fb219d6e0ec8dfb34507f2af9"
+  "built_at_commit": "520cadf0e812696599874a8d83bde3af046925f1"
 }

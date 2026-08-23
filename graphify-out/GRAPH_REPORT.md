@@ -1,16 +1,16 @@
 # Graph Report - Visual Whiteboard Pro  (2026-08-23)
 
 ## Corpus Check
-- 46 files · ~47,769 words
+- 46 files · ~48,080 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 328 nodes · 432 edges · 19 communities (14 shown, 5 thin omitted)
+- 329 nodes · 434 edges · 20 communities (15 shown, 5 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 8 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `415ed837`
+- Built from commit: `520cadf0`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -21,6 +21,7 @@
 - dependencies
 - Visual Whiteboard Pro
 - App.jsx
+- server/package.json
 - package.json
 - context.test.js
 - App
@@ -60,7 +61,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (19 total, 5 thin omitted)
+## Communities (20 total, 5 thin omitted)
 
 ### Community 0 - "Frontend Package Configuration"
 Cohesion: 0.09
@@ -75,8 +76,8 @@ Cohesion: 0.11
 Nodes (21): Architecture Assist AI, Real-time Collaboration, Context Layer, Drawing Canvas, HTML/CSS Export, PDF Export, Mess Cleanup AI, MongoDB Storage (+13 more)
 
 ### Community 3 - "dependencies"
-Cohesion: 0.05
-Nodes (37): bcryptjs, cors, dotenv, express, express-rate-limit, jest, jsonwebtoken, mongoose (+29 more)
+Cohesion: 0.09
+Nodes (23): bcryptjs, cors, dotenv, express, express-rate-limit, jsonwebtoken, mongoose, multer (+15 more)
 
 ### Community 4 - "Visual Whiteboard Pro"
 Cohesion: 0.12
@@ -86,9 +87,13 @@ Nodes (17): API Surface, Configuration, Current Limitations, Data Model, Future 
 Cohesion: 0.10
 Nodes (23): AssistPanel(), CanvasControls(), CanvasOverlay(), ContextPanel(), LANGUAGES, ExportModal(), PageStrip(), PermissionsPanel() (+15 more)
 
+### Community 7 - "server/package.json"
+Cohesion: 0.13
+Nodes (14): jest, devDependencies, jest, socket.io-client, supertest, socket.io-client, main, name (+6 more)
+
 ### Community 8 - "package.json"
 Cohesion: 0.06
-Nodes (31): eslint, husky, lint-staged, author, bugs, url, description, devDependencies (+23 more)
+Nodes (32): eslint, husky, lint-staged, author, bugs, url, description, devDependencies (+24 more)
 
 ### Community 9 - "context.test.js"
 Cohesion: 0.05
@@ -111,7 +116,7 @@ Cohesion: 0.52
 Nodes (10): deleteBoard(), deleteUser(), getHeaders(), handleResponse(), loadAllData(), loadBoardsList(), loadDashboardStats(), loadUsersList() (+2 more)
 
 ## Knowledge Gaps
-- **164 isolated node(s):** `name`, `version`, `private`, `dev`, `build` (+159 more)
+- **163 isolated node(s):** `name`, `version`, `private`, `dev`, `build` (+158 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -121,9 +126,9 @@ _Questions this graph is uniquely positioned to answer:_
 - **Why does `Visual Whiteboard Pro` connect `Visual Whiteboard Pro` to `Project Description and Requirements`?**
   _High betweenness centrality (0.034) - this node is a cross-community bridge._
 - **Why does `Real-time Collaboration` connect `Project Description and Requirements` to `index.js`?**
-  _High betweenness centrality (0.030) - this node is a cross-community bridge._
+  _High betweenness centrality (0.029) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `private` to the rest of the system?**
-  _164 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _163 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Frontend Package Configuration` be split into smaller, more focused modules?**
   _Cohesion score 0.09090909090909091 - nodes in this community are weakly interconnected._
 - **Should `index.js` be split into smaller, more focused modules?**
@@ -131,4 +136,4 @@ _Questions this graph is uniquely positioned to answer:_
 - **Should `Project Description and Requirements` be split into smaller, more focused modules?**
   _Cohesion score 0.11462450592885376 - nodes in this community are weakly interconnected._
 - **Should `dependencies` be split into smaller, more focused modules?**
-  _Cohesion score 0.05263157894736842 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08695652173913043 - nodes in this community are weakly interconnected._

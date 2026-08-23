@@ -2590,6 +2590,13 @@ export default function App() {
     const canvas = fabricRef.current;
     if (!canvas) return;
 
+    // Deselect any active object/selection so coordinates are in canvas space and animations render smoothly
+    const activeObj = canvas.getActiveObject();
+    if (activeObj) {
+      canvas.discardActiveObject();
+      canvas.requestRenderAll();
+    }
+
     const rawObjects = canvas
       .getObjects()
       .filter(
@@ -2652,6 +2659,24 @@ export default function App() {
       let completedCount = 0;
       applyingRemoteRef.current = true; // Disable intermediate history saves during animations
 
+      const F = window.fabric;
+      if (!F?.util?.animate) {
+        cleaned.forEach((item) => {
+          const obj = rawObjects.find((o) => o.id === item.id);
+          if (obj) {
+            obj.set("left", item.left);
+            obj.set("top", item.top);
+            obj.setCoords();
+          }
+        });
+        updateAllConnectors(canvas);
+        canvas.requestRenderAll();
+        applyingRemoteRef.current = false;
+        saveHistory();
+        sendCanvasUpdate();
+        return;
+      }
+
       cleaned.forEach((item) => {
         const obj = rawObjects.find((o) => o.id === item.id);
         if (obj) {
@@ -2660,20 +2685,23 @@ export default function App() {
           const endLeft = item.left;
           const endTop = item.top;
 
-          window.fabric.util.animate({
+          F.util.animate({
             startValue: 0,
             endValue: 1,
-            duration: 500,
+            duration: 450,
             onChange: (value) => {
               obj.set("left", startLeft + (endLeft - startLeft) * value);
               obj.set("top", startTop + (endTop - startTop) * value);
+              obj.setCoords();
               updateAllConnectors(canvas);
+              canvas.requestRenderAll();
             },
             onComplete: () => {
               obj.setCoords();
               completedCount++;
               if (completedCount === cleaned.length) {
                 updateAllConnectors(canvas);
+                canvas.requestRenderAll();
                 applyingRemoteRef.current = false;
                 saveHistory();
                 sendCanvasUpdate();

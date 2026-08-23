@@ -6,9 +6,9 @@
     "semantic_hash": ""
   },
   "frontend/src/App.jsx": {
-    "mtime": 1787413759.6400216,
-    "seen": 1787413783.3423414,
-    "ast_hash": "9310182dbd8b3de4b40c1cf52fd7b114",
+    "mtime": 1787461777.276541,
+    "seen": 1787461792.976287,
+    "ast_hash": "0ca6ed3c7ec9f91c6f19c25fbe6ab94b",
     "semantic_hash": ""
   },
   "frontend/src/main.jsx": {
@@ -18,8 +18,8 @@
     "semantic_hash": "1805ad7bae3bf603446eed7431bab36a"
   },
   "server/index.js": {
-    "mtime": 1782540743.4849803,
-    "seen": 1787378086.4252632,
+    "mtime": 1787461362.5716276,
+    "seen": 1787461792.9791162,
     "ast_hash": "fffb7f0c33124844978785823e5f55a8",
     "semantic_hash": ""
   },
@@ -126,15 +126,15 @@
     "semantic_hash": ""
   },
   "server/ai.service.js": {
-    "mtime": 1782539165.806718,
-    "seen": 1787378086.4252615,
+    "mtime": 1787461362.5700376,
+    "seen": 1787461792.979114,
     "ast_hash": "1207c7d6eb2cbaa9428d49859a64ed6b",
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1782101817.5563817,
-    "seen": 1787378086.4252586,
-    "ast_hash": "9329f19286717cf10d81d2835ab77862",
+    "mtime": 1787456021.0579555,
+    "seen": 1787461792.97893,
+    "ast_hash": "1faca194de9d5e01ad2a2828f2d95bea",
     "semantic_hash": ""
   },
   ".github/copilot-instructions.md": {
@@ -209,8 +209,8 @@
     "semantic_hash": ""
   },
   "server/tests/ai.test.js": {
-    "mtime": 1782101817.5638912,
-    "seen": 1787378086.4252734,
+    "mtime": 1787461362.5746372,
+    "seen": 1787461792.9807565,
     "ast_hash": "a15d4c818cbd42771caa7b5f6e579c44",
     "semantic_hash": ""
   },
@@ -239,33 +239,33 @@
     "semantic_hash": ""
   },
   "frontend/src/components/CanvasOverlay.jsx": {
-    "mtime": 1787413705.870834,
-    "seen": 1787413783.3428364,
-    "ast_hash": "b590ce52f7ff1a0943504e18c6611977",
+    "mtime": 1787455997.0054803,
+    "seen": 1787461792.976779,
+    "ast_hash": "e88f60f07c639704bc914351a8f4a9de",
     "semantic_hash": ""
   },
   "frontend/src/hooks/useConnectorSync.js": {
-    "mtime": 1787413757.439605,
-    "seen": 1787413783.3447225,
-    "ast_hash": "1572822f4621c53304e62eb75822bfe5",
+    "mtime": 1787455997.0661826,
+    "seen": 1787461792.9785554,
+    "ast_hash": "1b979ce2276e9d6f758c5e10d3ae4eac",
     "semantic_hash": ""
   },
   "frontend/src/tools/ConnectorLine.js": {
-    "mtime": 1787413649.3146708,
-    "seen": 1787413783.3451962,
-    "ast_hash": "9f72b0258890cb8486e045488ebff289",
+    "mtime": 1787455997.107181,
+    "seen": 1787461792.9789238,
+    "ast_hash": "c6e35fe8ddcbd9c6ed01d222d78cbff9",
     "semantic_hash": ""
   },
   "frontend/src/tools/useConnectorTool.js": {
-    "mtime": 1787413704.2336593,
-    "seen": 1787413783.345199,
-    "ast_hash": "2666cd5ce5a1a894d337d40f3d944806",
+    "mtime": 1787455997.1417272,
+    "seen": 1787461792.9789262,
+    "ast_hash": "0bb30cc37b31050a8bca4b7127016f77",
     "semantic_hash": ""
   },
   "frontend/src/utils/anchorPoints.js": {
-    "mtime": 1787413791.1979237,
-    "seen": 1787455582.1282916,
-    "ast_hash": "ed8425683f48f090e052510f47d875d8",
+    "mtime": 1787455997.1610122,
+    "seen": 1787461792.978928,
+    "ast_hash": "3462215bfbe84054161cae5d854cb2f6",
     "semantic_hash": ""
   },
   "server/middleware/admin.js": {
