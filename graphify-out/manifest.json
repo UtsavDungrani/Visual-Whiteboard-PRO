@@ -6,9 +6,9 @@
     "semantic_hash": ""
   },
   "frontend/src/App.jsx": {
-    "mtime": 1787461777.276541,
-    "seen": 1787461792.976287,
-    "ast_hash": "0ca6ed3c7ec9f91c6f19c25fbe6ab94b",
+    "mtime": 1787468659.4427142,
+    "seen": 1787468708.646197,
+    "ast_hash": "ed8f12ce068abd5ffe70af442fa541d7",
     "semantic_hash": ""
   },
   "frontend/src/main.jsx": {
@@ -18,9 +18,9 @@
     "semantic_hash": "1805ad7bae3bf603446eed7431bab36a"
   },
   "server/index.js": {
-    "mtime": 1787461362.5716276,
-    "seen": 1787461792.9791162,
-    "ast_hash": "fffb7f0c33124844978785823e5f55a8",
+    "mtime": 1787468637.3442042,
+    "seen": 1787468708.653531,
+    "ast_hash": "4592acb02e8d45fa9ea02ee38183d079",
     "semantic_hash": ""
   },
   "server/models/Whiteboard.js": {
@@ -66,9 +66,9 @@
     "semantic_hash": "7145a77ed24654d9301cc22b6e9316c9"
   },
   "frontend/index.html": {
-    "mtime": 1782101817.4892747,
-    "seen": 1787378086.425295,
-    "ast_hash": "ba83513762ea88f479eadec1215f2465",
+    "mtime": 1787463386.6993113,
+    "seen": 1787463582.692158,
+    "ast_hash": "2c8d8e9ef3e9ce40265cd97f1837d407",
     "semantic_hash": ""
   },
   "frontend/src/components/CanvasControls.jsx": {
@@ -90,9 +90,9 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Topbar.jsx": {
-    "mtime": 1782270099.3923495,
-    "seen": 1787378086.425247,
-    "ast_hash": "48b52280430fbc22470aaa9089834bf4",
+    "mtime": 1787468669.4435668,
+    "seen": 1787468708.6509287,
+    "ast_hash": "c95f4c329635a0114ad57dccda50830d",
     "semantic_hash": ""
   },
   "frontend/src/components/ExportModal.jsx": {
@@ -108,9 +108,9 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ContextPanel.jsx": {
-    "mtime": 1782101836.1732924,
-    "seen": 1787378086.4252388,
-    "ast_hash": "1f287cde59efa5a498f6dbc842d34627",
+    "mtime": 1787463541.2950847,
+    "seen": 1787463582.6816382,
+    "ast_hash": "ba8f06aa6a151ceac9c066dc7a107e1a",
     "semantic_hash": ""
   },
   "server/models/ElementContext.js": {
@@ -120,9 +120,9 @@
     "semantic_hash": ""
   },
   "frontend/src/components/AssistPanel.jsx": {
-    "mtime": 1782101817.4943142,
-    "seen": 1787378086.4252338,
-    "ast_hash": "63baf39dd36e6227e0981c5fee0aeafc",
+    "mtime": 1787463524.5130415,
+    "seen": 1787463582.681217,
+    "ast_hash": "c408d99e06555e8ce749704da9c60fbc",
     "semantic_hash": ""
   },
   "server/ai.service.js": {
@@ -296,6 +296,36 @@
     "mtime": 1787201927.4276075,
     "seen": 1787378086.4252868,
     "ast_hash": "c954fb6be23191d152d307f46311dde3",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/LandingPage.jsx": {
+    "mtime": 1787466557.36775,
+    "seen": 1787466615.164972,
+    "ast_hash": "0e7da12650a5cb82c47fb826b2caf025",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/AuthPage.jsx": {
+    "mtime": 1787463453.7827606,
+    "seen": 1787463582.6812336,
+    "ast_hash": "cbccc339ec83428d6436471bdf5b49c2",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/DashboardPage.jsx": {
+    "mtime": 1787468081.8541849,
+    "seen": 1787468149.684829,
+    "ast_hash": "1fbcd38128ef33b889856baad7d7dd06",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/CustomCursor.jsx": {
+    "mtime": 1787463653.5705702,
+    "seen": 1787463796.686215,
+    "ast_hash": "589642bb1b67c2af730b5485cc60b4fe",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/LoadingScreen.jsx": {
+    "mtime": 1787467125.26661,
+    "seen": 1787467365.055974,
+    "ast_hash": "22f3a6d46e0c0001a28cbd55babf13e7",
     "semantic_hash": ""
   }
 }

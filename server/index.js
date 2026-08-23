@@ -77,7 +77,10 @@ const REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
 
     // Log the error only once, then clean up so we don't keep a broken client
     redisClient.on("error", (err) => {
-      console.warn("Redis unavailable. Running in in-memory mode.", err.message);
+      console.warn(
+        "Redis unavailable. Running in in-memory mode.",
+        err.message,
+      );
       redisClient = null;
       subClient = null;
     });
@@ -88,14 +91,19 @@ const REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
     await Promise.all([redisClient.connect(), subClient.connect()]);
     console.log("Connected to Redis successfully.");
   } catch (err) {
-    console.warn("Redis connection failed. Running server in-memory mode.", err.message);
+    console.warn(
+      "Redis connection failed. Running server in-memory mode.",
+      err.message,
+    );
     redisClient = null;
     subClient = null;
   }
 })();
 
 function isRedisEnabled() {
-  return global.activeCacheMode === "redis" && !!(redisClient && redisClient.isReady);
+  return (
+    global.activeCacheMode === "redis" && !!(redisClient && redisClient.isReady)
+  );
 }
 
 // Simple in-memory store fallback for demo purposes
@@ -117,7 +125,7 @@ app.get("/.well-known/appspecific/com.chrome.devtools.json", (req, res) => {
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100,
-  message: { error: "too_many_requests_please_try_again_later" }
+  message: { error: "too_many_requests_please_try_again_later" },
 });
 
 // --- Authentication Routes ---
@@ -140,23 +148,36 @@ app.post("/api/auth/register", authLimiter, async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // Random avatar color
-    const avatarColors = ["#1E3A5F", "#2E86AB", "#10B981", "#F59E0B", "#EF4444"];
-    const avatarColor = avatarColors[Math.floor(Math.random() * avatarColors.length)];
+    const avatarColors = [
+      "#1E3A5F",
+      "#2E86AB",
+      "#10B981",
+      "#F59E0B",
+      "#EF4444",
+    ];
+    const avatarColor =
+      avatarColors[Math.floor(Math.random() * avatarColors.length)];
 
     user = new User({
       name,
       email: emailLower,
       password: hashedPassword,
-      avatar_color: avatarColor
+      avatar_color: avatarColor,
     });
 
     await user.save();
 
     // Generate token
     const token = jwt.sign(
-      { id: user._id, name: user.name, email: user.email, color: user.avatar_color, role: user.role },
+      {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        color: user.avatar_color,
+        role: user.role,
+      },
       JWT_SECRET,
-      { expiresIn: "2d" }
+      { expiresIn: "2d" },
     );
 
     return res.status(201).json({
@@ -166,8 +187,8 @@ app.post("/api/auth/register", authLimiter, async (req, res) => {
         name: user.name,
         email: user.email,
         color: user.avatar_color,
-        role: user.role
-      }
+        role: user.role,
+      },
     });
   } catch (err) {
     console.error("Register error:", err);
@@ -195,9 +216,15 @@ app.post("/api/auth/login", authLimiter, async (req, res) => {
 
     // Generate token
     const token = jwt.sign(
-      { id: user._id, name: user.name, email: user.email, color: user.avatar_color, role: user.role },
+      {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        color: user.avatar_color,
+        role: user.role,
+      },
       JWT_SECRET,
-      { expiresIn: "2d" }
+      { expiresIn: "2d" },
     );
 
     return res.json({
@@ -207,8 +234,8 @@ app.post("/api/auth/login", authLimiter, async (req, res) => {
         name: user.name,
         email: user.email,
         color: user.avatar_color,
-        role: user.role
-      }
+        role: user.role,
+      },
     });
   } catch (err) {
     console.error("Login error:", err);
@@ -225,7 +252,7 @@ app.get("/api/auth/me", auth, async (req, res) => {
       name: user.name,
       email: user.email,
       color: user.avatar_color,
-      role: user.role
+      role: user.role,
     });
   } catch (err) {
     console.error("Fetch profile error:", err);
@@ -238,12 +265,14 @@ app.get("/api/auth/me", auth, async (req, res) => {
 // GET list of whiteboards (owned or collaborated)
 app.get("/api/whiteboards", auth, async (req, res) => {
   try {
-    const docs = await Whiteboard.find({
-      $or: [
-        { owner: req.user.id },
-        { collaborators: req.user.id }
-      ]
-    }, "title owner collaborators isPublic updatedAt createdAt").populate("owner", "name email").lean();
+    const docs = await Whiteboard.find(
+      {
+        $or: [{ owner: req.user.id }, { collaborators: req.user.id }],
+      },
+      "title owner collaborators isPublic updatedAt createdAt",
+    )
+      .populate("owner", "name email")
+      .lean();
     return res.json(docs);
   } catch (err) {
     console.error("Failed to list whiteboards", err);
@@ -259,15 +288,19 @@ app.post("/api/whiteboards", auth, async (req, res) => {
       owner: req.user.id,
       collaborators: [],
       isPublic: req.body.isPublic || false,
-      content: req.body
+      content: req.body,
     });
-    
+
     await doc.save();
     const boardId = doc._id.toString();
 
     // Cache in Redis
     if (isRedisEnabled()) {
-      await redisClient.setEx(`board:${boardId}:state`, 86400, JSON.stringify(req.body));
+      await redisClient.setEx(
+        `board:${boardId}:state`,
+        86400,
+        JSON.stringify(req.body),
+      );
     }
 
     return res.json({ id: boardId });
@@ -277,17 +310,29 @@ app.post("/api/whiteboards", auth, async (req, res) => {
   }
 });
 
-// GET load whiteboard content (supports public or authenticated)
+// GET load whiteboard content (supports public or authenticated, by ID or by Slug/Title)
 app.get("/api/whiteboards/:id", async (req, res) => {
-  const boardId = req.params.id;
+  const identifier = req.params.id;
   try {
-    const board = await Whiteboard.findById(boardId);
+    let board = null;
+    if (mongoose.Types.ObjectId.isValid(identifier)) {
+      board = await Whiteboard.findById(identifier);
+    }
+    if (!board) {
+      // Look up by slug or title
+      const cleanSlug = identifier.replace(/^[/-]+|[/-]+$/g, "");
+      const regexPattern = cleanSlug.replace(/-/g, "[\\s\\-_]+");
+      board = await Whiteboard.findOne({
+        title: { $regex: new RegExp(`^${regexPattern}$`, "i") },
+      });
+    }
     if (!board) return res.status(404).json({ error: "Not found" });
 
     // Validate access
     if (!board.isPublic) {
       const authHeader = req.header("Authorization");
-      if (!authHeader) return res.status(401).json({ error: "unauthorized_missing_token" });
+      if (!authHeader)
+        return res.status(401).json({ error: "unauthorized_missing_token" });
 
       const parts = authHeader.split(" ");
       if (parts.length !== 2 || parts[0] !== "Bearer") {
@@ -296,8 +341,9 @@ app.get("/api/whiteboards/:id", async (req, res) => {
 
       try {
         const decoded = jwt.verify(parts[1], JWT_SECRET);
-        const isAuthorized = board.owner.toString() === decoded.id || 
-                             board.collaborators.map(c => c.toString()).includes(decoded.id);
+        const isAuthorized =
+          board.owner.toString() === decoded.id ||
+          board.collaborators.map((c) => c.toString()).includes(decoded.id);
         if (!isAuthorized) {
           return res.status(403).json({ error: "forbidden_access_denied" });
         }
@@ -306,16 +352,25 @@ app.get("/api/whiteboards/:id", async (req, res) => {
       }
     }
 
+    const boardId = board._id.toString();
+
     // Cache in Redis for subsequent loads
     if (isRedisEnabled()) {
-      await redisClient.setEx(`board:${boardId}:state`, 86400, JSON.stringify(board.content));
+      await redisClient.setEx(
+        `board:${boardId}:state`,
+        86400,
+        JSON.stringify(board.content),
+      );
     }
 
     const responsePayload = {
+      id: boardId,
+      _id: boardId,
+      title: board.title,
       ...(board.content || {}),
       owner: board.owner.toString(),
-      collaborators: board.collaborators.map(c => c.toString()),
-      isPublic: board.isPublic
+      collaborators: board.collaborators.map((c) => c.toString()),
+      isPublic: board.isPublic,
     };
     return res.json(responsePayload);
   } catch (err) {
@@ -331,16 +386,18 @@ app.put("/api/whiteboards/:id", auth, async (req, res) => {
     const board = await Whiteboard.findById(boardId);
     if (!board) return res.status(404).json({ error: "Not found" });
 
-    const isAuthorized = board.owner.toString() === req.user.id || 
-                         board.collaborators.map(c => c.toString()).includes(req.user.id);
+    const isAuthorized =
+      board.owner.toString() === req.user.id ||
+      board.collaborators.map((c) => c.toString()).includes(req.user.id);
     if (!isAuthorized) {
       return res.status(403).json({ error: "forbidden_access_denied" });
     }
 
     // Update root level metadata
     board.title = req.body.title || board.title;
-    board.isPublic = req.body.isPublic !== undefined ? req.body.isPublic : board.isPublic;
-    
+    board.isPublic =
+      req.body.isPublic !== undefined ? req.body.isPublic : board.isPublic;
+
     if (req.body.collaborators && board.owner.toString() === req.user.id) {
       board.collaborators = req.body.collaborators;
     }
@@ -350,7 +407,11 @@ app.put("/api/whiteboards/:id", auth, async (req, res) => {
 
     // Cache updated canvas JSON in Redis
     if (isRedisEnabled()) {
-      await redisClient.setEx(`board:${boardId}:state`, 86400, JSON.stringify(req.body));
+      await redisClient.setEx(
+        `board:${boardId}:state`,
+        86400,
+        JSON.stringify(req.body),
+      );
     }
 
     return res.json({ id: boardId });
@@ -373,7 +434,7 @@ app.delete("/api/whiteboards/:id", auth, async (req, res) => {
     }
 
     await board.deleteOne();
-    
+
     // Clear Redis Cache
     if (isRedisEnabled()) {
       await redisClient.del(`board:${boardId}:state`);
@@ -405,14 +466,19 @@ app.post("/api/whiteboards/:id/share", auth, async (req, res) => {
       if (!user) return res.status(404).json({ error: "user_not_found" });
 
       if (user._id.toString() === req.user.id) {
-        return res.status(400).json({ error: "cannot_add_self_as_collaborator" });
+        return res
+          .status(400)
+          .json({ error: "cannot_add_self_as_collaborator" });
       }
 
       if (!board.collaborators.includes(user._id)) {
         board.collaborators.push(user._id);
         await board.save();
       }
-      return res.json({ success: true, collaboratorsCount: board.collaborators.length });
+      return res.json({
+        success: true,
+        collaboratorsCount: board.collaborators.length,
+      });
     } else {
       // Toggle public status
       board.isPublic = !board.isPublic;
@@ -445,26 +511,28 @@ app.post("/api/whiteboards/:id/permissions", auth, async (req, res) => {
 
     const userObjectId = user._id;
 
-    if (access === 'full') {
-      if (!board.collaborators.map(c => c.toString()).includes(userId)) {
+    if (access === "full") {
+      if (!board.collaborators.map((c) => c.toString()).includes(userId)) {
         board.collaborators.push(userObjectId);
         await board.save();
       }
-    } else if (access === 'view') {
-      board.collaborators = board.collaborators.filter(c => c.toString() !== userId);
+    } else if (access === "view") {
+      board.collaborators = board.collaborators.filter(
+        (c) => c.toString() !== userId,
+      );
       await board.save();
     }
 
     // Broadcast permission change event through sockets to all clients in the room
     io.to(boardId).emit("board:permissions-update", {
       owner: board.owner.toString(),
-      collaborators: board.collaborators.map(c => c.toString()),
-      isPublic: board.isPublic
+      collaborators: board.collaborators.map((c) => c.toString()),
+      isPublic: board.isPublic,
     });
 
-    return res.json({ 
-      success: true, 
-      collaborators: board.collaborators.map(c => c.toString()) 
+    return res.json({
+      success: true,
+      collaborators: board.collaborators.map((c) => c.toString()),
     });
   } catch (err) {
     console.error("Failed to update permissions", err);
@@ -482,7 +550,7 @@ app.use("/admin", express.static(path.join(__dirname, "admin")));
 const aiLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
   max: 30, // limit each IP to 30 requests per minute
-  message: { error: "too_many_ai_requests_please_try_again_later" }
+  message: { error: "too_many_ai_requests_please_try_again_later" },
 });
 
 // GET map of all elements with active context on a whiteboard
@@ -490,7 +558,7 @@ app.get("/api/context/:whiteboardId", auth, async (req, res) => {
   try {
     const contexts = await ElementContext.find(
       { whiteboard_id: req.params.whiteboardId },
-      "element_id"
+      "element_id",
     );
     const activeMap = {};
     contexts.forEach((c) => {
@@ -543,7 +611,7 @@ app.post("/api/context/:whiteboardId/:elementId", auth, async (req, res) => {
         code_snippet: code_snippet !== undefined ? code_snippet : "",
         code_language: code_language || "javascript",
       },
-      { new: true, upsert: true }
+      { new: true, upsert: true },
     );
     return res.json(context);
   } catch (err) {
@@ -576,14 +644,14 @@ app.post(
             },
           },
         },
-        { new: true, upsert: true }
+        { new: true, upsert: true },
       );
       return res.json(context);
     } catch (err) {
       console.error("Failed to upload file to context", err);
       return res.status(500).json({ error: "upload_failed" });
     }
-  }
+  },
 );
 
 // DELETE file attachment from element context
@@ -596,21 +664,26 @@ app.delete(
       const context = await ElementContext.findOneAndUpdate(
         { whiteboard_id: whiteboardId, element_id: elementId },
         { $pull: { files: { _id: fileId } } },
-        { new: true }
+        { new: true },
       );
       return res.json(context);
     } catch (err) {
       console.error("Failed to delete file from context", err);
       return res.status(500).json({ error: "delete_file_failed" });
     }
-  }
+  },
 );
 
 // POST static layout cleanup snap & distribute
 app.post("/api/ai/cleanup", auth, aiLimiter, (req, res) => {
   try {
     const { elements, connectors } = req.body;
-    console.log("[Server Cleanup API] Elements received:", elements?.length, "Connectors received:", connectors?.length);
+    console.log(
+      "[Server Cleanup API] Elements received:",
+      elements?.length,
+      "Connectors received:",
+      connectors?.length,
+    );
     if (!elements || !Array.isArray(elements)) {
       return res.status(400).json({ error: "missing_elements_array" });
     }
@@ -646,13 +719,13 @@ app.get("/api/admin/stats", auth, admin, async (req, res) => {
     const userCount = await User.countDocuments();
     const boardCount = await Whiteboard.countDocuments();
     const activeSocketCount = io.sockets.sockets.size;
-    
+
     return res.json({
       userCount,
       boardCount,
       activeSocketCount,
       activeCacheMode: global.activeCacheMode,
-      redisConnected: !!(redisClient && redisClient.isReady)
+      redisConnected: !!(redisClient && redisClient.isReady),
     });
   } catch (err) {
     console.error("Admin stats failed:", err);
@@ -662,7 +735,10 @@ app.get("/api/admin/stats", auth, admin, async (req, res) => {
 
 app.get("/api/admin/users", auth, admin, async (req, res) => {
   try {
-    const users = await User.find({}, "name email avatar_color role createdAt").lean();
+    const users = await User.find(
+      {},
+      "name email avatar_color role createdAt",
+    ).lean();
     return res.json(users);
   } catch (err) {
     console.error("Admin list users failed:", err);
@@ -676,14 +752,18 @@ app.put("/api/admin/users/:id/role", auth, admin, async (req, res) => {
     if (role !== "user" && role !== "admin") {
       return res.status(400).json({ error: "invalid_role" });
     }
-    
+
     if (req.user.id === req.params.id) {
       return res.status(400).json({ error: "cannot_modify_own_role" });
     }
-    
-    const user = await User.findByIdAndUpdate(req.params.id, { role }, { new: true });
+
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { role },
+      { new: true },
+    );
     if (!user) return res.status(404).json({ error: "user_not_found" });
-    
+
     return res.json({ success: true, user: { id: user._id, role: user.role } });
   } catch (err) {
     console.error("Admin role change failed:", err);
@@ -712,7 +792,10 @@ app.delete("/api/admin/users/:id", auth, admin, async (req, res) => {
 
 app.get("/api/admin/boards", auth, admin, async (req, res) => {
   try {
-    const boards = await Whiteboard.find({}, "title owner collaborators isPublic createdAt updatedAt")
+    const boards = await Whiteboard.find(
+      {},
+      "title owner collaborators isPublic createdAt updatedAt",
+    )
       .populate("owner", "name email")
       .lean();
     return res.json(boards);
@@ -743,7 +826,7 @@ app.get("/api/admin/config", auth, admin, (req, res) => {
   return res.json({
     activeCacheMode: global.activeCacheMode,
     redisConnected: !!(redisClient && redisClient.isReady),
-    redisUrl: process.env.REDIS_URL ? "Configured" : "Not Configured"
+    redisUrl: process.env.REDIS_URL ? "Configured" : "Not Configured",
   });
 });
 
@@ -754,7 +837,9 @@ app.post("/api/admin/config", auth, admin, (req, res) => {
   }
   global.activeCacheMode = mode;
   console.log(`[Admin] Cache mode dynamically switched to: ${mode}`);
-  io.emit("admin:cache-mode-changed", { activeCacheMode: global.activeCacheMode });
+  io.emit("admin:cache-mode-changed", {
+    activeCacheMode: global.activeCacheMode,
+  });
   return res.json({ success: true, activeCacheMode: global.activeCacheMode });
 });
 
@@ -781,7 +866,10 @@ const io = new Server(httpServer, {
 
     // Log the error only once, then clean up so we don't keep a broken client
     redisClient.on("error", (err) => {
-      console.warn("Redis unavailable. Running in in-memory mode.", err.message);
+      console.warn(
+        "Redis unavailable. Running in in-memory mode.",
+        err.message,
+      );
       redisClient = null;
       subClient = null;
     });
@@ -796,7 +884,10 @@ const io = new Server(httpServer, {
     io.adapter(createAdapter(redisClient, subClient));
     console.log("Socket.io Redis adapter attached.");
   } catch (err) {
-    console.warn("Redis connection failed. Running server in-memory mode.", err.message);
+    console.warn(
+      "Redis connection failed. Running server in-memory mode.",
+      err.message,
+    );
     redisClient = null;
     subClient = null;
   }
@@ -809,14 +900,14 @@ function broadcastRoomUsers(roomId) {
   const roomUsers = [];
   for (const [sid, u] of activeUsers.entries()) {
     if (u.roomId === roomId) {
-      roomUsers.push({ 
-        id: sid, 
-        name: u.name, 
-        color: u.color, 
+      roomUsers.push({
+        id: sid,
+        name: u.name,
+        color: u.color,
         pageId: u.pageId,
         dbUserId: u.dbUserId || null,
         isGuest: !!u.isGuest,
-        sessionAccess: u.sessionAccess || null
+        sessionAccess: u.sessionAccess || null,
       });
     }
   }
@@ -827,7 +918,12 @@ function broadcastRoomUsers(roomId) {
 io.use((socket, next) => {
   const token = socket.handshake.auth?.token;
   if (!token) {
-    socket.user = { id: socket.id, name: "Guest Collaborator", color: "#6B7280", isGuest: true };
+    socket.user = {
+      id: socket.id,
+      name: "Guest Collaborator",
+      color: "#6B7280",
+      isGuest: true,
+    };
     return next();
   }
   try {
@@ -836,12 +932,20 @@ io.use((socket, next) => {
       id: decoded.id,
       name: decoded.name,
       color: decoded.color || "#6B7280",
-      isGuest: false
+      isGuest: false,
     };
     next();
   } catch (err) {
-    console.warn("Socket handshake auth failed. Fallback to guest:", err.message);
-    socket.user = { id: socket.id, name: "Guest Collaborator", color: "#6B7280", isGuest: true };
+    console.warn(
+      "Socket handshake auth failed. Fallback to guest:",
+      err.message,
+    );
+    socket.user = {
+      id: socket.id,
+      name: "Guest Collaborator",
+      color: "#6B7280",
+      isGuest: true,
+    };
     next();
   }
 });
@@ -873,15 +977,17 @@ io.on("connection", (socket) => {
     }
 
     socket.join(roomId);
-    activeUsers.set(socket.id, { 
-      roomId, 
-      name: user.name, 
-      color: user.color, 
+    activeUsers.set(socket.id, {
+      roomId,
+      name: user.name,
+      color: user.color,
       pageId,
       dbUserId: socket.user && !socket.user.isGuest ? socket.user.id : null,
-      isGuest: !socket.user || socket.user.isGuest
+      isGuest: !socket.user || socket.user.isGuest,
     });
-    console.log(`socket ${socket.id} (${user.name}) joined ${roomId} (page: ${pageId})`);
+    console.log(
+      `socket ${socket.id} (${user.name}) joined ${roomId} (page: ${pageId})`,
+    );
 
     // Notify room of updated users list
     broadcastRoomUsers(roomId);
@@ -894,8 +1000,13 @@ io.on("connection", (socket) => {
 
     // Cache updated canvas JSON in Redis
     if (isRedisEnabled()) {
-      redisClient.setEx(`board:${room}:page:${pageId}:state`, 86400, JSON.stringify(json))
-        .catch(err => console.error("Redis cache save error", err));
+      redisClient
+        .setEx(
+          `board:${room}:page:${pageId}:state`,
+          86400,
+          JSON.stringify(json),
+        )
+        .catch((err) => console.error("Redis cache save error", err));
     }
   });
 
@@ -908,7 +1019,7 @@ io.on("connection", (socket) => {
         color: u.color,
         pageId,
         x,
-        y
+        y,
       });
     }
   });
@@ -928,55 +1039,67 @@ io.on("connection", (socket) => {
     socket.to(room).emit("board:structure-update", { pages, mode, pageSize });
   });
 
-  socket.on("board:toggle-user-permission", async ({ roomId, targetSocketId, access }) => {
-    try {
-      const board = await Whiteboard.findById(roomId);
-      if (!board) return;
-      
-      const senderDbUserId = socket.user && !socket.user.isGuest ? socket.user.id : null;
-      if (board.owner.toString() !== senderDbUserId) {
-        console.warn("Unauthorized permission toggle attempt");
-        return;
-      }
+  socket.on(
+    "board:toggle-user-permission",
+    async ({ roomId, targetSocketId, access }) => {
+      try {
+        const board = await Whiteboard.findById(roomId);
+        if (!board) return;
 
-      const targetUser = activeUsers.get(targetSocketId);
-      if (targetUser) {
-        if (targetUser.dbUserId) {
-          // Prevent toggling board owner's own permissions
-          if (targetUser.dbUserId === board.owner.toString()) {
-            console.warn("Cannot toggle board owner permissions");
-            return;
-          }
-          const userObjectId = new mongoose.Types.ObjectId(targetUser.dbUserId);
-          if (access === 'full') {
-            if (!board.collaborators.map(c => c.toString()).includes(targetUser.dbUserId)) {
-              board.collaborators.push(userObjectId);
+        const senderDbUserId =
+          socket.user && !socket.user.isGuest ? socket.user.id : null;
+        if (board.owner.toString() !== senderDbUserId) {
+          console.warn("Unauthorized permission toggle attempt");
+          return;
+        }
+
+        const targetUser = activeUsers.get(targetSocketId);
+        if (targetUser) {
+          if (targetUser.dbUserId) {
+            // Prevent toggling board owner's own permissions
+            if (targetUser.dbUserId === board.owner.toString()) {
+              console.warn("Cannot toggle board owner permissions");
+              return;
+            }
+            const userObjectId = new mongoose.Types.ObjectId(
+              targetUser.dbUserId,
+            );
+            if (access === "full") {
+              if (
+                !board.collaborators
+                  .map((c) => c.toString())
+                  .includes(targetUser.dbUserId)
+              ) {
+                board.collaborators.push(userObjectId);
+                await board.save();
+              }
+            } else {
+              board.collaborators = board.collaborators.filter(
+                (c) => c.toString() !== targetUser.dbUserId,
+              );
               await board.save();
             }
-          } else {
-            board.collaborators = board.collaborators.filter(c => c.toString() !== targetUser.dbUserId);
-            await board.save();
           }
+
+          targetUser.sessionAccess = access;
+          activeUsers.set(targetSocketId, targetUser);
+
+          io.to(roomId).emit("board:user-permission-changed", {
+            socketId: targetSocketId,
+            dbUserId: targetUser.dbUserId,
+            access: access,
+            owner: board.owner.toString(),
+            collaborators: board.collaborators.map((c) => c.toString()),
+            isPublic: board.isPublic,
+          });
+
+          broadcastRoomUsers(roomId);
         }
-        
-        targetUser.sessionAccess = access;
-        activeUsers.set(targetSocketId, targetUser);
-
-        io.to(roomId).emit("board:user-permission-changed", {
-          socketId: targetSocketId,
-          dbUserId: targetUser.dbUserId,
-          access: access,
-          owner: board.owner.toString(),
-          collaborators: board.collaborators.map(c => c.toString()),
-          isPublic: board.isPublic
-        });
-
-        broadcastRoomUsers(roomId);
+      } catch (err) {
+        console.error("Failed to toggle user socket permission:", err);
       }
-    } catch (err) {
-      console.error("Failed to toggle user socket permission:", err);
-    }
-  });
+    },
+  );
 
   socket.on("disconnect", () => {
     const u = activeUsers.get(socket.id);
@@ -1039,10 +1162,12 @@ async function seedAdminUser() {
         email: adminEmail,
         password: hashedPassword,
         avatar_color: "#1E3A8A",
-        role: "admin"
+        role: "admin",
       });
       await admin.save();
-      console.log("[Seeder] Default Admin user created: admin@whiteboard.com / adminpassword");
+      console.log(
+        "[Seeder] Default Admin user created: admin@whiteboard.com / adminpassword",
+      );
     } else {
       console.log("[Seeder] Admin user already exists: admin@whiteboard.com");
     }

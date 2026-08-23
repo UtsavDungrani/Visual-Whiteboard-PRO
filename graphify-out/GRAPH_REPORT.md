@@ -1,16 +1,16 @@
 # Graph Report - Visual Whiteboard Pro  (2026-08-23)
 
 ## Corpus Check
-- 46 files · ~48,080 words
+- 51 files · ~53,849 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 329 nodes · 434 edges · 20 communities (15 shown, 5 thin omitted)
+- 342 nodes · 457 edges · 28 communities (21 shown, 7 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 8 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `520cadf0`
+- Built from commit: `9ca4efe0`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -24,7 +24,7 @@
 - server/package.json
 - package.json
 - context.test.js
-- App
+- pathLassoSplit.js
 - Visual Whiteboard Pro — Deployment Guide
 - Visual Whiteboard - Feature Backlog & Task Tracking
 - GEMINI.md
@@ -33,10 +33,18 @@
 - rules/graphify.md
 - workflows/graphify.md
 - copilot-instructions.md
+- app
+- useConnectorTool.js
+- sockets.test.js
+- ai.test.js
+- whiteboards.test.js
+- ai.service.js
+- auth.js
+- App
 
 ## God Nodes (most connected - your core abstractions)
-1. `Visual Whiteboard Pro` - 17 edges
-2. `App()` - 15 edges
+1. `App()` - 17 edges
+2. `Visual Whiteboard Pro` - 17 edges
 3. `Project Description and Requirements` - 12 edges
 4. `Visual Whiteboard - Feature Backlog & Task Tracking` - 11 edges
 5. `Visual Whiteboard Pro — Phased Task Breakdown` - 10 edges
@@ -61,15 +69,15 @@
 ## Import Cycles
 - None detected.
 
-## Communities (20 total, 5 thin omitted)
+## Communities (28 total, 7 thin omitted)
 
 ### Community 0 - "Frontend Package Configuration"
 Cohesion: 0.09
 Nodes (21): dependencies, jspdf, jszip, react, react-dom, socket.io-client, devDependencies, vite (+13 more)
 
 ### Community 1 - "index.js"
-Cohesion: 0.05
-Nodes (33): architectureAssist(), cleanupLayout(), activeUsers, admin, aiLimiter, auth, authLimiter, bcrypt (+25 more)
+Cohesion: 0.06
+Nodes (25): activeUsers, admin, aiLimiter, auth, authLimiter, bcrypt, cors, { createAdapter } (+17 more)
 
 ### Community 2 - "Project Description and Requirements"
 Cohesion: 0.11
@@ -84,8 +92,8 @@ Cohesion: 0.12
 Nodes (17): API Surface, Configuration, Current Limitations, Data Model, Future Improvements, How It Works, Live Url: https://visual-whiteboard-pro.vercel.app/, Local Setup (+9 more)
 
 ### Community 6 - "App.jsx"
-Cohesion: 0.10
-Nodes (23): AssistPanel(), CanvasControls(), CanvasOverlay(), ContextPanel(), LANGUAGES, ExportModal(), PageStrip(), PermissionsPanel() (+15 more)
+Cohesion: 0.08
+Nodes (22): AssistPanel(), AuthPage(), CanvasControls(), CanvasOverlay(), ContextPanel(), LANGUAGES, CustomCursor(), DashboardPage() (+14 more)
 
 ### Community 7 - "server/package.json"
 Cohesion: 0.13
@@ -96,12 +104,12 @@ Cohesion: 0.06
 Nodes (32): eslint, husky, lint-staged, author, bugs, url, description, devDependencies (+24 more)
 
 ### Community 9 - "context.test.js"
-Cohesion: 0.05
-Nodes (33): app, ElementContextSchema, mongoose, mongoose, UserSchema, mongoose, WhiteboardSchema, { app } (+25 more)
+Cohesion: 0.15
+Nodes (11): ElementContextSchema, mongoose, { app }, ElementContext, fs, jwt, mongoose, path (+3 more)
 
-### Community 10 - "App"
-Cohesion: 0.14
-Nodes (21): App(), applyRemoteCanvas(), attachFabricListeners(), flushPendingRemoteCanvas(), loadBoard(), loadBoardById(), updateInspectorProperties(), bboxCornersInPolygon() (+13 more)
+### Community 10 - "pathLassoSplit.js"
+Cohesion: 0.30
+Nodes (14): bboxCornersInPolygon(), buildClipPolygon(), canvasPolygonToLocal(), getLineEndpoints(), getObjectSelectionMode(), getPathSelectionMode(), isPointInPolygon(), lineLineIntersection() (+6 more)
 
 ### Community 11 - "Visual Whiteboard Pro — Deployment Guide"
 Cohesion: 0.20
@@ -115,24 +123,48 @@ Nodes (11): 10. Advanced Lasso & Selection Tool Refactor (On-Demand Implementati
 Cohesion: 0.52
 Nodes (10): deleteBoard(), deleteUser(), getHeaders(), handleResponse(), loadAllData(), loadBoardsList(), loadDashboardStats(), loadUsersList() (+2 more)
 
+### Community 20 - "app"
+Cohesion: 0.22
+Nodes (7): app, { app }, mongoose, request, User, { app }, request
+
+### Community 21 - "useConnectorTool.js"
+Cohesion: 0.42
+Nodes (6): ConnectorLine, useConnectorTool(), canvasToScreen(), findClosestAnchor(), getAnchorPoint(), localAnchorOffset()
+
+### Community 22 - "sockets.test.js"
+Cohesion: 0.33
+Nodes (5): httpServer, io, { app, httpServer, io }, http, ioClient
+
+### Community 23 - "ai.test.js"
+Cohesion: 0.22
+Nodes (7): mongoose, UserSchema, { app }, jwt, mongoose, request, User
+
+### Community 24 - "whiteboards.test.js"
+Cohesion: 0.20
+Nodes (8): mongoose, WhiteboardSchema, { app }, jwt, mongoose, request, User, Whiteboard
+
+### Community 27 - "App"
+Cohesion: 0.20
+Nodes (11): App(), applyRemoteCanvas(), attachFabricListeners(), flushPendingRemoteCanvas(), loadBoard(), loadBoardById(), saveBoard(), updateInspectorProperties() (+3 more)
+
 ## Knowledge Gaps
 - **163 isolated node(s):** `name`, `version`, `private`, `dev`, `build` (+158 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **7 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Visual Whiteboard Pro` connect `Visual Whiteboard Pro` to `Project Description and Requirements`?**
-  _High betweenness centrality (0.034) - this node is a cross-community bridge._
+  _High betweenness centrality (0.031) - this node is a cross-community bridge._
 - **Why does `Real-time Collaboration` connect `Project Description and Requirements` to `index.js`?**
-  _High betweenness centrality (0.029) - this node is a cross-community bridge._
+  _High betweenness centrality (0.027) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `private` to the rest of the system?**
   _163 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Frontend Package Configuration` be split into smaller, more focused modules?**
   _Cohesion score 0.09090909090909091 - nodes in this community are weakly interconnected._
 - **Should `index.js` be split into smaller, more focused modules?**
-  _Cohesion score 0.05226480836236934 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06451612903225806 - nodes in this community are weakly interconnected._
 - **Should `Project Description and Requirements` be split into smaller, more focused modules?**
   _Cohesion score 0.11462450592885376 - nodes in this community are weakly interconnected._
 - **Should `dependencies` be split into smaller, more focused modules?**

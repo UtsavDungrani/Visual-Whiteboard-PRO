@@ -9,6 +9,11 @@ import ExportModal from "./components/ExportModal";
 import ContextPanel from "./components/ContextPanel";
 import AssistPanel from "./components/AssistPanel";
 import PermissionsPanel from "./components/PermissionsPanel";
+import LandingPage from "./components/LandingPage";
+import AuthPage from "./components/AuthPage";
+import DashboardPage from "./components/DashboardPage";
+import CustomCursor from "./components/CustomCursor";
+import LoadingScreen from "./components/LoadingScreen";
 import "./fabric-eraser";
 import {
   isPointInPolygon,
@@ -29,6 +34,37 @@ const API_BASE_URL = rawApiUrl.endsWith("/")
   ? rawApiUrl.slice(0, -1)
   : rawApiUrl;
 
+// Helper to generate a clean URL-friendly slug from the whiteboard title (no numbers/hex appended)
+export function slugifyTitle(title) {
+  if (!title || typeof title !== "string") return "board";
+  const slug = title
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  return slug || "board";
+}
+
+// Helper to construct clean URL with ONLY the board name: /board/:slug
+export function getBoardUrl(id, title) {
+  const slug = slugifyTitle(title);
+  return `${window.location.origin}/board/${slug}`;
+}
+
+// Helper to extract board identifier (slug, ID, or query param) from URL
+export function parseBoardIdFromUrl() {
+  const pathParts = window.location.pathname.split("/").filter(Boolean);
+  if (pathParts.length > 0) {
+    if (pathParts[0] === "board" || pathParts[0] === "b") {
+      return pathParts.slice(1).join("/") || null;
+    }
+    // Direct /:slug or /:id path
+    return pathParts[0];
+  }
+  const params = new URLSearchParams(window.location.search);
+  return params.get("board");
+}
+
 export default function App() {
   const canvasRef = useRef(null);
   const fabricRef = useRef(null);
@@ -38,8 +74,7 @@ export default function App() {
 
   // Screen and Authentication state
   const [screen, setScreen] = useState(() => {
-    const params = new URLSearchParams(window.location.search);
-    const boardId = params.get("board");
+    const boardId = parseBoardIdFromUrl();
     if (boardId) {
       return "editor";
     }
@@ -65,6 +100,30 @@ export default function App() {
   const [joinBoardId, setJoinBoardId] = useState("");
   const [joinModalError, setJoinModalError] = useState("");
   const [joinModalLoading, setJoinModalLoading] = useState(false);
+  const [isAppInitializing, setIsAppInitializing] = useState(true);
+  const [globalLoading, setGlobalLoading] = useState(null);
+
+  // Seamless Screen Navigation with Dynamic Loading Transitions
+  const navigateTo = (targetScreen, options = {}) => {
+    const duration = options.duration || 1400;
+    setGlobalLoading({
+      message: options.message || `Loading ${targetScreen.toUpperCase()}...`,
+      subMessage:
+        options.subMessage || "Synchronizing workspace state & assets",
+      minDuration: duration,
+    });
+    if (options.action) {
+      options.action();
+    }
+    // Clean URL when leaving the board editor
+    if (targetScreen !== "editor") {
+      const cleanUrl = `${window.location.origin}/`;
+      window.history.pushState({ path: cleanUrl }, "", cleanUrl);
+    }
+    setTimeout(() => {
+      setScreen(targetScreen);
+    }, 450);
+  };
 
   // State variables
   const [title, setTitle] = useState("My Whiteboard");
@@ -477,8 +536,7 @@ export default function App() {
 
   // Handle initial direct URL load
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const boardId = params.get("board");
+    const boardId = parseBoardIdFromUrl();
     if (boardId) {
       loadBoardById(boardId);
     }
@@ -900,9 +958,11 @@ export default function App() {
     }
   };
 
-  const deleteBoard = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this whiteboard?"))
-      return;
+  const deleteBoard = async (id, boardTitle) => {
+    const promptText = boardTitle
+      ? `Are you sure you want to delete "${boardTitle}"?`
+      : "Are you sure you want to delete this whiteboard?";
+    if (!window.confirm(promptText)) return;
     try {
       const token = localStorage.getItem("wb_token");
       const headers = {};
@@ -970,7 +1030,11 @@ export default function App() {
       }
       localStorage.setItem("wb_token", data.token);
       setUser(data.user);
-      setScreen("dashboard");
+      navigateTo("dashboard", {
+        message: "Account Created! Opening Dashboard...",
+        subMessage: "Initializing your collaborative workspace & templates",
+        duration: 1500,
+      });
     } catch (err) {
       console.error(err);
       setAuthError(
@@ -1002,7 +1066,11 @@ export default function App() {
       }
       localStorage.setItem("wb_token", data.token);
       setUser(data.user);
-      setScreen("dashboard");
+      navigateTo("dashboard", {
+        message: "Welcome Back! Loading Dashboard...",
+        subMessage: "Fetching your cloud diagrams & collaborative workspaces",
+        duration: 1500,
+      });
     } catch (err) {
       console.error(err);
       setAuthError(
@@ -1018,22 +1086,18 @@ export default function App() {
   const handleLogout = () => {
     localStorage.removeItem("wb_token");
     setUser({ name: "Guest Collaborator", color: "#6B7280" });
-    setScreen("landing");
+    navigateTo("landing", {
+      message: "Signing Out of Session...",
+      subMessage: "Clearing local credentials and returning home",
+      duration: 1200,
+    });
   };
 
-  const handleCreateBoard = async () => {
-    let boardTitle = prompt(
-      "Enter a title for the new whiteboard:",
-      "My Design Board",
-    );
-    if (
-      boardTitle === null &&
-      (window.location.hostname === "localhost" ||
-        window.location.hostname === "127.0.0.1")
-    ) {
-      boardTitle = "Test Drawing Board";
-    }
-    if (!boardTitle || !boardTitle.trim()) return;
+  const handleCreateBoard = async (customTitle) => {
+    const boardTitle =
+      customTitle && customTitle.trim()
+        ? customTitle.trim()
+        : "My Architecture Board";
 
     const token = localStorage.getItem("wb_token");
     const headers = { "Content-Type": "application/json" };
@@ -1076,10 +1140,14 @@ export default function App() {
         isPublic: false,
       });
 
-      const newUrl = `${window.location.origin}${window.location.pathname}?board=${data.id}`;
+      const newUrl = getBoardUrl(data.id, boardTitle);
       window.history.pushState({ path: newUrl }, "", newUrl);
 
-      setScreen("editor");
+      navigateTo("editor", {
+        message: "Generating Architecture Whiteboard...",
+        subMessage: "Creating multi-page canvas & initializing room channels",
+        duration: 1500,
+      });
     } catch (err) {
       console.error(err);
       alert("Failed to create board: " + err.message);
@@ -1087,8 +1155,12 @@ export default function App() {
   };
 
   const handleOpenBoard = (boardId) => {
-    loadBoardById(boardId);
-    setScreen("editor");
+    navigateTo("editor", {
+      message: "Opening Architecture Whiteboard...",
+      subMessage: "Connecting real-time Redis sync & vector canvas",
+      duration: 1600,
+      action: () => loadBoardById(boardId),
+    });
   };
 
   const handleJoinBoard = async (e) => {
@@ -1129,8 +1201,12 @@ export default function App() {
         throw new Error("Failed to load board metadata");
       }
 
-      await loadBoardById(targetId);
-      setScreen("editor");
+      navigateTo("editor", {
+        message: "Joining Collaborative Session...",
+        subMessage: `Connecting to room ID ${targetId}`,
+        duration: 1600,
+        action: () => loadBoardById(targetId),
+      });
       setShowJoinModal(false);
       setJoinBoardId("");
     } catch (err) {
@@ -1159,8 +1235,8 @@ export default function App() {
       fabricRef.current.discardActiveObject();
       fabricRef.current.clear();
     }
-    const newUrl = `${window.location.origin}${window.location.pathname}`;
-    window.history.pushState({ path: newUrl }, "", newUrl);
+    const cleanUrl = `${window.location.origin}/`;
+    window.history.pushState({ path: cleanUrl }, "", cleanUrl);
 
     setSavedId(null);
     setSessionAccess(null);
@@ -1175,7 +1251,12 @@ export default function App() {
       },
     ]);
     setActivePageId("page-1");
-    setScreen(localStorage.getItem("wb_token") ? "dashboard" : "landing");
+    const target = localStorage.getItem("wb_token") ? "dashboard" : "landing";
+    navigateTo(target, {
+      message: "Returning to Workspace...",
+      subMessage: "Saving canvas state and syncing with cloud",
+      duration: 1200,
+    });
   };
 
   // Simple debounce helper
@@ -3053,8 +3134,8 @@ export default function App() {
         owner: prev.owner || user.id || user._id || null,
       }));
 
-      // Update URL query parameter without re-loading the page
-      const newUrl = `${window.location.origin}${window.location.pathname}?board=${data.id}`;
+      // Update clean direct URL: /board/:slug-:id
+      const newUrl = getBoardUrl(data.id, title);
       window.history.pushState({ path: newUrl }, "", newUrl);
 
       // Fetch contexts for the saved board
@@ -3126,22 +3207,28 @@ export default function App() {
         applyRemoteCanvas(legacyPage.canvas_state);
       }
 
-      setSavedId(id);
+      const realId = data.id || data._id || id;
+      setSavedId(realId);
 
       // Fetch contexts for this whiteboard
-      fetchContextMap(id);
+      fetchContextMap(realId);
 
-      const newUrl = `${window.location.origin}${window.location.pathname}?board=${id}`;
+      const newUrl = getBoardUrl(realId, data.title || title);
       window.history.pushState({ path: newUrl }, "", newUrl);
     } catch (err) {
-      console.error(err);
+      console.error("loadBoardById error:", err);
       if (err.message === "authentication_required") {
-        alert(
-          "Authentication required: please log in or sign up to access this board.",
+        setAuthError(
+          "Authentication required: Please sign in or create an account to access this whiteboard.",
         );
         setScreen("auth");
       } else {
-        alert("Load failed: " + err.message);
+        console.warn("Board load failed:", err.message);
+        // Clear invalid board path so user isn't trapped
+        const cleanUrl = `${window.location.origin}/`;
+        window.history.replaceState({}, "", cleanUrl);
+        const token = localStorage.getItem("wb_token");
+        setScreen(token ? "dashboard" : "landing");
       }
     }
   }
@@ -3604,864 +3691,528 @@ export default function App() {
 
   if (screen === "landing") {
     return (
-      <div className="landing-container">
-        <header className="landing-header">
-          <div className="logo-container">
-            <div className="logo-icon">W</div>
-            <span className="logo-text">Whiteboard Pro</span>
-          </div>
-          <button className="btn btn-primary" onClick={() => setScreen("auth")}>
-            Sign In
-          </button>
-        </header>
-
-        <main className="landing-main">
-          <section className="hero-section">
-            <h1 className="hero-title">
-              Collaborate, Design & Align in Real-Time
-            </h1>
-            <p className="hero-subtitle">
-              A premium, interactive digital canvas featuring instant static
-              layouts, multi-page slide exports, dynamic context notes, and
-              bank-grade session security.
-            </p>
-            <div className="hero-actions">
-              <button
-                className="btn btn-primary btn-lg"
-                onClick={() => setScreen("auth")}
-              >
-                Get Started for Free
-              </button>
-            </div>
-          </section>
-
-          <section className="features-grid">
-            <div className="feature-card">
-              <div className="feature-icon">✨</div>
-              <h3>Real-Time Collab</h3>
-              <p>
-                Work together on drawing designs simultaneously with smooth
-                cursors and dynamic team presence indicators.
-              </p>
-            </div>
-            <div className="feature-card">
-              <div className="feature-icon">🧹</div>
-              <h3>Static Cleanup</h3>
-              <p>
-                Tidy up messy hand-drawn boxes, circles, and polygons into
-                aligned grid systems automatically using layout engines.
-              </p>
-            </div>
-            <div className="feature-card">
-              <div className="feature-icon">🗂️</div>
-              <h3>Context Notes & Files</h3>
-              <p>
-                Attach code blocks, technical documentation links, and media
-                files directly to individual board nodes.
-              </p>
-            </div>
-            <div className="feature-card">
-              <div className="feature-icon">🔒</div>
-              <h3>Session Security</h3>
-              <p>
-                Secure whiteboard updates and file access with robust
-                authentication checks and rate limit guards.
-              </p>
-            </div>
-          </section>
-        </main>
-
-        <footer className="landing-footer">
-          <p>© 2026 Visual Whiteboard Pro. All rights reserved.</p>
-        </footer>
-      </div>
+      <>
+        {isAppInitializing && (
+          <LoadingScreen
+            minDuration={2800}
+            onFinished={() => setIsAppInitializing(false)}
+          />
+        )}
+        {globalLoading && (
+          <LoadingScreen
+            message={globalLoading.message}
+            subMessage={globalLoading.subMessage}
+            minDuration={globalLoading.minDuration || 750}
+            onFinished={() => setGlobalLoading(null)}
+          />
+        )}
+        <CustomCursor />
+        <LandingPage
+          onGetStarted={() => {
+            if (localStorage.getItem("wb_token")) {
+              navigateTo("dashboard", {
+                message: "Loading Your Dashboard...",
+                subMessage: "Fetching your cloud whiteboards & collaborators",
+                duration: 1400,
+              });
+            } else {
+              navigateTo("auth", {
+                message: "Opening Authentication Portal...",
+                subMessage: "Preparing secure session guards & JWT crypto",
+                duration: 1200,
+              });
+            }
+          }}
+          onSignIn={() =>
+            navigateTo("auth", {
+              message: "Opening Sign In...",
+              subMessage: "Loading secure authentication guards",
+              duration: 1200,
+            })
+          }
+          onTryDemo={() => {
+            setUser({
+              name: "Guest Explorer",
+              color: "#3B82F6",
+              isGuest: true,
+            });
+            navigateTo("editor", {
+              message: "Launching Sandbox Environment...",
+              subMessage:
+                "Initializing temporary vector canvas with sample nodes",
+              duration: 1500,
+            });
+          }}
+          isAuthenticated={Boolean(localStorage.getItem("wb_token"))}
+        />
+      </>
     );
   }
 
   if (screen === "auth") {
     return (
-      <div className="auth-container">
-        <div className="auth-card">
-          <div className="auth-header">
-            <div className="logo-icon" style={{ margin: "0 auto 12px" }}>
-              W
-            </div>
-            <h2>{authMode === "login" ? "Welcome Back" : "Create Account"}</h2>
-            <p>
-              {authMode === "login"
-                ? "Sign in to access your digital workspace"
-                : "Start collaborating on your visual project"}
-            </p>
-          </div>
-
-          {authError && <div className="auth-error-banner">{authError}</div>}
-
-          <form
-            onSubmit={authMode === "login" ? handleLogin : handleRegister}
-            className="auth-form"
-          >
-            {authMode === "register" && (
-              <div className="form-group">
-                <label htmlFor="auth-name">Full Name</label>
-                <input
-                  type="text"
-                  id="auth-name"
-                  value={authForm.name}
-                  onChange={(e) =>
-                    setAuthForm({ ...authForm, name: e.target.value })
-                  }
-                  placeholder="Alex Architect"
-                  required
-                />
-              </div>
-            )}
-
-            <div className="form-group">
-              <label htmlFor="auth-email">Email Address</label>
-              <input
-                type="email"
-                id="auth-email"
-                value={authForm.email}
-                onChange={(e) =>
-                  setAuthForm({ ...authForm, email: e.target.value })
-                }
-                placeholder="alex@company.com"
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="auth-password">Password</label>
-              <input
-                type="password"
-                id="auth-password"
-                value={authForm.password}
-                onChange={(e) =>
-                  setAuthForm({ ...authForm, password: e.target.value })
-                }
-                placeholder="••••••••"
-                required
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="btn btn-primary btn-block"
-              disabled={authLoading}
-            >
-              {authLoading
-                ? "Please wait..."
-                : authMode === "login"
-                  ? "Sign In"
-                  : "Sign Up"}
-            </button>
-          </form>
-
-          <div className="auth-footer">
-            <span>
-              {authMode === "login"
-                ? "Don't have an account?"
-                : "Already have an account?"}
-            </span>
-            <button
-              className="btn-link"
-              onClick={() => {
-                setAuthMode(authMode === "login" ? "register" : "login");
-                setAuthError("");
-              }}
-            >
-              {authMode === "login" ? "Sign Up" : "Sign In"}
-            </button>
-          </div>
-
-          <button
-            className="btn btn-secondary btn-block"
-            style={{ marginTop: "16px" }}
-            onClick={() => setScreen("landing")}
-          >
-            Back to Home
-          </button>
-        </div>
-      </div>
+      <>
+        {isAppInitializing && (
+          <LoadingScreen
+            minDuration={2800}
+            onFinished={() => setIsAppInitializing(false)}
+          />
+        )}
+        {globalLoading && (
+          <LoadingScreen
+            message={globalLoading.message}
+            subMessage={globalLoading.subMessage}
+            minDuration={globalLoading.minDuration || 750}
+            onFinished={() => setGlobalLoading(null)}
+          />
+        )}
+        <CustomCursor />
+        <AuthPage
+          authMode={authMode}
+          setAuthMode={setAuthMode}
+          authForm={authForm}
+          setAuthForm={setAuthForm}
+          authError={authError}
+          setAuthError={setAuthError}
+          authLoading={authLoading}
+          handleLogin={handleLogin}
+          handleRegister={handleRegister}
+          onBackHome={() =>
+            navigateTo("landing", {
+              message: "Returning to Home...",
+              subMessage: "Loading architectural studio showcase",
+              duration: 1200,
+            })
+          }
+          onGuestDemo={() => {
+            setUser({
+              name: "Guest Explorer",
+              color: "#3B82F6",
+              isGuest: true,
+            });
+            navigateTo("editor", {
+              message: "Launching Guest Sandbox...",
+              subMessage:
+                "Initializing temporary vector canvas with sample nodes",
+              duration: 1500,
+            });
+          }}
+        />
+      </>
     );
   }
 
   if (screen === "dashboard") {
-    const filteredBoards = whiteboardsList.filter((board) =>
-      board.title.toLowerCase().includes(searchQuery.toLowerCase()),
-    );
-
-    const getInitials = (name) => {
-      if (!name) return "?";
-      return name
-        .split(" ")
-        .map((n) => n[0])
-        .join("")
-        .toUpperCase()
-        .slice(0, 2);
-    };
-
     return (
-      <div className="dashboard-container">
-        <header className="dashboard-header">
-          <div className="logo-container">
-            <div className="logo-icon">W</div>
-            <span className="logo-text">Whiteboard Pro</span>
-          </div>
-
-          <div className="dashboard-user-profile">
-            <div
-              className="user-avatar"
-              style={{ backgroundColor: user.color || "#6B7280" }}
-            >
-              {getInitials(user.name)}
-            </div>
-            <div className="user-details">
-              <span className="user-name">{user.name}</span>
-              <span className="user-email">{user.email}</span>
-            </div>
-            <button className="btn btn-secondary btn-sm" onClick={handleLogout}>
-              Log Out
-            </button>
-          </div>
-        </header>
-
-        <main className="dashboard-main">
-          <div className="dashboard-toolbar">
-            <h1 className="dashboard-title">Your Workspaces</h1>
-            <div style={{ display: "flex", gap: "12px" }}>
-              <button
-                className="btn btn-secondary"
-                onClick={() => setShowJoinModal(true)}
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                  style={{ marginRight: "6px" }}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
-                  ></path>
-                </svg>
-                Join Board by ID
-              </button>
-              <button className="btn btn-primary" onClick={handleCreateBoard}>
-                <svg
-                  width="16"
-                  height="16"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 4v16m8-8H4"
-                  ></path>
-                </svg>
-                Create Board
-              </button>
-            </div>
-          </div>
-
-          <div className="search-bar-container">
-            <input
-              type="text"
-              className="search-input"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by board title..."
-            />
-          </div>
-
-          {filteredBoards.length === 0 ? (
-            <div className="dashboard-empty-state">
-              <div className="empty-icon">📁</div>
-              <h3>No Whiteboards Found</h3>
-              <p>
-                {searchQuery
-                  ? "Try adjusting your search query"
-                  : "Create your first design whiteboard workspace to begin collaborating!"}
-              </p>
-              {!searchQuery && (
-                <button
-                  className="btn btn-primary"
-                  onClick={handleCreateBoard}
-                  style={{ marginTop: "16px" }}
-                >
-                  Create New Board
-                </button>
-              )}
-            </div>
-          ) : (
-            <div className="dashboard-grid">
-              {filteredBoards.map((board) => {
-                const isOwner =
-                  board.owner &&
-                  (board.owner._id === user.id || board.owner === user.id);
-                return (
-                  <div
-                    key={board._id}
-                    className="board-card"
-                    onClick={() => handleOpenBoard(board._id)}
-                  >
-                    <div className="board-card-preview">
-                      <div className="board-placeholder-grid"></div>
-                      <div className="board-preview-overlay">
-                        <span className="btn btn-primary btn-sm">
-                          Open Workspace
-                        </span>
-                      </div>
-                    </div>
-                    <div
-                      className="board-card-info"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <div className="board-card-title-row">
-                        <h4 className="board-title-text" title={board.title}>
-                          {board.title}
-                        </h4>
-                        <span
-                          className={`badge ${board.isPublic ? "badge-public" : "badge-private"}`}
-                        >
-                          {board.isPublic ? "Public" : "Private"}
-                        </span>
-                      </div>
-
-                      <div className="board-meta-row">
-                        <span className="board-owner">
-                          {isOwner
-                            ? "Owner"
-                            : `Shared by ${board.owner?.name || "Collaborator"}`}
-                        </span>
-                        <span className="board-date">
-                          {new Date(board.updatedAt).toLocaleDateString()}
-                        </span>
-                      </div>
-
-                      <div className="board-card-actions">
-                        <button
-                          className="btn btn-secondary btn-sm"
-                          onClick={() => {
-                            const email = prompt(
-                              "Enter collaborator email to add:",
-                            );
-                            if (email && email.trim()) {
-                              shareBoard(board._id, false, email.trim());
-                            }
-                          }}
-                          disabled={!isOwner}
-                          title={
-                            isOwner
-                              ? "Add collaborator"
-                              : "Only owner can manage sharing"
-                          }
-                        >
-                          Share
-                        </button>
-                        <button
-                          className="btn btn-secondary btn-sm"
-                          onClick={() => shareBoard(board._id, true, null)}
-                          disabled={!isOwner}
-                          title={
-                            isOwner
-                              ? "Toggle public access"
-                              : "Only owner can manage visibility"
-                          }
-                        >
-                          {board.isPublic ? "Make Private" : "Make Public"}
-                        </button>
-                        <button
-                          className="btn btn-danger btn-sm"
-                          onClick={() => deleteBoard(board._id)}
-                          disabled={!isOwner}
-                          title={
-                            isOwner
-                              ? "Delete whiteboard"
-                              : "Only owner can delete"
-                          }
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </main>
-
-        {showJoinModal && (
-          <div
-            className="modal-overlay"
-            onClick={() => {
-              setShowJoinModal(false);
-              setJoinBoardId("");
-              setJoinModalError("");
-            }}
-          >
-            <div
-              className="modal-container"
-              onClick={(e) => e.stopPropagation()}
-              style={{ maxWidth: "400px" }}
-            >
-              <div className="modal-header">
-                <h3 className="modal-title">Join Board by ID</h3>
-                <button
-                  className="modal-close-btn"
-                  onClick={() => {
-                    setShowJoinModal(false);
-                    setJoinBoardId("");
-                    setJoinModalError("");
-                  }}
-                >
-                  &times;
-                </button>
-              </div>
-              <form onSubmit={handleJoinBoard} style={{ padding: "16px" }}>
-                {joinModalError && (
-                  <div
-                    style={{
-                      padding: "8px 12px",
-                      borderRadius: "6px",
-                      backgroundColor: "#FDEDEC",
-                      color: "#C0392B",
-                      fontSize: "13px",
-                      fontWeight: "500",
-                      border: "1px solid #FADBD8",
-                      marginBottom: "12px",
-                    }}
-                  >
-                    {joinModalError}
-                  </div>
-                )}
-                <div className="form-group" style={{ marginBottom: "16px" }}>
-                  <label
-                    className="form-label"
-                    style={{
-                      display: "block",
-                      marginBottom: "8px",
-                      fontWeight: "500",
-                    }}
-                  >
-                    Board ID (24-character hex string)
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    style={{
-                      width: "100%",
-                      padding: "8px 12px",
-                      borderRadius: "6px",
-                      border: "1px solid #E0E0E0",
-                      fontSize: "14px",
-                      boxSizing: "border-box",
-                    }}
-                    placeholder="e.g. 648f8c47b5..."
-                    value={joinBoardId}
-                    onChange={(e) => setJoinBoardId(e.target.value)}
-                    disabled={joinModalLoading}
-                    autoFocus
-                  />
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    gap: "12px",
-                    justifyContent: "flex-end",
-                    marginTop: "16px",
-                  }}
-                >
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => {
-                      setShowJoinModal(false);
-                      setJoinBoardId("");
-                      setJoinModalError("");
-                    }}
-                    disabled={joinModalLoading}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                    disabled={joinModalLoading}
-                  >
-                    {joinModalLoading ? "Joining..." : "Join Board"}
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
+      <>
+        {isAppInitializing && (
+          <LoadingScreen
+            minDuration={2800}
+            onFinished={() => setIsAppInitializing(false)}
+          />
         )}
-      </div>
+        {globalLoading && (
+          <LoadingScreen
+            message={globalLoading.message}
+            subMessage={globalLoading.subMessage}
+            minDuration={globalLoading.minDuration || 750}
+            onFinished={() => setGlobalLoading(null)}
+          />
+        )}
+        <CustomCursor />
+        <DashboardPage
+          user={user}
+          whiteboardsList={whiteboardsList}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          handleCreateBoard={handleCreateBoard}
+          handleOpenBoard={handleOpenBoard}
+          shareBoard={shareBoard}
+          deleteBoard={deleteBoard}
+          handleLogout={handleLogout}
+          showJoinModal={showJoinModal}
+          setShowJoinModal={setShowJoinModal}
+          joinBoardId={joinBoardId}
+          setJoinBoardId={setJoinBoardId}
+          joinModalLoading={joinModalLoading}
+          joinModalError={joinModalError}
+          setJoinModalError={setJoinModalError}
+          handleJoinBoard={handleJoinBoard}
+        />
+      </>
     );
   }
 
   return (
-    <div className="app-container">
-      {/* Top Header Bar */}
-      <Topbar
-        title={title}
-        setTitle={setTitle}
-        onSave={saveBoard}
-        onLoad={loadBoard}
-        onClearPage={handleClearPage}
-        savedId={savedId}
-        roomUsers={roomUsers}
-        currentUser={{
-          ...user,
-          id: socketRef.current?.id,
-          dbUserId: user.id || user._id,
-        }}
-        onRenameUser={handleRenameUser}
-        onExport={() => {
-          // Synchronize current page state before opening export modal
-          if (fabricRef.current) {
-            const currentJson = getCanvasJson();
-            const currentThumbnail = fabricRef.current.toDataURL({
-              format: "jpeg",
-              quality: 0.1,
-              multiplier: 0.1,
-            });
-            const updatedPages = pagesRef.current.map((p) =>
-              p.page_id === activePageIdRef.current
-                ? {
-                    ...p,
-                    canvas_state: currentJson,
-                    thumbnail: currentThumbnail,
-                  }
-                : p,
-            );
-            setPages(updatedPages);
+    <>
+      {isAppInitializing && (
+        <LoadingScreen
+          minDuration={2800}
+          onFinished={() => setIsAppInitializing(false)}
+        />
+      )}
+      {globalLoading && (
+        <LoadingScreen
+          message={globalLoading.message}
+          subMessage={globalLoading.subMessage}
+          minDuration={globalLoading.minDuration || 750}
+          onFinished={() => setGlobalLoading(null)}
+        />
+      )}
+      <div className="app-container">
+        {/* Top Header Bar */}
+        <Topbar
+          title={title}
+          setTitle={setTitle}
+          onSave={saveBoard}
+          onLoad={loadBoard}
+          onClearPage={handleClearPage}
+          savedId={savedId}
+          roomUsers={roomUsers}
+          currentUser={{
+            ...user,
+            id: socketRef.current?.id,
+            dbUserId: user.id || user._id,
+          }}
+          onRenameUser={handleRenameUser}
+          onExport={() => {
+            // Synchronize current page state before opening export modal
+            if (fabricRef.current) {
+              const currentJson = getCanvasJson();
+              const currentThumbnail = fabricRef.current.toDataURL({
+                format: "jpeg",
+                quality: 0.1,
+                multiplier: 0.1,
+              });
+              const updatedPages = pagesRef.current.map((p) =>
+                p.page_id === activePageIdRef.current
+                  ? {
+                      ...p,
+                      canvas_state: currentJson,
+                      thumbnail: currentThumbnail,
+                    }
+                  : p,
+              );
+              setPages(updatedPages);
+            }
+            setIsExportModalOpen(true);
+          }}
+          onCleanup={handleCleanup}
+          onAssist={handleAssist}
+          isCleanupLoading={isCleanupLoading}
+          isAssistLoading={isAssistLoading}
+          onExit={handleExitEditor}
+          isReadOnly={isReadOnly}
+          onOpenPermissionsPanel={() =>
+            setIsPermissionsPanelOpen((prev) => !prev)
           }
-          setIsExportModalOpen(true);
-        }}
-        onCleanup={handleCleanup}
-        onAssist={handleAssist}
-        isCleanupLoading={isCleanupLoading}
-        isAssistLoading={isAssistLoading}
-        onExit={handleExitEditor}
-        isReadOnly={isReadOnly}
-        onOpenPermissionsPanel={() =>
-          setIsPermissionsPanelOpen((prev) => !prev)
-        }
-        boardMeta={boardMeta}
-      />
-
-      {/* Main Workspace Area */}
-      <div className="workspace-container">
-        {/* Left Sidebar Page Navigator */}
-        <PageStrip
-          pages={pages}
-          activePageId={activePageId}
-          onSwitchPage={switchPage}
-          onAddPage={addPage}
-          onDeletePage={deletePage}
-          onDuplicatePage={duplicatePage}
-          onRenamePage={renamePage}
-          onReorderPage={reorderPage}
-          onSharePage={sharePage}
-          canManagePages={
-            !isReadOnly && (boardMeta.owner === user.id || !savedId)
-          }
-          isCollapsed={isLeftPanelCollapsed}
-          onToggleCollapse={toggleLeftPanel}
+          boardMeta={boardMeta}
         />
 
-        {isLeftPanelCollapsed && (
-          <div
-            className="strip-expand-trigger"
-            onClick={toggleLeftPanel}
-            title="Expand Page Strip"
-          >
-            <svg
-              width="12"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="3"
-            >
-              <path d="M9 18l6-6-6-6" />
-            </svg>
-          </div>
-        )}
+        {/* Main Workspace Area */}
+        <div className="workspace-container">
+          {/* Left Sidebar Page Navigator */}
+          <PageStrip
+            pages={pages}
+            activePageId={activePageId}
+            onSwitchPage={switchPage}
+            onAddPage={addPage}
+            onDeletePage={deletePage}
+            onDuplicatePage={duplicatePage}
+            onRenamePage={renamePage}
+            onReorderPage={reorderPage}
+            onSharePage={sharePage}
+            canManagePages={
+              !isReadOnly && (boardMeta.owner === user.id || !savedId)
+            }
+            isCollapsed={isLeftPanelCollapsed}
+            onToggleCollapse={toggleLeftPanel}
+          />
 
-        {/* Toolbar Left Side */}
-        {!isReadOnly && (
-          <Toolbar
+          {isLeftPanelCollapsed && (
+            <div
+              className="strip-expand-trigger"
+              onClick={toggleLeftPanel}
+              title="Expand Page Strip"
+            >
+              <svg
+                width="12"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3"
+              >
+                <path d="M9 18l6-6-6-6" />
+              </svg>
+            </div>
+          )}
+
+          {/* Toolbar Left Side */}
+          {!isReadOnly && (
+            <Toolbar
+              activeTool={activeTool}
+              setActiveTool={setActiveTool}
+              drawType={drawType}
+              setDrawType={setDrawType}
+              isReadOnly={isReadOnly}
+            />
+          )}
+
+          <div id="canvas-viewport" className="canvas-viewport">
+            <div
+              id="canvas-wrapper"
+              className={`canvas-wrapper ${activeTool === "pan" ? "pan-mode" : ""} ${activeTool === "draw" && drawType === "eraser" ? "eraser-mode" : ""}`}
+            >
+              <canvas id="whiteboard-canvas" />
+              <CanvasOverlay
+                fabricCanvas={canvasInstance}
+                overlayRef={overlayCanvasRef}
+              />
+
+              {/* Eraser brush size preview ring */}
+              <div
+                ref={eraserCursorElRef}
+                className="eraser-cursor-preview"
+                aria-hidden="true"
+              />
+
+              {/* Remote Cursors Overlay */}
+              {Object.entries(remoteCursors).map(([id, cursor]) => {
+                if (!fabricRef.current) return null;
+                if (id === socketRef.current?.id) return null;
+                if (cursor.pageId !== activePageId) return null;
+
+                const pt = new window.fabric.Point(cursor.x, cursor.y);
+                const screenPt = window.fabric.util.transformPoint(
+                  pt,
+                  fabricRef.current.viewportTransform,
+                );
+
+                return (
+                  <div
+                    key={id}
+                    className="remote-cursor"
+                    style={{
+                      left: `${screenPt.x}px`,
+                      top: `${screenPt.y}px`,
+                      transform: "translate(-5px, -5px)",
+                      transition: "left 0.08s ease-out, top 0.08s ease-out",
+                    }}
+                  >
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M4.5 3V17.6562C4.5 18.2344 5.23438 18.5 5.60938 18.0625L10.375 12.875L17.2031 12.875C17.7969 12.875 18.0625 12.125 17.6094 11.75L5.04688 3.09375C4.89062 2.98438 4.6875 2.95312 4.5 3Z"
+                        fill={cursor.color}
+                        stroke="white"
+                        strokeWidth="1.5"
+                      />
+                    </svg>
+                    <div
+                      className="remote-cursor-label"
+                      style={{ backgroundColor: cursor.color }}
+                    >
+                      {cursor.name}
+                    </div>
+                  </div>
+                );
+              })}
+
+              {/* Element Context Badges Overlay */}
+              {fabricRef.current &&
+                fabricRef.current
+                  .getObjects()
+                  .filter(
+                    (obj) =>
+                      obj.id &&
+                      obj.id !== "page-boundary" &&
+                      contextMap[obj.id],
+                  )
+                  .map((obj) => {
+                    const center = obj.getCenterPoint();
+                    const width = obj.width * obj.scaleX || 50;
+                    const height = obj.height * obj.scaleY || 50;
+
+                    const badgePt = new window.fabric.Point(
+                      center.x + width / 2,
+                      center.y - height / 2,
+                    );
+                    const screenPt = window.fabric.util.transformPoint(
+                      badgePt,
+                      fabricRef.current.viewportTransform,
+                    );
+
+                    return (
+                      <div
+                        key={obj.id}
+                        className="context-badge"
+                        style={{
+                          left: `${screenPt.x}px`,
+                          top: `${screenPt.y}px`,
+                          transition: "left 0.05s ease-out, top 0.05s ease-out",
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          fabricRef.current.setActiveObject(obj);
+                          fabricRef.current.requestRenderAll();
+                          updateInspectorProperties(obj);
+                          setIsContextPanelOpen(true);
+                        }}
+                        title="View notes, links & files"
+                      >
+                        <svg viewBox="0 0 24 24" stroke="currentColor">
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"
+                          />
+                        </svg>
+                      </div>
+                    );
+                  })}
+            </div>
+
+            {/* Floating Canvas Controls (Bottom Left) */}
+            <CanvasControls
+              zoom={zoom}
+              onZoomIn={() => handleZoom(zoom + 0.1)}
+              onZoomOut={() => handleZoom(zoom - 0.1)}
+              onZoomReset={handleZoomReset}
+              snapToGrid={snapToGrid}
+              onToggleSnapToGrid={() => setSnapToGrid((prev) => !prev)}
+              onUndo={undo}
+              onRedo={redo}
+              canUndo={canUndo}
+              canRedo={canRedo}
+              isReadOnly={isReadOnly}
+            />
+          </div>
+
+          {/* Properties Panel Right Side */}
+          <PropertiesPanel
+            selectedObject={selectedObject}
+            properties={properties}
+            onChangeProperty={handleChangeProperty}
+            onBringToFront={handleBringToFront}
+            onSendToBack={handleSendToBack}
+            onDelete={handleDeleteElement}
+            onGroup={handleGroup}
+            onUngroup={handleUngroup}
+            onToggleLock={handleToggleLock}
+            onEditContext={() => {
+              if (!savedId) {
+                alert(
+                  'Please save the whiteboard first (click "Save" in the top bar) to enable attaching notes, code, and files.',
+                );
+                return;
+              }
+              setIsContextPanelOpen(true);
+            }}
+            isReadOnly={isReadOnly}
             activeTool={activeTool}
-            setActiveTool={setActiveTool}
             drawType={drawType}
             setDrawType={setDrawType}
+            drawSizes={drawSizes}
+            onChangeDrawSize={handleChangeDrawSize}
+            isCollapsed={isRightPanelCollapsed}
+            onToggleCollapse={toggleRightPanel}
+          />
+
+          {isRightPanelCollapsed && (
+            <div
+              className="panel-expand-trigger"
+              onClick={toggleRightPanel}
+              title="Expand Properties"
+            >
+              <svg
+                width="12"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3"
+              >
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </div>
+          )}
+
+          {/* Context Details Panel (Slides from Right) */}
+          <ContextPanel
+            isOpen={isContextPanelOpen}
+            onClose={() => setIsContextPanelOpen(false)}
+            whiteboardId={savedId}
+            elementId={selectedObject?.id}
+            elementName={
+              selectedObject ? `${selectedObject.type.toUpperCase()} Shape` : ""
+            }
+            onContextUpdated={(elId, hasContext) => {
+              setContextMap((prev) => ({
+                ...prev,
+                [elId]: hasContext,
+              }));
+            }}
             isReadOnly={isReadOnly}
           />
-        )}
 
-        <div id="canvas-viewport" className="canvas-viewport">
-          <div
-            id="canvas-wrapper"
-            className={`canvas-wrapper ${activeTool === "pan" ? "pan-mode" : ""} ${activeTool === "draw" && drawType === "eraser" ? "eraser-mode" : ""}`}
-          >
-            <canvas id="whiteboard-canvas" />
-            <CanvasOverlay
-              fabricCanvas={canvasInstance}
-              overlayRef={overlayCanvasRef}
-            />
+          {/* Architecture Assistant Recommendations Panel */}
+          <AssistPanel
+            isOpen={isAssistPanelOpen}
+            onClose={() => setIsAssistPanelOpen(false)}
+            suggestions={suggestions}
+            setSuggestions={setSuggestions}
+            onApplySuggestion={handleApplySuggestion}
+            isLoading={isAssistLoading}
+          />
 
-            {/* Eraser brush size preview ring */}
-            <div
-              ref={eraserCursorElRef}
-              className="eraser-cursor-preview"
-              aria-hidden="true"
-            />
-
-            {/* Remote Cursors Overlay */}
-            {Object.entries(remoteCursors).map(([id, cursor]) => {
-              if (!fabricRef.current) return null;
-              if (id === socketRef.current?.id) return null;
-              if (cursor.pageId !== activePageId) return null;
-
-              const pt = new window.fabric.Point(cursor.x, cursor.y);
-              const screenPt = window.fabric.util.transformPoint(
-                pt,
-                fabricRef.current.viewportTransform,
-              );
-
-              return (
-                <div
-                  key={id}
-                  className="remote-cursor"
-                  style={{
-                    left: `${screenPt.x}px`,
-                    top: `${screenPt.y}px`,
-                    transform: "translate(-5px, -5px)",
-                    transition: "left 0.08s ease-out, top 0.08s ease-out",
-                  }}
-                >
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M4.5 3V17.6562C4.5 18.2344 5.23438 18.5 5.60938 18.0625L10.375 12.875L17.2031 12.875C17.7969 12.875 18.0625 12.125 17.6094 11.75L5.04688 3.09375C4.89062 2.98438 4.6875 2.95312 4.5 3Z"
-                      fill={cursor.color}
-                      stroke="white"
-                      strokeWidth="1.5"
-                    />
-                  </svg>
-                  <div
-                    className="remote-cursor-label"
-                    style={{ backgroundColor: cursor.color }}
-                  >
-                    {cursor.name}
-                  </div>
-                </div>
-              );
-            })}
-
-            {/* Element Context Badges Overlay */}
-            {fabricRef.current &&
-              fabricRef.current
-                .getObjects()
-                .filter(
-                  (obj) =>
-                    obj.id && obj.id !== "page-boundary" && contextMap[obj.id],
-                )
-                .map((obj) => {
-                  const center = obj.getCenterPoint();
-                  const width = obj.width * obj.scaleX || 50;
-                  const height = obj.height * obj.scaleY || 50;
-
-                  const badgePt = new window.fabric.Point(
-                    center.x + width / 2,
-                    center.y - height / 2,
-                  );
-                  const screenPt = window.fabric.util.transformPoint(
-                    badgePt,
-                    fabricRef.current.viewportTransform,
-                  );
-
-                  return (
-                    <div
-                      key={obj.id}
-                      className="context-badge"
-                      style={{
-                        left: `${screenPt.x}px`,
-                        top: `${screenPt.y}px`,
-                        transition: "left 0.05s ease-out, top 0.05s ease-out",
-                      }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        fabricRef.current.setActiveObject(obj);
-                        fabricRef.current.requestRenderAll();
-                        updateInspectorProperties(obj);
-                        setIsContextPanelOpen(true);
-                      }}
-                      title="View notes, links & files"
-                    >
-                      <svg viewBox="0 0 24 24" stroke="currentColor">
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"
-                        />
-                      </svg>
-                    </div>
-                  );
-                })}
-          </div>
-
-          {/* Floating Canvas Controls (Bottom Left) */}
-          <CanvasControls
-            zoom={zoom}
-            onZoomIn={() => handleZoom(zoom + 0.1)}
-            onZoomOut={() => handleZoom(zoom - 0.1)}
-            onZoomReset={handleZoomReset}
-            snapToGrid={snapToGrid}
-            onToggleSnapToGrid={() => setSnapToGrid((prev) => !prev)}
-            onUndo={undo}
-            onRedo={redo}
-            canUndo={canUndo}
-            canRedo={canRedo}
-            isReadOnly={isReadOnly}
+          {/* Permissions Panel */}
+          <PermissionsPanel
+            isOpen={isPermissionsPanelOpen}
+            onClose={() => setIsPermissionsPanelOpen(false)}
+            whiteboardId={savedId}
+            roomUsers={roomUsers}
+            boardMeta={boardMeta}
+            onTogglePermission={handleTogglePermission}
           />
         </div>
 
-        {/* Properties Panel Right Side */}
-        <PropertiesPanel
-          selectedObject={selectedObject}
-          properties={properties}
-          onChangeProperty={handleChangeProperty}
-          onBringToFront={handleBringToFront}
-          onSendToBack={handleSendToBack}
-          onDelete={handleDeleteElement}
-          onGroup={handleGroup}
-          onUngroup={handleUngroup}
-          onToggleLock={handleToggleLock}
-          onEditContext={() => {
-            if (!savedId) {
-              alert(
-                'Please save the whiteboard first (click "Save" in the top bar) to enable attaching notes, code, and files.',
-              );
-              return;
-            }
-            setIsContextPanelOpen(true);
-          }}
-          isReadOnly={isReadOnly}
-          activeTool={activeTool}
-          drawType={drawType}
-          setDrawType={setDrawType}
-          drawSizes={drawSizes}
-          onChangeDrawSize={handleChangeDrawSize}
-          isCollapsed={isRightPanelCollapsed}
-          onToggleCollapse={toggleRightPanel}
-        />
-
-        {isRightPanelCollapsed && (
-          <div
-            className="panel-expand-trigger"
-            onClick={toggleRightPanel}
-            title="Expand Properties"
-          >
-            <svg
-              width="12"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="3"
-            >
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
+        {/* Bottom Status Bar */}
+        <footer className="status-bar">
+          <div className="status-item">
+            <span className={`status-indicator ${connectionStatus}`} />
+            <span>
+              {connectionStatus === "connected"
+                ? `Live Collaboration Active (${roomUsers.length} online)`
+                : "Reconnecting to network..."}
+            </span>
           </div>
-        )}
+          <div className="status-item">
+            <span>Grid Snap: {snapToGrid ? "ON" : "OFF"}</span>
+            <span>•</span>
+            <span>Zoom: {Math.round(zoom * 100)}%</span>
+            {savedId && (
+              <>
+                <span>•</span>
+                <span style={{ fontFamily: "monospace" }}>ID: {savedId}</span>
+              </>
+            )}
+          </div>
+        </footer>
 
-        {/* Context Details Panel (Slides from Right) */}
-        <ContextPanel
-          isOpen={isContextPanelOpen}
-          onClose={() => setIsContextPanelOpen(false)}
-          whiteboardId={savedId}
-          elementId={selectedObject?.id}
-          elementName={
-            selectedObject ? `${selectedObject.type.toUpperCase()} Shape` : ""
-          }
-          onContextUpdated={(elId, hasContext) => {
-            setContextMap((prev) => ({
-              ...prev,
-              [elId]: hasContext,
-            }));
-          }}
-          isReadOnly={isReadOnly}
-        />
-
-        {/* Architecture Assistant Recommendations Panel */}
-        <AssistPanel
-          isOpen={isAssistPanelOpen}
-          onClose={() => setIsAssistPanelOpen(false)}
-          suggestions={suggestions}
-          setSuggestions={setSuggestions}
-          onApplySuggestion={handleApplySuggestion}
-          isLoading={isAssistLoading}
-        />
-
-        {/* Permissions Panel */}
-        <PermissionsPanel
-          isOpen={isPermissionsPanelOpen}
-          onClose={() => setIsPermissionsPanelOpen(false)}
-          whiteboardId={savedId}
-          roomUsers={roomUsers}
-          boardMeta={boardMeta}
-          onTogglePermission={handleTogglePermission}
+        {/* Export System Dialog */}
+        <ExportModal
+          isOpen={isExportModalOpen}
+          onClose={() => setIsExportModalOpen(false)}
+          pages={pages}
+          title={title}
         />
       </div>
-
-      {/* Bottom Status Bar */}
-      <footer className="status-bar">
-        <div className="status-item">
-          <span className={`status-indicator ${connectionStatus}`} />
-          <span>
-            {connectionStatus === "connected"
-              ? `Live Collaboration Active (${roomUsers.length} online)`
-              : "Reconnecting to network..."}
-          </span>
-        </div>
-        <div className="status-item">
-          <span>Grid Snap: {snapToGrid ? "ON" : "OFF"}</span>
-          <span>•</span>
-          <span>Zoom: {Math.round(zoom * 100)}%</span>
-          {savedId && (
-            <>
-              <span>•</span>
-              <span style={{ fontFamily: "monospace" }}>ID: {savedId}</span>
-            </>
-          )}
-        </div>
-      </footer>
-
-      {/* Export System Dialog */}
-      <ExportModal
-        isOpen={isExportModalOpen}
-        onClose={() => setIsExportModalOpen(false)}
-        pages={pages}
-        title={title}
-      />
-    </div>
+    </>
   );
 }

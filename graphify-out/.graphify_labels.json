@@ -9,7 +9,7 @@
   "7": "server/package.json",
   "8": "package.json",
   "9": "context.test.js",
-  "10": "App",
+  "10": "pathLassoSplit.js",
   "11": "Visual Whiteboard Pro — Deployment Guide",
   "12": "Visual Whiteboard - Feature Backlog & Task Tracking",
   "13": "GEMINI.md",
@@ -18,5 +18,13 @@
   "16": "AGENTS.md",
   "17": "rules/graphify.md",
   "18": "workflows/graphify.md",
-  "19": "copilot-instructions.md"
+  "19": "copilot-instructions.md",
+  "20": "app",
+  "21": "useConnectorTool.js",
+  "22": "sockets.test.js",
+  "23": "ai.test.js",
+  "24": "whiteboards.test.js",
+  "25": "ai.service.js",
+  "26": "auth.js",
+  "27": "App"
 }

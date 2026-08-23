@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 export default function AssistPanel({
   isOpen,
@@ -6,51 +6,72 @@ export default function AssistPanel({
   suggestions = [],
   setSuggestions,
   onApplySuggestion,
-  isLoading = false
+  isLoading = false,
 }) {
   const getSeverityBadgeClass = (severity) => {
     switch (severity) {
-      case 'critical': return 'badge-critical'
-      case 'warning': return 'badge-warning'
-      case 'info':
-      default: return 'badge-info'
+      case "critical":
+        return "badge-critical";
+      case "warning":
+        return "badge-warning";
+      case "info":
+      default:
+        return "badge-info";
     }
-  }
+  };
 
   const getSeverityIcon = (severity) => {
     switch (severity) {
-      case 'critical': return '🛑'
-      case 'warning': return '⚠️'
-      case 'info':
-      default: return '💡'
+      case "critical":
+        return <i className="fa-solid fa-circle-xmark"></i>;
+      case "warning":
+        return <i className="fa-solid fa-triangle-exclamation"></i>;
+      case "info":
+      default:
+        return <i className="fa-solid fa-lightbulb"></i>;
     }
-  }
+  };
 
   const handleDismiss = (index) => {
     if (setSuggestions) {
-      setSuggestions(prev => prev.filter((_, i) => i !== index))
+      setSuggestions((prev) => prev.filter((_, i) => i !== index));
     }
-  }
+  };
 
   const handleApply = (suggestion, index) => {
     if (onApplySuggestion && suggestion.suggestedComponent) {
-      onApplySuggestion(suggestion.suggestedComponent)
-      handleDismiss(index)
+      onApplySuggestion(suggestion.suggestedComponent);
+      handleDismiss(index);
     }
-  }
+  };
 
-  if (!isOpen) return null
+  if (!isOpen) return null;
 
   return (
-    <div className={`assist-panel-drawer ${isOpen ? 'open' : ''}`}>
+    <div className={`assist-panel-drawer ${isOpen ? "open" : ""}`}>
       <div className="assist-panel-header">
         <div className="header-info">
           <h3>Architecture Assistant</h3>
           <span className="element-badge">Design Check</span>
         </div>
-        <button className="btn-close" onClick={onClose} title="Close Assistant Panel">
-          <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+        <button
+          className="btn-close"
+          onClick={onClose}
+          title="Close Assistant Panel"
+        >
+          <svg
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         </button>
       </div>
@@ -67,41 +88,61 @@ export default function AssistPanel({
           </div>
         ) : suggestions.length === 0 ? (
           <div className="assist-empty-state">
-            <div className="success-icon-container">🎉</div>
+            <div className="success-icon-container">
+              <i
+                className="fa-solid fa-circle-check"
+                style={{ color: "#10B981", fontSize: "36px" }}
+              ></i>
+            </div>
             <h4>All Clear!</h4>
-            <p>No architectural design issues or missing service components were identified. Excellent diagram layout!</p>
+            <p>
+              No architectural design issues or missing service components were
+              identified. Excellent diagram layout!
+            </p>
           </div>
         ) : (
           <div className="suggestions-list">
             <p className="assist-summary">
-              Found <strong>{suggestions.length}</strong> recommendations to improve your system architecture:
+              Found <strong>{suggestions.length}</strong> recommendations to
+              improve your system architecture:
             </p>
             {suggestions.map((suggestion, index) => (
-              <div key={index} className={`suggestion-card ${suggestion.severity}`}>
+              <div
+                key={index}
+                className={`suggestion-card ${suggestion.severity}`}
+              >
                 <div className="card-header">
-                  <span className={`severity-badge ${getSeverityBadgeClass(suggestion.severity)}`}>
-                    <span className="badge-icon">{getSeverityIcon(suggestion.severity)}</span>
-                    <span className="badge-text">{suggestion.severity.toUpperCase()}</span>
+                  <span
+                    className={`severity-badge ${getSeverityBadgeClass(suggestion.severity)}`}
+                  >
+                    <span className="badge-icon">
+                      {getSeverityIcon(suggestion.severity)}
+                    </span>
+                    <span className="badge-text">
+                      {suggestion.severity.toUpperCase()}
+                    </span>
                   </span>
-                  <span className="suggestion-type">{suggestion.type.replace('_', ' ')}</span>
+                  <span className="suggestion-type">
+                    {suggestion.type.replace("_", " ")}
+                  </span>
                 </div>
-                <div className="card-message">
-                  {suggestion.message}
-                </div>
+                <div className="card-message">{suggestion.message}</div>
                 {suggestion.suggestedComponent && (
                   <div className="card-suggestion-action">
                     <span className="suggestion-preview">
-                      Recommendation: Add <strong>{suggestion.suggestedComponent.label}</strong> ({suggestion.suggestedComponent.type})
+                      Recommendation: Add{" "}
+                      <strong>{suggestion.suggestedComponent.label}</strong> (
+                      {suggestion.suggestedComponent.type})
                     </span>
                     <div className="action-buttons">
-                      <button 
-                        className="btn btn-secondary btn-xs btn-dismiss" 
+                      <button
+                        className="btn btn-secondary btn-xs btn-dismiss"
                         onClick={() => handleDismiss(index)}
                       >
                         Dismiss
                       </button>
-                      <button 
-                        className="btn btn-primary btn-xs btn-apply" 
+                      <button
+                        className="btn btn-primary btn-xs btn-apply"
                         onClick={() => handleApply(suggestion, index)}
                       >
                         Apply Suggestion
@@ -116,8 +157,10 @@ export default function AssistPanel({
       </div>
 
       <div className="assist-panel-footer">
-        <p className="footer-hint">Rules check updates dynamically as components are added and labeled.</p>
+        <p className="footer-hint">
+          Rules check updates dynamically as components are added and labeled.
+        </p>
       </div>
     </div>
-  )
+  );
 }
