@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from "react";
 
 /**
  * CanvasOverlay sits on top of the FabricJS canvas wrapper.
@@ -7,53 +7,58 @@ import React, { useEffect, useRef } from 'react'
  */
 export default function CanvasOverlay({ fabricCanvas, overlayRef }) {
   useEffect(() => {
-    if (!fabricCanvas || !overlayRef.current) return
+    if (!fabricCanvas || !overlayRef.current) return;
 
-    const canvasElement = overlayRef.current
-    const originalParent = canvasElement.parentElement
-    
+    const canvasElement = overlayRef.current;
+    const originalParent = canvasElement.parentElement;
+
     // Find the FabricJS container (.canvas-container)
-    const container = originalParent?.querySelector('.canvas-container')
+    const container = originalParent?.querySelector(".canvas-container");
     if (container) {
-      container.appendChild(canvasElement)
+      container.appendChild(canvasElement);
     }
 
     const resizeOverlay = () => {
-      // Match the Fabric canvas width and height exactly
-      canvasElement.width = fabricCanvas.getWidth()
-      canvasElement.height = fabricCanvas.getHeight()
-      canvasElement.style.width = fabricCanvas.getWidth() + 'px'
-      canvasElement.style.height = fabricCanvas.getHeight() + 'px'
-    }
+      const w = fabricCanvas.getWidth();
+      const h = fabricCanvas.getHeight();
+      if (canvasElement.width !== w) canvasElement.width = w;
+      if (canvasElement.height !== h) canvasElement.height = h;
+      canvasElement.style.width = w + "px";
+      canvasElement.style.height = h + "px";
+    };
 
     // Initialize and bind resize listener
-    resizeOverlay()
-    window.addEventListener('resize', resizeOverlay)
-    
+    resizeOverlay();
+    window.addEventListener("resize", resizeOverlay);
+
     // Also listen to Fabric canvas events to trigger overlay updates
-    fabricCanvas.on('after:render', resizeOverlay)
+    fabricCanvas.on("after:render", resizeOverlay);
 
     return () => {
       // Append back to original parent so React can clean it up safely
-      if (canvasElement && originalParent && canvasElement.parentElement !== originalParent) {
-        originalParent.appendChild(canvasElement)
+      if (
+        canvasElement &&
+        originalParent &&
+        canvasElement.parentElement !== originalParent
+      ) {
+        originalParent.appendChild(canvasElement);
       }
-      window.removeEventListener('resize', resizeOverlay)
-      fabricCanvas.off('after:render', resizeOverlay)
-    }
-  }, [fabricCanvas, overlayRef])
+      window.removeEventListener("resize", resizeOverlay);
+      fabricCanvas.off("after:render", resizeOverlay);
+    };
+  }, [fabricCanvas, overlayRef]);
 
   return (
     <canvas
       ref={overlayRef}
       className="canvas-overlay"
       style={{
-        position: 'absolute',
+        position: "absolute",
         left: 0,
         top: 0,
-        pointerEvents: 'none',
+        pointerEvents: "none",
         zIndex: 9, // Sits right on top of FabricJS canvas elements
       }}
     />
-  )
+  );
 }

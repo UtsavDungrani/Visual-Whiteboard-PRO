@@ -1,102 +1,92 @@
 /**
- * Helper utilities for rendering and snapping to magnetic connection points on FabricJS shapes.
+ * Magnetic anchors in canvas space (viewport / zoom independent).
+ * Uses calcTransformMatrix so grouped / multi-selected objects stay correct.
  */
 
-/**
- * Calculates the coordinates of an anchor point on a FabricJS object.
- * @param {fabric.Object} fabricObject - The FabricJS shape.
- * @param {string} anchor - 'left' | 'right' | 'top' | 'bottom'.
- * @param {boolean} absolute - If true, returns canvas space coordinates. If false, returns viewport/screen space coordinates.
- */
-export function getAnchorPoint(fabricObject, anchor, absolute = false) {
-  // fabricObject.getBoundingRect(absolute) returns bounds in canvas coordinate space when absolute = true.
-  // When absolute = false, it returns bounds in viewport/screen space.
-  const bounds = fabricObject.getBoundingRect(absolute)
-  const cx = bounds.left + bounds.width / 2
-  const cy = bounds.top + bounds.height / 2
-
+export function localAnchorOffset(width, height, anchor) {
+  const w = width || 0;
+  const h = height || 0;
   switch (anchor) {
-    case 'left':
-      return { x: bounds.left, y: cy }
-    case 'right':
-      return { x: bounds.left + bounds.width, y: cy }
-    case 'top':
-      return { x: cx, y: bounds.top }
-    case 'bottom':
-      return { x: cx, y: bounds.top + bounds.height }
+    case "left":
+      return { x: -w / 2, y: 0 };
+    case "right":
+      return { x: w / 2, y: 0 };
+    case "top":
+      return { x: 0, y: -h / 2 };
+    case "bottom":
+      return { x: 0, y: h / 2 };
     default:
-      return { x: cx, y: cy }
+      return { x: 0, y: 0 };
   }
 }
 
-/**
- * Finds all anchor points of an object in screen space.
- */
-export function getObjectAnchors(fabricObject) {
-  return [
-    { name: 'left', ...getAnchorPoint(fabricObject, 'left', false) },
-    { name: 'right', ...getAnchorPoint(fabricObject, 'right', false) },
-    { name: 'top', ...getAnchorPoint(fabricObject, 'top', false) },
-    { name: 'bottom', ...getAnchorPoint(fabricObject, 'bottom', false) }
-  ]
+export function canvasToScreen(canvas, pt) {
+  const F = typeof window !== "undefined" ? window.fabric : null;
+  if (!F || !canvas?.viewportTransform) {
+    return { x: pt.x, y: pt.y };
+  }
+  const screen = F.util.transformPoint(
+    new F.Point(pt.x, pt.y),
+    canvas.viewportTransform,
+  );
+  return { x: screen.x, y: screen.y };
 }
 
 /**
- * Find the closest anchor point within snapping distance.
- * @param {fabric.Canvas} canvas - Fabric canvas.
- * @param {Object} mousePointer - {x, y} coordinates of the cursor.
- * @param {number} threshold - Snapping radius in pixels (e.g. 12px).
- * @returns {Object|null} Snapped anchor info { object, anchor, screenX, screenY, canvasX, canvasY }
+ * Side midpoint of a shape in canvas coordinates (ignores zoom / viewport).
  */
-export function findClosestAnchor(canvas, mousePointer, threshold = 12) {
-  // Find all elements except line/connector, active overlay, grid, etc.
-  const objects = canvas.getObjects().filter(obj => {
-    return obj.id !== 'page-boundary' && 
-           obj.type !== 'connector' && 
-           obj.visible !== false
-  })
+export function getAnchorPoint(fabricObject, anchor) {
+  const F = typeof window !== "undefined" ? window.fabric : null;
+  const local = localAnchorOffset(
+    fabricObject.width,
+    fabricObject.height,
+    anchor,
+  );
+  if (!F || !fabricObject?.calcTransformMatrix) {
+    return local;
+  }
+  const pt = F.util.transformPoint(
+    new F.Point(local.x, local.y),
+    fabricObject.calcTransformMatrix(),
+  );
+  return { x: pt.x, y: pt.y };
+}
 
-  let closest = null
-  const zoom = canvas.getZoom() || 1
-  // Convert screen threshold (px) to canvas space threshold
-  const thresholdCanvas = threshold / zoom
-  let minDistance = thresholdCanvas
+export function findClosestAnchor(canvas, mousePointer, threshold = 12) {
+  const objects = canvas.getObjects().filter((obj) => {
+    return (
+      obj.id !== "page-boundary" &&
+      obj.type !== "connector" &&
+      obj.visible !== false
+    );
+  });
+
+  const zoom = canvas.getZoom() || 1;
+  const thresholdCanvas = threshold / zoom;
+  let minDistance = thresholdCanvas;
+  let closest = null;
 
   for (const obj of objects) {
-    const positions = ['left', 'right', 'top', 'bottom']
-    for (const pos of positions) {
-      // Get anchor coordinate in absolute canvas space
-      const canvasCoords = getAnchorPoint(obj, pos, true)
-      
-      const dx = mousePointer.x - canvasCoords.x
-      const dy = mousePointer.y - canvasCoords.y
-      const dist = Math.hypot(dx, dy)
-
+    for (const pos of ["left", "right", "top", "bottom"]) {
+      const canvasCoords = getAnchorPoint(obj, pos);
+      const dist = Math.hypot(
+        mousePointer.x - canvasCoords.x,
+        mousePointer.y - canvasCoords.y,
+      );
       if (dist < minDistance) {
-        minDistance = dist
-        
-        // Convert canvas coordinates to screen coordinates for overlay drawing
-        const F = window.fabric
-        let screenX = canvasCoords.x
-        let screenY = canvasCoords.y
-        if (F && canvas.viewportTransform) {
-          const pt = new F.Point(canvasCoords.x, canvasCoords.y)
-          const screenPt = F.util.transformPoint(pt, canvas.viewportTransform)
-          screenX = screenPt.x
-          screenY = screenPt.y
-        }
-
+        minDistance = dist;
+        const screen = canvasToScreen(canvas, canvasCoords);
         closest = {
           object: obj,
           anchor: pos,
-          screenX: screenX,
-          screenY: screenY,
+          screenX: screen.x,
+          screenY: screen.y,
           canvasX: canvasCoords.x,
-          canvasY: canvasCoords.y
-        }
+          canvasY: canvasCoords.y,
+        };
       }
     }
   }
 
-  return closest
+  return closest;
 }

@@ -6,9 +6,9 @@
     "semantic_hash": ""
   },
   "frontend/src/App.jsx": {
-    "mtime": 1787380814.312848,
-    "seen": 1787380835.4187622,
-    "ast_hash": "f3b012d4e56f9d69733e39c6b973f4e3",
+    "mtime": 1787413759.6400216,
+    "seen": 1787413783.3423414,
+    "ast_hash": "9310182dbd8b3de4b40c1cf52fd7b114",
     "semantic_hash": ""
   },
   "frontend/src/main.jsx": {
@@ -48,10 +48,10 @@
     "semantic_hash": "637776aa6f7496d069afe7520c845c8a"
   },
   "README.md": {
-    "mtime": 1781255378.39367,
-    "seen": 1787378086.4252896,
-    "ast_hash": "061c65932a362b25164f1fe90fbf79b4",
-    "semantic_hash": "061c65932a362b25164f1fe90fbf79b4"
+    "mtime": 1787392152.9342084,
+    "seen": 1787393564.9708967,
+    "ast_hash": "b29114152b931a782ede08045bc343fc",
+    "semantic_hash": ""
   },
   "TASKS.md": {
     "mtime": 1782101817.4880245,
@@ -239,33 +239,33 @@
     "semantic_hash": ""
   },
   "frontend/src/components/CanvasOverlay.jsx": {
-    "mtime": 1782537705.9240599,
-    "seen": 1787378086.4252372,
-    "ast_hash": "5565b7c00341097a9e4a6972b2fbfd54",
+    "mtime": 1787413705.870834,
+    "seen": 1787413783.3428364,
+    "ast_hash": "b590ce52f7ff1a0943504e18c6611977",
     "semantic_hash": ""
   },
   "frontend/src/hooks/useConnectorSync.js": {
-    "mtime": 1782537505.658313,
-    "seen": 1787378086.42525,
-    "ast_hash": "fb1ec16b583bd9f267ca9c1b3705691d",
+    "mtime": 1787413757.439605,
+    "seen": 1787413783.3447225,
+    "ast_hash": "1572822f4621c53304e62eb75822bfe5",
     "semantic_hash": ""
   },
   "frontend/src/tools/ConnectorLine.js": {
-    "mtime": 1787381936.29039,
-    "seen": 1787381992.4131653,
-    "ast_hash": "6f4382ceabdbb2fa7d9126c0beaaaf8b",
+    "mtime": 1787413649.3146708,
+    "seen": 1787413783.3451962,
+    "ast_hash": "9f72b0258890cb8486e045488ebff289",
     "semantic_hash": ""
   },
   "frontend/src/tools/useConnectorTool.js": {
-    "mtime": 1782538309.153427,
-    "seen": 1787378086.4252563,
-    "ast_hash": "c990a042f2ba547336b5f932d5043934",
+    "mtime": 1787413704.2336593,
+    "seen": 1787413783.345199,
+    "ast_hash": "2666cd5ce5a1a894d337d40f3d944806",
     "semantic_hash": ""
   },
   "frontend/src/utils/anchorPoints.js": {
-    "mtime": 1782538192.0628977,
-    "seen": 1787378086.4252574,
-    "ast_hash": "f94d83ff5fe5f505edc0da9cf176a2a0",
+    "mtime": 1787413791.1979237,
+    "seen": 1787455582.1282916,
+    "ast_hash": "ed8425683f48f090e052510f47d875d8",
     "semantic_hash": ""
   },
   "server/middleware/admin.js": {

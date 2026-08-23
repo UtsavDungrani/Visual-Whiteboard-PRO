@@ -1,99 +1,154 @@
-import { useEffect } from 'react'
-import { getAnchorPoint } from '../utils/anchorPoints'
+import { useEffect } from "react";
+import { getAnchorPoint } from "../utils/anchorPoints";
 
-/**
- * Custom hook to synchronize connector line endpoints when connected shapes are moved, scaled, or modified.
- */
+function collectMovedShapes(target, out = []) {
+  if (!target || target.type === "connector" || target.id === "page-boundary") {
+    return out;
+  }
+  if (target.type === "activeSelection" || target.type === "group") {
+    const kids = target.getObjects
+      ? target.getObjects()
+      : target._objects || [];
+    kids.forEach((child) => collectMovedShapes(child, out));
+  }
+  if (target.id) {
+    out.push(target);
+  }
+  return out;
+}
+
+function stripConnectorsFromSelection(canvas) {
+  const active = canvas.getActiveObject();
+  if (!active) return;
+  if (active.type === "connector") {
+    return;
+  }
+  if (active.type !== "activeSelection") return;
+  const connectors = active
+    .getObjects()
+    .filter((obj) => obj.type === "connector");
+  if (connectors.length === 0) return;
+  connectors.forEach((conn) => active.removeWithUpdate(conn));
+  const remaining = active.getObjects();
+  if (remaining.length === 0) {
+    canvas.discardActiveObject();
+  } else if (remaining.length === 1) {
+    canvas.setActiveObject(remaining[0]);
+  }
+  canvas.requestRenderAll();
+}
+
+function applyConnectorAnchors(connector, shapesMap) {
+  if (!connector.data) return false;
+  const { sourceId, sourceAnchor, targetId, targetAnchor } = connector.data;
+  const sourceObj = shapesMap.get(sourceId);
+  const targetObj = shapesMap.get(targetId);
+  if (!sourceObj && !targetObj) return false;
+
+  const p1 = sourceObj
+    ? getAnchorPoint(sourceObj, sourceAnchor)
+    : { x: connector.x1, y: connector.y1 };
+  const p2 = targetObj
+    ? getAnchorPoint(targetObj, targetAnchor)
+    : { x: connector.x2, y: connector.y2 };
+
+  if (typeof connector.setEndpoints === "function") {
+    connector.setEndpoints(p1.x, p1.y, p2.x, p2.y);
+  } else {
+    connector.set({
+      x1: p1.x,
+      y1: p1.y,
+      x2: p2.x,
+      y2: p2.y,
+      scaleX: 1,
+      scaleY: 1,
+      angle: 0,
+    });
+    connector.setCoords();
+  }
+  connector.set({
+    lockMovementX: true,
+    lockMovementY: true,
+    lockScalingX: true,
+    lockScalingY: true,
+    lockRotation: true,
+    objectCaching: false,
+  });
+  return true;
+}
+
+function shapesMapFromCanvas(canvas) {
+  return new Map(
+    canvas
+      .getObjects()
+      .filter(
+        (obj) =>
+          obj.id && obj.id !== "page-boundary" && obj.type !== "connector",
+      )
+      .map((s) => [s.id, s]),
+  );
+}
+
 export function useConnectorSync(canvas) {
   useEffect(() => {
-    if (!canvas) return
+    if (!canvas) return;
 
     const handleObjectMove = (e) => {
-      const movedObject = e.target
-      if (!movedObject || movedObject.type === 'connector' || movedObject.id === 'page-boundary') {
-        return
-      }
+      const moved = collectMovedShapes(e.target);
+      if (moved.length === 0) return;
 
-      // Find all connectors on the canvas
-      const connectors = canvas.getObjects().filter(obj => obj.type === 'connector')
-      let updatedAny = false
+      const movedIds = new Set(moved.map((obj) => obj.id));
+      const shapesMap = shapesMapFromCanvas(canvas);
+      let updatedAny = false;
 
-      for (const connector of connectors) {
-        if (!connector.data) continue
-
-        const { sourceId, sourceAnchor, targetId, targetAnchor } = connector.data
-
-        if (sourceId === movedObject.id) {
-          const pt = getAnchorPoint(movedObject, sourceAnchor, true)
-          connector.set({ x1: pt.x, y1: pt.y })
-          connector.setCoords()
-          updatedAny = true
-        }
-
-        if (targetId === movedObject.id) {
-          const pt = getAnchorPoint(movedObject, targetAnchor, true)
-          connector.set({ x2: pt.x, y2: pt.y })
-          connector.setCoords()
-          updatedAny = true
+      for (const connector of canvas.getObjects()) {
+        if (connector.type !== "connector" || !connector.data) continue;
+        const { sourceId, targetId } = connector.data;
+        if (!movedIds.has(sourceId) && !movedIds.has(targetId)) continue;
+        if (applyConnectorAnchors(connector, shapesMap)) {
+          updatedAny = true;
         }
       }
 
       if (updatedAny) {
-        canvas.renderAll()
+        canvas.requestRenderAll();
       }
-    }
+    };
 
-    // Bind listeners
-    canvas.on('object:moving', handleObjectMove)
-    canvas.on('object:scaling', handleObjectMove)
-    canvas.on('object:modified', handleObjectMove)
+    const handleSelection = () => stripConnectorsFromSelection(canvas);
+
+    canvas.on("object:moving", handleObjectMove);
+    canvas.on("object:scaling", handleObjectMove);
+    canvas.on("object:rotating", handleObjectMove);
+    canvas.on("object:modified", handleObjectMove);
+    canvas.on("selection:created", handleSelection);
+    canvas.on("selection:updated", handleSelection);
 
     return () => {
-      canvas.off('object:moving', handleObjectMove)
-      canvas.off('object:scaling', handleObjectMove)
-      canvas.off('object:modified', handleObjectMove)
-    }
-  }, [canvas])
+      canvas.off("object:moving", handleObjectMove);
+      canvas.off("object:scaling", handleObjectMove);
+      canvas.off("object:rotating", handleObjectMove);
+      canvas.off("object:modified", handleObjectMove);
+      canvas.off("selection:created", handleSelection);
+      canvas.off("selection:updated", handleSelection);
+    };
+  }, [canvas]);
 }
 
-/**
- * Utility function to manually update all connectors for a specific canvas.
- * Useful after loading a canvas, running AI cleanup, or bulk operations.
- */
 export function updateAllConnectors(canvas) {
-  if (!canvas) return
+  if (!canvas) return;
 
-  const connectors = canvas.getObjects().filter(obj => obj.type === 'connector')
-  const shapes = canvas.getObjects().filter(obj => obj.id !== 'page-boundary' && obj.type !== 'connector')
-  
-  const shapesMap = new Map(shapes.map(s => [s.id, s]))
-  let updatedAny = false
+  const shapesMap = shapesMapFromCanvas(canvas);
+  let updatedAny = false;
 
-  for (const connector of connectors) {
-    if (!connector.data) continue
-    const { sourceId, sourceAnchor, targetId, targetAnchor } = connector.data
-
-    const sourceObj = shapesMap.get(sourceId)
-    const targetObj = shapesMap.get(targetId)
-
-    if (sourceObj) {
-      const pt = getAnchorPoint(sourceObj, sourceAnchor, true)
-      connector.set({ x1: pt.x, y1: pt.y })
-      updatedAny = true
-    }
-
-    if (targetObj) {
-      const pt = getAnchorPoint(targetObj, targetAnchor, true)
-      connector.set({ x2: pt.x, y2: pt.y })
-      updatedAny = true
-    }
-
-    if (sourceObj || targetObj) {
-      connector.setCoords()
+  for (const connector of canvas.getObjects()) {
+    if (connector.type !== "connector") continue;
+    if (applyConnectorAnchors(connector, shapesMap)) {
+      updatedAny = true;
     }
   }
 
   if (updatedAny) {
-    canvas.renderAll()
+    canvas.requestRenderAll();
   }
 }

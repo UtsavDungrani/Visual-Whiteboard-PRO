@@ -1,365 +1,461 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { io } from 'socket.io-client'
-import Topbar from './components/Topbar'
-import Toolbar from './components/Toolbar'
-import PropertiesPanel from './components/PropertiesPanel'
-import CanvasControls from './components/CanvasControls'
-import PageStrip from './components/PageStrip'
-import ExportModal from './components/ExportModal'
-import ContextPanel from './components/ContextPanel'
-import AssistPanel from './components/AssistPanel'
-import PermissionsPanel from './components/PermissionsPanel'
-import './fabric-eraser'
+import React, { useEffect, useRef, useState } from "react";
+import { io } from "socket.io-client";
+import Topbar from "./components/Topbar";
+import Toolbar from "./components/Toolbar";
+import PropertiesPanel from "./components/PropertiesPanel";
+import CanvasControls from "./components/CanvasControls";
+import PageStrip from "./components/PageStrip";
+import ExportModal from "./components/ExportModal";
+import ContextPanel from "./components/ContextPanel";
+import AssistPanel from "./components/AssistPanel";
+import PermissionsPanel from "./components/PermissionsPanel";
+import "./fabric-eraser";
 import {
   isPointInPolygon,
   getObjectSelectionMode,
   splitObjectWithLasso,
   splitLineWithLasso,
-} from './pathLassoSplit'
-import { ConnectorLine } from './tools/ConnectorLine'
-import CanvasOverlay from './components/CanvasOverlay'
-import { useConnectorTool } from './tools/useConnectorTool'
-import { useConnectorSync, updateAllConnectors } from './hooks/useConnectorSync'
-import { getAnchorPoint } from './utils/anchorPoints'
+} from "./pathLassoSplit";
+import { ConnectorLine } from "./tools/ConnectorLine";
+import CanvasOverlay from "./components/CanvasOverlay";
+import { useConnectorTool } from "./tools/useConnectorTool";
+import {
+  useConnectorSync,
+  updateAllConnectors,
+} from "./hooks/useConnectorSync";
 
-const rawApiUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-const API_BASE_URL = rawApiUrl.endsWith('/') ? rawApiUrl.slice(0, -1) : rawApiUrl;
+const rawApiUrl = import.meta.env.VITE_API_URL || "http://localhost:4000";
+const API_BASE_URL = rawApiUrl.endsWith("/")
+  ? rawApiUrl.slice(0, -1)
+  : rawApiUrl;
 
 export default function App() {
-  const canvasRef = useRef(null)
-  const fabricRef = useRef(null)
-  const socketRef = useRef(null)
-  const overlayCanvasRef = useRef(null)
-  const [canvasInstance, setCanvasInstance] = useState(null)
+  const canvasRef = useRef(null);
+  const fabricRef = useRef(null);
+  const socketRef = useRef(null);
+  const overlayCanvasRef = useRef(null);
+  const [canvasInstance, setCanvasInstance] = useState(null);
 
   // Screen and Authentication state
   const [screen, setScreen] = useState(() => {
-    const params = new URLSearchParams(window.location.search)
-    const boardId = params.get('board')
+    const params = new URLSearchParams(window.location.search);
+    const boardId = params.get("board");
     if (boardId) {
-      return 'editor'
+      return "editor";
     }
-    const token = localStorage.getItem('wb_token')
-    return token ? 'dashboard' : 'landing'
-  })
-  const [authMode, setAuthMode] = useState('login')
-  const [authForm, setAuthForm] = useState({ name: '', email: '', password: '' })
-  const [authError, setAuthError] = useState('')
-  const [authLoading, setAuthLoading] = useState(false)
-  const [whiteboardsList, setWhiteboardsList] = useState([])
-  const [searchQuery, setSearchQuery] = useState('')
-  const [boardMeta, setBoardMeta] = useState({ owner: null, collaborators: [], isPublic: false })
-  const [showJoinModal, setShowJoinModal] = useState(false)
-  const [joinBoardId, setJoinBoardId] = useState('')
-  const [joinModalError, setJoinModalError] = useState('')
-  const [joinModalLoading, setJoinModalLoading] = useState(false)
+    const token = localStorage.getItem("wb_token");
+    return token ? "dashboard" : "landing";
+  });
+  const [authMode, setAuthMode] = useState("login");
+  const [authForm, setAuthForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const [authError, setAuthError] = useState("");
+  const [authLoading, setAuthLoading] = useState(false);
+  const [whiteboardsList, setWhiteboardsList] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [boardMeta, setBoardMeta] = useState({
+    owner: null,
+    collaborators: [],
+    isPublic: false,
+  });
+  const [showJoinModal, setShowJoinModal] = useState(false);
+  const [joinBoardId, setJoinBoardId] = useState("");
+  const [joinModalError, setJoinModalError] = useState("");
+  const [joinModalLoading, setJoinModalLoading] = useState(false);
 
   // State variables
-  const [title, setTitle] = useState('My Whiteboard')
-  const [savedId, setSavedId] = useState(null)
-  const [activeTool, setActiveTool] = useState('select') // select, square-select, circle-select, lasso-select, pan, draw, rect, circle, diamond, text, arrow
-  const [drawType, setDrawType] = useState('pencil') // pencil, pen, highlighter, eraser
+  const [title, setTitle] = useState("My Whiteboard");
+  const [savedId, setSavedId] = useState(null);
+  const [activeTool, setActiveTool] = useState("select"); // select, square-select, circle-select, lasso-select, pan, draw, rect, circle, diamond, text, arrow
+  const [drawType, setDrawType] = useState("pencil"); // pencil, pen, highlighter, eraser
   const [drawSizes, setDrawSizes] = useState({
     pencil: 2,
     pen: 6,
     highlighter: 20,
     eraser: 20,
-  })
-  const [selectedObject, setSelectedObject] = useState(null)
+  });
+  const [selectedObject, setSelectedObject] = useState(null);
   const [properties, setProperties] = useState({
-    stroke: '#1E3A5F',
-    fill: '#FFFFFF',
+    stroke: "#1E3A5F",
+    fill: "#FFFFFF",
     strokeWidth: 2,
-    opacity: 1
-  })
-  const [zoom, setZoom] = useState(1.0)
-  const [snapToGrid, setSnapToGrid] = useState(false)
-  const [connectionStatus, setConnectionStatus] = useState('connecting')
-  const [contextMap, setContextMap] = useState({})
-  const [isContextPanelOpen, setIsContextPanelOpen] = useState(false)
-  const [isAssistPanelOpen, setIsAssistPanelOpen] = useState(false)
-  const [isPermissionsPanelOpen, setIsPermissionsPanelOpen] = useState(false)
-  const [sessionAccess, setSessionAccess] = useState(null)
-  const [suggestions, setSuggestions] = useState([])
-  const [isCleanupLoading, setIsCleanupLoading] = useState(false)
-  const [isAssistLoading, setIsAssistLoading] = useState(false)
-  const clipboardRef = useRef(null)
-  const isCreatingShapeRef = useRef(false)
-  const tempCreationShapeRef = useRef(null)
+    opacity: 1,
+  });
+  const [zoom, setZoom] = useState(1.0);
+  const [snapToGrid, setSnapToGrid] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState("connecting");
+  const [contextMap, setContextMap] = useState({});
+  const [isContextPanelOpen, setIsContextPanelOpen] = useState(false);
+  const [isAssistPanelOpen, setIsAssistPanelOpen] = useState(false);
+  const [isPermissionsPanelOpen, setIsPermissionsPanelOpen] = useState(false);
+  const [sessionAccess, setSessionAccess] = useState(null);
+  const [suggestions, setSuggestions] = useState([]);
+  const [isCleanupLoading, setIsCleanupLoading] = useState(false);
+  const [isAssistLoading, setIsAssistLoading] = useState(false);
+  const clipboardRef = useRef(null);
+  const isCreatingShapeRef = useRef(false);
+  const tempCreationShapeRef = useRef(null);
 
   // --- Canvas Management & Clipboard ---
   const handleClearPage = () => {
-    if (isReadOnly) return
-    const canvas = fabricRef.current
-    if (!canvas) return
-    if (!window.confirm('Are you sure you want to clear this entire page? This can be undone.')) return
+    if (isReadOnly) return;
+    const canvas = fabricRef.current;
+    if (!canvas) return;
+    if (
+      !window.confirm(
+        "Are you sure you want to clear this entire page? This can be undone.",
+      )
+    )
+      return;
 
     // Keep page boundary if it exists
-    const objects = canvas.getObjects()
-    objects.forEach(obj => {
-      if (obj.id !== 'page-boundary') {
-        canvas.remove(obj)
+    const objects = canvas.getObjects();
+    objects.forEach((obj) => {
+      if (obj.id !== "page-boundary") {
+        canvas.remove(obj);
       }
-    })
+    });
 
-    canvas.requestRenderAll()
-    saveHistory()
-    sendCanvasUpdate()
-  }
+    canvas.requestRenderAll();
+    saveHistory();
+    sendCanvasUpdate();
+  };
 
   const handleCopy = () => {
-    const canvas = fabricRef.current
-    if (!canvas) return
-    const activeObj = canvas.getActiveObject()
-    if (!activeObj) return
+    const canvas = fabricRef.current;
+    if (!canvas) return;
+    const activeObj = canvas.getActiveObject();
+    if (!activeObj) return;
 
-    activeObj.clone((cloned) => {
-      clipboardRef.current = cloned
-    }, ['id', 'isLocked']) // include custom properties
-  }
+    activeObj.clone(
+      (cloned) => {
+        clipboardRef.current = cloned;
+      },
+      ["id", "isLocked"],
+    ); // include custom properties
+  };
 
   const handleCut = () => {
-    if (isReadOnly) return
-    const canvas = fabricRef.current
-    if (!canvas) return
-    const activeObj = canvas.getActiveObject()
-    if (!activeObj) return
+    if (isReadOnly) return;
+    const canvas = fabricRef.current;
+    if (!canvas) return;
+    const activeObj = canvas.getActiveObject();
+    if (!activeObj) return;
 
-    activeObj.clone((cloned) => {
-      clipboardRef.current = cloned
-      // Remove original objects
-      if (activeObj.type === 'activeSelection') {
-        activeObj.forEachObject((obj) => {
-          canvas.remove(obj)
-        })
-      } else {
-        canvas.remove(activeObj)
-      }
-      canvas.discardActiveObject()
-      canvas.requestRenderAll()
-      saveHistory()
-      sendCanvasUpdate()
-    }, ['id', 'isLocked'])
-  }
+    activeObj.clone(
+      (cloned) => {
+        clipboardRef.current = cloned;
+        // Remove original objects
+        if (activeObj.type === "activeSelection") {
+          activeObj.forEachObject((obj) => {
+            canvas.remove(obj);
+          });
+        } else {
+          canvas.remove(activeObj);
+        }
+        canvas.discardActiveObject();
+        canvas.requestRenderAll();
+        saveHistory();
+        sendCanvasUpdate();
+      },
+      ["id", "isLocked"],
+    );
+  };
 
   const handlePaste = () => {
-    if (isReadOnly) return
-    const canvas = fabricRef.current
-    if (!canvas || !clipboardRef.current) return
+    if (isReadOnly) return;
+    const canvas = fabricRef.current;
+    if (!canvas || !clipboardRef.current) return;
 
-    clipboardRef.current.clone((clonedObj) => {
-      canvas.discardActiveObject()
-      
-      // Offset pasted items so they don't land exactly on top
-      clonedObj.set({
-        left: clonedObj.left + 20,
-        top: clonedObj.top + 20,
-        evented: true,
-      })
+    clipboardRef.current.clone(
+      (clonedObj) => {
+        canvas.discardActiveObject();
 
-      if (clonedObj.type === 'activeSelection') {
-        // activeSelection needs to be added to canvas item by item
-        clonedObj.canvas = canvas
-        clonedObj.forEachObject((obj) => {
-          const newId = 'el-' + Date.now() + '-' + Math.round(Math.random() * 1e9)
-          obj.set('id', newId)
-          canvas.add(obj)
-        })
-        clonedObj.setCoords()
-      } else {
-        const newId = 'el-' + Date.now() + '-' + Math.round(Math.random() * 1e9)
-        clonedObj.set('id', newId)
-        canvas.add(clonedObj)
-      }
+        // Offset pasted items so they don't land exactly on top
+        clonedObj.set({
+          left: clonedObj.left + 20,
+          top: clonedObj.top + 20,
+          evented: true,
+        });
 
-      // Update clipboard for next paste (cumulative offset)
-      clipboardRef.current.top += 20
-      clipboardRef.current.left += 20
+        if (clonedObj.type === "activeSelection") {
+          // activeSelection needs to be added to canvas item by item
+          clonedObj.canvas = canvas;
+          clonedObj.forEachObject((obj) => {
+            const newId =
+              "el-" + Date.now() + "-" + Math.round(Math.random() * 1e9);
+            obj.set("id", newId);
+            canvas.add(obj);
+          });
+          clonedObj.setCoords();
+        } else {
+          const newId =
+            "el-" + Date.now() + "-" + Math.round(Math.random() * 1e9);
+          clonedObj.set("id", newId);
+          canvas.add(clonedObj);
+        }
 
-      canvas.setActiveObject(clonedObj)
-      canvas.requestRenderAll()
-      saveHistory()
-      sendCanvasUpdate()
-    }, ['id', 'isLocked'])
-  }
+        // Update clipboard for next paste (cumulative offset)
+        clipboardRef.current.top += 20;
+        clipboardRef.current.left += 20;
+
+        canvas.setActiveObject(clonedObj);
+        canvas.requestRenderAll();
+        saveHistory();
+        sendCanvasUpdate();
+      },
+      ["id", "isLocked"],
+    );
+  };
 
   // Real-time Collaboration States
-  const [roomUsers, setRoomUsers] = useState([])
-  const [remoteCursors, setRemoteCursors] = useState({})
+  const [roomUsers, setRoomUsers] = useState([]);
+  const [remoteCursors, setRemoteCursors] = useState({});
   const [user, setUser] = useState(() => {
-    const avatarColors = ['#1E3A5F', '#2E86AB', '#10B981', '#F59E0B', '#EF4444']
-    const savedName = localStorage.getItem('wb_username')
-    const savedColor = localStorage.getItem('wb_usercolor') || avatarColors[Math.floor(Math.random() * avatarColors.length)]
+    const avatarColors = [
+      "#1E3A5F",
+      "#2E86AB",
+      "#10B981",
+      "#F59E0B",
+      "#EF4444",
+    ];
+    const savedName = localStorage.getItem("wb_username");
+    const savedColor =
+      localStorage.getItem("wb_usercolor") ||
+      avatarColors[Math.floor(Math.random() * avatarColors.length)];
 
     if (savedName) {
-      return { name: savedName, color: savedColor }
+      return { name: savedName, color: savedColor };
     }
 
-    const ADJECTIVES = ['Creative', 'Sleek', 'Agile', 'Smart', 'Logical', 'Dynamic', 'Robust']
-    const NOUNS = ['Architect', 'Coder', 'Developer', 'Designer', 'Engineer', 'Guru', 'Builder']
-    const name = `${ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)]} ${NOUNS[Math.floor(Math.random() * NOUNS.length)]}`
+    const ADJECTIVES = [
+      "Creative",
+      "Sleek",
+      "Agile",
+      "Smart",
+      "Logical",
+      "Dynamic",
+      "Robust",
+    ];
+    const NOUNS = [
+      "Architect",
+      "Coder",
+      "Developer",
+      "Designer",
+      "Engineer",
+      "Guru",
+      "Builder",
+    ];
+    const name = `${ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)]} ${NOUNS[Math.floor(Math.random() * NOUNS.length)]}`;
 
-    localStorage.setItem('wb_username', name)
-    localStorage.setItem('wb_usercolor', savedColor)
-    return { name, color: savedColor }
-  })
+    localStorage.setItem("wb_username", name);
+    localStorage.setItem("wb_usercolor", savedColor);
+    return { name, color: savedColor };
+  });
 
   // Multi-page and Export States
   const [pages, setPages] = useState([
     {
-      page_id: 'page-1',
-      title: 'Page 1',
+      page_id: "page-1",
+      title: "Page 1",
       order: 0,
       canvas_state: { objects: [] },
-      thumbnail: null
-    }
-  ])
-  const [activePageId, setActivePageId] = useState('page-1')
-  const [pageMode, setPageMode] = useState('infinite') // infinite, fixed
-  const [pageSize, setPageSize] = useState({ w: 1024, h: 576 }) // default 16:9 Presentation Slide size
-  const [isExportModalOpen, setIsExportModalOpen] = useState(false)
+      thumbnail: null,
+    },
+  ]);
+  const [activePageId, setActivePageId] = useState("page-1");
+  const [pageMode, setPageMode] = useState("infinite"); // infinite, fixed
+  const [pageSize, setPageSize] = useState({ w: 1024, h: 576 }); // default 16:9 Presentation Slide size
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
 
   // Collapsible Panel States (Item 6)
-  const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(false)
-  const [isRightPanelCollapsed, setIsRightPanelCollapsed] = useState(true)
+  const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(false);
+  const [isRightPanelCollapsed, setIsRightPanelCollapsed] = useState(true);
 
-  const toggleLeftPanel = () => setIsLeftPanelCollapsed(prev => !prev)
-  const toggleRightPanel = () => setIsRightPanelCollapsed(prev => !prev)
+  const toggleLeftPanel = () => setIsLeftPanelCollapsed((prev) => !prev);
+  const toggleRightPanel = () => setIsRightPanelCollapsed((prev) => !prev);
 
   // Auto-collapse logic when interacting with canvas
   const handleCanvasInteraction = () => {
-    setIsLeftPanelCollapsed(true)
-    setIsRightPanelCollapsed(true)
-    setIsPermissionsPanelOpen(false)
-  }
+    setIsLeftPanelCollapsed(true);
+    setIsRightPanelCollapsed(true);
+    setIsPermissionsPanelOpen(false);
+  };
 
   // Refs for callbacks & listeners to avoid stale states
-  const activeToolRef = useRef(activeTool)
-  const snapToGridRef = useRef(snapToGrid)
-  const propertiesRef = useRef(properties)
-  const savedIdRef = useRef(savedId)
-  const applyingRemoteRef = useRef(false)
-  const interactingRef = useRef(false)
-  const pendingRemoteJsonRef = useRef(null)
+  const activeToolRef = useRef(activeTool);
+  const snapToGridRef = useRef(snapToGrid);
+  const propertiesRef = useRef(properties);
+  const savedIdRef = useRef(savedId);
+  const applyingRemoteRef = useRef(false);
+  const interactingRef = useRef(false);
+  const pendingRemoteJsonRef = useRef(null);
 
-  const activePageIdRef = useRef(activePageId)
-  const pagesRef = useRef(pages)
-  const pageModeRef = useRef(pageMode)
-  const pageSizeRef = useRef(pageSize)
+  const activePageIdRef = useRef(activePageId);
+  const pagesRef = useRef(pages);
+  const pageModeRef = useRef(pageMode);
+  const pageSizeRef = useRef(pageSize);
 
   // Undo / Redo History Stack Refs
-  const historyRef = useRef([])
-  const historyIndexRef = useRef(-1)
-  const [canUndo, setCanUndo] = useState(false)
-  const [canRedo, setCanRedo] = useState(false)
+  const historyRef = useRef([]);
+  const historyIndexRef = useRef(-1);
+  const [canUndo, setCanUndo] = useState(false);
+  const [canRedo, setCanRedo] = useState(false);
 
   // Refs for custom selection drawing
-  const isDrawingSelectionRef = useRef(false)
-  const selectionPointsRef = useRef([])
-  const tempSelectionShapeRef = useRef(null)
-  const selectionStartRef = useRef({ x: 0, y: 0 })
-  const lassoClickTargetRef = useRef(null)
-  const drawTypeRef = useRef(drawType)
-  const drawSizesRef = useRef(drawSizes)
-  const zoomRef = useRef(zoom)
-  const eraserCursorElRef = useRef(null)
+  const isDrawingSelectionRef = useRef(false);
+  const selectionPointsRef = useRef([]);
+  const tempSelectionShapeRef = useRef(null);
+  const selectionStartRef = useRef({ x: 0, y: 0 });
+  const lassoClickTargetRef = useRef(null);
+  const drawTypeRef = useRef(drawType);
+  const drawSizesRef = useRef(drawSizes);
+  const zoomRef = useRef(zoom);
+  const eraserCursorElRef = useRef(null);
 
   // Keep refs in sync with React state
-  useEffect(() => { activeToolRef.current = activeTool }, [activeTool])
-  useEffect(() => { drawTypeRef.current = drawType }, [drawType])
-  useEffect(() => { drawSizesRef.current = drawSizes }, [drawSizes])
-  useEffect(() => { zoomRef.current = zoom }, [zoom])
-  useEffect(() => { snapToGridRef.current = snapToGrid }, [snapToGrid])
-  useEffect(() => { propertiesRef.current = properties }, [properties])
-  useEffect(() => { savedIdRef.current = savedId }, [savedId])
+  useEffect(() => {
+    activeToolRef.current = activeTool;
+  }, [activeTool]);
+  useEffect(() => {
+    drawTypeRef.current = drawType;
+  }, [drawType]);
+  useEffect(() => {
+    drawSizesRef.current = drawSizes;
+  }, [drawSizes]);
+  useEffect(() => {
+    zoomRef.current = zoom;
+  }, [zoom]);
+  useEffect(() => {
+    snapToGridRef.current = snapToGrid;
+  }, [snapToGrid]);
+  useEffect(() => {
+    propertiesRef.current = properties;
+  }, [properties]);
+  useEffect(() => {
+    savedIdRef.current = savedId;
+  }, [savedId]);
 
-  useEffect(() => { activePageIdRef.current = activePageId }, [activePageId])
-  useEffect(() => { pagesRef.current = pages }, [pages])
-  useEffect(() => { pageModeRef.current = pageMode }, [pageMode])
-  useEffect(() => { pageSizeRef.current = pageSize }, [pageSize])
+  useEffect(() => {
+    activePageIdRef.current = activePageId;
+  }, [activePageId]);
+  useEffect(() => {
+    pagesRef.current = pages;
+  }, [pages]);
+  useEffect(() => {
+    pageModeRef.current = pageMode;
+  }, [pageMode]);
+  useEffect(() => {
+    pageSizeRef.current = pageSize;
+  }, [pageSize]);
 
   // Derived read-only permission check
-  const isReadOnly = savedId ? (
-    sessionAccess ? (sessionAccess === 'view') : (
-      boardMeta.owner !== user.id &&
-      !boardMeta.collaborators.includes(user.id)
-    )
-  ) : false
-  const isReadOnlyRef = useRef(isReadOnly)
-  useEffect(() => { isReadOnlyRef.current = isReadOnly }, [isReadOnly])
+  const isReadOnly = savedId
+    ? sessionAccess
+      ? sessionAccess === "view"
+      : boardMeta.owner !== user.id &&
+        !boardMeta.collaborators.includes(user.id)
+    : false;
+  const isReadOnlyRef = useRef(isReadOnly);
+  useEffect(() => {
+    isReadOnlyRef.current = isReadOnly;
+  }, [isReadOnly]);
 
   const lockObjectsIfReadOnly = (canvasInstance) => {
-    if (!canvasInstance) return
-    const readOnly = isReadOnlyRef.current
-    const isSelectionTool = activeToolRef.current === 'select'
-    const isAreaSelectTool = ['lasso-select', 'square-select', 'circle-select'].includes(activeToolRef.current)
+    if (!canvasInstance) return;
+    const readOnly = isReadOnlyRef.current;
+    const isSelectionTool = activeToolRef.current === "select";
+    const isAreaSelectTool = [
+      "lasso-select",
+      "square-select",
+      "circle-select",
+    ].includes(activeToolRef.current);
     canvasInstance.getObjects().forEach((obj) => {
-      if (obj.id !== 'page-boundary') {
-        obj.selectable = !readOnly && isSelectionTool
-        obj.evented = !readOnly && (isSelectionTool || isAreaSelectTool || activeToolRef.current === 'connector')
-        obj.hoverCursor = isSelectionTool ? (obj.lockMovementX ? 'default' : 'move') : (activeToolRef.current === 'connector' ? 'default' : 'crosshair')
+      if (obj.id !== "page-boundary") {
+        obj.selectable = !readOnly && isSelectionTool;
+        obj.evented =
+          !readOnly &&
+          (isSelectionTool ||
+            isAreaSelectTool ||
+            activeToolRef.current === "connector");
+        obj.hoverCursor = isSelectionTool
+          ? obj.lockMovementX
+            ? "default"
+            : "move"
+          : activeToolRef.current === "connector"
+            ? "default"
+            : "crosshair";
       }
-    })
-  }
+    });
+  };
 
   // Auto-login verify token on mount
   useEffect(() => {
-    const token = localStorage.getItem('wb_token')
+    const token = localStorage.getItem("wb_token");
     if (token) {
       fetch(`${API_BASE_URL}/api/auth/me`, {
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       })
-        .then(res => {
+        .then((res) => {
           if (!res.ok) {
-            localStorage.removeItem('wb_token')
-            setScreen('landing')
-            return
+            localStorage.removeItem("wb_token");
+            setScreen("landing");
+            return;
           }
-          return res.json()
+          return res.json();
         })
-        .then(data => {
+        .then((data) => {
           if (data) {
-            setUser(data)
+            setUser(data);
           }
         })
-        .catch(err => console.error('Auto-login error:', err))
+        .catch((err) => console.error("Auto-login error:", err));
     }
-  }, [])
+  }, []);
 
   // Lock canvas shapes if read-only view (tool effect restores interactivity when editable)
   useEffect(() => {
-    const canvas = fabricRef.current
-    if (!canvas) return
+    const canvas = fabricRef.current;
+    if (!canvas) return;
 
     if (isReadOnly) {
       canvas.forEachObject((obj) => {
-        if (obj.id !== 'page-boundary') {
-          obj.selectable = false
-          obj.evented = false
+        if (obj.id !== "page-boundary") {
+          obj.selectable = false;
+          obj.evented = false;
         }
-      })
-      canvas.discardActiveObject()
-      canvas.selection = false
-      canvas.isDrawingMode = false
-      canvas.defaultCursor = 'default'
-      setActiveTool('pan')
+      });
+      canvas.discardActiveObject();
+      canvas.selection = false;
+      canvas.isDrawingMode = false;
+      canvas.defaultCursor = "default";
+      setActiveTool("pan");
     } else {
       // Restore interactivity for the active tool selection settings
-      const isSelectionTool = activeTool === 'select'
-      const isAreaSelectTool = ['lasso-select', 'square-select', 'circle-select'].includes(activeTool)
+      const isSelectionTool = activeTool === "select";
+      const isAreaSelectTool = [
+        "lasso-select",
+        "square-select",
+        "circle-select",
+      ].includes(activeTool);
       canvas.forEachObject((obj) => {
-        if (obj.id !== 'page-boundary' && obj.type !== 'connector') {
-          obj.selectable = isSelectionTool
-          obj.evented = isSelectionTool || isAreaSelectTool || activeTool === 'connector'
+        if (obj.id !== "page-boundary" && obj.type !== "connector") {
+          obj.selectable = isSelectionTool;
+          obj.evented =
+            isSelectionTool || isAreaSelectTool || activeTool === "connector";
         }
-      })
-      canvas.defaultCursor = (isSelectionTool || isAreaSelectTool) ? 'default' : 'crosshair'
+      });
+      canvas.defaultCursor =
+        isSelectionTool || isAreaSelectTool ? "default" : "crosshair";
     }
-    canvas.requestRenderAll()
-  }, [isReadOnly, activeTool])
+    canvas.requestRenderAll();
+  }, [isReadOnly, activeTool]);
 
   // Connectors sync on shapes move/resize/rotate
-  useConnectorSync(canvasInstance)
+  useConnectorSync(canvasInstance);
 
   // Connector drawing tool state machine
   useConnectorTool({
@@ -367,1093 +463,1177 @@ export default function App() {
     activeTool,
     overlayRef: overlayCanvasRef,
     onConnectorAdded: () => {
-      saveHistory()
-      sendCanvasUpdate()
-    }
-  })
+      saveHistory();
+      sendCanvasUpdate();
+    },
+  });
 
   // Load whiteboards when screen is dashboard
   useEffect(() => {
-    if (screen === 'dashboard') {
-      fetchWhiteboards()
+    if (screen === "dashboard") {
+      fetchWhiteboards();
     }
-  }, [screen])
+  }, [screen]);
 
   // Handle initial direct URL load
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    const boardId = params.get('board')
+    const params = new URLSearchParams(window.location.search);
+    const boardId = params.get("board");
     if (boardId) {
-      loadBoardById(boardId)
+      loadBoardById(boardId);
     }
-  }, [])
+  }, []);
 
   // Clean up remote cursors for users who left the room
   useEffect(() => {
-    const userIds = new Set(roomUsers.map((u) => u.id))
+    const userIds = new Set(roomUsers.map((u) => u.id));
     setRemoteCursors((prev) => {
-      const next = { ...prev }
-      let changed = false
+      const next = { ...prev };
+      let changed = false;
       for (const id in next) {
         if (!userIds.has(id)) {
-          delete next[id]
-          changed = true
+          delete next[id];
+          changed = true;
         }
       }
-      return changed ? next : prev
-    })
-  }, [roomUsers])
+      return changed ? next : prev;
+    });
+  }, [roomUsers]);
 
   // Reset canvas drawing contexts after eraser use (EraserBrush leaves destination-out on main ctx)
   const resetDrawingContexts = (canvas) => {
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    if (ctx) ctx.globalCompositeOperation = 'source-over'
-    if (canvas.contextTop) canvas.clearContext(canvas.contextTop)
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (ctx) ctx.globalCompositeOperation = "source-over";
+    if (canvas.contextTop) canvas.clearContext(canvas.contextTop);
     if (canvas.freeDrawingBrush) {
-      canvas.freeDrawingBrush._isErasing = false
+      canvas.freeDrawingBrush._isErasing = false;
     }
-  }
+  };
 
   const updateEraserCursor = (canvas, e) => {
-    const el = eraserCursorElRef.current
-    if (!el || !canvas) return
+    const el = eraserCursorElRef.current;
+    if (!el || !canvas) return;
 
-    if (activeToolRef.current !== 'draw' || drawTypeRef.current !== 'eraser') {
-      el.style.display = 'none'
-      return
+    if (activeToolRef.current !== "draw" || drawTypeRef.current !== "eraser") {
+      el.style.display = "none";
+      return;
     }
 
-    const F = window.fabric
+    const F = window.fabric;
     if (!F || !e) {
-      el.style.display = 'none'
-      return
+      el.style.display = "none";
+      return;
     }
 
-    const pointer = canvas.getPointer(e)
+    const pointer = canvas.getPointer(e);
     const screenPt = F.util.transformPoint(
       new F.Point(pointer.x, pointer.y),
-      canvas.viewportTransform
-    )
-    const size = drawSizesRef.current.eraser * zoomRef.current
+      canvas.viewportTransform,
+    );
+    const size = drawSizesRef.current.eraser * zoomRef.current;
 
-    el.style.display = 'block'
-    el.style.left = `${screenPt.x}px`
-    el.style.top = `${screenPt.y}px`
-    el.style.width = `${size}px`
-    el.style.height = `${size}px`
-  }
+    el.style.display = "block";
+    el.style.left = `${screenPt.x}px`;
+    el.style.top = `${screenPt.y}px`;
+    el.style.width = `${size}px`;
+    el.style.height = `${size}px`;
+  };
 
   const hideEraserCursor = () => {
     if (eraserCursorElRef.current) {
-      eraserCursorElRef.current.style.display = 'none'
+      eraserCursorElRef.current.style.display = "none";
     }
-  }
+  };
 
   const handleChangeDrawSize = (type, size) => {
     setDrawSizes((prev) => ({
       ...prev,
-      [type]: Math.min(60, Math.max(type === 'eraser' ? 5 : 1, size)),
-    }))
-  }
+      [type]: Math.min(60, Math.max(type === "eraser" ? 5 : 1, size)),
+    }));
+  };
 
   const getCanvasJson = () => {
-    if (!fabricRef.current) return { objects: [] }
+    if (!fabricRef.current) return { objects: [] };
     const json = fabricRef.current.toJSON([
-      'selectable', 
-      'id', 
-      'globalCompositeOperation', 
-      'erasable', 
-      'eraser', 
-      'customType',
-      'rx',
-      'ry',
-      'boxStroke',
-      'boxStrokeWidth',
-      'padding',
-      'data'
-    ])
+      "selectable",
+      "id",
+      "globalCompositeOperation",
+      "erasable",
+      "eraser",
+      "customType",
+      "rx",
+      "ry",
+      "boxStroke",
+      "boxStrokeWidth",
+      "padding",
+      "data",
+    ]);
     if (json && json.objects) {
-      json.objects = json.objects.filter(obj => obj.id !== 'page-boundary')
+      json.objects = json.objects.filter((obj) => obj.id !== "page-boundary");
     }
-    return json
-  }
+    return json;
+  };
 
   // Helper: Draw page boundaries for Fixed Page Mode
   const renderPageBoundary = (canvas, mode, size) => {
-    if (!canvas) return
-    const existing = canvas.getObjects().find(o => o.id === 'page-boundary')
-    if (existing) canvas.remove(existing)
+    if (!canvas) return;
+    const existing = canvas.getObjects().find((o) => o.id === "page-boundary");
+    if (existing) canvas.remove(existing);
 
-    if (mode === 'fixed') {
-      const F = window.fabric
+    if (mode === "fixed") {
+      const F = window.fabric;
       const boundary = new F.Rect({
-        id: 'page-boundary',
+        id: "page-boundary",
         left: canvas.getWidth() / 2 - size.w / 2,
         top: canvas.getHeight() / 2 - size.h / 2,
         width: size.w,
         height: size.h,
-        fill: '#FFFFFF',
+        fill: "#FFFFFF",
         selectable: false,
         evented: false,
-        hoverCursor: 'default',
+        hoverCursor: "default",
         erasable: false,
         shadow: new F.Shadow({
-          color: 'rgba(0, 0, 0, 0.1)',
+          color: "rgba(0, 0, 0, 0.1)",
           blur: 15,
           offsetX: 0,
-          offsetY: 4
-        })
-      })
-      canvas.insertAt(boundary, 0)
+          offsetY: 4,
+        }),
+      });
+      canvas.insertAt(boundary, 0);
     }
-  }
+  };
 
   // Page Operations
   const switchPage = (targetPageId) => {
-    if (!fabricRef.current) return
-    const canvas = fabricRef.current
+    if (!fabricRef.current) return;
+    const canvas = fabricRef.current;
 
     // Save current canvas snapshot and state
-    const currentJson = getCanvasJson()
-    const currentThumbnail = canvas.toDataURL({ format: 'jpeg', quality: 0.1, multiplier: 0.1 })
+    const currentJson = getCanvasJson();
+    const currentThumbnail = canvas.toDataURL({
+      format: "jpeg",
+      quality: 0.1,
+      multiplier: 0.1,
+    });
 
-    const updatedPages = pagesRef.current.map(p =>
+    const updatedPages = pagesRef.current.map((p) =>
       p.page_id === activePageIdRef.current
         ? { ...p, canvas_state: currentJson, thumbnail: currentThumbnail }
-        : p
-    )
+        : p,
+    );
 
-    const targetPage = updatedPages.find(p => p.page_id === targetPageId)
-    if (!targetPage) return
+    const targetPage = updatedPages.find((p) => p.page_id === targetPageId);
+    if (!targetPage) return;
 
-    setPages(updatedPages)
-    setActivePageId(targetPageId)
+    setPages(updatedPages);
+    setActivePageId(targetPageId);
 
     // Load target canvas JSON
-    applyingRemoteRef.current = true
-    canvas.discardActiveObject()
+    applyingRemoteRef.current = true;
+    canvas.discardActiveObject();
     canvas.loadFromJSON(targetPage.canvas_state, () => {
-      canvas.getObjects().forEach((obj) => obj.setCoords())
-      lockObjectsIfReadOnly(canvas)
-      renderPageBoundary(canvas, pageModeRef.current, pageSizeRef.current)
-      updateAllConnectors(canvas)
-      canvas.requestRenderAll()
-      applyingRemoteRef.current = false
+      canvas.getObjects().forEach((obj) => obj.setCoords());
+      lockObjectsIfReadOnly(canvas);
+      renderPageBoundary(canvas, pageModeRef.current, pageSizeRef.current);
+      updateAllConnectors(canvas);
+      canvas.requestRenderAll();
+      applyingRemoteRef.current = false;
 
       // Reset history reference stack
-      historyRef.current = [targetPage.canvas_state]
-      historyIndexRef.current = 0
-      setCanUndo(false)
-      setCanRedo(false)
-    })
+      historyRef.current = [targetPage.canvas_state];
+      historyIndexRef.current = 0;
+      setCanUndo(false);
+      setCanRedo(false);
+    });
 
     // Broadcast page switch to other clients
     if (socketRef.current) {
-      socketRef.current.emit('page-switch', { roomId: savedIdRef.current || 'global', pageId: targetPageId })
+      socketRef.current.emit("page-switch", {
+        roomId: savedIdRef.current || "global",
+        pageId: targetPageId,
+      });
     }
-  }
+  };
 
   const addPage = () => {
-    if (!fabricRef.current) return
-    const canvas = fabricRef.current
+    if (!fabricRef.current) return;
+    const canvas = fabricRef.current;
 
     // Save current page state and snapshot
-    const currentJson = getCanvasJson()
-    const currentThumbnail = canvas.toDataURL({ format: 'jpeg', quality: 0.1, multiplier: 0.1 })
+    const currentJson = getCanvasJson();
+    const currentThumbnail = canvas.toDataURL({
+      format: "jpeg",
+      quality: 0.1,
+      multiplier: 0.1,
+    });
 
-    const updatedPages = pagesRef.current.map(p =>
+    const updatedPages = pagesRef.current.map((p) =>
       p.page_id === activePageIdRef.current
         ? { ...p, canvas_state: currentJson, thumbnail: currentThumbnail }
-        : p
-    )
+        : p,
+    );
 
-    const newPageId = 'page-' + Date.now()
+    const newPageId = "page-" + Date.now();
     const newPage = {
       page_id: newPageId,
       title: `Page ${updatedPages.length + 1}`,
       order: updatedPages.length,
       canvas_state: { objects: [] },
-      thumbnail: null
-    }
+      thumbnail: null,
+    };
 
-    const nextPages = [...updatedPages, newPage]
-    setPages(nextPages)
-    setActivePageId(newPageId)
+    const nextPages = [...updatedPages, newPage];
+    setPages(nextPages);
+    setActivePageId(newPageId);
 
-    applyingRemoteRef.current = true
-    canvas.discardActiveObject()
-    canvas.clear()
+    applyingRemoteRef.current = true;
+    canvas.discardActiveObject();
+    canvas.clear();
 
-    renderPageBoundary(canvas, pageModeRef.current, pageSizeRef.current)
-    canvas.requestRenderAll()
-    applyingRemoteRef.current = false
+    renderPageBoundary(canvas, pageModeRef.current, pageSizeRef.current);
+    canvas.requestRenderAll();
+    applyingRemoteRef.current = false;
 
-    historyRef.current = [{ objects: [] }]
-    historyIndexRef.current = 0
-    setCanUndo(false)
-    setCanRedo(false)
+    historyRef.current = [{ objects: [] }];
+    historyIndexRef.current = 0;
+    setCanUndo(false);
+    setCanRedo(false);
 
     // Notify other users
-    sendStructureUpdate(nextPages)
-    sendCanvasUpdate()
-  }
+    sendStructureUpdate(nextPages);
+    sendCanvasUpdate();
+  };
 
   const deletePage = (targetPageId) => {
     if (pagesRef.current.length <= 1) {
-      alert('A whiteboard must contain at least one page!')
-      return
+      alert("A whiteboard must contain at least one page!");
+      return;
     }
 
-    const confirmDelete = window.confirm('Are you sure you want to delete this page?')
-    if (!confirmDelete) return
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this page?",
+    );
+    if (!confirmDelete) return;
 
-    const updatedPages = pagesRef.current.filter(p => p.page_id !== targetPageId)
+    const updatedPages = pagesRef.current.filter(
+      (p) => p.page_id !== targetPageId,
+    );
 
     if (activePageIdRef.current === targetPageId) {
-      const remainingPage = updatedPages[0]
-      setActivePageId(remainingPage.page_id)
+      const remainingPage = updatedPages[0];
+      setActivePageId(remainingPage.page_id);
 
-      applyingRemoteRef.current = true
-      const canvas = fabricRef.current
-      canvas.discardActiveObject()
+      applyingRemoteRef.current = true;
+      const canvas = fabricRef.current;
+      canvas.discardActiveObject();
       canvas.loadFromJSON(remainingPage.canvas_state, () => {
-        canvas.getObjects().forEach((obj) => obj.setCoords())
-        lockObjectsIfReadOnly(canvas)
-        renderPageBoundary(canvas, pageModeRef.current, pageSizeRef.current)
-        updateAllConnectors(canvas)
-        canvas.requestRenderAll()
-        applyingRemoteRef.current = false
+        canvas.getObjects().forEach((obj) => obj.setCoords());
+        lockObjectsIfReadOnly(canvas);
+        renderPageBoundary(canvas, pageModeRef.current, pageSizeRef.current);
+        updateAllConnectors(canvas);
+        canvas.requestRenderAll();
+        applyingRemoteRef.current = false;
 
-        historyRef.current = [remainingPage.canvas_state]
-        historyIndexRef.current = 0
-        setCanUndo(false)
-        setCanRedo(false)
-      })
+        historyRef.current = [remainingPage.canvas_state];
+        historyIndexRef.current = 0;
+        setCanUndo(false);
+        setCanRedo(false);
+      });
     }
 
-    setPages(updatedPages)
-    sendStructureUpdate(updatedPages)
-    sendCanvasUpdate()
-  }
+    setPages(updatedPages);
+    sendStructureUpdate(updatedPages);
+    sendCanvasUpdate();
+  };
 
   const duplicatePage = (targetPageId) => {
-    const target = pagesRef.current.find(p => p.page_id === targetPageId)
-    if (!target) return
+    const target = pagesRef.current.find((p) => p.page_id === targetPageId);
+    if (!target) return;
 
-    let canvasState = target.canvas_state
+    let canvasState = target.canvas_state;
     if (activePageIdRef.current === targetPageId && fabricRef.current) {
-      canvasState = getCanvasJson()
+      canvasState = getCanvasJson();
     }
 
-    const newPageId = 'page-' + Date.now()
+    const newPageId = "page-" + Date.now();
     const newPage = {
       page_id: newPageId,
       title: `${target.title} (Copy)`,
       order: pagesRef.current.length,
       canvas_state: JSON.parse(JSON.stringify(canvasState)),
-      thumbnail: target.thumbnail
-    }
+      thumbnail: target.thumbnail,
+    };
 
-    const targetIndex = pagesRef.current.findIndex(p => p.page_id === targetPageId)
-    const nextPages = [...pagesRef.current]
-    nextPages.splice(targetIndex + 1, 0, newPage)
+    const targetIndex = pagesRef.current.findIndex(
+      (p) => p.page_id === targetPageId,
+    );
+    const nextPages = [...pagesRef.current];
+    nextPages.splice(targetIndex + 1, 0, newPage);
 
-    const orderedPages = nextPages.map((p, idx) => ({ ...p, order: idx }))
-    setPages(orderedPages)
-    setActivePageId(newPageId)
+    const orderedPages = nextPages.map((p, idx) => ({ ...p, order: idx }));
+    setPages(orderedPages);
+    setActivePageId(newPageId);
 
-    applyingRemoteRef.current = true
-    const canvas = fabricRef.current
-    canvas.discardActiveObject()
+    applyingRemoteRef.current = true;
+    const canvas = fabricRef.current;
+    canvas.discardActiveObject();
     canvas.loadFromJSON(newPage.canvas_state, () => {
-      canvas.getObjects().forEach((obj) => obj.setCoords())
-      lockObjectsIfReadOnly(canvas)
-      renderPageBoundary(canvas, pageModeRef.current, pageSizeRef.current)
-      updateAllConnectors(canvas)
-      canvas.requestRenderAll()
-      applyingRemoteRef.current = false
+      canvas.getObjects().forEach((obj) => obj.setCoords());
+      lockObjectsIfReadOnly(canvas);
+      renderPageBoundary(canvas, pageModeRef.current, pageSizeRef.current);
+      updateAllConnectors(canvas);
+      canvas.requestRenderAll();
+      applyingRemoteRef.current = false;
 
-      historyRef.current = [newPage.canvas_state]
-      historyIndexRef.current = 0
-      setCanUndo(false)
-      setCanRedo(false)
-    })
+      historyRef.current = [newPage.canvas_state];
+      historyIndexRef.current = 0;
+      setCanUndo(false);
+      setCanRedo(false);
+    });
 
-    sendStructureUpdate(orderedPages)
-    sendCanvasUpdate()
-  }
+    sendStructureUpdate(orderedPages);
+    sendCanvasUpdate();
+  };
 
   const renamePage = (targetPageId, newTitle) => {
-    if (!newTitle || !newTitle.trim()) return
-    const updatedPages = pagesRef.current.map(p =>
-      p.page_id === targetPageId
-        ? { ...p, title: newTitle.trim() }
-        : p
-    )
-    setPages(updatedPages)
-    sendStructureUpdate(updatedPages)
-  }
+    if (!newTitle || !newTitle.trim()) return;
+    const updatedPages = pagesRef.current.map((p) =>
+      p.page_id === targetPageId ? { ...p, title: newTitle.trim() } : p,
+    );
+    setPages(updatedPages);
+    sendStructureUpdate(updatedPages);
+  };
 
   const reorderPage = (pageId, targetIndexOrDirection) => {
-    const fromIndex = pagesRef.current.findIndex(p => p.page_id === pageId)
-    if (fromIndex === -1) return
+    const fromIndex = pagesRef.current.findIndex((p) => p.page_id === pageId);
+    if (fromIndex === -1) return;
 
-    const newPages = [...pagesRef.current]
-    const item = newPages.splice(fromIndex, 1)[0]
+    const newPages = [...pagesRef.current];
+    const item = newPages.splice(fromIndex, 1)[0];
 
-    if (typeof targetIndexOrDirection === 'number') {
-      newPages.splice(targetIndexOrDirection, 0, item)
+    if (typeof targetIndexOrDirection === "number") {
+      newPages.splice(targetIndexOrDirection, 0, item);
     } else {
       // Legacy direction support (up/down)
-      const targetIndex = targetIndexOrDirection === 'up' ? fromIndex - 1 : fromIndex + 1
-      if (targetIndex < 0 || targetIndex >= pagesRef.current.length) return
-      newPages.splice(targetIndex, 0, item)
+      const targetIndex =
+        targetIndexOrDirection === "up" ? fromIndex - 1 : fromIndex + 1;
+      if (targetIndex < 0 || targetIndex >= pagesRef.current.length) return;
+      newPages.splice(targetIndex, 0, item);
     }
 
-    const orderedPages = newPages.map((p, idx) => ({ ...p, order: idx }))
-    setPages(orderedPages)
-    sendStructureUpdate(orderedPages)
-  }
+    const orderedPages = newPages.map((p, idx) => ({ ...p, order: idx }));
+    setPages(orderedPages);
+    sendStructureUpdate(orderedPages);
+  };
 
   const sharePage = (pageId) => {
-    const page = pagesRef.current.find(p => p.page_id === pageId)
-    if (!page) return
+    const page = pagesRef.current.find((p) => p.page_id === pageId);
+    if (!page) return;
 
     // Create a shareable payload for just this page
     const sharePayload = {
-      type: 'vwp_page_share',
-      version: '1.0',
+      type: "vwp_page_share",
+      version: "1.0",
       timestamp: Date.now(),
       board_title: title,
       page: {
         title: page.title,
-        canvas_state: page.page_id === activePageIdRef.current ? getCanvasJson() : page.canvas_state
-      }
-    }
+        canvas_state:
+          page.page_id === activePageIdRef.current
+            ? getCanvasJson()
+            : page.canvas_state,
+      },
+    };
 
-    const jsonStr = JSON.stringify(sharePayload, null, 2)
-    const blob = new Blob([jsonStr], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `${title}-${page.title}.json`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
+    const jsonStr = JSON.stringify(sharePayload, null, 2);
+    const blob = new Blob([jsonStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${title}-${page.title}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 
-    alert(`Page "${page.title}" exported as JSON for sharing.`)
-  }
+    alert(`Page "${page.title}" exported as JSON for sharing.`);
+  };
 
   const sendStructureUpdate = (updatedPages = pagesRef.current) => {
-    if (!socketRef.current) return
-    socketRef.current.emit('board:structure-update', {
-      roomId: savedIdRef.current || 'global',
+    if (!socketRef.current) return;
+    socketRef.current.emit("board:structure-update", {
+      roomId: savedIdRef.current || "global",
       pages: updatedPages,
       mode: pageModeRef.current,
-      pageSize: pageSizeRef.current
-    })
-  }
+      pageSize: pageSizeRef.current,
+    });
+  };
 
   const handleRenameUser = () => {
-    const newName = prompt('Enter your name:', user.name)
+    const newName = prompt("Enter your name:", user.name);
     if (newName && newName.trim()) {
-      const updatedUser = { ...user, name: newName.trim() }
-      setUser(updatedUser)
-      localStorage.setItem('wb_username', updatedUser.name)
+      const updatedUser = { ...user, name: newName.trim() };
+      setUser(updatedUser);
+      localStorage.setItem("wb_username", updatedUser.name);
       if (socketRef.current) {
-        socketRef.current.emit('join', { roomId: savedId || 'global', user: updatedUser })
+        socketRef.current.emit("join", {
+          roomId: savedId || "global",
+          user: updatedUser,
+        });
       }
     }
-  }
+  };
 
   const fetchWhiteboards = async () => {
     try {
-      const token = localStorage.getItem('wb_token')
-      const headers = {}
-      if (token) headers['Authorization'] = `Bearer ${token}`
-      const res = await fetch(`${API_BASE_URL}/api/whiteboards`, { headers })
-      if (!res.ok) throw new Error('Failed to fetch whiteboards')
-      const data = await res.json()
-      setWhiteboardsList(data)
+      const token = localStorage.getItem("wb_token");
+      const headers = {};
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+      const res = await fetch(`${API_BASE_URL}/api/whiteboards`, { headers });
+      if (!res.ok) throw new Error("Failed to fetch whiteboards");
+      const data = await res.json();
+      setWhiteboardsList(data);
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
-  }
+  };
 
   const deleteBoard = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this whiteboard?')) return
+    if (!window.confirm("Are you sure you want to delete this whiteboard?"))
+      return;
     try {
-      const token = localStorage.getItem('wb_token')
-      const headers = {}
-      if (token) headers['Authorization'] = `Bearer ${token}`
+      const token = localStorage.getItem("wb_token");
+      const headers = {};
+      if (token) headers["Authorization"] = `Bearer ${token}`;
       const res = await fetch(`${API_BASE_URL}/api/whiteboards/${id}`, {
-        method: 'DELETE',
-        headers
-      })
+        method: "DELETE",
+        headers,
+      });
       if (!res.ok) {
-        const errorData = await res.json()
-        throw new Error(errorData.error || 'Failed to delete whiteboard')
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Failed to delete whiteboard");
       }
-      fetchWhiteboards()
+      fetchWhiteboards();
     } catch (err) {
-      alert(err.message)
+      alert(err.message);
     }
-  }
+  };
 
   const shareBoard = async (id, isPublicToggle, email) => {
     try {
-      const token = localStorage.getItem('wb_token')
-      const headers = { 'Content-Type': 'application/json' }
-      if (token) headers['Authorization'] = `Bearer ${token}`
-      const body = {}
-      if (email) body.email = email
+      const token = localStorage.getItem("wb_token");
+      const headers = { "Content-Type": "application/json" };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+      const body = {};
+      if (email) body.email = email;
 
       const res = await fetch(`${API_BASE_URL}/api/whiteboards/${id}/share`, {
-        method: 'POST',
+        method: "POST",
         headers,
-        body: JSON.stringify(body)
-      })
+        body: JSON.stringify(body),
+      });
       if (!res.ok) {
-        const errorData = await res.json()
-        throw new Error(errorData.error || 'Failed to share whiteboard')
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Failed to share whiteboard");
       }
-      const data = await res.json()
+      const data = await res.json();
       if (email) {
-        alert(`Collaborator ${email} added successfully!`)
+        alert(`Collaborator ${email} added successfully!`);
       } else {
-        alert(`Board visibility updated. Public: ${data.isPublic}`)
+        alert(`Board visibility updated. Public: ${data.isPublic}`);
       }
-      fetchWhiteboards()
+      fetchWhiteboards();
     } catch (err) {
-      alert(err.message)
+      alert(err.message);
     }
-  }
+  };
 
   const handleRegister = async (e) => {
-    e.preventDefault()
-    setAuthError('')
-    setAuthLoading(true)
+    e.preventDefault();
+    setAuthError("");
+    setAuthLoading(true);
     try {
       const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: authForm.name,
           email: authForm.email,
-          password: authForm.password
-        })
-      })
-      const data = await res.json()
+          password: authForm.password,
+        }),
+      });
+      const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || 'registration_failed')
+        throw new Error(data.error || "registration_failed");
       }
-      localStorage.setItem('wb_token', data.token)
-      setUser(data.user)
-      setScreen('dashboard')
+      localStorage.setItem("wb_token", data.token);
+      setUser(data.user);
+      setScreen("dashboard");
     } catch (err) {
-      console.error(err)
-      setAuthError(err.message === 'email_already_registered' ? 'Email is already registered' : 'Registration failed. Try again.')
+      console.error(err);
+      setAuthError(
+        err.message === "email_already_registered"
+          ? "Email is already registered"
+          : "Registration failed. Try again.",
+      );
     } finally {
-      setAuthLoading(false)
+      setAuthLoading(false);
     }
-  }
+  };
 
   const handleLogin = async (e) => {
-    e.preventDefault()
-    setAuthError('')
-    setAuthLoading(true)
+    e.preventDefault();
+    setAuthError("");
+    setAuthLoading(true);
     try {
       const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: authForm.email,
-          password: authForm.password
-        })
-      })
-      const data = await res.json()
+          password: authForm.password,
+        }),
+      });
+      const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || 'login_failed')
+        throw new Error(data.error || "login_failed");
       }
-      localStorage.setItem('wb_token', data.token)
-      setUser(data.user)
-      setScreen('dashboard')
+      localStorage.setItem("wb_token", data.token);
+      setUser(data.user);
+      setScreen("dashboard");
     } catch (err) {
-      console.error(err)
-      setAuthError(err.message === 'invalid_credentials' ? 'Invalid email or password' : 'Login failed. Try again.')
+      console.error(err);
+      setAuthError(
+        err.message === "invalid_credentials"
+          ? "Invalid email or password"
+          : "Login failed. Try again.",
+      );
     } finally {
-      setAuthLoading(false)
+      setAuthLoading(false);
     }
-  }
+  };
 
   const handleLogout = () => {
-    localStorage.removeItem('wb_token')
-    setUser({ name: 'Guest Collaborator', color: '#6B7280' })
-    setScreen('landing')
-  }
+    localStorage.removeItem("wb_token");
+    setUser({ name: "Guest Collaborator", color: "#6B7280" });
+    setScreen("landing");
+  };
 
   const handleCreateBoard = async () => {
-    let boardTitle = prompt('Enter a title for the new whiteboard:', 'My Design Board')
-    if (boardTitle === null && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
-      boardTitle = 'Test Drawing Board'
+    let boardTitle = prompt(
+      "Enter a title for the new whiteboard:",
+      "My Design Board",
+    );
+    if (
+      boardTitle === null &&
+      (window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1")
+    ) {
+      boardTitle = "Test Drawing Board";
     }
-    if (!boardTitle || !boardTitle.trim()) return
+    if (!boardTitle || !boardTitle.trim()) return;
 
-    const token = localStorage.getItem('wb_token')
-    const headers = { 'Content-Type': 'application/json' }
-    if (token) headers['Authorization'] = `Bearer ${token}`
+    const token = localStorage.getItem("wb_token");
+    const headers = { "Content-Type": "application/json" };
+    if (token) headers["Authorization"] = `Bearer ${token}`;
 
     const initialPages = [
       {
-        page_id: 'page-1',
-        title: 'Page 1',
+        page_id: "page-1",
+        title: "Page 1",
         order: 0,
         canvas_state: { objects: [] },
-        thumbnail: null
-      }
-    ]
+        thumbnail: null,
+      },
+    ];
 
     const payload = {
       title: boardTitle.trim(),
-      mode: 'infinite',
+      mode: "infinite",
       pageSize: { w: 1024, h: 576 },
-      pages: initialPages
-    }
+      pages: initialPages,
+    };
 
     try {
       const res = await fetch(`${API_BASE_URL}/api/whiteboards`, {
-        method: 'POST',
+        method: "POST",
         headers,
-        body: JSON.stringify(payload)
-      })
-      if (!res.ok) throw new Error('Failed to create board')
-      const data = await res.json()
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error("Failed to create board");
+      const data = await res.json();
 
-      setSavedId(data.id)
-      setTitle(boardTitle.trim())
-      setPages(initialPages)
-      setActivePageId('page-1')
-      setPageMode('infinite')
+      setSavedId(data.id);
+      setTitle(boardTitle.trim());
+      setPages(initialPages);
+      setActivePageId("page-1");
+      setPageMode("infinite");
       setBoardMeta({
         owner: user.id || user._id || null,
         collaborators: [],
-        isPublic: false
-      })
+        isPublic: false,
+      });
 
-      const newUrl = `${window.location.origin}${window.location.pathname}?board=${data.id}`
-      window.history.pushState({ path: newUrl }, '', newUrl)
+      const newUrl = `${window.location.origin}${window.location.pathname}?board=${data.id}`;
+      window.history.pushState({ path: newUrl }, "", newUrl);
 
-      setScreen('editor')
+      setScreen("editor");
     } catch (err) {
-      console.error(err)
-      alert('Failed to create board: ' + err.message)
+      console.error(err);
+      alert("Failed to create board: " + err.message);
     }
-  }
+  };
 
   const handleOpenBoard = (boardId) => {
-    loadBoardById(boardId)
-    setScreen('editor')
-  }
+    loadBoardById(boardId);
+    setScreen("editor");
+  };
 
   const handleJoinBoard = async (e) => {
-    if (e) e.preventDefault()
-    const targetId = joinBoardId.trim()
+    if (e) e.preventDefault();
+    const targetId = joinBoardId.trim();
     if (!targetId) {
-      setJoinModalError('Please enter a board ID.')
-      return
+      setJoinModalError("Please enter a board ID.");
+      return;
     }
 
     // Basic MongoDB ObjectId format validation (24 hex characters)
-    const objectIdRegex = /^[0-9a-fA-F]{24}$/
+    const objectIdRegex = /^[0-9a-fA-F]{24}$/;
     if (!objectIdRegex.test(targetId)) {
-      setJoinModalError('Invalid Board ID format. Must be a 24-character hex string.')
-      return
+      setJoinModalError(
+        "Invalid Board ID format. Must be a 24-character hex string.",
+      );
+      return;
     }
 
-    setJoinModalLoading(true)
-    setJoinModalError('')
+    setJoinModalLoading(true);
+    setJoinModalError("");
 
     try {
-      const token = localStorage.getItem('wb_token')
-      const headers = { 'Content-Type': 'application/json' }
-      if (token) headers['Authorization'] = `Bearer ${token}`
+      const token = localStorage.getItem("wb_token");
+      const headers = { "Content-Type": "application/json" };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
 
-      const res = await fetch(`${API_BASE_URL}/api/whiteboards/${targetId}`, { headers })
+      const res = await fetch(`${API_BASE_URL}/api/whiteboards/${targetId}`, {
+        headers,
+      });
       if (!res.ok) {
         if (res.status === 401 || res.status === 403) {
-          throw new Error('Board is not available/Private')
+          throw new Error("Board is not available/Private");
         }
         if (res.status === 404) {
-          throw new Error('Board not found')
+          throw new Error("Board not found");
         }
-        throw new Error('Failed to load board metadata')
+        throw new Error("Failed to load board metadata");
       }
 
-      await loadBoardById(targetId)
-      setScreen('editor')
-      setShowJoinModal(false)
-      setJoinBoardId('')
+      await loadBoardById(targetId);
+      setScreen("editor");
+      setShowJoinModal(false);
+      setJoinBoardId("");
     } catch (err) {
-      console.error(err)
-      setJoinModalError(err.message)
+      console.error(err);
+      setJoinModalError(err.message);
     } finally {
-      setJoinModalLoading(false)
+      setJoinModalLoading(false);
     }
-  }
+  };
 
-  const handleTogglePermission = async (targetSocketId, targetDbUserId, newAccess) => {
-    if (!socketRef.current) return
-    socketRef.current.emit('board:toggle-user-permission', {
+  const handleTogglePermission = async (
+    targetSocketId,
+    targetDbUserId,
+    newAccess,
+  ) => {
+    if (!socketRef.current) return;
+    socketRef.current.emit("board:toggle-user-permission", {
       roomId: savedId,
       targetSocketId,
-      access: newAccess
-    })
-  }
+      access: newAccess,
+    });
+  };
 
   const handleExitEditor = () => {
     if (fabricRef.current) {
-      fabricRef.current.discardActiveObject()
-      fabricRef.current.clear()
+      fabricRef.current.discardActiveObject();
+      fabricRef.current.clear();
     }
-    const newUrl = `${window.location.origin}${window.location.pathname}`
-    window.history.pushState({ path: newUrl }, '', newUrl)
+    const newUrl = `${window.location.origin}${window.location.pathname}`;
+    window.history.pushState({ path: newUrl }, "", newUrl);
 
-    setSavedId(null)
-    setSessionAccess(null)
-    setTitle('My Whiteboard')
+    setSavedId(null);
+    setSessionAccess(null);
+    setTitle("My Whiteboard");
     setPages([
       {
-        page_id: 'page-1',
-        title: 'Page 1',
+        page_id: "page-1",
+        title: "Page 1",
         order: 0,
         canvas_state: { objects: [] },
-        thumbnail: null
-      }
-    ])
-    setActivePageId('page-1')
-    setScreen(localStorage.getItem('wb_token') ? 'dashboard' : 'landing')
-  }
+        thumbnail: null,
+      },
+    ]);
+    setActivePageId("page-1");
+    setScreen(localStorage.getItem("wb_token") ? "dashboard" : "landing");
+  };
 
   // Simple debounce helper
   function debounce(fn, wait) {
-    let t
+    let t;
     return (...args) => {
-      clearTimeout(t)
-      t = setTimeout(() => fn(...args), wait)
-    }
+      clearTimeout(t);
+      t = setTimeout(() => fn(...args), wait);
+    };
   }
 
   // Simple throttle helper
   function throttle(fn, limit) {
-    let inThrottle
+    let inThrottle;
     return (...args) => {
       if (!inThrottle) {
-        fn(...args)
-        inThrottle = true
-        setTimeout(() => inThrottle = false, limit)
+        fn(...args);
+        inThrottle = true;
+        setTimeout(() => (inThrottle = false), limit);
       }
-    }
+    };
   }
 
   // Ref for throttled mouse position cursor broadcast
   const broadcastCursorRef = useRef(
     throttle((x, y) => {
       if (socketRef.current) {
-        const room = savedIdRef.current || 'global'
-        socketRef.current.emit('cursor:move', {
+        const room = savedIdRef.current || "global";
+        socketRef.current.emit("cursor:move", {
           roomId: room,
           pageId: activePageIdRef.current,
           x,
-          y
-        })
+          y,
+        });
       }
-    }, 50)
-  )
+    }, 50),
+  );
 
   // Push canvas state to Undo History
   const saveHistory = () => {
-    if (!fabricRef.current || applyingRemoteRef.current) return
+    if (!fabricRef.current || applyingRemoteRef.current) return;
     try {
-      const json = getCanvasJson()
+      const json = getCanvasJson();
 
       // Truncate redo stack if we were in middle of history
-      const newHistory = historyRef.current.slice(0, historyIndexRef.current + 1)
-      newHistory.push(json)
+      const newHistory = historyRef.current.slice(
+        0,
+        historyIndexRef.current + 1,
+      );
+      newHistory.push(json);
 
       // Limit history stack size to conserve memory
       if (newHistory.length > 50) {
-        newHistory.shift()
+        newHistory.shift();
       }
 
-      historyRef.current = newHistory
-      historyIndexRef.current = newHistory.length - 1
+      historyRef.current = newHistory;
+      historyIndexRef.current = newHistory.length - 1;
 
-      setCanUndo(historyIndexRef.current > 0)
-      setCanRedo(false)
+      setCanUndo(historyIndexRef.current > 0);
+      setCanRedo(false);
     } catch (e) {
-      console.error('Failed to save history state', e)
+      console.error("Failed to save history state", e);
     }
-  }
+  };
 
   const undo = () => {
     if (historyIndexRef.current > 0 && fabricRef.current) {
-      historyIndexRef.current -= 1
-      const state = historyRef.current[historyIndexRef.current]
-      applyingRemoteRef.current = true
+      historyIndexRef.current -= 1;
+      const state = historyRef.current[historyIndexRef.current];
+      applyingRemoteRef.current = true;
 
-      fabricRef.current.discardActiveObject()
+      fabricRef.current.discardActiveObject();
       fabricRef.current.loadFromJSON(state, () => {
-        fabricRef.current.getObjects().forEach((obj) => obj.setCoords())
-        lockObjectsIfReadOnly(fabricRef.current)
-        updateAllConnectors(fabricRef.current)
-        fabricRef.current.requestRenderAll()
-        applyingRemoteRef.current = false
-        setCanUndo(historyIndexRef.current > 0)
-        setCanRedo(true)
-        sendCanvasUpdate()
-      })
+        fabricRef.current.getObjects().forEach((obj) => obj.setCoords());
+        lockObjectsIfReadOnly(fabricRef.current);
+        updateAllConnectors(fabricRef.current);
+        fabricRef.current.requestRenderAll();
+        applyingRemoteRef.current = false;
+        setCanUndo(historyIndexRef.current > 0);
+        setCanRedo(true);
+        sendCanvasUpdate();
+      });
     }
-  }
+  };
 
   const redo = () => {
-    if (historyIndexRef.current < historyRef.current.length - 1 && fabricRef.current) {
-      historyIndexRef.current += 1
-      const state = historyRef.current[historyIndexRef.current]
-      applyingRemoteRef.current = true
+    if (
+      historyIndexRef.current < historyRef.current.length - 1 &&
+      fabricRef.current
+    ) {
+      historyIndexRef.current += 1;
+      const state = historyRef.current[historyIndexRef.current];
+      applyingRemoteRef.current = true;
 
-      fabricRef.current.discardActiveObject()
+      fabricRef.current.discardActiveObject();
       fabricRef.current.loadFromJSON(state, () => {
-        fabricRef.current.getObjects().forEach((obj) => obj.setCoords())
-        lockObjectsIfReadOnly(fabricRef.current)
-        updateAllConnectors(fabricRef.current)
-        fabricRef.current.requestRenderAll()
-        applyingRemoteRef.current = false
-        setCanUndo(true)
-        setCanRedo(historyIndexRef.current < historyRef.current.length - 1)
-        sendCanvasUpdate()
-      })
+        fabricRef.current.getObjects().forEach((obj) => obj.setCoords());
+        lockObjectsIfReadOnly(fabricRef.current);
+        updateAllConnectors(fabricRef.current);
+        fabricRef.current.requestRenderAll();
+        applyingRemoteRef.current = false;
+        setCanUndo(true);
+        setCanRedo(historyIndexRef.current < historyRef.current.length - 1);
+        sendCanvasUpdate();
+      });
     }
-  }
+  };
 
   // Apply remote updates via websocket
   function applyRemoteCanvas(json) {
-    if (!fabricRef.current) return
+    if (!fabricRef.current) return;
     if (interactingRef.current) {
-      pendingRemoteJsonRef.current = json
-      return
+      pendingRemoteJsonRef.current = json;
+      return;
     }
 
-    applyingRemoteRef.current = true
-    const canvas = fabricRef.current
-    canvas.discardActiveObject()
+    applyingRemoteRef.current = true;
+    const canvas = fabricRef.current;
+    canvas.discardActiveObject();
     canvas.loadFromJSON(json, () => {
-      canvas.getObjects().forEach((obj) => obj.setCoords())
-      lockObjectsIfReadOnly(canvas)
-      updateAllConnectors(canvas)
-      canvas.calcOffset()
-      canvas.requestRenderAll()
-      applyingRemoteRef.current = false
+      canvas.getObjects().forEach((obj) => obj.setCoords());
+      lockObjectsIfReadOnly(canvas);
+      updateAllConnectors(canvas);
+      canvas.calcOffset();
+      canvas.requestRenderAll();
+      applyingRemoteRef.current = false;
 
       // Update history reference silently to match remote sync
-      historyRef.current = [json]
-      historyIndexRef.current = 0
-      setCanUndo(false)
-      setCanRedo(false)
-    })
+      historyRef.current = [json];
+      historyIndexRef.current = 0;
+      setCanUndo(false);
+      setCanRedo(false);
+    });
   }
 
   function flushPendingRemoteCanvas() {
-    if (!pendingRemoteJsonRef.current || !fabricRef.current) return
-    const json = pendingRemoteJsonRef.current
-    pendingRemoteJsonRef.current = null
-    applyRemoteCanvas(json)
+    if (!pendingRemoteJsonRef.current || !fabricRef.current) return;
+    const json = pendingRemoteJsonRef.current;
+    pendingRemoteJsonRef.current = null;
+    applyRemoteCanvas(json);
   }
 
   // Manage selection & properties state when items are selected
   function updateInspectorProperties(target) {
     if (!target) {
-      setSelectedObject(null)
-      setIsContextPanelOpen(false)
-      return
+      setSelectedObject(null);
+      setIsContextPanelOpen(false);
+      return;
     }
-    if (target.id === 'page-boundary') {
-      setSelectedObject(null)
-      setIsContextPanelOpen(false)
-      return
+    if (target.id === "page-boundary") {
+      setSelectedObject(null);
+      setIsContextPanelOpen(false);
+      return;
     }
     if (!target.id) {
-      target.id = 'el-' + Date.now() + '-' + Math.round(Math.random() * 1e9)
+      target.id = "el-" + Date.now() + "-" + Math.round(Math.random() * 1e9);
     }
-    const isTextObj = target.type === 'i-text' || target.type === 'text'
-    setSelectedObject(target)
+    const isTextObj = target.type === "i-text" || target.type === "text";
+    setSelectedObject(target);
     setProperties({
-      stroke: target.stroke || 'transparent',
-      fill: target.fill || '#FFFFFF',
-      strokeWidth: target.strokeWidth !== undefined ? target.strokeWidth : (isTextObj ? 0 : 2),
+      stroke: target.stroke || "transparent",
+      fill: target.fill || "#FFFFFF",
+      strokeWidth:
+        target.strokeWidth !== undefined
+          ? target.strokeWidth
+          : isTextObj
+            ? 0
+            : 2,
       opacity: target.opacity || 1,
       // Text properties
-      fontFamily: target.fontFamily || 'Inter',
+      fontFamily: target.fontFamily || "Inter",
       fontSize: target.fontSize || 24,
-      fontWeight: target.fontWeight || 'normal',
-      fontStyle: target.fontStyle || 'normal',
+      fontWeight: target.fontWeight || "normal",
+      fontStyle: target.fontStyle || "normal",
       underline: target.underline || false,
-      backgroundColor: target.backgroundColor || 'transparent',
+      backgroundColor: target.backgroundColor || "transparent",
       // Text box border and roundness/padding
-      boxStroke: target.boxStroke || 'transparent',
+      boxStroke: target.boxStroke || "transparent",
       boxStrokeWidth: target.boxStrokeWidth || 0,
       padding: target.padding || 0,
       // Corner roundness
       rx: target.rx || 0,
-      ry: target.ry || 0
-    })
+      ry: target.ry || 0,
+    });
   }
 
   function attachFabricListeners(canvas) {
     const onMouseDown = (opt) => {
-      const activeTool = activeToolRef.current
-      const shapeSelectTools = ['lasso-select', 'square-select', 'circle-select']
-      
+      const activeTool = activeToolRef.current;
+      const shapeSelectTools = [
+        "lasso-select",
+        "square-select",
+        "circle-select",
+      ];
+
       // Auto-collapse panels on interaction
-      handleCanvasInteraction()
+      handleCanvasInteraction();
 
       // Panning logic on drag
-      if (activeTool === 'pan') {
-        canvas.isDragging = true
-        canvas.selection = false
-        canvas.lastPosX = opt.e.clientX
-        canvas.lastPosY = opt.e.clientY
-        return
+      if (activeTool === "pan") {
+        canvas.isDragging = true;
+        canvas.selection = false;
+        canvas.lastPosX = opt.e.clientX;
+        canvas.lastPosY = opt.e.clientY;
+        return;
       }
-      
-      interactingRef.current = true
+
+      interactingRef.current = true;
 
       // Custom selection tool drawing logic
       if (shapeSelectTools.includes(activeTool) && !isReadOnlyRef.current) {
-        const target = canvas.findTarget(opt.e)
+        const target = canvas.findTarget(opt.e);
 
         // Square/circle: click an object to select it directly
-        if (activeTool !== 'lasso-select' && target && target.id !== 'page-boundary') {
-          canvas.setActiveObject(target)
-          updateInspectorProperties(target)
-          canvas.requestRenderAll()
-          return
+        if (
+          activeTool !== "lasso-select" &&
+          target &&
+          target.id !== "page-boundary"
+        ) {
+          canvas.setActiveObject(target);
+          updateInspectorProperties(target);
+          canvas.requestRenderAll();
+          return;
         }
 
-        const pointer = canvas.getPointer(opt.e)
-        isDrawingSelectionRef.current = true
-        selectionStartRef.current = { x: pointer.x, y: pointer.y }
-        selectionPointsRef.current = [{ x: pointer.x, y: pointer.y }]
+        const pointer = canvas.getPointer(opt.e);
+        isDrawingSelectionRef.current = true;
+        selectionStartRef.current = { x: pointer.x, y: pointer.y };
+        selectionPointsRef.current = [{ x: pointer.x, y: pointer.y }];
         lassoClickTargetRef.current =
-          activeTool === 'lasso-select' && target && target.id !== 'page-boundary'
+          activeTool === "lasso-select" &&
+          target &&
+          target.id !== "page-boundary"
             ? target
-            : null
-        
-        const F = window.fabric
-        
+            : null;
+
+        const F = window.fabric;
+
         if (tempSelectionShapeRef.current) {
-          canvas.remove(tempSelectionShapeRef.current)
-          tempSelectionShapeRef.current = null
+          canvas.remove(tempSelectionShapeRef.current);
+          tempSelectionShapeRef.current = null;
         }
-        
-        if (activeTool === 'square-select') {
+
+        if (activeTool === "square-select") {
           tempSelectionShapeRef.current = new F.Rect({
-            id: 'temp-selection-shape',
+            id: "temp-selection-shape",
             left: pointer.x,
             top: pointer.y,
             width: 0,
             height: 0,
-            fill: 'rgba(46, 134, 171, 0.15)',
-            stroke: '#2E86AB',
+            fill: "rgba(46, 134, 171, 0.15)",
+            stroke: "#2E86AB",
             strokeWidth: 1.5,
             strokeDashArray: [5, 5],
             selectable: false,
-            evented: false
-          })
-          canvas.add(tempSelectionShapeRef.current)
-        } else if (activeTool === 'circle-select') {
+            evented: false,
+          });
+          canvas.add(tempSelectionShapeRef.current);
+        } else if (activeTool === "circle-select") {
           tempSelectionShapeRef.current = new F.Circle({
-            id: 'temp-selection-shape',
+            id: "temp-selection-shape",
             left: pointer.x,
             top: pointer.y,
             radius: 0,
-            fill: 'rgba(46, 134, 171, 0.15)',
-            stroke: '#2E86AB',
+            fill: "rgba(46, 134, 171, 0.15)",
+            stroke: "#2E86AB",
             strokeWidth: 1.5,
             strokeDashArray: [5, 5],
             selectable: false,
-            evented: false
-          })
-          canvas.add(tempSelectionShapeRef.current)
-        } else if (activeTool === 'lasso-select') {
-          tempSelectionShapeRef.current = new F.Polyline(selectionPointsRef.current, {
-            id: 'temp-selection-shape',
-            fill: 'rgba(46, 134, 171, 0.15)',
-            stroke: '#2E86AB',
-            strokeWidth: 1.5,
-            strokeDashArray: [5, 5],
-            selectable: false,
-            evented: false
-          })
-          canvas.add(tempSelectionShapeRef.current)
+            evented: false,
+          });
+          canvas.add(tempSelectionShapeRef.current);
+        } else if (activeTool === "lasso-select") {
+          tempSelectionShapeRef.current = new F.Polyline(
+            selectionPointsRef.current,
+            {
+              id: "temp-selection-shape",
+              fill: "rgba(46, 134, 171, 0.15)",
+              stroke: "#2E86AB",
+              strokeWidth: 1.5,
+              strokeDashArray: [5, 5],
+              selectable: false,
+              evented: false,
+            },
+          );
+          canvas.add(tempSelectionShapeRef.current);
         }
-        canvas.requestRenderAll()
-      } else if (['rect', 'circle', 'diamond', 'arrow', 'line'].includes(activeTool) && !isReadOnlyRef.current) {
-        const pointer = canvas.getPointer(opt.e)
-        selectionStartRef.current = { x: pointer.x, y: pointer.y }
-        isCreatingShapeRef.current = true
+        canvas.requestRenderAll();
+      } else if (
+        ["rect", "circle", "diamond", "arrow", "line"].includes(activeTool) &&
+        !isReadOnlyRef.current
+      ) {
+        const pointer = canvas.getPointer(opt.e);
+        selectionStartRef.current = { x: pointer.x, y: pointer.y };
+        isCreatingShapeRef.current = true;
 
-        const F = window.fabric
-        const stroke = propertiesRef.current.stroke
-        const strokeWidth = propertiesRef.current.strokeWidth
-        const fill = propertiesRef.current.fill
+        const F = window.fabric;
+        const stroke = propertiesRef.current.stroke;
+        const strokeWidth = propertiesRef.current.strokeWidth;
+        const fill = propertiesRef.current.fill;
 
-        if (activeTool === 'rect') {
+        if (activeTool === "rect") {
           tempCreationShapeRef.current = new F.Rect({
             left: pointer.x,
             top: pointer.y,
             width: 1,
             height: 1,
-            fill: 'rgba(46, 134, 171, 0.1)',
+            fill: "rgba(46, 134, 171, 0.1)",
             stroke: stroke,
             strokeWidth: strokeWidth,
             strokeDashArray: [5, 5],
             strokeUniform: true,
             selectable: false,
-            evented: false
-          })
-        } else if (activeTool === 'circle') {
+            evented: false,
+          });
+        } else if (activeTool === "circle") {
           tempCreationShapeRef.current = new F.Circle({
             left: pointer.x,
             top: pointer.y,
             radius: 1,
-            fill: 'rgba(46, 134, 171, 0.1)',
+            fill: "rgba(46, 134, 171, 0.1)",
             stroke: stroke,
             strokeWidth: strokeWidth,
             strokeDashArray: [5, 5],
             strokeUniform: true,
             selectable: false,
-            evented: false
-          })
-        } else if (activeTool === 'diamond') {
+            evented: false,
+          });
+        } else if (activeTool === "diamond") {
           // Initialize a standard 100x100 diamond. We will scale it during mousemove.
-          tempCreationShapeRef.current = new F.Polygon([
-            { x: 50, y: 0 }, { x: 100, y: 50 }, { x: 50, y: 100 }, { x: 0, y: 50 }
-          ], {
-            left: pointer.x,
-            top: pointer.y,
-            fill: 'rgba(46, 134, 171, 0.1)',
-            stroke: stroke,
-            strokeWidth: strokeWidth,
-            strokeDashArray: [5, 5],
-            strokeUniform: true,
-            selectable: false,
-            evented: false,
-            scaleX: 0.01, // Start tiny
-            scaleY: 0.01
-          })
-        } else if (activeTool === 'arrow' || activeTool === 'line') {
-          tempCreationShapeRef.current = new F.Line([pointer.x, pointer.y, pointer.x, pointer.y], {
-            stroke: stroke,
-            strokeWidth: strokeWidth,
-            selectable: false,
-            evented: false,
-            strokeLineCap: 'round',
-            strokeDashArray: [5, 5]
-          })
+          tempCreationShapeRef.current = new F.Polygon(
+            [
+              { x: 50, y: 0 },
+              { x: 100, y: 50 },
+              { x: 50, y: 100 },
+              { x: 0, y: 50 },
+            ],
+            {
+              left: pointer.x,
+              top: pointer.y,
+              fill: "rgba(46, 134, 171, 0.1)",
+              stroke: stroke,
+              strokeWidth: strokeWidth,
+              strokeDashArray: [5, 5],
+              strokeUniform: true,
+              selectable: false,
+              evented: false,
+              scaleX: 0.01, // Start tiny
+              scaleY: 0.01,
+            },
+          );
+        } else if (activeTool === "arrow" || activeTool === "line") {
+          tempCreationShapeRef.current = new F.Line(
+            [pointer.x, pointer.y, pointer.x, pointer.y],
+            {
+              stroke: stroke,
+              strokeWidth: strokeWidth,
+              selectable: false,
+              evented: false,
+              strokeLineCap: "round",
+              strokeDashArray: [5, 5],
+            },
+          );
         }
-
 
         if (tempCreationShapeRef.current) {
-          canvas.add(tempCreationShapeRef.current)
+          canvas.add(tempCreationShapeRef.current);
         }
-        canvas.requestRenderAll()
+        canvas.requestRenderAll();
       }
-    }
+    };
 
     const onMouseMove = (opt) => {
-      const activeTool = activeToolRef.current
-      
-      if (canvas.isDragging && activeTool === 'pan') {
-        const e = opt.e
-        const vpt = canvas.viewportTransform
-        vpt[4] += e.clientX - canvas.lastPosX
-        vpt[5] += e.clientY - canvas.lastPosY
-        canvas.requestRenderAll()
-        canvas.lastPosX = e.clientX
-        canvas.lastPosY = e.clientY
-        return
+      const activeTool = activeToolRef.current;
+
+      if (canvas.isDragging && activeTool === "pan") {
+        const e = opt.e;
+        const vpt = canvas.viewportTransform;
+        vpt[4] += e.clientX - canvas.lastPosX;
+        vpt[5] += e.clientY - canvas.lastPosY;
+        canvas.requestRenderAll();
+        canvas.lastPosX = e.clientX;
+        canvas.lastPosY = e.clientY;
+        return;
       }
 
       if (opt.e) {
-        const pointer = canvas.getPointer(opt.e)
-        broadcastCursorRef.current(pointer.x, pointer.y)
-        updateEraserCursor(canvas, opt.e)
-        
+        const pointer = canvas.getPointer(opt.e);
+        broadcastCursorRef.current(pointer.x, pointer.y);
+        updateEraserCursor(canvas, opt.e);
+
         // Update selection shape dimensions as cursor moves
         if (isDrawingSelectionRef.current && tempSelectionShapeRef.current) {
-          const startX = selectionStartRef.current.x
-          const startY = selectionStartRef.current.y
-          
-          if (activeTool === 'square-select') {
-            const left = Math.min(startX, pointer.x)
-            const top = Math.min(startY, pointer.y)
-            const width = Math.abs(startX - pointer.x)
-            const height = Math.abs(startY - pointer.y)
-            tempSelectionShapeRef.current.set({ left, top, width, height })
-          } else if (activeTool === 'circle-select') {
-            const dx = pointer.x - startX
-            const dy = pointer.y - startY
-            const radius = Math.sqrt(dx * dx + dy * dy)
+          const startX = selectionStartRef.current.x;
+          const startY = selectionStartRef.current.y;
+
+          if (activeTool === "square-select") {
+            const left = Math.min(startX, pointer.x);
+            const top = Math.min(startY, pointer.y);
+            const width = Math.abs(startX - pointer.x);
+            const height = Math.abs(startY - pointer.y);
+            tempSelectionShapeRef.current.set({ left, top, width, height });
+          } else if (activeTool === "circle-select") {
+            const dx = pointer.x - startX;
+            const dy = pointer.y - startY;
+            const radius = Math.sqrt(dx * dx + dy * dy);
             tempSelectionShapeRef.current.set({
               left: startX - radius,
               top: startY - radius,
-              radius: radius
-            })
-          } else if (activeTool === 'lasso-select') {
-            selectionPointsRef.current.push({ x: pointer.x, y: pointer.y })
-            canvas.remove(tempSelectionShapeRef.current)
-            const F = window.fabric
-            tempSelectionShapeRef.current = new F.Polyline(selectionPointsRef.current, {
-              id: 'temp-selection-shape',
-              fill: 'rgba(46, 134, 171, 0.15)',
-              stroke: '#2E86AB',
-              strokeWidth: 1.5,
-              strokeDashArray: [5, 5],
-              selectable: false,
-              evented: false
-            })
-            canvas.add(tempSelectionShapeRef.current)
+              radius: radius,
+            });
+          } else if (activeTool === "lasso-select") {
+            selectionPointsRef.current.push({ x: pointer.x, y: pointer.y });
+            canvas.remove(tempSelectionShapeRef.current);
+            const F = window.fabric;
+            tempSelectionShapeRef.current = new F.Polyline(
+              selectionPointsRef.current,
+              {
+                id: "temp-selection-shape",
+                fill: "rgba(46, 134, 171, 0.15)",
+                stroke: "#2E86AB",
+                strokeWidth: 1.5,
+                strokeDashArray: [5, 5],
+                selectable: false,
+                evented: false,
+              },
+            );
+            canvas.add(tempSelectionShapeRef.current);
           }
-          canvas.requestRenderAll()
+          canvas.requestRenderAll();
         }
 
         // Update creation shape dimensions
         if (isCreatingShapeRef.current && tempCreationShapeRef.current) {
-          const startX = selectionStartRef.current.x
-          const startY = selectionStartRef.current.y
+          const startX = selectionStartRef.current.x;
+          const startY = selectionStartRef.current.y;
 
-          if (activeTool === 'rect') {
-            const left = Math.min(startX, pointer.x)
-            const top = Math.min(startY, pointer.y)
-            const width = Math.abs(startX - pointer.x)
-            const height = Math.abs(startY - pointer.y)
-            tempCreationShapeRef.current.set({ left, top, width, height })
-          } else if (activeTool === 'circle') {
-            const dx = pointer.x - startX
-            const dy = pointer.y - startY
-            const radius = Math.sqrt(dx * dx + dy * dy)
+          if (activeTool === "rect") {
+            const left = Math.min(startX, pointer.x);
+            const top = Math.min(startY, pointer.y);
+            const width = Math.abs(startX - pointer.x);
+            const height = Math.abs(startY - pointer.y);
+            tempCreationShapeRef.current.set({ left, top, width, height });
+          } else if (activeTool === "circle") {
+            const dx = pointer.x - startX;
+            const dy = pointer.y - startY;
+            const radius = Math.sqrt(dx * dx + dy * dy);
             tempCreationShapeRef.current.set({
               left: startX - radius,
               top: startY - radius,
-              radius: radius
-            })
-          } else if (activeTool === 'diamond') {
-            const left = Math.min(startX, pointer.x)
-            const top = Math.min(startY, pointer.y)
-            const width = Math.abs(startX - pointer.x)
-            const height = Math.abs(startY - pointer.y)
+              radius: radius,
+            });
+          } else if (activeTool === "diamond") {
+            const left = Math.min(startX, pointer.x);
+            const top = Math.min(startY, pointer.y);
+            const width = Math.abs(startX - pointer.x);
+            const height = Math.abs(startY - pointer.y);
 
             // For Polygons in FabricJS, resetting points doesn't automatically recalculate width/height/pathOffset properly during a live render.
             // We use standard scaling of a base shape instead of changing points dynamically.
@@ -1462,54 +1642,60 @@ export default function App() {
                 left,
                 top,
                 scaleX: width / 100, // scale relative to 100x100 base shape
-                scaleY: height / 100
-              })
+                scaleY: height / 100,
+              });
             }
-          } else if (activeTool === 'arrow' || activeTool === 'line') {
+          } else if (activeTool === "arrow" || activeTool === "line") {
             tempCreationShapeRef.current.set({
               x2: pointer.x,
-              y2: pointer.y
-            })
+              y2: pointer.y,
+            });
           }
-          canvas.requestRenderAll()
+          canvas.requestRenderAll();
         }
       }
-    }
+    };
 
     const onMouseUp = (opt) => {
-      canvas.isDragging = false
-      interactingRef.current = false
-      flushPendingRemoteCanvas()
-      
-      const pointer = canvas.getPointer(opt.e)
-      const startX = selectionStartRef.current.x
-      const startY = selectionStartRef.current.y
+      canvas.isDragging = false;
+      interactingRef.current = false;
+      flushPendingRemoteCanvas();
+
+      const pointer = canvas.getPointer(opt.e);
+      const startX = selectionStartRef.current.x;
+      const startY = selectionStartRef.current.y;
 
       // Finalize Shape Creation
       if (isCreatingShapeRef.current) {
-        isCreatingShapeRef.current = false
-        const activeTool = activeToolRef.current
-        const F = window.fabric
-        
+        isCreatingShapeRef.current = false;
+        const activeTool = activeToolRef.current;
+        const F = window.fabric;
+
         if (tempCreationShapeRef.current) {
-          canvas.remove(tempCreationShapeRef.current)
+          canvas.remove(tempCreationShapeRef.current);
         }
 
-        const width = Math.abs(startX - pointer.x)
-        const height = Math.abs(startY - pointer.y)
+        const width = Math.abs(startX - pointer.x);
+        const height = Math.abs(startY - pointer.y);
 
         // Ignore tiny clicks (min 5px)
-        if (width < 5 && height < 5 && activeTool !== 'arrow' && activeTool !== 'line') {
-          tempCreationShapeRef.current = null
-          canvas.requestRenderAll()
+        if (
+          width < 5 &&
+          height < 5 &&
+          activeTool !== "arrow" &&
+          activeTool !== "line"
+        ) {
+          tempCreationShapeRef.current = null;
+          canvas.requestRenderAll();
         } else {
-          const elementId = 'el-' + Date.now() + '-' + Math.round(Math.random() * 1e9)
-          const stroke = propertiesRef.current.stroke
-          const strokeWidth = propertiesRef.current.strokeWidth
-          const fill = propertiesRef.current.fill
-          
-          let finalShape
-          if (activeTool === 'rect') {
+          const elementId =
+            "el-" + Date.now() + "-" + Math.round(Math.random() * 1e9);
+          const stroke = propertiesRef.current.stroke;
+          const strokeWidth = propertiesRef.current.strokeWidth;
+          const fill = propertiesRef.current.fill;
+
+          let finalShape;
+          if (activeTool === "rect") {
             finalShape = new F.Rect({
               id: elementId,
               left: Math.min(startX, pointer.x),
@@ -1521,12 +1707,12 @@ export default function App() {
               strokeWidth: strokeWidth,
               strokeUniform: true,
               selectable: true,
-              evented: true
-            })
-          } else if (activeTool === 'circle') {
-            const dx = pointer.x - startX
-            const dy = pointer.y - startY
-            const radius = Math.sqrt(dx * dx + dy * dy)
+              evented: true,
+            });
+          } else if (activeTool === "circle") {
+            const dx = pointer.x - startX;
+            const dy = pointer.y - startY;
+            const radius = Math.sqrt(dx * dx + dy * dy);
             finalShape = new F.Circle({
               id: elementId,
               left: startX - radius,
@@ -1537,145 +1723,166 @@ export default function App() {
               strokeWidth: strokeWidth,
               strokeUniform: true,
               selectable: true,
-              evented: true
-            })
-          } else if (activeTool === 'diamond') {
-            finalShape = new F.Polygon([
-              { x: width / 2, y: 0 },
-              { x: width, y: height / 2 },
-              { x: width / 2, y: height },
-              { x: 0, y: height / 2 }
-            ], {
-              id: elementId,
-              left: Math.min(startX, pointer.x),
-              top: Math.min(startY, pointer.y),
-              fill: fill,
-              stroke: stroke,
-              strokeWidth: strokeWidth,
-              selectable: true,
-              evented: true
-            })
-          } else if (activeTool === 'line') {
+              evented: true,
+            });
+          } else if (activeTool === "diamond") {
+            finalShape = new F.Polygon(
+              [
+                { x: width / 2, y: 0 },
+                { x: width, y: height / 2 },
+                { x: width / 2, y: height },
+                { x: 0, y: height / 2 },
+              ],
+              {
+                id: elementId,
+                left: Math.min(startX, pointer.x),
+                top: Math.min(startY, pointer.y),
+                fill: fill,
+                stroke: stroke,
+                strokeWidth: strokeWidth,
+                selectable: true,
+                evented: true,
+              },
+            );
+          } else if (activeTool === "line") {
             finalShape = new F.Line([startX, startY, pointer.x, pointer.y], {
               id: elementId,
-              customType: 'line',
+              customType: "line",
               stroke: stroke,
               strokeWidth: strokeWidth,
               strokeUniform: true,
-              strokeLineCap: 'round',
+              strokeLineCap: "round",
               selectable: true,
-              evented: true
-            })
-          } else if (activeTool === 'arrow') {
-            const dx = pointer.x - startX
-            const dy = pointer.y - startY
-            const angle = Math.atan2(dy, dx)
-            const headLength = 10 + (strokeWidth * 0.8)
-            
+              evented: true,
+            });
+          } else if (activeTool === "arrow") {
+            const dx = pointer.x - startX;
+            const dy = pointer.y - startY;
+            const angle = Math.atan2(dy, dx);
+            const headLength = 10 + strokeWidth * 0.8;
+
             // Calculate head points for unified path
-            const headX1 = pointer.x - headLength * Math.cos(angle - Math.PI / 6)
-            const headY1 = pointer.y - headLength * Math.sin(angle - Math.PI / 6)
-            const headX2 = pointer.x - headLength * Math.cos(angle + Math.PI / 6)
-            const headY2 = pointer.y - headLength * Math.sin(angle + Math.PI / 6)
+            const headX1 =
+              pointer.x - headLength * Math.cos(angle - Math.PI / 6);
+            const headY1 =
+              pointer.y - headLength * Math.sin(angle - Math.PI / 6);
+            const headX2 =
+              pointer.x - headLength * Math.cos(angle + Math.PI / 6);
+            const headY2 =
+              pointer.y - headLength * Math.sin(angle + Math.PI / 6);
 
             // Single path: Line to end, then triangle head, then back to end
-            const pathData = `M ${startX} ${startY} L ${pointer.x} ${pointer.y} M ${pointer.x} ${pointer.y} L ${headX1} ${headY1} L ${headX2} ${headY2} Z`
-            
+            const pathData = `M ${startX} ${startY} L ${pointer.x} ${pointer.y} M ${pointer.x} ${pointer.y} L ${headX1} ${headY1} L ${headX2} ${headY2} Z`;
+
             finalShape = new F.Path(pathData, {
               id: elementId,
-              customType: 'arrow',
+              customType: "arrow",
               stroke: stroke,
               strokeWidth: strokeWidth,
               fill: stroke, // Head is filled with stroke color
               strokeUniform: true,
-              strokeLineCap: 'round',
-              strokeLineJoin: 'round',
+              strokeLineCap: "round",
+              strokeLineJoin: "round",
               selectable: true,
-              evented: true
-            })
+              evented: true,
+            });
           }
 
           if (finalShape) {
-            canvas.add(finalShape)
-            canvas.setActiveObject(finalShape)
-            saveHistory()
-            sendCanvasUpdate()
+            canvas.add(finalShape);
+            canvas.setActiveObject(finalShape);
+            saveHistory();
+            sendCanvasUpdate();
           }
-          tempCreationShapeRef.current = null
+          tempCreationShapeRef.current = null;
         }
       }
 
       if (isDrawingSelectionRef.current) {
-        isDrawingSelectionRef.current = false
-        const activeTool = activeToolRef.current
-        const F = window.fabric
-        
+        isDrawingSelectionRef.current = false;
+        const activeTool = activeToolRef.current;
+        const F = window.fabric;
+
         if (tempSelectionShapeRef.current) {
-          canvas.remove(tempSelectionShapeRef.current)
+          canvas.remove(tempSelectionShapeRef.current);
         }
-        
-        const pointer = canvas.getPointer(opt.e)
-        const startX = selectionStartRef.current.x
-        const startY = selectionStartRef.current.y
-        
-        let selectedObjects = []
-        const candidates = canvas.getObjects().filter(
-          obj => obj.id !== 'page-boundary' && obj.id !== 'temp-selection-shape'
-        )
+
+        const pointer = canvas.getPointer(opt.e);
+        const startX = selectionStartRef.current.x;
+        const startY = selectionStartRef.current.y;
+
+        let selectedObjects = [];
+        const candidates = canvas
+          .getObjects()
+          .filter(
+            (obj) =>
+              obj.id !== "page-boundary" && obj.id !== "temp-selection-shape",
+          );
         // ponytail: lasso-split only works on shapes that honor clipPath.
         // Text, images, and active-selection groups crash or ghost-select otherwise.
-        const LASSO_SPLITTABLE = new Set(['rect', 'circle', 'ellipse', 'triangle', 'path', 'polygon', 'polyline'])
-        
-        if (activeTool === 'square-select') {
-          const left = Math.min(startX, pointer.x)
-          const top = Math.min(startY, pointer.y)
-          const width = Math.abs(startX - pointer.x)
-          const height = Math.abs(startY - pointer.y)
-          
-          selectedObjects = candidates.filter(obj => {
-            obj.setCoords()
-            const r = obj.getBoundingRect(true, true)
+        const LASSO_SPLITTABLE = new Set([
+          "rect",
+          "circle",
+          "ellipse",
+          "triangle",
+          "path",
+          "polygon",
+          "polyline",
+        ]);
+
+        if (activeTool === "square-select") {
+          const left = Math.min(startX, pointer.x);
+          const top = Math.min(startY, pointer.y);
+          const width = Math.abs(startX - pointer.x);
+          const height = Math.abs(startY - pointer.y);
+
+          selectedObjects = candidates.filter((obj) => {
+            obj.setCoords();
+            const r = obj.getBoundingRect(true, true);
             return !(
               r.left > left + width ||
               r.left + r.width < left ||
               r.top > top + height ||
               r.top + r.height < top
-            )
-          })
-        } else if (activeTool === 'circle-select') {
-          const dx = pointer.x - startX
-          const dy = pointer.y - startY
-          const radius = Math.sqrt(dx * dx + dy * dy)
-          
-          selectedObjects = candidates.filter(obj => {
-            obj.setCoords()
-            const r = obj.getBoundingRect(true, true)
+            );
+          });
+        } else if (activeTool === "circle-select") {
+          const dx = pointer.x - startX;
+          const dy = pointer.y - startY;
+          const radius = Math.sqrt(dx * dx + dy * dy);
+
+          selectedObjects = candidates.filter((obj) => {
+            obj.setCoords();
+            const r = obj.getBoundingRect(true, true);
             const corners = [
               { x: r.left, y: r.top },
               { x: r.left + r.width, y: r.top },
               { x: r.left, y: r.top + r.height },
               { x: r.left + r.width, y: r.top + r.height },
-              { x: r.left + r.width / 2, y: r.top + r.height / 2 }
-            ]
-            return corners.some(p => {
-              const cx = p.x - startX
-              const cy = p.y - startY
-              return (cx * cx + cy * cy) <= radius * radius
-            })
-          })
-        } else if (activeTool === 'lasso-select') {
-          const pts = selectionPointsRef.current
+              { x: r.left + r.width / 2, y: r.top + r.height / 2 },
+            ];
+            return corners.some((p) => {
+              const cx = p.x - startX;
+              const cy = p.y - startY;
+              return cx * cx + cy * cy <= radius * radius;
+            });
+          });
+        } else if (activeTool === "lasso-select") {
+          const pts = selectionPointsRef.current;
           const finalizeLassoSelection = async () => {
-            const picked = []
+            const picked = [];
             // Calculate total travel distance along the lasso stroke
-            let totalTravel = 0
+            let totalTravel = 0;
             for (let i = 1; i < pts.length; i++) {
-              totalTravel += Math.hypot(pts[i].x - pts[i - 1].x, pts[i].y - pts[i - 1].y)
+              totalTravel += Math.hypot(
+                pts[i].x - pts[i - 1].x,
+                pts[i].y - pts[i - 1].y,
+              );
             }
 
             // Short click without drag — select object under cursor
             if (totalTravel < 5 && lassoClickTargetRef.current) {
-              picked.push(lassoClickTargetRef.current)
+              picked.push(lassoClickTargetRef.current);
             } else if (pts.length >= 2) {
               // Close the lasso (2-point drag becomes a thin rectangle)
               const lassoPoly =
@@ -1686,412 +1893,473 @@ export default function App() {
                       { x: pts[1].x, y: pts[0].y },
                       pts[1],
                       { x: pts[0].x, y: pts[1].y },
-                    ]
+                    ];
 
               for (const obj of candidates) {
-                const mode = getObjectSelectionMode(obj, lassoPoly)
-                if (mode === 'partial') {
+                const mode = getObjectSelectionMode(obj, lassoPoly);
+                if (mode === "partial") {
                   // ponytail: lines don't honor clipPath, so use a segment clipper
                   // for them. Everything else (rect, circle, path, polygon, etc.)
                   // goes through the shared clipPath-based splitter.
-                  if (obj.type === 'line' || obj.customType === 'line') {
-                    applyingRemoteRef.current = true
-                    const parts = splitLineWithLasso(canvas, obj, lassoPoly)
-                    applyingRemoteRef.current = false
-                    for (const p of parts) picked.push(p)
-                    continue
+                  if (obj.type === "line" || obj.customType === "line") {
+                    applyingRemoteRef.current = true;
+                    const parts = splitLineWithLasso(canvas, obj, lassoPoly);
+                    applyingRemoteRef.current = false;
+                    for (const p of parts) picked.push(p);
+                    continue;
                   }
                   if (!LASSO_SPLITTABLE.has(obj.type)) {
-                    picked.push(obj)
-                    continue
+                    picked.push(obj);
+                    continue;
                   }
-                  applyingRemoteRef.current = true
-                  const part = await splitObjectWithLasso(canvas, obj, lassoPoly)
-                  applyingRemoteRef.current = false
+                  applyingRemoteRef.current = true;
+                  const part = await splitObjectWithLasso(
+                    canvas,
+                    obj,
+                    lassoPoly,
+                  );
+                  applyingRemoteRef.current = false;
                   if (part) {
-                    picked.push(part)
+                    picked.push(part);
                   }
-                } else if (mode === 'full') {
-                  picked.push(obj)
+                } else if (mode === "full") {
+                  picked.push(obj);
                 }
               }
             }
 
-            lassoClickTargetRef.current = null
-            canvas.discardActiveObject()
+            lassoClickTargetRef.current = null;
+            canvas.discardActiveObject();
             if (picked.length > 0) {
               if (picked.length === 1) {
-                canvas.setActiveObject(picked[0])
-                updateInspectorProperties(picked[0])
+                canvas.setActiveObject(picked[0]);
+                updateInspectorProperties(picked[0]);
               } else {
-                const activeSel = new F.ActiveSelection(picked, { canvas })
-                canvas.setActiveObject(activeSel)
-                updateInspectorProperties(picked[0])
+                const activeSel = new F.ActiveSelection(picked, { canvas });
+                canvas.setActiveObject(activeSel);
+                updateInspectorProperties(picked[0]);
               }
             }
-            tempSelectionShapeRef.current = null
-            setActiveTool('select')
-            saveHistory()
-            sendCanvasUpdate()
-            canvas.requestRenderAll()
-          }
+            tempSelectionShapeRef.current = null;
+            setActiveTool("select");
+            saveHistory();
+            sendCanvasUpdate();
+            canvas.requestRenderAll();
+          };
 
-          finalizeLassoSelection()
-          return
+          finalizeLassoSelection();
+          return;
         }
 
-        canvas.discardActiveObject()
+        canvas.discardActiveObject();
         if (selectedObjects.length > 0) {
           if (selectedObjects.length === 1) {
-            canvas.setActiveObject(selectedObjects[0])
+            canvas.setActiveObject(selectedObjects[0]);
           } else {
-            const activeSel = new F.ActiveSelection(selectedObjects, { canvas })
-            canvas.setActiveObject(activeSel)
+            const activeSel = new F.ActiveSelection(selectedObjects, {
+              canvas,
+            });
+            canvas.setActiveObject(activeSel);
           }
         }
-        tempSelectionShapeRef.current = null
-        setActiveTool('select')
-        canvas.requestRenderAll()
+        tempSelectionShapeRef.current = null;
+        setActiveTool("select");
+        canvas.requestRenderAll();
       }
-    }
+    };
 
     const onSelectionCreated = (e) => {
-      const activeObj = canvas.getActiveObject() || e.selected[0]
-      updateInspectorProperties(activeObj)
+      const activeObj = canvas.getActiveObject() || e.selected[0];
+      updateInspectorProperties(activeObj);
 
-      const targetTools = ['rect', 'circle', 'diamond', 'line', 'arrow']
+      const targetTools = ["rect", "circle", "diamond", "line", "arrow"];
       if (targetTools.includes(activeToolRef.current)) {
-        setIsRightPanelCollapsed(false)
+        setIsRightPanelCollapsed(false);
       }
-    }
+    };
 
     const onSelectionUpdated = (e) => {
-      const activeObj = canvas.getActiveObject() || e.selected[0]
-      updateInspectorProperties(activeObj)
+      const activeObj = canvas.getActiveObject() || e.selected[0];
+      updateInspectorProperties(activeObj);
 
-      const targetTools = ['rect', 'circle', 'diamond', 'line', 'arrow']
+      const targetTools = ["rect", "circle", "diamond", "line", "arrow"];
       if (targetTools.includes(activeToolRef.current)) {
-        setIsRightPanelCollapsed(false)
+        setIsRightPanelCollapsed(false);
       }
-    }
+    };
 
     const onSelectionCleared = () => {
-      setSelectedObject(null)
+      setSelectedObject(null);
 
-      const targetTools = ['rect', 'circle', 'diamond', 'line', 'arrow']
+      const targetTools = ["rect", "circle", "diamond", "line", "arrow"];
       if (targetTools.includes(activeToolRef.current)) {
-        setIsRightPanelCollapsed(true)
+        setIsRightPanelCollapsed(true);
       }
-    }
+    };
 
     const onObjectMoving = (options) => {
-      interactingRef.current = true
+      interactingRef.current = true;
       // Snap to Grid (20px spacing)
       if (snapToGridRef.current && options.target) {
         options.target.set({
           left: Math.round(options.target.left / 20) * 20,
-          top: Math.round(options.target.top / 20) * 20
-        })
+          top: Math.round(options.target.top / 20) * 20,
+        });
       }
-    }
+    };
 
     const onObjectModified = () => {
-      if (applyingRemoteRef.current || isReadOnlyRef.current) return
-      saveHistory()
-      sendCanvasUpdate()
-    }
+      if (applyingRemoteRef.current || isReadOnlyRef.current) return;
+      saveHistory();
+      sendCanvasUpdate();
+    };
 
     const onObjectAdded = (options) => {
-      if (applyingRemoteRef.current || isReadOnlyRef.current) return
-      const obj = options?.target
+      if (applyingRemoteRef.current || isReadOnlyRef.current) return;
+      const obj = options?.target;
       if (obj) {
         if (!obj.id) {
-          obj.id = 'el-' + Date.now() + '-' + Math.round(Math.random() * 1e9)
+          obj.id = "el-" + Date.now() + "-" + Math.round(Math.random() * 1e9);
         }
-        if (obj.type === 'path') {
-          obj.erasable = true
+        if (obj.type === "path") {
+          obj.erasable = true;
         }
 
         // Keep free-draw strokes non-interactive until a selection tool is chosen
-        if (activeToolRef.current === 'draw') {
-          obj.selectable = false
-          obj.evented = false
-          obj.hoverCursor = 'crosshair'
+        if (activeToolRef.current === "draw") {
+          obj.selectable = false;
+          obj.evented = false;
+          obj.hoverCursor = "crosshair";
         } else {
-          const isSelectionTool = activeToolRef.current === 'select'
-          const isAreaSelectTool = ['lasso-select', 'square-select', 'circle-select'].includes(activeToolRef.current)
-          obj.selectable = isSelectionTool && !isReadOnly
-          obj.evented = (isSelectionTool || isAreaSelectTool || activeToolRef.current === 'connector') && !isReadOnly
-          obj.hoverCursor = isSelectionTool ? (obj.lockMovementX ? 'default' : 'move') : (activeToolRef.current === 'connector' ? 'default' : 'crosshair')
+          const isSelectionTool = activeToolRef.current === "select";
+          const isAreaSelectTool = [
+            "lasso-select",
+            "square-select",
+            "circle-select",
+          ].includes(activeToolRef.current);
+          obj.selectable = isSelectionTool && !isReadOnly;
+          obj.evented =
+            (isSelectionTool ||
+              isAreaSelectTool ||
+              activeToolRef.current === "connector") &&
+            !isReadOnly;
+          obj.hoverCursor = isSelectionTool
+            ? obj.lockMovementX
+              ? "default"
+              : "move"
+            : activeToolRef.current === "connector"
+              ? "default"
+              : "crosshair";
         }
       }
-      saveHistory()
-      sendCanvasUpdate()
-    }
+      saveHistory();
+      sendCanvasUpdate();
+    };
 
     const onObjectRemoved = (options) => {
-      const removedObj = options?.target
-      if (removedObj && removedObj.type !== 'connector' && removedObj.id !== 'page-boundary') {
-        const connectors = canvas.getObjects().filter(obj => obj.type === 'connector')
-        connectors.forEach(conn => {
-          if (conn.data && (conn.data.sourceId === removedObj.id || conn.data.targetId === removedObj.id)) {
-            canvas.remove(conn)
+      const removedObj = options?.target;
+      if (
+        removedObj &&
+        removedObj.type !== "connector" &&
+        removedObj.id !== "page-boundary"
+      ) {
+        const connectors = canvas
+          .getObjects()
+          .filter((obj) => obj.type === "connector");
+        connectors.forEach((conn) => {
+          if (
+            conn.data &&
+            (conn.data.sourceId === removedObj.id ||
+              conn.data.targetId === removedObj.id)
+          ) {
+            canvas.remove(conn);
           }
-        })
+        });
       }
-      if (applyingRemoteRef.current || isReadOnlyRef.current) return
-      saveHistory()
-      sendCanvasUpdate()
-    }
+      if (applyingRemoteRef.current || isReadOnlyRef.current) return;
+      saveHistory();
+      sendCanvasUpdate();
+    };
 
     const onPathCreated = (e) => {
-      const path = e?.path
-      if (!path) return
+      const path = e?.path;
+      if (!path) return;
 
       // EraserBrush emits path:created but must not leave a stroke object on the canvas
-      if (canvas.freeDrawingBrush?.type === 'eraser') {
+      if (canvas.freeDrawingBrush?.type === "eraser") {
         if (canvas.getObjects().includes(path)) {
-          canvas.remove(path)
+          canvas.remove(path);
         }
-        canvas.discardActiveObject()
-        resetDrawingContexts(canvas)
-        if (activeToolRef.current === 'draw') {
-          canvas.isDrawingMode = true
+        canvas.discardActiveObject();
+        resetDrawingContexts(canvas);
+        if (activeToolRef.current === "draw") {
+          canvas.isDrawingMode = true;
         }
-        canvas.requestRenderAll()
-        return
+        canvas.requestRenderAll();
+        return;
       }
 
       if (!path.id) {
-        path.id = 'el-' + Date.now() + '-' + Math.round(Math.random() * 1e9)
+        path.id = "el-" + Date.now() + "-" + Math.round(Math.random() * 1e9);
       }
-      path.erasable = true
-      path.selectable = false
-      path.evented = false
-      canvas.discardActiveObject()
-      canvas.requestRenderAll()
-    }
+      path.erasable = true;
+      path.selectable = false;
+      path.evented = false;
+      canvas.discardActiveObject();
+      canvas.requestRenderAll();
+    };
 
     const onErasingEnd = () => {
-      resetDrawingContexts(canvas)
-      if (activeToolRef.current === 'draw') {
-        canvas.isDrawingMode = true
-        canvas.requestRenderAll()
+      resetDrawingContexts(canvas);
+      if (activeToolRef.current === "draw") {
+        canvas.isDrawingMode = true;
+        canvas.requestRenderAll();
       }
-      if (applyingRemoteRef.current) return
-      saveHistory()
-      sendCanvasUpdate()
-    }
+      if (applyingRemoteRef.current) return;
+      saveHistory();
+      sendCanvasUpdate();
+    };
 
     const onMouseOut = () => {
-      hideEraserCursor()
-    }
+      hideEraserCursor();
+    };
 
-    canvas.on('mouse:down', onMouseDown)
-    canvas.on('mouse:move', onMouseMove)
-    canvas.on('mouse:up', onMouseUp)
-    canvas.on('mouse:out', onMouseOut)
-    canvas.on('path:created', onPathCreated)
-    canvas.on('selection:created', onSelectionCreated)
-    canvas.on('selection:updated', onSelectionUpdated)
-    canvas.on('selection:cleared', onSelectionCleared)
-    canvas.on('object:moving', onObjectMoving)
-    canvas.on('object:scaling', () => { interactingRef.current = true })
-    canvas.on('object:rotating', () => { interactingRef.current = true })
-    canvas.on('object:modified', onObjectModified)
-    canvas.on('object:added', onObjectAdded)
-    canvas.on('object:removed', onObjectRemoved)
-    canvas.on('erasing:end', onErasingEnd)
+    canvas.on("mouse:down", onMouseDown);
+    canvas.on("mouse:move", onMouseMove);
+    canvas.on("mouse:up", onMouseUp);
+    canvas.on("mouse:out", onMouseOut);
+    canvas.on("path:created", onPathCreated);
+    canvas.on("selection:created", onSelectionCreated);
+    canvas.on("selection:updated", onSelectionUpdated);
+    canvas.on("selection:cleared", onSelectionCleared);
+    canvas.on("object:moving", onObjectMoving);
+    canvas.on("object:scaling", () => {
+      interactingRef.current = true;
+    });
+    canvas.on("object:rotating", () => {
+      interactingRef.current = true;
+    });
+    canvas.on("object:modified", onObjectModified);
+    canvas.on("object:added", onObjectAdded);
+    canvas.on("object:removed", onObjectRemoved);
+    canvas.on("erasing:end", onErasingEnd);
 
     return () => {
-      canvas.off('mouse:down', onMouseDown)
-      canvas.off('mouse:move', onMouseMove)
-      canvas.off('mouse:up', onMouseUp)
-      canvas.off('mouse:out', onMouseOut)
-      canvas.off('path:created', onPathCreated)
-      canvas.off('selection:created', onSelectionCreated)
-      canvas.off('selection:updated', onSelectionUpdated)
-      canvas.off('selection:cleared', onSelectionCleared)
-      canvas.off('object:moving', onObjectMoving)
-      canvas.off('object:modified', onObjectModified)
-      canvas.off('object:added', onObjectAdded)
-      canvas.off('object:removed', onObjectRemoved)
-      canvas.off('erasing:end', onErasingEnd)
-    }
+      canvas.off("mouse:down", onMouseDown);
+      canvas.off("mouse:move", onMouseMove);
+      canvas.off("mouse:up", onMouseUp);
+      canvas.off("mouse:out", onMouseOut);
+      canvas.off("path:created", onPathCreated);
+      canvas.off("selection:created", onSelectionCreated);
+      canvas.off("selection:updated", onSelectionUpdated);
+      canvas.off("selection:cleared", onSelectionCleared);
+      canvas.off("object:moving", onObjectMoving);
+      canvas.off("object:modified", onObjectModified);
+      canvas.off("object:added", onObjectAdded);
+      canvas.off("object:removed", onObjectRemoved);
+      canvas.off("erasing:end", onErasingEnd);
+    };
   }
 
   // Hook toolbar tool changes
   useEffect(() => {
-    const canvas = fabricRef.current
-    if (!canvas) return
+    const canvas = fabricRef.current;
+    if (!canvas) return;
 
-    const selectionTools = ['select', 'lasso-select', 'square-select', 'circle-select']
-    const isSelectionTool = selectionTools.includes(activeTool)
+    const selectionTools = [
+      "select",
+      "lasso-select",
+      "square-select",
+      "circle-select",
+    ];
+    const isSelectionTool = selectionTools.includes(activeTool);
 
     // Only keep active selections for the default select pointer tool
-    if (activeTool !== 'select') {
-      canvas.discardActiveObject()
-      canvas.requestRenderAll()
+    if (activeTool !== "select") {
+      canvas.discardActiveObject();
+      canvas.requestRenderAll();
     }
 
     // Disable drawing mode by default
-    canvas.isDrawingMode = false
+    canvas.isDrawingMode = false;
 
-    if (activeTool === 'pan') {
-      hideEraserCursor()
-      canvas.selection = false
-      canvas.defaultCursor = 'grab'
+    if (activeTool === "pan") {
+      hideEraserCursor();
+      canvas.selection = false;
+      canvas.defaultCursor = "grab";
       canvas.forEachObject((obj) => {
-        obj.selectable = false
-        obj.evented = false
-      })
-    } else if (activeTool === 'draw') {
-      canvas.isDrawingMode = true
-      canvas.selection = false
-      canvas.defaultCursor = drawTypeRef.current === 'eraser' ? 'none' : 'crosshair'
+        obj.selectable = false;
+        obj.evented = false;
+      });
+    } else if (activeTool === "draw") {
+      canvas.isDrawingMode = true;
+      canvas.selection = false;
+      canvas.defaultCursor =
+        drawTypeRef.current === "eraser" ? "none" : "crosshair";
       canvas.forEachObject((obj) => {
-        obj.selectable = false
-        obj.evented = false
-      })
-      if (drawTypeRef.current !== 'eraser') {
-        hideEraserCursor()
+        obj.selectable = false;
+        obj.evented = false;
+      });
+      if (drawTypeRef.current !== "eraser") {
+        hideEraserCursor();
       }
     } else if (isSelectionTool) {
-      hideEraserCursor()
-      canvas.selection = false // We handle selection drawing manually
-      const isSelectTool = activeTool === 'select'
-      const isAreaSelectTool = ['lasso-select', 'square-select', 'circle-select'].includes(activeTool)
-      canvas.defaultCursor = isSelectTool ? 'default' : 'crosshair'
+      hideEraserCursor();
+      canvas.selection = false; // We handle selection drawing manually
+      const isSelectTool = activeTool === "select";
+      const isAreaSelectTool = [
+        "lasso-select",
+        "square-select",
+        "circle-select",
+      ].includes(activeTool);
+      canvas.defaultCursor = isSelectTool ? "default" : "crosshair";
       canvas.forEachObject((obj) => {
-        if (obj.id !== 'page-boundary' && obj.type !== 'connector') {
-          obj.selectable = !isReadOnly && isSelectTool
-          obj.evented = !isReadOnly && (isSelectTool || isAreaSelectTool || activeTool === 'connector')
-          obj.hoverCursor = isSelectTool ? (obj.lockMovementX ? 'default' : 'move') : 'crosshair'
+        if (obj.id !== "page-boundary" && obj.type !== "connector") {
+          obj.selectable = !isReadOnly && isSelectTool;
+          obj.evented =
+            !isReadOnly &&
+            (isSelectTool || isAreaSelectTool || activeTool === "connector");
+          obj.hoverCursor = isSelectTool
+            ? obj.lockMovementX
+              ? "default"
+              : "move"
+            : "crosshair";
         }
-      })
+      });
     } else {
-      hideEraserCursor()
-      canvas.selection = false
-      
-      const isShapeTool = ['rect', 'circle', 'diamond', 'arrow', 'line'].includes(activeTool)
-      canvas.defaultCursor = isShapeTool ? 'crosshair' : 'default'
+      hideEraserCursor();
+      canvas.selection = false;
+
+      const isShapeTool = [
+        "rect",
+        "circle",
+        "diamond",
+        "arrow",
+        "line",
+      ].includes(activeTool);
+      canvas.defaultCursor = isShapeTool ? "crosshair" : "default";
 
       canvas.forEachObject((obj) => {
-        if (obj.id !== 'page-boundary' && obj.type !== 'connector') {
-          obj.selectable = false
-          obj.evented = activeTool === 'connector'
-          obj.hoverCursor = activeTool === 'connector' ? 'default' : 'crosshair'
+        if (obj.id !== "page-boundary" && obj.type !== "connector") {
+          obj.selectable = false;
+          obj.evented = activeTool === "connector";
+          obj.hoverCursor =
+            activeTool === "connector" ? "default" : "crosshair";
         }
-      })
+      });
 
       // If text tool is selected, we still use click-to-drop or a simple placement logic
-      if (activeTool === 'text') {
-        addNewElement('text')
-        setActiveTool('square-select')
+      if (activeTool === "text") {
+        addNewElement("text");
+        setActiveTool("square-select");
       }
     }
-  }, [activeTool, isReadOnly, drawType])
+  }, [activeTool, isReadOnly, drawType]);
 
   // Helper: Convert hex color to rgba format with custom alpha
   const hexToRgba = (hex, alpha) => {
-    if (!hex) return `rgba(30, 58, 95, ${alpha})`
-    let cleanHex = hex.replace('#', '')
+    if (!hex) return `rgba(30, 58, 95, ${alpha})`;
+    let cleanHex = hex.replace("#", "");
     if (cleanHex.length === 3) {
-      cleanHex = cleanHex.split('').map(char => char + char).join('')
+      cleanHex = cleanHex
+        .split("")
+        .map((char) => char + char)
+        .join("");
     }
-    const r = parseInt(cleanHex.substring(0, 2), 16)
-    const g = parseInt(cleanHex.substring(2, 4), 16)
-    const b = parseInt(cleanHex.substring(4, 6), 16)
-    return `rgba(${r}, ${g}, ${b}, ${alpha})`
-  }
+    const r = parseInt(cleanHex.substring(0, 2), 16);
+    const g = parseInt(cleanHex.substring(2, 4), 16);
+    const b = parseInt(cleanHex.substring(4, 6), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  };
 
   // Configure free drawing brush properties
   useEffect(() => {
-    const canvas = fabricRef.current
-    const F = window.fabric
-    if (!canvas || !F || screen !== 'editor') return
+    const canvas = fabricRef.current;
+    const F = window.fabric;
+    if (!canvas || !F || screen !== "editor") return;
 
-    const color = properties.stroke || '#1E3A5F'
+    const color = properties.stroke || "#1E3A5F";
 
-    if (activeTool === 'draw') {
-      canvas.isDrawingMode = true
-      canvas.selection = false
-      canvas.defaultCursor = drawType === 'eraser' ? 'none' : 'crosshair'
-      resetDrawingContexts(canvas)
+    if (activeTool === "draw") {
+      canvas.isDrawingMode = true;
+      canvas.selection = false;
+      canvas.defaultCursor = drawType === "eraser" ? "none" : "crosshair";
+      resetDrawingContexts(canvas);
     }
 
     // Always recreate brush on type change so eraser state never leaks into pencil/pen
-    if (drawType === 'eraser') {
+    if (drawType === "eraser") {
       if (F.EraserBrush) {
-        canvas.freeDrawingBrush = new F.EraserBrush(canvas)
-        canvas.freeDrawingBrush.width = drawSizes.eraser
+        canvas.freeDrawingBrush = new F.EraserBrush(canvas);
+        canvas.freeDrawingBrush.width = drawSizes.eraser;
       } else {
-        canvas.freeDrawingBrush = new F.PencilBrush(canvas)
-        const brush = canvas.freeDrawingBrush
-        brush.width = drawSizes.eraser
-        brush.color = '#000000'
-        brush.globalCompositeOperation = 'destination-out'
+        canvas.freeDrawingBrush = new F.PencilBrush(canvas);
+        const brush = canvas.freeDrawingBrush;
+        brush.width = drawSizes.eraser;
+        brush.color = "#000000";
+        brush.globalCompositeOperation = "destination-out";
       }
     } else {
-      canvas.freeDrawingBrush = new F.PencilBrush(canvas)
-      const brush = canvas.freeDrawingBrush
-      brush.globalCompositeOperation = 'source-over'
-      if (drawType === 'pencil') {
-        brush.width = drawSizes.pencil
-        brush.color = color
-      } else if (drawType === 'pen') {
-        brush.width = drawSizes.pen
-        brush.color = color
-      } else if (drawType === 'highlighter') {
-        brush.width = drawSizes.highlighter
-        brush.color = hexToRgba(color, 0.4)
+      canvas.freeDrawingBrush = new F.PencilBrush(canvas);
+      const brush = canvas.freeDrawingBrush;
+      brush.globalCompositeOperation = "source-over";
+      if (drawType === "pencil") {
+        brush.width = drawSizes.pencil;
+        brush.color = color;
+      } else if (drawType === "pen") {
+        brush.width = drawSizes.pen;
+        brush.color = color;
+      } else if (drawType === "highlighter") {
+        brush.width = drawSizes.highlighter;
+        brush.color = hexToRgba(color, 0.4);
       }
     }
 
-    if (drawType !== 'eraser') {
-      hideEraserCursor()
-    } else if (activeTool === 'draw') {
+    if (drawType !== "eraser") {
+      hideEraserCursor();
+    } else if (activeTool === "draw") {
       // Refresh cursor ring size when eraser size changes
-      const el = eraserCursorElRef.current
-      if (el && el.style.display !== 'none') {
-        const size = drawSizes.eraser * zoomRef.current
-        el.style.width = `${size}px`
-        el.style.height = `${size}px`
+      const el = eraserCursorElRef.current;
+      if (el && el.style.display !== "none") {
+        const size = drawSizes.eraser * zoomRef.current;
+        el.style.width = `${size}px`;
+        el.style.height = `${size}px`;
       }
     }
-  }, [drawType, drawSizes, properties.stroke, activeTool, screen, zoom])
+  }, [drawType, drawSizes, properties.stroke, activeTool, screen, zoom]);
 
   // Element Creation Factory
   function addNewElement(type) {
-    const F = window.fabric
-    const canvas = fabricRef.current
-    if (!F || !canvas || isReadOnly) return
+    const F = window.fabric;
+    const canvas = fabricRef.current;
+    if (!F || !canvas || isReadOnly) return;
 
     // Calculate canvas center point taking zoom/pan into account
-    const vpt = canvas.viewportTransform
-    const centerX = (-vpt[4] + canvas.getWidth() / 2) / zoom
-    const centerY = (-vpt[5] + canvas.getHeight() / 2) / zoom
+    const vpt = canvas.viewportTransform;
+    const centerX = (-vpt[4] + canvas.getWidth() / 2) / zoom;
+    const centerY = (-vpt[5] + canvas.getHeight() / 2) / zoom;
 
-    const elementId = 'el-' + Date.now() + '-' + Math.round(Math.random() * 1e9)
-    let shape
-    const stroke = propertiesRef.current.stroke || '#1E3A5F'
-    const fill = propertiesRef.current.fill || '#FFFFFF'
-    const strokeWidth = propertiesRef.current.strokeWidth || 2
+    const elementId =
+      "el-" + Date.now() + "-" + Math.round(Math.random() * 1e9);
+    let shape;
+    const stroke = propertiesRef.current.stroke || "#1E3A5F";
+    const fill = propertiesRef.current.fill || "#FFFFFF";
+    const strokeWidth = propertiesRef.current.strokeWidth || 2;
 
-    if (type === 'text') {
-      shape = new F.IText('Double-click to edit', {
+    if (type === "text") {
+      shape = new F.IText("Double-click to edit", {
         id: elementId,
         left: centerX,
         top: centerY,
-        fontFamily: 'Inter, system-ui, Arial',
+        fontFamily: "Inter, system-ui, Arial",
         fontSize: 24,
         fill: stroke,
-        originX: 'center',
-        originY: 'center',
+        originX: "center",
+        originY: "center",
         selectable: true,
-        evented: true
-      })
-    } else if (type === 'rect') {
+        evented: true,
+      });
+    } else if (type === "rect") {
       shape = new F.Rect({
         id: elementId,
         left: centerX - 50,
@@ -2102,9 +2370,9 @@ export default function App() {
         stroke: stroke,
         strokeWidth: strokeWidth,
         selectable: true,
-        evented: true
-      })
-    } else if (type === 'circle') {
+        evented: true,
+      });
+    } else if (type === "circle") {
       shape = new F.Circle({
         id: elementId,
         left: centerX - 50,
@@ -2114,186 +2382,189 @@ export default function App() {
         stroke: stroke,
         strokeWidth: strokeWidth,
         selectable: true,
-        evented: true
-      })
-    } else if (type === 'line') {
+        evented: true,
+      });
+    } else if (type === "line") {
       shape = new F.Line([centerX - 50, centerY, centerX + 50, centerY], {
         id: elementId,
-        customType: 'line',
+        customType: "line",
         stroke: stroke,
         strokeWidth: strokeWidth,
         strokeUniform: true,
-        strokeLineCap: 'round',
+        strokeLineCap: "round",
         selectable: true,
-        evented: true
-      })
-    } else if (type === 'arrow') {
-      const headLength = 10 + (strokeWidth * 0.8)
+        evented: true,
+      });
+    } else if (type === "arrow") {
+      const headLength = 10 + strokeWidth * 0.8;
       // M 0 0 L 100 0 (Line) M 100 0 L 85 -7.5 L 85 7.5 Z (Head)
-      const pathData = `M ${centerX - 50} ${centerY} L ${centerX + 50} ${centerY} M ${centerX + 50} ${centerY} L ${centerX + 50 - headLength} ${centerY - headLength/2} L ${centerX + 50 - headLength} ${centerY + headLength/2} Z`
-      
+      const pathData = `M ${centerX - 50} ${centerY} L ${centerX + 50} ${centerY} M ${centerX + 50} ${centerY} L ${centerX + 50 - headLength} ${centerY - headLength / 2} L ${centerX + 50 - headLength} ${centerY + headLength / 2} Z`;
+
       shape = new F.Path(pathData, {
         id: elementId,
-        customType: 'arrow',
+        customType: "arrow",
         stroke: stroke,
         strokeWidth: strokeWidth,
         fill: stroke,
         strokeUniform: true,
-        strokeLineCap: 'round',
-        strokeLineJoin: 'round',
+        strokeLineCap: "round",
+        strokeLineJoin: "round",
         selectable: true,
-        evented: true
-      })
+        evented: true,
+      });
     }
 
     if (shape) {
-      canvas.add(shape)
-      canvas.setActiveObject(shape)
-      saveHistory()
-      sendCanvasUpdate()
+      canvas.add(shape);
+      canvas.setActiveObject(shape);
+      saveHistory();
+      sendCanvasUpdate();
     }
   }
 
   // Property Changes from sidebar panel
   const handleChangeProperty = (name, value) => {
-    const canvas = fabricRef.current
-    if (!canvas) return
-    const activeObject = canvas.getActiveObject()
+    const canvas = fabricRef.current;
+    if (!canvas) return;
+    const activeObject = canvas.getActiveObject();
 
-    setProperties((prev) => ({ ...prev, [name]: value }))
+    setProperties((prev) => ({ ...prev, [name]: value }));
 
     // Sync drawing brush color immediately
-    if (name === 'stroke' && canvas.freeDrawingBrush) {
-      canvas.freeDrawingBrush.color = value
+    if (name === "stroke" && canvas.freeDrawingBrush) {
+      canvas.freeDrawingBrush.color = value;
     }
 
     if (activeObject) {
-      if (activeObject.type === 'activeSelection') {
+      if (activeObject.type === "activeSelection") {
         activeObject.forEachObject((obj) => {
-          obj.set(name, value)
-          obj.dirty = true // Invalidate cache for custom properties
-          obj.setCoords() // Recalculate selection borders and handles
-          if (obj.customType === 'arrow' && name === 'stroke') {
-            obj.set('fill', value) // Keep head filled with stroke color
+          obj.set(name, value);
+          obj.dirty = true; // Invalidate cache for custom properties
+          obj.setCoords(); // Recalculate selection borders and handles
+          if (obj.customType === "arrow" && name === "stroke") {
+            obj.set("fill", value); // Keep head filled with stroke color
           }
-        })
+        });
       } else {
-        activeObject.set(name, value)
-        activeObject.dirty = true // Invalidate cache for custom properties
-        activeObject.setCoords() // Recalculate selection borders and handles
-        if (activeObject.customType === 'arrow' && name === 'stroke') {
-          activeObject.set('fill', value)
+        activeObject.set(name, value);
+        activeObject.dirty = true; // Invalidate cache for custom properties
+        activeObject.setCoords(); // Recalculate selection borders and handles
+        if (activeObject.customType === "arrow" && name === "stroke") {
+          activeObject.set("fill", value);
         }
       }
-      canvas.requestRenderAll()
-      saveHistory()
-      sendCanvasUpdate()
+      canvas.requestRenderAll();
+      saveHistory();
+      sendCanvasUpdate();
     }
-  }
+  };
 
   const handleBringToFront = () => {
-    const canvas = fabricRef.current
-    if (!canvas) return
-    const activeObject = canvas.getActiveObject()
+    const canvas = fabricRef.current;
+    if (!canvas) return;
+    const activeObject = canvas.getActiveObject();
     if (activeObject) {
-      canvas.bringToFront(activeObject)
-      canvas.requestRenderAll()
-      saveHistory()
-      sendCanvasUpdate()
+      canvas.bringToFront(activeObject);
+      canvas.requestRenderAll();
+      saveHistory();
+      sendCanvasUpdate();
     }
-  }
+  };
 
   const handleSendToBack = () => {
-    const canvas = fabricRef.current
-    if (!canvas) return
-    const activeObject = canvas.getActiveObject()
+    const canvas = fabricRef.current;
+    if (!canvas) return;
+    const activeObject = canvas.getActiveObject();
     if (activeObject) {
-      canvas.sendToBack(activeObject)
-      canvas.requestRenderAll()
-      saveHistory()
-      sendCanvasUpdate()
+      canvas.sendToBack(activeObject);
+      canvas.requestRenderAll();
+      saveHistory();
+      sendCanvasUpdate();
     }
-  }
+  };
 
   const handleDeleteElement = () => {
-    if (isReadOnly) return
-    const canvas = fabricRef.current
-    if (!canvas) return
-    const activeObject = canvas.getActiveObject()
+    if (isReadOnly) return;
+    const canvas = fabricRef.current;
+    if (!canvas) return;
+    const activeObject = canvas.getActiveObject();
     if (activeObject) {
-      if (activeObject.type === 'activeSelection') {
-        activeObject.forEachObject((obj) => canvas.remove(obj))
-        canvas.discardActiveObject()
+      if (activeObject.type === "activeSelection") {
+        activeObject.forEachObject((obj) => canvas.remove(obj));
+        canvas.discardActiveObject();
       } else {
-        canvas.remove(activeObject)
-        canvas.discardActiveObject()
+        canvas.remove(activeObject);
+        canvas.discardActiveObject();
       }
-      canvas.requestRenderAll()
-      setSelectedObject(null)
+      canvas.requestRenderAll();
+      setSelectedObject(null);
     }
-  }
+  };
 
   // Zoom Controls
   const handleZoom = (factor) => {
-    const canvas = fabricRef.current
-    if (!canvas) return
-    const newZoom = Math.min(Math.max(factor, 0.25), 4.0)
+    const canvas = fabricRef.current;
+    if (!canvas) return;
+    const newZoom = Math.min(Math.max(factor, 0.25), 4.0);
 
     // Zoom centered in the canvas viewport
-    canvas.zoomToPoint(new window.fabric.Point(canvas.getWidth() / 2, canvas.getHeight() / 2), newZoom)
-    setZoom(newZoom)
-  }
+    canvas.zoomToPoint(
+      new window.fabric.Point(canvas.getWidth() / 2, canvas.getHeight() / 2),
+      newZoom,
+    );
+    updateAllConnectors(canvas);
+    setZoom(newZoom);
+  };
 
   const handleZoomReset = () => {
-    const canvas = fabricRef.current
-    if (!canvas) return
-    canvas.setZoom(1.0)
-    canvas.viewportTransform = [1, 0, 0, 1, 0, 0]
-    canvas.requestRenderAll()
-    setZoom(1.0)
-  }
+    const canvas = fabricRef.current;
+    if (!canvas) return;
+    canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+    updateAllConnectors(canvas);
+    setZoom(1.0);
+  };
 
   // --- Grouping & Locking ---
   const handleGroup = () => {
-    const canvas = fabricRef.current
-    if (!canvas) return
-    const activeObj = canvas.getActiveObject()
-    if (!activeObj || activeObj.type !== 'activeSelection') return
+    const canvas = fabricRef.current;
+    if (!canvas) return;
+    const activeObj = canvas.getActiveObject();
+    if (!activeObj || activeObj.type !== "activeSelection") return;
 
-    activeObj.toGroup()
-    const newGroup = canvas.getActiveObject()
+    activeObj.toGroup();
+    const newGroup = canvas.getActiveObject();
     if (newGroup) {
       newGroup.set({
-        id: 'group-' + Date.now() + '-' + Math.round(Math.random() * 1e9),
-        subTargetCheck: true // allows selecting inner elements if needed
-      })
-      canvas.requestRenderAll()
-      updateInspectorProperties(newGroup)
-      saveHistory()
-      sendCanvasUpdate()
+        id: "group-" + Date.now() + "-" + Math.round(Math.random() * 1e9),
+        subTargetCheck: true, // allows selecting inner elements if needed
+      });
+      canvas.requestRenderAll();
+      updateInspectorProperties(newGroup);
+      saveHistory();
+      sendCanvasUpdate();
     }
-  }
+  };
 
   const handleUngroup = () => {
-    const canvas = fabricRef.current
-    if (!canvas) return
-    const activeObj = canvas.getActiveObject()
-    if (!activeObj || activeObj.type !== 'group') return
+    const canvas = fabricRef.current;
+    if (!canvas) return;
+    const activeObj = canvas.getActiveObject();
+    if (!activeObj || activeObj.type !== "group") return;
 
-    activeObj.toActiveSelection()
-    canvas.requestRenderAll()
-    updateInspectorProperties(canvas.getActiveObject())
-    saveHistory()
-    sendCanvasUpdate()
-  }
+    activeObj.toActiveSelection();
+    canvas.requestRenderAll();
+    updateInspectorProperties(canvas.getActiveObject());
+    saveHistory();
+    sendCanvasUpdate();
+  };
 
   const handleToggleLock = () => {
-    const canvas = fabricRef.current
-    if (!canvas) return
-    const activeObj = canvas.getActiveObject()
-    if (!activeObj) return
+    const canvas = fabricRef.current;
+    if (!canvas) return;
+    const activeObj = canvas.getActiveObject();
+    if (!activeObj) return;
 
-    const isLocked = !activeObj.lockMovementX
+    const isLocked = !activeObj.lockMovementX;
     activeObj.set({
       lockMovementX: isLocked,
       lockMovementY: isLocked,
@@ -2302,328 +2573,342 @@ export default function App() {
       lockRotation: isLocked,
       hasControls: !isLocked,
       editable: !isLocked,
-      hoverCursor: isLocked ? 'default' : 'move'
-    })
+      hoverCursor: isLocked ? "default" : "move",
+    });
 
-    canvas.requestRenderAll()
+    canvas.requestRenderAll();
     // Force React to re-render without losing scroll position by shallow-copying the reference
-    setSelectedObject(Object.assign(Object.create(Object.getPrototypeOf(activeObj)), activeObj))
-    saveHistory()
-    sendCanvasUpdate()
-  }
+    setSelectedObject(
+      Object.assign(Object.create(Object.getPrototypeOf(activeObj)), activeObj),
+    );
+    saveHistory();
+    sendCanvasUpdate();
+  };
 
   // Phase 5: AI features (Mess Cleanup and Architecture Assist)
   const handleCleanup = async () => {
-    const canvas = fabricRef.current
-    if (!canvas) return
+    const canvas = fabricRef.current;
+    if (!canvas) return;
 
-    const rawObjects = canvas.getObjects().filter(obj => obj.id && obj.id !== 'page-boundary' && obj.type !== 'connector')
+    const rawObjects = canvas
+      .getObjects()
+      .filter(
+        (obj) =>
+          obj.id && obj.id !== "page-boundary" && obj.type !== "connector",
+      );
     if (rawObjects.length === 0) {
-      alert('Draw some shapes on the canvas first before cleaning them up!')
-      return
+      alert("Draw some shapes on the canvas first before cleaning them up!");
+      return;
     }
 
-    const rawConnectors = canvas.getObjects().filter(obj => obj.type === 'connector')
-    const connectors = rawConnectors.map(obj => ({
+    const rawConnectors = canvas
+      .getObjects()
+      .filter((obj) => obj.type === "connector");
+    const connectors = rawConnectors.map((obj) => ({
       id: obj.data?.id || obj.id,
       sourceId: obj.data?.sourceId,
       sourceAnchor: obj.data?.sourceAnchor,
       targetId: obj.data?.targetId,
-      targetAnchor: obj.data?.targetAnchor
-    }))
+      targetAnchor: obj.data?.targetAnchor,
+    }));
 
     // Save history state before cleanup so it can be undone
-    saveHistory()
-    setIsCleanupLoading(true)
+    saveHistory();
+    setIsCleanupLoading(true);
 
-    const elements = rawObjects.map(obj => ({
+    const elements = rawObjects.map((obj) => ({
       id: obj.id,
-      type: obj.type === 'i-text' || obj.type === 'text' ? 'text' : obj.type,
+      type: obj.type === "i-text" || obj.type === "text" ? "text" : obj.type,
       left: obj.left,
       top: obj.top,
       width: obj.width,
       height: obj.height,
       scaleX: obj.scaleX || 1,
       scaleY: obj.scaleY || 1,
-      isLocked: obj.lockMovementX || obj.isLocked || false
-    }))
+      isLocked: obj.lockMovementX || obj.isLocked || false,
+    }));
 
     try {
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 15000) // 15s timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s timeout
 
-      const token = localStorage.getItem('wb_token')
-      const headers = { 'Content-Type': 'application/json' }
-      if (token) headers['Authorization'] = `Bearer ${token}`
+      const token = localStorage.getItem("wb_token");
+      const headers = { "Content-Type": "application/json" };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
       const res = await fetch(`${API_BASE_URL}/api/ai/cleanup`, {
-        method: 'POST',
+        method: "POST",
         headers,
         body: JSON.stringify({ elements, connectors }),
-        signal: controller.signal
-      })
-      clearTimeout(timeoutId)
+        signal: controller.signal,
+      });
+      clearTimeout(timeoutId);
 
-      if (!res.ok) throw new Error('Cleanup failed')
-      const data = await res.json()
-      const cleaned = data.elements || []
+      if (!res.ok) throw new Error("Cleanup failed");
+      const data = await res.json();
+      const cleaned = data.elements || [];
 
-      if (cleaned.length === 0) return
+      if (cleaned.length === 0) return;
 
-      let completedCount = 0
-      applyingRemoteRef.current = true // Disable intermediate history saves during animations
+      let completedCount = 0;
+      applyingRemoteRef.current = true; // Disable intermediate history saves during animations
 
-      cleaned.forEach(item => {
-        const obj = rawObjects.find(o => o.id === item.id)
+      cleaned.forEach((item) => {
+        const obj = rawObjects.find((o) => o.id === item.id);
         if (obj) {
-          const startLeft = obj.left
-          const startTop = obj.top
-          const endLeft = item.left
-          const endTop = item.top
+          const startLeft = obj.left;
+          const startTop = obj.top;
+          const endLeft = item.left;
+          const endTop = item.top;
 
           window.fabric.util.animate({
             startValue: 0,
             endValue: 1,
             duration: 500,
             onChange: (value) => {
-              obj.set('left', startLeft + (endLeft - startLeft) * value)
-              obj.set('top', startTop + (endTop - startTop) * value)
-              
-              // Recalculate attached connectors on each animation frame
-              const canvasConnectors = canvas.getObjects().filter(c => c.type === 'connector')
-              canvasConnectors.forEach(conn => {
-                if (conn.data) {
-                  if (conn.data.sourceId === obj.id) {
-                    const pt = getAnchorPoint(obj, conn.data.sourceAnchor, true)
-                    conn.set({ x1: pt.x, y1: pt.y })
-                    conn.setCoords()
-                  }
-                  if (conn.data.targetId === obj.id) {
-                    const pt = getAnchorPoint(obj, conn.data.targetAnchor, true)
-                    conn.set({ x2: pt.x, y2: pt.y })
-                    conn.setCoords()
-                  }
-                }
-              })
-              canvas.requestRenderAll()
+              obj.set("left", startLeft + (endLeft - startLeft) * value);
+              obj.set("top", startTop + (endTop - startTop) * value);
+              updateAllConnectors(canvas);
             },
             onComplete: () => {
-              obj.setCoords()
-              completedCount++
+              obj.setCoords();
+              completedCount++;
               if (completedCount === cleaned.length) {
-                updateAllConnectors(canvas)
-                applyingRemoteRef.current = false
-                saveHistory()
-                sendCanvasUpdate()
+                updateAllConnectors(canvas);
+                applyingRemoteRef.current = false;
+                saveHistory();
+                sendCanvasUpdate();
               }
-            }
-          })
+            },
+          });
         } else {
-          completedCount++
+          completedCount++;
         }
-      })
+      });
     } catch (err) {
-      console.error('Mess cleanup error:', err)
-      alert('Failed to tidy elements. Please try again.')
+      console.error("Mess cleanup error:", err);
+      alert("Failed to tidy elements. Please try again.");
     } finally {
-      setIsCleanupLoading(false)
+      setIsCleanupLoading(false);
     }
-  }
+  };
 
   const handleAssist = async () => {
-    const canvas = fabricRef.current
-    if (!canvas) return
+    const canvas = fabricRef.current;
+    if (!canvas) return;
 
-    setIsAssistLoading(true)
-    setIsAssistPanelOpen(true) // Slide open right away to show loader
+    setIsAssistLoading(true);
+    setIsAssistPanelOpen(true); // Slide open right away to show loader
 
-    const rawObjects = canvas.getObjects().filter(obj => obj.id && obj.id !== 'page-boundary')
-    const shapes = rawObjects.filter(obj => ['rect', 'circle', 'polygon'].includes(obj.type) || obj.type === 'path')
-    const texts = rawObjects.filter(obj => obj.type === 'i-text' || obj.type === 'text')
+    const rawObjects = canvas
+      .getObjects()
+      .filter((obj) => obj.id && obj.id !== "page-boundary");
+    const shapes = rawObjects.filter(
+      (obj) =>
+        ["rect", "circle", "polygon"].includes(obj.type) || obj.type === "path",
+    );
+    const texts = rawObjects.filter(
+      (obj) => obj.type === "i-text" || obj.type === "text",
+    );
 
     // Map shapes and find nested text overlapping as labels
-    const elements = shapes.map(shape => {
-      const shapeLeft = shape.left
-      const shapeTop = shape.top
-      const shapeWidth = shape.width * (shape.scaleX || 1)
-      const shapeHeight = shape.height * (shape.scaleY || 1)
+    const elements = shapes.map((shape) => {
+      const shapeLeft = shape.left;
+      const shapeTop = shape.top;
+      const shapeWidth = shape.width * (shape.scaleX || 1);
+      const shapeHeight = shape.height * (shape.scaleY || 1);
 
-      const insideTexts = texts.filter(text => {
-        const textX = text.left
-        const textY = text.top
+      const insideTexts = texts.filter((text) => {
+        const textX = text.left;
+        const textY = text.top;
         return (
           textX >= shapeLeft &&
           textX <= shapeLeft + shapeWidth &&
           textY >= shapeTop &&
           textY <= shapeTop + shapeHeight
-        )
-      })
+        );
+      });
 
-      const label = insideTexts.map(t => t.text).join(' ').trim()
+      const label = insideTexts
+        .map((t) => t.text)
+        .join(" ")
+        .trim();
       return {
         id: shape.id,
         type: shape.type,
-        label: label || shape.type
-      }
-    })
+        label: label || shape.type,
+      };
+    });
 
     // Add standalone texts
-    texts.forEach(text => {
-      const isInside = shapes.some(shape => {
-        const shapeLeft = shape.left
-        const shapeTop = shape.top
-        const shapeWidth = shape.width * (shape.scaleX || 1)
-        const shapeHeight = shape.height * (shape.scaleY || 1)
+    texts.forEach((text) => {
+      const isInside = shapes.some((shape) => {
+        const shapeLeft = shape.left;
+        const shapeTop = shape.top;
+        const shapeWidth = shape.width * (shape.scaleX || 1);
+        const shapeHeight = shape.height * (shape.scaleY || 1);
         return (
           text.left >= shapeLeft &&
           text.left <= shapeLeft + shapeWidth &&
           text.top >= shapeTop &&
           text.top <= shapeTop + shapeHeight
-        )
-      })
+        );
+      });
       if (!isInside && text.text.trim()) {
         elements.push({
           id: text.id,
-          type: 'text',
+          type: "text",
           label: text.text.trim(),
           left: text.left,
-          top: text.top
-        })
+          top: text.top,
+        });
       }
-    })
+    });
 
     // Detect connections (edges)
-    const edges = []
-    const connectors = rawObjects.filter(obj => obj.customType === 'arrow' || obj.customType === 'line')
-    
-    connectors.forEach(conn => {
-      conn.setCoords()
-      const connRect = conn.getBoundingRect(true, true)
-      
-      const connectedShapes = shapes.filter(s => {
-        s.setCoords()
-        const sRect = s.getBoundingRect(true, true)
-        // Check simple bounding box intersection
-        return !(
-          connRect.left > sRect.left + sRect.width ||
-          connRect.left + connRect.width < sRect.left ||
-          connRect.top > sRect.top + sRect.height ||
-          connRect.top + connRect.height < sRect.top
-        )
-      }).map(s => s.id)
-      
+    const edges = [];
+    const connectors = rawObjects.filter(
+      (obj) => obj.customType === "arrow" || obj.customType === "line",
+    );
+
+    connectors.forEach((conn) => {
+      conn.setCoords();
+      const connRect = conn.getBoundingRect(true, true);
+
+      const connectedShapes = shapes
+        .filter((s) => {
+          s.setCoords();
+          const sRect = s.getBoundingRect(true, true);
+          // Check simple bounding box intersection
+          return !(
+            connRect.left > sRect.left + sRect.width ||
+            connRect.left + connRect.width < sRect.left ||
+            connRect.top > sRect.top + sRect.height ||
+            connRect.top + connRect.height < sRect.top
+          );
+        })
+        .map((s) => s.id);
+
       if (connectedShapes.length >= 2) {
         // Assume first is 'from' and second is 'to' for simplicity
-        edges.push({ from: connectedShapes[0], to: connectedShapes[1] })
+        edges.push({ from: connectedShapes[0], to: connectedShapes[1] });
       }
-    })
+    });
 
     try {
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 20000) // 20s timeout for assist
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 20000); // 20s timeout for assist
 
-      const token = localStorage.getItem('wb_token')
-      const headers = { 'Content-Type': 'application/json' }
-      if (token) headers['Authorization'] = `Bearer ${token}`
+      const token = localStorage.getItem("wb_token");
+      const headers = { "Content-Type": "application/json" };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
       const res = await fetch(`${API_BASE_URL}/api/ai/assist`, {
-        method: 'POST',
+        method: "POST",
         headers,
         body: JSON.stringify({ elements, edges }),
-        signal: controller.signal
-      })
-      clearTimeout(timeoutId)
+        signal: controller.signal,
+      });
+      clearTimeout(timeoutId);
 
-      if (!res.ok) throw new Error('Assist failed')
-      const data = await res.json()
-      setSuggestions(data.suggestions || [])
+      if (!res.ok) throw new Error("Assist failed");
+      const data = await res.json();
+      setSuggestions(data.suggestions || []);
     } catch (err) {
-      console.error('Architecture assist error:', err)
-      setSuggestions([])
+      console.error("Architecture assist error:", err);
+      setSuggestions([]);
     } finally {
-      setIsAssistLoading(false)
+      setIsAssistLoading(false);
     }
-  }
+  };
 
   const handleApplySuggestion = (suggestedComponent) => {
-    const F = window.fabric
-    const canvas = fabricRef.current
-    if (!F || !canvas) return
+    const F = window.fabric;
+    const canvas = fabricRef.current;
+    if (!F || !canvas) return;
 
     // Calculate default viewport center
-    const vpt = canvas.viewportTransform
-    let centerX = (-vpt[4] + canvas.getWidth() / 2) / zoom
-    let centerY = (-vpt[5] + canvas.getHeight() / 2) / zoom
+    const vpt = canvas.viewportTransform;
+    let centerX = (-vpt[4] + canvas.getWidth() / 2) / zoom;
+    let centerY = (-vpt[5] + canvas.getHeight() / 2) / zoom;
 
     // Smart Placement
     if (suggestedComponent.targetId) {
-      const targetObj = canvas.getObjects().find(o => o.id === suggestedComponent.targetId)
+      const targetObj = canvas
+        .getObjects()
+        .find((o) => o.id === suggestedComponent.targetId);
       if (targetObj) {
-        targetObj.setCoords()
-        centerX = targetObj.left + (targetObj.width * (targetObj.scaleX || 1)) + 150 // Place 150px to the right
-        centerY = targetObj.top + ((targetObj.height * (targetObj.scaleY || 1)) / 2)
+        targetObj.setCoords();
+        centerX =
+          targetObj.left + targetObj.width * (targetObj.scaleX || 1) + 150; // Place 150px to the right
+        centerY =
+          targetObj.top + (targetObj.height * (targetObj.scaleY || 1)) / 2;
       }
     }
 
-    const elementId = 'el-' + Date.now() + '-' + Math.round(Math.random() * 1e9)
-    const textId = 'el-' + Date.now() + '-' + Math.round(Math.random() * 1e9)
+    const elementId =
+      "el-" + Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const textId = "el-" + Date.now() + "-" + Math.round(Math.random() * 1e9);
 
-    let shape
-    const type = suggestedComponent.type
-    const labelText = suggestedComponent.label
+    let shape;
+    const type = suggestedComponent.type;
+    const labelText = suggestedComponent.label;
 
-    const strokeColor = propertiesRef.current.stroke || '#1E3A5F'
-    const strokeWidth = propertiesRef.current.strokeWidth || 2
+    const strokeColor = propertiesRef.current.stroke || "#1E3A5F";
+    const strokeWidth = propertiesRef.current.strokeWidth || 2;
 
     switch (type) {
-      case 'rect':
+      case "rect":
         shape = new F.Rect({
           id: elementId,
           left: centerX - 75,
           top: centerY - 45,
           width: 150,
           height: 90,
-          fill: '#FFFFFF',
+          fill: "#FFFFFF",
           stroke: strokeColor,
           strokeWidth: strokeWidth,
           rx: 8,
           ry: 8,
           selectable: true,
-          evented: true
-        })
-        break
-      case 'circle':
+          evented: true,
+        });
+        break;
+      case "circle":
         shape = new F.Circle({
           id: elementId,
           left: centerX - 55,
           top: centerY - 55,
           radius: 55,
-          fill: '#FFFFFF',
+          fill: "#FFFFFF",
           stroke: strokeColor,
           strokeWidth: strokeWidth,
           selectable: true,
-          evented: true
-        })
-        break
-      case 'diamond':
-        shape = new F.Polygon([
-          { x: 65, y: 0 },
-          { x: 130, y: 65 },
-          { x: 65, y: 130 },
-          { x: 0, y: 65 }
-        ], {
-          id: elementId,
-          left: centerX - 65,
-          top: centerY - 65,
-          fill: '#FFFFFF',
-          stroke: strokeColor,
-          strokeWidth: strokeWidth,
-          selectable: true,
-          evented: true
-        })
-        break
-      case 'text':
+          evented: true,
+        });
+        break;
+      case "diamond":
+        shape = new F.Polygon(
+          [
+            { x: 65, y: 0 },
+            { x: 130, y: 65 },
+            { x: 65, y: 130 },
+            { x: 0, y: 65 },
+          ],
+          {
+            id: elementId,
+            left: centerX - 65,
+            top: centerY - 65,
+            fill: "#FFFFFF",
+            stroke: strokeColor,
+            strokeWidth: strokeWidth,
+            selectable: true,
+            evented: true,
+          },
+        );
+        break;
+      case "text":
       default:
-        shape = null
-        break
+        shape = null;
+        break;
     }
 
     // Create label text
@@ -2631,629 +2916,665 @@ export default function App() {
       id: textId,
       left: centerX,
       top: centerY,
-      fontFamily: 'Inter, sans-serif',
+      fontFamily: "Inter, sans-serif",
       fontSize: 13,
-      fontWeight: '600',
-      fill: '#1E3A5F',
-      originX: 'center',
-      originY: 'center',
+      fontWeight: "600",
+      fill: "#1E3A5F",
+      originX: "center",
+      originY: "center",
       selectable: true,
-      evented: true
-    })
+      evented: true,
+    });
 
-    canvas.discardActiveObject()
+    canvas.discardActiveObject();
 
     if (shape) {
-      canvas.add(shape)
+      canvas.add(shape);
       text.set({
         left: shape.left + (shape.width * (shape.scaleX || 1)) / 2,
-        top: shape.top + (shape.height * (shape.scaleY || 1)) / 2
-      })
-      canvas.add(text)
+        top: shape.top + (shape.height * (shape.scaleY || 1)) / 2,
+      });
+      canvas.add(text);
 
-      const selection = new F.ActiveSelection([shape, text], { canvas })
-      canvas.setActiveObject(selection)
+      const selection = new F.ActiveSelection([shape, text], { canvas });
+      canvas.setActiveObject(selection);
     } else {
-      canvas.add(text)
-      canvas.setActiveObject(text)
+      canvas.add(text);
+      canvas.setActiveObject(text);
     }
 
-    canvas.requestRenderAll()
-    saveHistory()
-    sendCanvasUpdate()
-  }
+    canvas.requestRenderAll();
+    saveHistory();
+    sendCanvasUpdate();
+  };
 
   // Fetch active contexts map
   const fetchContextMap = async (boardId) => {
-    if (!boardId) return
+    if (!boardId) return;
     try {
-      const token = localStorage.getItem('wb_token')
-      const headers = {}
-      if (token) headers['Authorization'] = `Bearer ${token}`
-      const res = await fetch(`${API_BASE_URL}/api/context/${boardId}`, { headers })
+      const token = localStorage.getItem("wb_token");
+      const headers = {};
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+      const res = await fetch(`${API_BASE_URL}/api/context/${boardId}`, {
+        headers,
+      });
       if (res.ok) {
-        const data = await res.json()
-        setContextMap(data)
+        const data = await res.json();
+        setContextMap(data);
       }
     } catch (err) {
-      console.error('Failed to load context map:', err)
+      console.error("Failed to load context map:", err);
     }
-  }
+  };
 
   // Persistence triggers
   async function saveBoard() {
-    if (!fabricRef.current) return
+    if (!fabricRef.current) return;
     if (isReadOnly) {
-      alert('You do not have permission to modify this whiteboard.')
-      return
+      alert("You do not have permission to modify this whiteboard.");
+      return;
     }
 
     // Save current active page state and snapshot
-    const currentJson = getCanvasJson()
-    const currentThumbnail = fabricRef.current.toDataURL({ format: 'jpeg', quality: 0.1, multiplier: 0.1 })
+    const currentJson = getCanvasJson();
+    const currentThumbnail = fabricRef.current.toDataURL({
+      format: "jpeg",
+      quality: 0.1,
+      multiplier: 0.1,
+    });
 
-    const updatedPages = pagesRef.current.map(p =>
+    const updatedPages = pagesRef.current.map((p) =>
       p.page_id === activePageIdRef.current
         ? { ...p, canvas_state: currentJson, thumbnail: currentThumbnail }
-        : p
-    )
+        : p,
+    );
 
     const payload = {
       title,
       mode: pageMode,
       pageSize,
-      pages: updatedPages
-    }
+      pages: updatedPages,
+    };
 
     try {
-      const token = localStorage.getItem('wb_token')
-      const headers = { 'Content-Type': 'application/json' }
-      if (token) headers['Authorization'] = `Bearer ${token}`
+      const token = localStorage.getItem("wb_token");
+      const headers = { "Content-Type": "application/json" };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
 
       const url = savedId
         ? `${API_BASE_URL}/api/whiteboards/${savedId}`
-        : `${API_BASE_URL}/api/whiteboards`
-      const method = savedId ? 'PUT' : 'POST'
+        : `${API_BASE_URL}/api/whiteboards`;
+      const method = savedId ? "PUT" : "POST";
 
       const res = await fetch(url, {
         method,
         headers,
-        body: JSON.stringify(payload)
-      })
+        body: JSON.stringify(payload),
+      });
 
       if (!res.ok) {
-        const errorData = await res.json()
-        throw new Error(errorData.error || 'Save failed')
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Save failed");
       }
 
-      const data = await res.json()
-      setSavedId(data.id)
-      setPages(updatedPages)
-      setBoardMeta(prev => ({
+      const data = await res.json();
+      setSavedId(data.id);
+      setPages(updatedPages);
+      setBoardMeta((prev) => ({
         ...prev,
-        owner: prev.owner || user.id || user._id || null
-      }))
+        owner: prev.owner || user.id || user._id || null,
+      }));
 
       // Update URL query parameter without re-loading the page
-      const newUrl = `${window.location.origin}${window.location.pathname}?board=${data.id}`
-      window.history.pushState({ path: newUrl }, '', newUrl)
+      const newUrl = `${window.location.origin}${window.location.pathname}?board=${data.id}`;
+      window.history.pushState({ path: newUrl }, "", newUrl);
 
       // Fetch contexts for the saved board
-      fetchContextMap(data.id)
+      fetchContextMap(data.id);
 
-      alert('Board saved successfully! Room ID: ' + data.id)
+      alert("Board saved successfully! Room ID: " + data.id);
     } catch (err) {
-      console.error(err)
-      alert('Save failed: ' + err.message)
+      console.error(err);
+      alert("Save failed: " + err.message);
     }
   }
 
   async function loadBoard() {
-    const id = prompt('Enter whiteboard ID to load', savedId || '')
-    if (!id) return
-    loadBoardById(id)
+    const id = prompt("Enter whiteboard ID to load", savedId || "");
+    if (!id) return;
+    loadBoardById(id);
   }
 
   async function loadBoardById(id) {
     try {
-      const token = localStorage.getItem('wb_token')
-      const headers = {}
-      if (token) headers['Authorization'] = `Bearer ${token}`
+      const token = localStorage.getItem("wb_token");
+      const headers = {};
+      if (token) headers["Authorization"] = `Bearer ${token}`;
 
-      const res = await fetch(`${API_BASE_URL}/api/whiteboards/${id}`, { headers })
+      const res = await fetch(`${API_BASE_URL}/api/whiteboards/${id}`, {
+        headers,
+      });
       if (!res.ok) {
         if (res.status === 401 || res.status === 403) {
-          throw new Error('authentication_required')
+          throw new Error("authentication_required");
         }
-        throw new Error('Whiteboard not found')
+        throw new Error("Whiteboard not found");
       }
-      const data = await res.json()
+      const data = await res.json();
 
-      if (data.title) setTitle(data.title)
+      if (data.title) setTitle(data.title);
 
       // Set metadata
       setBoardMeta({
         owner: data.owner || null,
         collaborators: data.collaborators || [],
-        isPublic: data.isPublic || false
-      })
+        isPublic: data.isPublic || false,
+      });
 
       if (data.pages && Array.isArray(data.pages)) {
         // Multi-page document load
-        setPages(data.pages)
-        setPageMode(data.mode || 'infinite')
-        setPageSize(data.pageSize || { w: 1024, h: 576 })
+        setPages(data.pages);
+        setPageMode(data.mode || "infinite");
+        setPageSize(data.pageSize || { w: 1024, h: 576 });
 
-        const firstPage = data.pages[0]
+        const firstPage = data.pages[0];
         if (firstPage) {
-          setActivePageId(firstPage.page_id)
-          applyRemoteCanvas(firstPage.canvas_state)
+          setActivePageId(firstPage.page_id);
+          applyRemoteCanvas(firstPage.canvas_state);
         }
       } else {
         // Legacy single-page format fallback
-        const canvasJson = data.json || data
+        const canvasJson = data.json || data;
         const legacyPage = {
-          page_id: 'page-1',
-          title: 'Page 1',
+          page_id: "page-1",
+          title: "Page 1",
           order: 0,
           canvas_state: canvasJson,
-          thumbnail: null
-        }
-        setPages([legacyPage])
-        setPageMode('infinite')
-        setActivePageId('page-1')
-        applyRemoteCanvas(legacyPage.canvas_state)
+          thumbnail: null,
+        };
+        setPages([legacyPage]);
+        setPageMode("infinite");
+        setActivePageId("page-1");
+        applyRemoteCanvas(legacyPage.canvas_state);
       }
 
-      setSavedId(id)
+      setSavedId(id);
 
       // Fetch contexts for this whiteboard
-      fetchContextMap(id)
+      fetchContextMap(id);
 
-      const newUrl = `${window.location.origin}${window.location.pathname}?board=${id}`
-      window.history.pushState({ path: newUrl }, '', newUrl)
+      const newUrl = `${window.location.origin}${window.location.pathname}?board=${id}`;
+      window.history.pushState({ path: newUrl }, "", newUrl);
     } catch (err) {
-      console.error(err)
-      if (err.message === 'authentication_required') {
-        alert('Authentication required: please log in or sign up to access this board.')
-        setScreen('auth')
+      console.error(err);
+      if (err.message === "authentication_required") {
+        alert(
+          "Authentication required: please log in or sign up to access this board.",
+        );
+        setScreen("auth");
       } else {
-        alert('Load failed: ' + err.message)
+        alert("Load failed: " + err.message);
       }
     }
   }
 
   // Send updates to socket (debounced)
   const sendCanvasUpdate = debounce(() => {
-    if (!fabricRef.current || !socketRef.current) return
-    if (applyingRemoteRef.current) return
-    if (isReadOnlyRef.current) return // Guard: read-only users cannot emit updates
+    if (!fabricRef.current || !socketRef.current) return;
+    if (applyingRemoteRef.current) return;
+    if (isReadOnlyRef.current) return; // Guard: read-only users cannot emit updates
     try {
-      const json = getCanvasJson()
-      const room = savedIdRef.current || 'global'
-      socketRef.current.emit('canvas:update', {
+      const json = getCanvasJson();
+      const room = savedIdRef.current || "global";
+      socketRef.current.emit("canvas:update", {
         id: room,
         pageId: activePageIdRef.current,
-        json
-      })
+        json,
+      });
     } catch (e) {
-      console.error('Failed to emit canvas update', e)
+      console.error("Failed to emit canvas update", e);
     }
-  }, 200)
+  }, 200);
 
   // Initialize Canvas
   useEffect(() => {
-    if (screen !== 'editor') return
+    if (screen !== "editor") return;
 
-    const F = window.fabric
+    const F = window.fabric;
     if (!F) {
-      alert('Fabric library not found. Check index.html CDN import.')
-      return
+      alert("Fabric library not found. Check index.html CDN import.");
+      return;
     }
 
-    const viewport = document.getElementById('canvas-viewport')
-    const initialWidth = viewport ? viewport.clientWidth - 40 : window.innerWidth - 380
-    const initialHeight = viewport ? viewport.clientHeight - 40 : 600
+    const viewport = document.getElementById("canvas-viewport");
+    const initialWidth = viewport
+      ? viewport.clientWidth - 40
+      : window.innerWidth - 380;
+    const initialHeight = viewport ? viewport.clientHeight - 40 : 600;
 
-    const canvasEl = document.getElementById('whiteboard-canvas')
+    const canvasEl = document.getElementById("whiteboard-canvas");
     const canvas = new F.Canvas(canvasEl, {
-      backgroundColor: 'transparent', // let wrapper handle grid background
+      backgroundColor: "transparent", // let wrapper handle grid background
       selection: true,
       preserveObjectStacking: true,
-    })
+    });
 
-    canvas.setWidth(initialWidth)
-    canvas.setHeight(initialHeight)
-    canvas.calcOffset()
-    canvas.requestRenderAll()
+    canvas.setWidth(initialWidth);
+    canvas.setHeight(initialHeight);
+    canvas.calcOffset();
+    canvas.requestRenderAll();
 
     // Premium styling config for handles
-    F.Object.prototype.transparentCorners = false
-    F.Object.prototype.cornerStyle = 'circle'
-    F.Object.prototype.cornerColor = '#2E86AB'
-    F.Object.prototype.borderColor = '#2E86AB'
-    F.Object.prototype.cornerSize = 8
-    F.Object.prototype.borderScaleFactor = 1.5
+    F.Object.prototype.transparentCorners = false;
+    F.Object.prototype.cornerStyle = "circle";
+    F.Object.prototype.cornerColor = "#2E86AB";
+    F.Object.prototype.borderColor = "#2E86AB";
+    F.Object.prototype.cornerSize = 8;
+    F.Object.prototype.borderScaleFactor = 1.5;
 
     // Override containsPoint to respect clipPath boundaries (supports clean Lasso splitting of shapes)
-    const originalContainsPoint = F.Object.prototype.containsPoint
-    F.Object.prototype.containsPoint = function(point, alternate, drawWidth) {
+    const originalContainsPoint = F.Object.prototype.containsPoint;
+    F.Object.prototype.containsPoint = function (point, alternate, drawWidth) {
       if (!originalContainsPoint.call(this, point, alternate, drawWidth)) {
-        return false
+        return false;
       }
       if (this.clipPath) {
-        let testPoint = point
+        let testPoint = point;
         if (!this.clipPath.absolutePositioned) {
-          const invMatrix = F.util.invertTransform(this.calcTransformMatrix())
-          testPoint = F.util.transformPoint(point, invMatrix)
+          const invMatrix = F.util.invertTransform(this.calcTransformMatrix());
+          testPoint = F.util.transformPoint(point, invMatrix);
         }
-        let isInside = this.clipPath.containsPoint(testPoint, alternate, drawWidth)
+        let isInside = this.clipPath.containsPoint(
+          testPoint,
+          alternate,
+          drawWidth,
+        );
         if (this.clipPath.inverted) {
-          isInside = !isInside
+          isInside = !isInside;
         }
-        return isInside
+        return isInside;
       }
-      return true
-    }
+      return true;
+    };
 
     // Disable caching for Text objects to prevent blurry scaling and boundary ghost previews on resize
-    F.Text.prototype.objectCaching = false
+    F.Text.prototype.objectCaching = false;
 
     // Override fabric.Text._renderBackground to support rounded corners and background border/padding
-    F.Text.prototype._renderBackground = function(ctx) {
+    F.Text.prototype._renderBackground = function (ctx) {
       if (!this.backgroundColor && !(this.boxStroke && this.boxStrokeWidth)) {
-        return
+        return;
       }
-      const dim = this._getNonTransformedDimensions()
-      const w = dim.x
-      const h = dim.y
-      
-      const padding = this.padding || 0
-      const x = -w / 2 - padding
-      const y = -h / 2 - padding
-      const width = w + padding * 2
-      const height = h + padding * 2
-      
-      const rx = this.rx || 0
-      const ry = this.ry || 0
-      
-      ctx.save()
+      const dim = this._getNonTransformedDimensions();
+      const w = dim.x;
+      const h = dim.y;
+
+      const padding = this.padding || 0;
+      const x = -w / 2 - padding;
+      const y = -h / 2 - padding;
+      const width = w + padding * 2;
+      const height = h + padding * 2;
+
+      const rx = this.rx || 0;
+      const ry = this.ry || 0;
+
+      ctx.save();
       if (this._removeShadow) {
-        this._removeShadow(ctx)
+        this._removeShadow(ctx);
       }
-      
-      ctx.beginPath()
+
+      ctx.beginPath();
       if (ctx.roundRect) {
-        ctx.roundRect(x, y, width, height, [rx, ry, rx, ry])
+        ctx.roundRect(x, y, width, height, [rx, ry, rx, ry]);
       } else {
         // Fallback for environments lacking roundRect
-        ctx.moveTo(x + rx, y)
-        ctx.lineTo(x + width - rx, y)
-        ctx.arcTo(x + width, y, x + width, y + ry, ry)
-        ctx.lineTo(x + width, y + height - ry)
-        ctx.arcTo(x + width, y + height, x + width - rx, y + height, rx)
-        ctx.lineTo(x + rx, y + height)
-        ctx.arcTo(x, y + height, x, y + height - ry, ry)
-        ctx.lineTo(x, y + ry)
-        ctx.arcTo(x, y, x + rx, y, rx)
-        ctx.closePath()
+        ctx.moveTo(x + rx, y);
+        ctx.lineTo(x + width - rx, y);
+        ctx.arcTo(x + width, y, x + width, y + ry, ry);
+        ctx.lineTo(x + width, y + height - ry);
+        ctx.arcTo(x + width, y + height, x + width - rx, y + height, rx);
+        ctx.lineTo(x + rx, y + height);
+        ctx.arcTo(x, y + height, x, y + height - ry, ry);
+        ctx.lineTo(x, y + ry);
+        ctx.arcTo(x, y, x + rx, y, rx);
+        ctx.closePath();
       }
-      
-      if (this.backgroundColor) {
-        ctx.fillStyle = this.backgroundColor
-        ctx.fill()
-      }
-      
-      if (this.boxStroke && this.boxStrokeWidth) {
-        ctx.strokeStyle = this.boxStroke
-        ctx.lineWidth = this.boxStrokeWidth
-        ctx.stroke()
-      }
-      
-      ctx.restore()
-    }
 
-    fabricRef.current = canvas
-    window.__fabricCanvas = canvas
-    setCanvasInstance(canvas)
+      if (this.backgroundColor) {
+        ctx.fillStyle = this.backgroundColor;
+        ctx.fill();
+      }
+
+      if (this.boxStroke && this.boxStrokeWidth) {
+        ctx.strokeStyle = this.boxStroke;
+        ctx.lineWidth = this.boxStrokeWidth;
+        ctx.stroke();
+      }
+
+      ctx.restore();
+    };
+
+    fabricRef.current = canvas;
+    window.__fabricCanvas = canvas;
+    setCanvasInstance(canvas);
 
     // Initial page boundary rendering
-    renderPageBoundary(canvas, pageModeRef.current, pageSizeRef.current)
+    renderPageBoundary(canvas, pageModeRef.current, pageSizeRef.current);
 
     // Attach listeners
-    const cleanupFabricListeners = attachFabricListeners(canvas)
+    const cleanupFabricListeners = attachFabricListeners(canvas);
 
     // Load existing pages if populated, else save initial history snapshot
     const initialJson = canvas.toJSON([
-      'selectable', 
-      'id', 
-      'globalCompositeOperation', 
-      'erasable', 
-      'eraser', 
-      'customType',
-      'rx',
-      'ry',
-      'boxStroke',
-      'boxStrokeWidth',
-      'padding'
-    ])
+      "selectable",
+      "id",
+      "globalCompositeOperation",
+      "erasable",
+      "eraser",
+      "customType",
+      "rx",
+      "ry",
+      "boxStroke",
+      "boxStrokeWidth",
+      "padding",
+    ]);
     if (initialJson && initialJson.objects) {
-      initialJson.objects = initialJson.objects.filter(obj => obj.id !== 'page-boundary')
+      initialJson.objects = initialJson.objects.filter(
+        (obj) => obj.id !== "page-boundary",
+      );
     }
 
-    const activePage = pagesRef.current.find(p => p.page_id === activePageIdRef.current)
-    if (activePage && activePage.canvas_state && activePage.canvas_state.objects && activePage.canvas_state.objects.length > 0) {
-      applyingRemoteRef.current = true
-      canvas.discardActiveObject()
+    const activePage = pagesRef.current.find(
+      (p) => p.page_id === activePageIdRef.current,
+    );
+    if (
+      activePage &&
+      activePage.canvas_state &&
+      activePage.canvas_state.objects &&
+      activePage.canvas_state.objects.length > 0
+    ) {
+      applyingRemoteRef.current = true;
+      canvas.discardActiveObject();
       canvas.loadFromJSON(activePage.canvas_state, () => {
-        canvas.getObjects().forEach((obj) => obj.setCoords())
-        lockObjectsIfReadOnly(canvas)
-        renderPageBoundary(canvas, pageModeRef.current, pageSizeRef.current)
-        updateAllConnectors(canvas)
-        canvas.requestRenderAll()
-        applyingRemoteRef.current = false
-        setCanvasInstance(canvas)
+        canvas.getObjects().forEach((obj) => obj.setCoords());
+        lockObjectsIfReadOnly(canvas);
+        renderPageBoundary(canvas, pageModeRef.current, pageSizeRef.current);
+        updateAllConnectors(canvas);
+        canvas.requestRenderAll();
+        applyingRemoteRef.current = false;
+        setCanvasInstance(canvas);
 
-        historyRef.current = [activePage.canvas_state]
-        historyIndexRef.current = 0
-        setCanUndo(false)
-        setCanRedo(false)
-      })
+        historyRef.current = [activePage.canvas_state];
+        historyIndexRef.current = 0;
+        setCanUndo(false);
+        setCanRedo(false);
+      });
     } else {
-      historyRef.current = [initialJson]
-      historyIndexRef.current = 0
+      historyRef.current = [initialJson];
+      historyIndexRef.current = 0;
     }
 
     // Handle viewport resize
     const onResize = () => {
-      const w = viewport ? viewport.clientWidth - 40 : window.innerWidth - 380
-      const h = viewport ? viewport.clientHeight - 40 : 600
-      canvas.setWidth(w)
-      canvas.setHeight(h)
-      canvas.calcOffset()
-      canvas.requestRenderAll()
-    }
-    window.addEventListener('resize', onResize)
+      const w = viewport ? viewport.clientWidth - 40 : window.innerWidth - 380;
+      const h = viewport ? viewport.clientHeight - 40 : 600;
+      canvas.setWidth(w);
+      canvas.setHeight(h);
+      canvas.calcOffset();
+      canvas.requestRenderAll();
+    };
+    window.addEventListener("resize", onResize);
 
     // Keyboard Shortcuts Listener
     const onKeyDown = (e) => {
       // Don't fire shortcuts if typing in input/textarea
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) {
-        return
+      if (
+        e.target.tagName === "INPUT" ||
+        e.target.tagName === "TEXTAREA" ||
+        e.target.isContentEditable
+      ) {
+        return;
       }
 
-      const key = e.key.toLowerCase()
+      const key = e.key.toLowerCase();
 
       // Allow zooming shortcuts even if read-only
-      if (e.ctrlKey && e.key === '=') {
-        handleZoom(zoom + 0.1)
-        e.preventDefault()
-        return
+      if (e.ctrlKey && e.key === "=") {
+        handleZoom(zoom + 0.1);
+        e.preventDefault();
+        return;
       }
-      if (e.ctrlKey && e.key === '-') {
-        handleZoom(zoom - 0.1)
-        e.preventDefault()
-        return
+      if (e.ctrlKey && e.key === "-") {
+        handleZoom(zoom - 0.1);
+        e.preventDefault();
+        return;
       }
-      if (e.ctrlKey && e.key === '0') {
-        handleZoomReset()
-        e.preventDefault()
-        return
+      if (e.ctrlKey && e.key === "0") {
+        handleZoomReset();
+        e.preventDefault();
+        return;
       }
 
       // If read-only, block all other shortcuts
       if (isReadOnlyRef.current) {
-        return
+        return;
       }
 
       // Delete element (Delete or Backspace)
-      if (e.key === 'Delete' || e.key === 'Backspace') {
-        handleDeleteElement()
-        e.preventDefault()
+      if (e.key === "Delete" || e.key === "Backspace") {
+        handleDeleteElement();
+        e.preventDefault();
       }
 
       // Undo (Ctrl+Z)
-      if (e.ctrlKey && key === 'z') {
-        undo()
-        e.preventDefault()
+      if (e.ctrlKey && key === "z") {
+        undo();
+        e.preventDefault();
       }
 
       // Redo (Ctrl+Y)
-      if (e.ctrlKey && key === 'y') {
-        redo()
-        e.preventDefault()
+      if (e.ctrlKey && key === "y") {
+        redo();
+        e.preventDefault();
       }
 
       // Copy (Ctrl+C)
-      if (e.ctrlKey && key === 'c') {
-        handleCopy()
-        e.preventDefault()
+      if (e.ctrlKey && key === "c") {
+        handleCopy();
+        e.preventDefault();
       }
 
       // Cut (Ctrl+X)
-      if (e.ctrlKey && key === 'x') {
-        handleCut()
-        e.preventDefault()
+      if (e.ctrlKey && key === "x") {
+        handleCut();
+        e.preventDefault();
       }
 
       // Paste (Ctrl+V)
-      if (e.ctrlKey && key === 'v') {
-        handlePaste()
-        e.preventDefault()
+      if (e.ctrlKey && key === "v") {
+        handlePaste();
+        e.preventDefault();
       }
 
       // Zoom In (Ctrl+=)
-      if (e.ctrlKey && e.key === '=') {
-        handleZoom(zoom + 0.1)
-        e.preventDefault()
+      if (e.ctrlKey && e.key === "=") {
+        handleZoom(zoom + 0.1);
+        e.preventDefault();
       }
 
       // Zoom Out (Ctrl+-)
-      if (e.ctrlKey && e.key === '-') {
-        handleZoom(zoom - 0.1)
-        e.preventDefault()
+      if (e.ctrlKey && e.key === "-") {
+        handleZoom(zoom - 0.1);
+        e.preventDefault();
       }
 
       // Zoom Reset (Ctrl+0)
-      if (e.ctrlKey && e.key === '0') {
-        handleZoomReset()
-        e.preventDefault()
+      if (e.ctrlKey && e.key === "0") {
+        handleZoomReset();
+        e.preventDefault();
       }
 
       // Group (Ctrl+G)
-      if (e.ctrlKey && !e.shiftKey && key === 'g') {
-        handleGroup()
-        e.preventDefault()
+      if (e.ctrlKey && !e.shiftKey && key === "g") {
+        handleGroup();
+        e.preventDefault();
       }
 
       // Ungroup (Ctrl+Shift+G)
-      if (e.ctrlKey && e.shiftKey && key === 'g') {
-        handleUngroup()
-        e.preventDefault()
+      if (e.ctrlKey && e.shiftKey && key === "g") {
+        handleUngroup();
+        e.preventDefault();
       }
 
       // Lock/Unlock Toggle (Ctrl+L)
-      if (e.ctrlKey && key === 'l') {
-        handleToggleLock()
-        e.preventDefault()
+      if (e.ctrlKey && key === "l") {
+        handleToggleLock();
+        e.preventDefault();
       }
 
       // Grid Snap toggle (G)
-      if (!e.ctrlKey && key === 'g') {
-        setSnapToGrid((prev) => !prev)
+      if (!e.ctrlKey && key === "g") {
+        setSnapToGrid((prev) => !prev);
       }
 
       // Tool shortcuts
       if (!e.ctrlKey) {
-        if (key === 'v') setActiveTool('select')
-        if (key === 'c') setActiveTool('circle-select')
-        if (key === 'l') setActiveTool('lasso-select')
-        if (key === 'h') setActiveTool('pan')
-        if (key === 'p') setActiveTool('draw')
-        if (key === 'e') {
-          setActiveTool('draw')
-          setDrawType('eraser')
+        if (key === "v") setActiveTool("select");
+        if (key === "c") setActiveTool("circle-select");
+        if (key === "l") setActiveTool("lasso-select");
+        if (key === "h") setActiveTool("pan");
+        if (key === "p") setActiveTool("draw");
+        if (key === "e") {
+          setActiveTool("draw");
+          setDrawType("eraser");
         }
-        if (key === 'r') setActiveTool('rect')
-        if (key === 'o') setActiveTool('circle')
-        if (key === 'd') setActiveTool('diamond')
-        if (key === 't') setActiveTool('text')
-        if (key === 'a') setActiveTool('arrow')
-        if (key === 's') setActiveTool('line')
-        if (key === 'x') setActiveTool('connector')
+        if (key === "r") setActiveTool("rect");
+        if (key === "o") setActiveTool("circle");
+        if (key === "d") setActiveTool("diamond");
+        if (key === "t") setActiveTool("text");
+        if (key === "a") setActiveTool("arrow");
+        if (key === "s") setActiveTool("line");
+        if (key === "x") setActiveTool("connector");
       }
-    }
-    window.addEventListener('keydown', onKeyDown)
+    };
+    window.addEventListener("keydown", onKeyDown);
 
     return () => {
-      cleanupFabricListeners()
+      cleanupFabricListeners();
       if (window.__fabricCanvas === canvas) {
-        window.__fabricCanvas = null
+        window.__fabricCanvas = null;
       }
-      canvas.dispose()
-      fabricRef.current = null
-      setCanvasInstance(null)
-      window.removeEventListener('resize', onResize)
-      window.removeEventListener('keydown', onKeyDown)
-    }
-  }, [screen])
+      canvas.dispose();
+      fabricRef.current = null;
+      setCanvasInstance(null);
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [screen]);
 
   // WebSockets collaboration lifecycle
   useEffect(() => {
-    if (screen !== 'editor') {
+    if (screen !== "editor") {
       if (socketRef.current) {
-        socketRef.current.disconnect()
-        socketRef.current = null
+        socketRef.current.disconnect();
+        socketRef.current = null;
       }
-      return
+      return;
     }
 
-    const token = localStorage.getItem('wb_token')
+    const token = localStorage.getItem("wb_token");
     const socket = io(API_BASE_URL, {
-      auth: { token }
-    })
-    socketRef.current = socket
+      auth: { token },
+    });
+    socketRef.current = socket;
 
-    socket.on('connect', () => {
-      console.log('Socket connected:', socket.id)
-      setConnectionStatus('connected')
-    })
+    socket.on("connect", () => {
+      console.log("Socket connected:", socket.id);
+      setConnectionStatus("connected");
+    });
 
-    socket.on('disconnect', () => {
-      console.log('Socket disconnected')
-      setConnectionStatus('disconnected')
-      setRoomUsers([])
-      setRemoteCursors({})
-    })
+    socket.on("disconnect", () => {
+      console.log("Socket disconnected");
+      setConnectionStatus("disconnected");
+      setRoomUsers([]);
+      setRemoteCursors({});
+    });
 
-    socket.on('canvas:update', ({ roomId, pageId, json }) => {
+    socket.on("canvas:update", ({ roomId, pageId, json }) => {
       if (pageId === activePageIdRef.current) {
-        applyRemoteCanvas(json)
+        applyRemoteCanvas(json);
       } else {
         // Cache in page states array
         setPages((prev) =>
           prev.map((p) =>
-            p.page_id === pageId
-              ? { ...p, canvas_state: json }
-              : p
-          )
-        )
+            p.page_id === pageId ? { ...p, canvas_state: json } : p,
+          ),
+        );
       }
-    })
+    });
 
-    socket.on('board:structure-update', ({ pages: remotePages, mode: remoteMode, pageSize: remotePageSize }) => {
-      // If our current page is gone, switch to first available
-      if (!remotePages.find(p => p.page_id === activePageIdRef.current)) {
-        const firstPage = remotePages[0]
-        if (firstPage) {
-          setActivePageId(firstPage.page_id)
-          applyRemoteCanvas(firstPage.canvas_state)
+    socket.on(
+      "board:structure-update",
+      ({ pages: remotePages, mode: remoteMode, pageSize: remotePageSize }) => {
+        // If our current page is gone, switch to first available
+        if (!remotePages.find((p) => p.page_id === activePageIdRef.current)) {
+          const firstPage = remotePages[0];
+          if (firstPage) {
+            setActivePageId(firstPage.page_id);
+            applyRemoteCanvas(firstPage.canvas_state);
+          }
         }
-      }
-      setPages(remotePages)
-      setPageMode(remoteMode)
-      setPageSize(remotePageSize)
-    })
+        setPages(remotePages);
+        setPageMode(remoteMode);
+        setPageSize(remotePageSize);
+      },
+    );
 
-    socket.on('room:users', (users) => {
-      setRoomUsers(users || [])
-    })
+    socket.on("room:users", (users) => {
+      setRoomUsers(users || []);
+    });
 
-    socket.on('board:permissions-update', ({ owner, collaborators, isPublic }) => {
-      setBoardMeta({ owner, collaborators, isPublic })
-    })
+    socket.on(
+      "board:permissions-update",
+      ({ owner, collaborators, isPublic }) => {
+        setBoardMeta({ owner, collaborators, isPublic });
+      },
+    );
 
-    socket.on('board:user-permission-changed', ({ socketId, dbUserId, access, owner, collaborators, isPublic }) => {
-      setBoardMeta({ owner, collaborators, isPublic })
-      
-      const myId = socketRef.current?.id
-      const myDbUserId = user.id || user._id
-      if (socketId === myId || (dbUserId && dbUserId === myDbUserId)) {
-        setSessionAccess(access)
-      }
-    })
+    socket.on(
+      "board:user-permission-changed",
+      ({ socketId, dbUserId, access, owner, collaborators, isPublic }) => {
+        setBoardMeta({ owner, collaborators, isPublic });
 
-    socket.on('cursor:update', ({ userId, name, color, pageId, x, y }) => {
+        const myId = socketRef.current?.id;
+        const myDbUserId = user.id || user._id;
+        if (socketId === myId || (dbUserId && dbUserId === myDbUserId)) {
+          setSessionAccess(access);
+        }
+      },
+    );
+
+    socket.on("cursor:update", ({ userId, name, color, pageId, x, y }) => {
       setRemoteCursors((prev) => ({
         ...prev,
-        [userId]: { name, color, pageId, x, y }
-      }))
-    })
+        [userId]: { name, color, pageId, x, y },
+      }));
+    });
 
     return () => {
-      socket.disconnect()
-      socketRef.current = null
-    }
-  }, [screen])
+      socket.disconnect();
+      socketRef.current = null;
+    };
+  }, [screen]);
 
   // Join designated socket room
   useEffect(() => {
-    if (!socketRef.current) return
-    const room = savedId || 'global'
-    socketRef.current.emit('join', { roomId: room, user })
-  }, [savedId, connectionStatus, user])
+    if (!socketRef.current) return;
+    const room = savedId || "global";
+    socketRef.current.emit("join", { roomId: room, user });
+  }, [savedId, connectionStatus, user]);
 
-  if (screen === 'landing') {
+  if (screen === "landing") {
     return (
       <div className="landing-container">
         <header className="landing-header">
@@ -3261,17 +3582,28 @@ export default function App() {
             <div className="logo-icon">W</div>
             <span className="logo-text">Whiteboard Pro</span>
           </div>
-          <button className="btn btn-primary" onClick={() => setScreen('auth')}>Sign In</button>
+          <button className="btn btn-primary" onClick={() => setScreen("auth")}>
+            Sign In
+          </button>
         </header>
 
         <main className="landing-main">
           <section className="hero-section">
-            <h1 className="hero-title">Collaborate, Design & Align in Real-Time</h1>
+            <h1 className="hero-title">
+              Collaborate, Design & Align in Real-Time
+            </h1>
             <p className="hero-subtitle">
-              A premium, interactive digital canvas featuring instant static layouts, multi-page slide exports, dynamic context notes, and bank-grade session security.
+              A premium, interactive digital canvas featuring instant static
+              layouts, multi-page slide exports, dynamic context notes, and
+              bank-grade session security.
             </p>
             <div className="hero-actions">
-              <button className="btn btn-primary btn-lg" onClick={() => setScreen('auth')}>Get Started for Free</button>
+              <button
+                className="btn btn-primary btn-lg"
+                onClick={() => setScreen("auth")}
+              >
+                Get Started for Free
+              </button>
             </div>
           </section>
 
@@ -3279,22 +3611,34 @@ export default function App() {
             <div className="feature-card">
               <div className="feature-icon">✨</div>
               <h3>Real-Time Collab</h3>
-              <p>Work together on drawing designs simultaneously with smooth cursors and dynamic team presence indicators.</p>
+              <p>
+                Work together on drawing designs simultaneously with smooth
+                cursors and dynamic team presence indicators.
+              </p>
             </div>
             <div className="feature-card">
               <div className="feature-icon">🧹</div>
               <h3>Static Cleanup</h3>
-              <p>Tidy up messy hand-drawn boxes, circles, and polygons into aligned grid systems automatically using layout engines.</p>
+              <p>
+                Tidy up messy hand-drawn boxes, circles, and polygons into
+                aligned grid systems automatically using layout engines.
+              </p>
             </div>
             <div className="feature-card">
               <div className="feature-icon">🗂️</div>
               <h3>Context Notes & Files</h3>
-              <p>Attach code blocks, technical documentation links, and media files directly to individual board nodes.</p>
+              <p>
+                Attach code blocks, technical documentation links, and media
+                files directly to individual board nodes.
+              </p>
             </div>
             <div className="feature-card">
               <div className="feature-icon">🔒</div>
               <h3>Session Security</h3>
-              <p>Secure whiteboard updates and file access with robust authentication checks and rate limit guards.</p>
+              <p>
+                Secure whiteboard updates and file access with robust
+                authentication checks and rate limit guards.
+              </p>
             </div>
           </section>
         </main>
@@ -3303,30 +3647,41 @@ export default function App() {
           <p>© 2026 Visual Whiteboard Pro. All rights reserved.</p>
         </footer>
       </div>
-    )
+    );
   }
 
-  if (screen === 'auth') {
+  if (screen === "auth") {
     return (
       <div className="auth-container">
         <div className="auth-card">
           <div className="auth-header">
-            <div className="logo-icon" style={{ margin: '0 auto 12px' }}>W</div>
-            <h2>{authMode === 'login' ? 'Welcome Back' : 'Create Account'}</h2>
-            <p>{authMode === 'login' ? 'Sign in to access your digital workspace' : 'Start collaborating on your visual project'}</p>
+            <div className="logo-icon" style={{ margin: "0 auto 12px" }}>
+              W
+            </div>
+            <h2>{authMode === "login" ? "Welcome Back" : "Create Account"}</h2>
+            <p>
+              {authMode === "login"
+                ? "Sign in to access your digital workspace"
+                : "Start collaborating on your visual project"}
+            </p>
           </div>
 
           {authError && <div className="auth-error-banner">{authError}</div>}
 
-          <form onSubmit={authMode === 'login' ? handleLogin : handleRegister} className="auth-form">
-            {authMode === 'register' && (
+          <form
+            onSubmit={authMode === "login" ? handleLogin : handleRegister}
+            className="auth-form"
+          >
+            {authMode === "register" && (
               <div className="form-group">
                 <label htmlFor="auth-name">Full Name</label>
                 <input
                   type="text"
                   id="auth-name"
                   value={authForm.name}
-                  onChange={(e) => setAuthForm({ ...authForm, name: e.target.value })}
+                  onChange={(e) =>
+                    setAuthForm({ ...authForm, name: e.target.value })
+                  }
                   placeholder="Alex Architect"
                   required
                 />
@@ -3339,7 +3694,9 @@ export default function App() {
                 type="email"
                 id="auth-email"
                 value={authForm.email}
-                onChange={(e) => setAuthForm({ ...authForm, email: e.target.value })}
+                onChange={(e) =>
+                  setAuthForm({ ...authForm, email: e.target.value })
+                }
                 placeholder="alex@company.com"
                 required
               />
@@ -3351,49 +3708,70 @@ export default function App() {
                 type="password"
                 id="auth-password"
                 value={authForm.password}
-                onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })}
+                onChange={(e) =>
+                  setAuthForm({ ...authForm, password: e.target.value })
+                }
                 placeholder="••••••••"
                 required
               />
             </div>
 
-            <button type="submit" className="btn btn-primary btn-block" disabled={authLoading}>
-              {authLoading ? 'Please wait...' : authMode === 'login' ? 'Sign In' : 'Sign Up'}
+            <button
+              type="submit"
+              className="btn btn-primary btn-block"
+              disabled={authLoading}
+            >
+              {authLoading
+                ? "Please wait..."
+                : authMode === "login"
+                  ? "Sign In"
+                  : "Sign Up"}
             </button>
           </form>
 
           <div className="auth-footer">
             <span>
-              {authMode === 'login' ? "Don't have an account?" : 'Already have an account?'}
+              {authMode === "login"
+                ? "Don't have an account?"
+                : "Already have an account?"}
             </span>
             <button
               className="btn-link"
               onClick={() => {
-                setAuthMode(authMode === 'login' ? 'register' : 'login')
-                setAuthError('')
+                setAuthMode(authMode === "login" ? "register" : "login");
+                setAuthError("");
               }}
             >
-              {authMode === 'login' ? 'Sign Up' : 'Sign In'}
+              {authMode === "login" ? "Sign Up" : "Sign In"}
             </button>
           </div>
 
-          <button className="btn btn-secondary btn-block" style={{ marginTop: '16px' }} onClick={() => setScreen('landing')}>
+          <button
+            className="btn btn-secondary btn-block"
+            style={{ marginTop: "16px" }}
+            onClick={() => setScreen("landing")}
+          >
             Back to Home
           </button>
         </div>
       </div>
-    )
+    );
   }
 
-  if (screen === 'dashboard') {
-    const filteredBoards = whiteboardsList.filter(board =>
-      board.title.toLowerCase().includes(searchQuery.toLowerCase())
-    )
+  if (screen === "dashboard") {
+    const filteredBoards = whiteboardsList.filter((board) =>
+      board.title.toLowerCase().includes(searchQuery.toLowerCase()),
+    );
 
     const getInitials = (name) => {
-      if (!name) return '?'
-      return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
-    }
+      if (!name) return "?";
+      return name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2);
+    };
 
     return (
       <div className="dashboard-container">
@@ -3404,30 +3782,63 @@ export default function App() {
           </div>
 
           <div className="dashboard-user-profile">
-            <div className="user-avatar" style={{ backgroundColor: user.color || '#6B7280' }}>
+            <div
+              className="user-avatar"
+              style={{ backgroundColor: user.color || "#6B7280" }}
+            >
               {getInitials(user.name)}
             </div>
             <div className="user-details">
               <span className="user-name">{user.name}</span>
               <span className="user-email">{user.email}</span>
             </div>
-            <button className="btn btn-secondary btn-sm" onClick={handleLogout}>Log Out</button>
+            <button className="btn btn-secondary btn-sm" onClick={handleLogout}>
+              Log Out
+            </button>
           </div>
         </header>
 
         <main className="dashboard-main">
           <div className="dashboard-toolbar">
             <h1 className="dashboard-title">Your Workspaces</h1>
-            <div style={{ display: 'flex', gap: '12px' }}>
-              <button className="btn btn-secondary" onClick={() => setShowJoinModal(true)}>
-                <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '6px' }}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+            <div style={{ display: "flex", gap: "12px" }}>
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowJoinModal(true)}
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ marginRight: "6px" }}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                  ></path>
                 </svg>
                 Join Board by ID
               </button>
               <button className="btn btn-primary" onClick={handleCreateBoard}>
-                <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4"></path>
+                <svg
+                  width="16"
+                  height="16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 4v16m8-8H4"
+                  ></path>
                 </svg>
                 Create Board
               </button>
@@ -3448,9 +3859,17 @@ export default function App() {
             <div className="dashboard-empty-state">
               <div className="empty-icon">📁</div>
               <h3>No Whiteboards Found</h3>
-              <p>{searchQuery ? 'Try adjusting your search query' : 'Create your first design whiteboard workspace to begin collaborating!'}</p>
+              <p>
+                {searchQuery
+                  ? "Try adjusting your search query"
+                  : "Create your first design whiteboard workspace to begin collaborating!"}
+              </p>
               {!searchQuery && (
-                <button className="btn btn-primary" onClick={handleCreateBoard} style={{ marginTop: '16px' }}>
+                <button
+                  className="btn btn-primary"
+                  onClick={handleCreateBoard}
+                  style={{ marginTop: "16px" }}
+                >
                   Create New Board
                 </button>
               )}
@@ -3458,26 +3877,43 @@ export default function App() {
           ) : (
             <div className="dashboard-grid">
               {filteredBoards.map((board) => {
-                const isOwner = board.owner && (board.owner._id === user.id || board.owner === user.id);
+                const isOwner =
+                  board.owner &&
+                  (board.owner._id === user.id || board.owner === user.id);
                 return (
-                  <div key={board._id} className="board-card" onClick={() => handleOpenBoard(board._id)}>
+                  <div
+                    key={board._id}
+                    className="board-card"
+                    onClick={() => handleOpenBoard(board._id)}
+                  >
                     <div className="board-card-preview">
                       <div className="board-placeholder-grid"></div>
                       <div className="board-preview-overlay">
-                        <span className="btn btn-primary btn-sm">Open Workspace</span>
+                        <span className="btn btn-primary btn-sm">
+                          Open Workspace
+                        </span>
                       </div>
                     </div>
-                    <div className="board-card-info" onClick={(e) => e.stopPropagation()}>
+                    <div
+                      className="board-card-info"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <div className="board-card-title-row">
-                        <h4 className="board-title-text" title={board.title}>{board.title}</h4>
-                        <span className={`badge ${board.isPublic ? 'badge-public' : 'badge-private'}`}>
-                          {board.isPublic ? 'Public' : 'Private'}
+                        <h4 className="board-title-text" title={board.title}>
+                          {board.title}
+                        </h4>
+                        <span
+                          className={`badge ${board.isPublic ? "badge-public" : "badge-private"}`}
+                        >
+                          {board.isPublic ? "Public" : "Private"}
                         </span>
                       </div>
 
                       <div className="board-meta-row">
                         <span className="board-owner">
-                          {isOwner ? 'Owner' : `Shared by ${board.owner?.name || 'Collaborator'}`}
+                          {isOwner
+                            ? "Owner"
+                            : `Shared by ${board.owner?.name || "Collaborator"}`}
                         </span>
                         <span className="board-date">
                           {new Date(board.updatedAt).toLocaleDateString()}
@@ -3488,13 +3924,19 @@ export default function App() {
                         <button
                           className="btn btn-secondary btn-sm"
                           onClick={() => {
-                            const email = prompt('Enter collaborator email to add:');
+                            const email = prompt(
+                              "Enter collaborator email to add:",
+                            );
                             if (email && email.trim()) {
                               shareBoard(board._id, false, email.trim());
                             }
                           }}
                           disabled={!isOwner}
-                          title={isOwner ? "Add collaborator" : "Only owner can manage sharing"}
+                          title={
+                            isOwner
+                              ? "Add collaborator"
+                              : "Only owner can manage sharing"
+                          }
                         >
                           Share
                         </button>
@@ -3502,68 +3944,100 @@ export default function App() {
                           className="btn btn-secondary btn-sm"
                           onClick={() => shareBoard(board._id, true, null)}
                           disabled={!isOwner}
-                          title={isOwner ? "Toggle public access" : "Only owner can manage visibility"}
+                          title={
+                            isOwner
+                              ? "Toggle public access"
+                              : "Only owner can manage visibility"
+                          }
                         >
-                          {board.isPublic ? 'Make Private' : 'Make Public'}
+                          {board.isPublic ? "Make Private" : "Make Public"}
                         </button>
                         <button
                           className="btn btn-danger btn-sm"
                           onClick={() => deleteBoard(board._id)}
                           disabled={!isOwner}
-                          title={isOwner ? "Delete whiteboard" : "Only owner can delete"}
+                          title={
+                            isOwner
+                              ? "Delete whiteboard"
+                              : "Only owner can delete"
+                          }
                         >
                           Delete
                         </button>
                       </div>
                     </div>
                   </div>
-                )
+                );
               })}
             </div>
           )}
         </main>
 
         {showJoinModal && (
-          <div className="modal-overlay" onClick={() => { setShowJoinModal(false); setJoinBoardId(''); setJoinModalError(''); }}>
-            <div className="modal-container" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '400px' }}>
+          <div
+            className="modal-overlay"
+            onClick={() => {
+              setShowJoinModal(false);
+              setJoinBoardId("");
+              setJoinModalError("");
+            }}
+          >
+            <div
+              className="modal-container"
+              onClick={(e) => e.stopPropagation()}
+              style={{ maxWidth: "400px" }}
+            >
               <div className="modal-header">
                 <h3 className="modal-title">Join Board by ID</h3>
-                <button 
-                  className="modal-close-btn" 
-                  onClick={() => { setShowJoinModal(false); setJoinBoardId(''); setJoinModalError(''); }}
+                <button
+                  className="modal-close-btn"
+                  onClick={() => {
+                    setShowJoinModal(false);
+                    setJoinBoardId("");
+                    setJoinModalError("");
+                  }}
                 >
                   &times;
                 </button>
               </div>
-              <form onSubmit={handleJoinBoard} style={{ padding: '16px' }}>
+              <form onSubmit={handleJoinBoard} style={{ padding: "16px" }}>
                 {joinModalError && (
-                  <div style={{
-                    padding: '8px 12px',
-                    borderRadius: '6px',
-                    backgroundColor: '#FDEDEC',
-                    color: '#C0392B',
-                    fontSize: '13px',
-                    fontWeight: '500',
-                    border: '1px solid #FADBD8',
-                    marginBottom: '12px'
-                  }}>
+                  <div
+                    style={{
+                      padding: "8px 12px",
+                      borderRadius: "6px",
+                      backgroundColor: "#FDEDEC",
+                      color: "#C0392B",
+                      fontSize: "13px",
+                      fontWeight: "500",
+                      border: "1px solid #FADBD8",
+                      marginBottom: "12px",
+                    }}
+                  >
                     {joinModalError}
                   </div>
                 )}
-                <div className="form-group" style={{ marginBottom: '16px' }}>
-                  <label className="form-label" style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>
+                <div className="form-group" style={{ marginBottom: "16px" }}>
+                  <label
+                    className="form-label"
+                    style={{
+                      display: "block",
+                      marginBottom: "8px",
+                      fontWeight: "500",
+                    }}
+                  >
                     Board ID (24-character hex string)
                   </label>
                   <input
                     type="text"
                     className="form-control"
                     style={{
-                      width: '100%',
-                      padding: '8px 12px',
-                      borderRadius: '6px',
-                      border: '1px solid #E0E0E0',
-                      fontSize: '14px',
-                      boxSizing: 'border-box'
+                      width: "100%",
+                      padding: "8px 12px",
+                      borderRadius: "6px",
+                      border: "1px solid #E0E0E0",
+                      fontSize: "14px",
+                      boxSizing: "border-box",
                     }}
                     placeholder="e.g. 648f8c47b5..."
                     value={joinBoardId}
@@ -3572,11 +4046,22 @@ export default function App() {
                     autoFocus
                   />
                 </div>
-                <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '16px' }}>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "12px",
+                    justifyContent: "flex-end",
+                    marginTop: "16px",
+                  }}
+                >
                   <button
                     type="button"
                     className="btn btn-secondary"
-                    onClick={() => { setShowJoinModal(false); setJoinBoardId(''); setJoinModalError(''); }}
+                    onClick={() => {
+                      setShowJoinModal(false);
+                      setJoinBoardId("");
+                      setJoinModalError("");
+                    }}
                     disabled={joinModalLoading}
                   >
                     Cancel
@@ -3586,7 +4071,7 @@ export default function App() {
                     className="btn btn-primary"
                     disabled={joinModalLoading}
                   >
-                    {joinModalLoading ? 'Joining...' : 'Join Board'}
+                    {joinModalLoading ? "Joining..." : "Join Board"}
                   </button>
                 </div>
               </form>
@@ -3594,7 +4079,7 @@ export default function App() {
           </div>
         )}
       </div>
-    )
+    );
   }
 
   return (
@@ -3608,21 +4093,33 @@ export default function App() {
         onClearPage={handleClearPage}
         savedId={savedId}
         roomUsers={roomUsers}
-        currentUser={{ ...user, id: socketRef.current?.id, dbUserId: user.id || user._id }}
+        currentUser={{
+          ...user,
+          id: socketRef.current?.id,
+          dbUserId: user.id || user._id,
+        }}
         onRenameUser={handleRenameUser}
         onExport={() => {
           // Synchronize current page state before opening export modal
           if (fabricRef.current) {
-            const currentJson = getCanvasJson()
-            const currentThumbnail = fabricRef.current.toDataURL({ format: 'jpeg', quality: 0.1, multiplier: 0.1 })
-            const updatedPages = pagesRef.current.map(p =>
+            const currentJson = getCanvasJson();
+            const currentThumbnail = fabricRef.current.toDataURL({
+              format: "jpeg",
+              quality: 0.1,
+              multiplier: 0.1,
+            });
+            const updatedPages = pagesRef.current.map((p) =>
               p.page_id === activePageIdRef.current
-                ? { ...p, canvas_state: currentJson, thumbnail: currentThumbnail }
-                : p
-            )
-            setPages(updatedPages)
+                ? {
+                    ...p,
+                    canvas_state: currentJson,
+                    thumbnail: currentThumbnail,
+                  }
+                : p,
+            );
+            setPages(updatedPages);
           }
-          setIsExportModalOpen(true)
+          setIsExportModalOpen(true);
         }}
         onCleanup={handleCleanup}
         onAssist={handleAssist}
@@ -3630,7 +4127,9 @@ export default function App() {
         isAssistLoading={isAssistLoading}
         onExit={handleExitEditor}
         isReadOnly={isReadOnly}
-        onOpenPermissionsPanel={() => setIsPermissionsPanelOpen(prev => !prev)}
+        onOpenPermissionsPanel={() =>
+          setIsPermissionsPanelOpen((prev) => !prev)
+        }
         boardMeta={boardMeta}
       />
 
@@ -3647,18 +4146,27 @@ export default function App() {
           onRenamePage={renamePage}
           onReorderPage={reorderPage}
           onSharePage={sharePage}
-          canManagePages={!isReadOnly && (boardMeta.owner === user.id || !savedId)}
+          canManagePages={
+            !isReadOnly && (boardMeta.owner === user.id || !savedId)
+          }
           isCollapsed={isLeftPanelCollapsed}
           onToggleCollapse={toggleLeftPanel}
         />
 
         {isLeftPanelCollapsed && (
-          <div 
-            className="strip-expand-trigger" 
+          <div
+            className="strip-expand-trigger"
             onClick={toggleLeftPanel}
             title="Expand Page Strip"
           >
-            <svg width="12" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+            <svg
+              width="12"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+            >
               <path d="M9 18l6-6-6-6" />
             </svg>
           </div>
@@ -3666,22 +4174,25 @@ export default function App() {
 
         {/* Toolbar Left Side */}
         {!isReadOnly && (
-          <Toolbar 
-            activeTool={activeTool} 
-            setActiveTool={setActiveTool} 
+          <Toolbar
+            activeTool={activeTool}
+            setActiveTool={setActiveTool}
             drawType={drawType}
             setDrawType={setDrawType}
-            isReadOnly={isReadOnly} 
+            isReadOnly={isReadOnly}
           />
         )}
 
         <div id="canvas-viewport" className="canvas-viewport">
           <div
             id="canvas-wrapper"
-            className={`canvas-wrapper ${activeTool === 'pan' ? 'pan-mode' : ''} ${activeTool === 'draw' && drawType === 'eraser' ? 'eraser-mode' : ''}`}
+            className={`canvas-wrapper ${activeTool === "pan" ? "pan-mode" : ""} ${activeTool === "draw" && drawType === "eraser" ? "eraser-mode" : ""}`}
           >
             <canvas id="whiteboard-canvas" />
-            <CanvasOverlay fabricCanvas={canvasInstance} overlayRef={overlayCanvasRef} />
+            <CanvasOverlay
+              fabricCanvas={canvasInstance}
+              overlayRef={overlayCanvasRef}
+            />
 
             {/* Eraser brush size preview ring */}
             <div
@@ -3692,12 +4203,15 @@ export default function App() {
 
             {/* Remote Cursors Overlay */}
             {Object.entries(remoteCursors).map(([id, cursor]) => {
-              if (!fabricRef.current) return null
-              if (id === socketRef.current?.id) return null
-              if (cursor.pageId !== activePageId) return null
+              if (!fabricRef.current) return null;
+              if (id === socketRef.current?.id) return null;
+              if (cursor.pageId !== activePageId) return null;
 
-              const pt = new window.fabric.Point(cursor.x, cursor.y)
-              const screenPt = window.fabric.util.transformPoint(pt, fabricRef.current.viewportTransform)
+              const pt = new window.fabric.Point(cursor.x, cursor.y);
+              const screenPt = window.fabric.util.transformPoint(
+                pt,
+                fabricRef.current.viewportTransform,
+              );
 
               return (
                 <div
@@ -3706,11 +4220,17 @@ export default function App() {
                   style={{
                     left: `${screenPt.x}px`,
                     top: `${screenPt.y}px`,
-                    transform: 'translate(-5px, -5px)',
-                    transition: 'left 0.08s ease-out, top 0.08s ease-out'
+                    transform: "translate(-5px, -5px)",
+                    transition: "left 0.08s ease-out, top 0.08s ease-out",
                   }}
                 >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
                     <path
                       d="M4.5 3V17.6562C4.5 18.2344 5.23438 18.5 5.60938 18.0625L10.375 12.875L17.2031 12.875C17.7969 12.875 18.0625 12.125 17.6094 11.75L5.04688 3.09375C4.89062 2.98438 4.6875 2.95312 4.5 3Z"
                       fill={cursor.color}
@@ -3718,52 +4238,66 @@ export default function App() {
                       strokeWidth="1.5"
                     />
                   </svg>
-                  <div className="remote-cursor-label" style={{ backgroundColor: cursor.color }}>
+                  <div
+                    className="remote-cursor-label"
+                    style={{ backgroundColor: cursor.color }}
+                  >
                     {cursor.name}
                   </div>
                 </div>
-              )
+              );
             })}
 
             {/* Element Context Badges Overlay */}
-            {fabricRef.current && fabricRef.current.getObjects()
-              .filter(obj => obj.id && obj.id !== 'page-boundary' && contextMap[obj.id])
-              .map(obj => {
-                const center = obj.getCenterPoint()
-                const width = (obj.width * obj.scaleX) || 50
-                const height = (obj.height * obj.scaleY) || 50
-
-                const badgePt = new window.fabric.Point(
-                  center.x + (width / 2),
-                  center.y - (height / 2)
+            {fabricRef.current &&
+              fabricRef.current
+                .getObjects()
+                .filter(
+                  (obj) =>
+                    obj.id && obj.id !== "page-boundary" && contextMap[obj.id],
                 )
-                const screenPt = window.fabric.util.transformPoint(badgePt, fabricRef.current.viewportTransform)
+                .map((obj) => {
+                  const center = obj.getCenterPoint();
+                  const width = obj.width * obj.scaleX || 50;
+                  const height = obj.height * obj.scaleY || 50;
 
-                return (
-                  <div
-                    key={obj.id}
-                    className="context-badge"
-                    style={{
-                      left: `${screenPt.x}px`,
-                      top: `${screenPt.y}px`,
-                      transition: 'left 0.05s ease-out, top 0.05s ease-out'
-                    }}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      fabricRef.current.setActiveObject(obj)
-                      fabricRef.current.requestRenderAll()
-                      updateInspectorProperties(obj)
-                      setIsContextPanelOpen(true)
-                    }}
-                    title="View notes, links & files"
-                  >
-                    <svg viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z" />
-                    </svg>
-                  </div>
-                )
-              })
-            }
+                  const badgePt = new window.fabric.Point(
+                    center.x + width / 2,
+                    center.y - height / 2,
+                  );
+                  const screenPt = window.fabric.util.transformPoint(
+                    badgePt,
+                    fabricRef.current.viewportTransform,
+                  );
+
+                  return (
+                    <div
+                      key={obj.id}
+                      className="context-badge"
+                      style={{
+                        left: `${screenPt.x}px`,
+                        top: `${screenPt.y}px`,
+                        transition: "left 0.05s ease-out, top 0.05s ease-out",
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        fabricRef.current.setActiveObject(obj);
+                        fabricRef.current.requestRenderAll();
+                        updateInspectorProperties(obj);
+                        setIsContextPanelOpen(true);
+                      }}
+                      title="View notes, links & files"
+                    >
+                      <svg viewBox="0 0 24 24" stroke="currentColor">
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"
+                        />
+                      </svg>
+                    </div>
+                  );
+                })}
           </div>
 
           {/* Floating Canvas Controls (Bottom Left) */}
@@ -3795,10 +4329,12 @@ export default function App() {
           onToggleLock={handleToggleLock}
           onEditContext={() => {
             if (!savedId) {
-              alert('Please save the whiteboard first (click "Save" in the top bar) to enable attaching notes, code, and files.')
-              return
+              alert(
+                'Please save the whiteboard first (click "Save" in the top bar) to enable attaching notes, code, and files.',
+              );
+              return;
             }
-            setIsContextPanelOpen(true)
+            setIsContextPanelOpen(true);
           }}
           isReadOnly={isReadOnly}
           activeTool={activeTool}
@@ -3811,12 +4347,19 @@ export default function App() {
         />
 
         {isRightPanelCollapsed && (
-          <div 
-            className="panel-expand-trigger" 
+          <div
+            className="panel-expand-trigger"
             onClick={toggleRightPanel}
             title="Expand Properties"
           >
-            <svg width="12" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+            <svg
+              width="12"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+            >
               <path d="M15 18l-6-6 6-6" />
             </svg>
           </div>
@@ -3828,12 +4371,14 @@ export default function App() {
           onClose={() => setIsContextPanelOpen(false)}
           whiteboardId={savedId}
           elementId={selectedObject?.id}
-          elementName={selectedObject ? `${selectedObject.type.toUpperCase()} Shape` : ''}
+          elementName={
+            selectedObject ? `${selectedObject.type.toUpperCase()} Shape` : ""
+          }
           onContextUpdated={(elId, hasContext) => {
-            setContextMap(prev => ({
+            setContextMap((prev) => ({
               ...prev,
-              [elId]: hasContext
-            }))
+              [elId]: hasContext,
+            }));
           }}
           isReadOnly={isReadOnly}
         />
@@ -3864,19 +4409,19 @@ export default function App() {
         <div className="status-item">
           <span className={`status-indicator ${connectionStatus}`} />
           <span>
-            {connectionStatus === 'connected'
+            {connectionStatus === "connected"
               ? `Live Collaboration Active (${roomUsers.length} online)`
-              : 'Reconnecting to network...'}
+              : "Reconnecting to network..."}
           </span>
         </div>
         <div className="status-item">
-          <span>Grid Snap: {snapToGrid ? 'ON' : 'OFF'}</span>
+          <span>Grid Snap: {snapToGrid ? "ON" : "OFF"}</span>
           <span>•</span>
           <span>Zoom: {Math.round(zoom * 100)}%</span>
           {savedId && (
             <>
               <span>•</span>
-              <span style={{ fontFamily: 'monospace' }}>ID: {savedId}</span>
+              <span style={{ fontFamily: "monospace" }}>ID: {savedId}</span>
             </>
           )}
         </div>
@@ -3890,6 +4435,5 @@ export default function App() {
         title={title}
       />
     </div>
-  )
+  );
 }
-

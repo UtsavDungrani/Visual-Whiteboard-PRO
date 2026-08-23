@@ -9,7 +9,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "architectureassist()",
       "source_file": "server/ai.service.js",
@@ -21,7 +21,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "cleanuplayout()",
       "source_file": "server/ai.service.js",
@@ -33,7 +33,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "broadcastroomusers()",
       "source_file": "server/index.js",
@@ -45,7 +45,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "isredisenabled()",
       "source_file": "server/index.js",
@@ -57,7 +57,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "seedadminuser()",
       "source_file": "server/index.js",
@@ -69,11 +69,143 @@
       "_callable": true,
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "startserver()",
       "source_file": "server/index.js",
       "source_location": "L992"
+    },
+    {
+      "id": "frontend_src_app_app",
+      "label": "App()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "App",
+      "file_type": "code",
+      "norm_label": "app()",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L27"
+    },
+    {
+      "id": "frontend_src_app_app_addnewelement",
+      "label": "addNewElement()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "App",
+      "file_type": "code",
+      "norm_label": "addnewelement()",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L2064"
+    },
+    {
+      "id": "frontend_src_app_app_applyremotecanvas",
+      "label": "applyRemoteCanvas()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "App",
+      "file_type": "code",
+      "norm_label": "applyremotecanvas()",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L1140"
+    },
+    {
+      "id": "frontend_src_app_app_attachfabriclisteners",
+      "label": "attachFabricListeners()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "App",
+      "file_type": "code",
+      "norm_label": "attachfabriclisteners()",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L1212"
+    },
+    {
+      "id": "frontend_src_app_app_debounce",
+      "label": "debounce()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "App",
+      "file_type": "code",
+      "norm_label": "debounce()",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L1039"
+    },
+    {
+      "id": "frontend_src_app_app_flushpendingremotecanvas",
+      "label": "flushPendingRemoteCanvas()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "App",
+      "file_type": "code",
+      "norm_label": "flushpendingremotecanvas()",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L1166"
+    },
+    {
+      "id": "frontend_src_app_app_loadboard",
+      "label": "loadBoard()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "App",
+      "file_type": "code",
+      "norm_label": "loadboard()",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L2733"
+    },
+    {
+      "id": "frontend_src_app_app_loadboardbyid",
+      "label": "loadBoardById()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "App",
+      "file_type": "code",
+      "norm_label": "loadboardbyid()",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L2739"
+    },
+    {
+      "id": "frontend_src_app_app_saveboard",
+      "label": "saveBoard()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "App",
+      "file_type": "code",
+      "norm_label": "saveboard()",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L2666"
+    },
+    {
+      "id": "frontend_src_app_app_throttle",
+      "label": "throttle()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "App",
+      "file_type": "code",
+      "norm_label": "throttle()",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L1048"
+    },
+    {
+      "id": "frontend_src_app_app_updateinspectorproperties",
+      "label": "updateInspectorProperties()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "App",
+      "file_type": "code",
+      "norm_label": "updateinspectorproperties()",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L1174"
     },
     {
       "id": "frontend_src_pathlassosplit_bboxcornersinpolygon",
@@ -81,7 +213,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 10,
-      "community_name": "pathLassoSplit.js",
+      "community_name": "App",
       "file_type": "code",
       "norm_label": "bboxcornersinpolygon()",
       "source_file": "frontend/src/pathLassoSplit.js",
@@ -93,7 +225,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 10,
-      "community_name": "pathLassoSplit.js",
+      "community_name": "App",
       "file_type": "code",
       "norm_label": "buildclippolygon()",
       "source_file": "frontend/src/pathLassoSplit.js",
@@ -105,7 +237,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 10,
-      "community_name": "pathLassoSplit.js",
+      "community_name": "App",
       "file_type": "code",
       "norm_label": "canvaspolygontolocal()",
       "source_file": "frontend/src/pathLassoSplit.js",
@@ -117,7 +249,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 10,
-      "community_name": "pathLassoSplit.js",
+      "community_name": "App",
       "file_type": "code",
       "norm_label": "getlineendpoints()",
       "source_file": "frontend/src/pathLassoSplit.js",
@@ -129,7 +261,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 10,
-      "community_name": "pathLassoSplit.js",
+      "community_name": "App",
       "file_type": "code",
       "norm_label": "getobjectselectionmode()",
       "source_file": "frontend/src/pathLassoSplit.js",
@@ -141,7 +273,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 10,
-      "community_name": "pathLassoSplit.js",
+      "community_name": "App",
       "file_type": "code",
       "norm_label": "getpathselectionmode()",
       "source_file": "frontend/src/pathLassoSplit.js",
@@ -153,7 +285,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 10,
-      "community_name": "pathLassoSplit.js",
+      "community_name": "App",
       "file_type": "code",
       "norm_label": "ispointinpolygon()",
       "source_file": "frontend/src/pathLassoSplit.js",
@@ -165,7 +297,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 10,
-      "community_name": "pathLassoSplit.js",
+      "community_name": "App",
       "file_type": "code",
       "norm_label": "linelineintersection()",
       "source_file": "frontend/src/pathLassoSplit.js",
@@ -177,7 +309,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 10,
-      "community_name": "pathLassoSplit.js",
+      "community_name": "App",
       "file_type": "code",
       "norm_label": "pathdatatosvgd()",
       "source_file": "frontend/src/pathLassoSplit.js",
@@ -189,7 +321,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 10,
-      "community_name": "pathLassoSplit.js",
+      "community_name": "App",
       "file_type": "code",
       "norm_label": "samplefabricpath()",
       "source_file": "frontend/src/pathLassoSplit.js",
@@ -201,7 +333,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 10,
-      "community_name": "pathLassoSplit.js",
+      "community_name": "App",
       "file_type": "code",
       "norm_label": "samplepathhitpoints()",
       "source_file": "frontend/src/pathLassoSplit.js",
@@ -213,7 +345,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 10,
-      "community_name": "pathLassoSplit.js",
+      "community_name": "App",
       "file_type": "code",
       "norm_label": "splitlinewithlasso()",
       "source_file": "frontend/src/pathLassoSplit.js",
@@ -225,7 +357,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 10,
-      "community_name": "pathLassoSplit.js",
+      "community_name": "App",
       "file_type": "code",
       "norm_label": "splitobjectwithlasso()",
       "source_file": "frontend/src/pathLassoSplit.js",
@@ -237,7 +369,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 10,
-      "community_name": "pathLassoSplit.js",
+      "community_name": "App",
       "file_type": "code",
       "norm_label": "splitsegmentbypolygon()",
       "source_file": "frontend/src/pathLassoSplit.js",
@@ -376,138 +508,6 @@
       "source_location": "L202"
     },
     {
-      "id": "frontend_src_app_app",
-      "label": "App()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "app()",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L28"
-    },
-    {
-      "id": "frontend_src_app_app_addnewelement",
-      "label": "addNewElement()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "addnewelement()",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L2065"
-    },
-    {
-      "id": "frontend_src_app_app_applyremotecanvas",
-      "label": "applyRemoteCanvas()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "applyremotecanvas()",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L1141"
-    },
-    {
-      "id": "frontend_src_app_app_attachfabriclisteners",
-      "label": "attachFabricListeners()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "attachfabriclisteners()",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L1213"
-    },
-    {
-      "id": "frontend_src_app_app_debounce",
-      "label": "debounce()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "debounce()",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L1040"
-    },
-    {
-      "id": "frontend_src_app_app_flushpendingremotecanvas",
-      "label": "flushPendingRemoteCanvas()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "flushpendingremotecanvas()",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L1167"
-    },
-    {
-      "id": "frontend_src_app_app_loadboard",
-      "label": "loadBoard()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "loadboard()",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L2751"
-    },
-    {
-      "id": "frontend_src_app_app_loadboardbyid",
-      "label": "loadBoardById()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "loadboardbyid()",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L2757"
-    },
-    {
-      "id": "frontend_src_app_app_saveboard",
-      "label": "saveBoard()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "saveboard()",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L2684"
-    },
-    {
-      "id": "frontend_src_app_app_throttle",
-      "label": "throttle()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "throttle()",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L1049"
-    },
-    {
-      "id": "frontend_src_app_app_updateinspectorproperties",
-      "label": "updateInspectorProperties()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "updateinspectorproperties()",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L1175"
-    },
-    {
       "id": "frontend_src_components_assistpanel_assistpanel",
       "label": "AssistPanel()",
       "_callable": true,
@@ -628,6 +628,54 @@
       "source_location": "L3"
     },
     {
+      "id": "frontend_src_hooks_useconnectorsync_applyconnectoranchors",
+      "label": "applyConnectorAnchors()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "applyconnectoranchors()",
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L37"
+    },
+    {
+      "id": "frontend_src_hooks_useconnectorsync_collectmovedshapes",
+      "label": "collectMovedShapes()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "collectmovedshapes()",
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L4"
+    },
+    {
+      "id": "frontend_src_hooks_useconnectorsync_shapesmapfromcanvas",
+      "label": "shapesMapFromCanvas()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "shapesmapfromcanvas()",
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L64"
+    },
+    {
+      "id": "frontend_src_hooks_useconnectorsync_stripconnectorsfromselection",
+      "label": "stripConnectorsFromSelection()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "stripconnectorsfromselection()",
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L18"
+    },
+    {
       "id": "frontend_src_hooks_useconnectorsync_updateallconnectors",
       "label": "updateAllConnectors()",
       "_callable": true,
@@ -637,7 +685,7 @@
       "file_type": "code",
       "norm_label": "updateallconnectors()",
       "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L63"
+      "source_location": "L118"
     },
     {
       "id": "frontend_src_hooks_useconnectorsync_useconnectorsync",
@@ -649,7 +697,7 @@
       "file_type": "code",
       "norm_label": "useconnectorsync()",
       "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L7"
+      "source_location": "L72"
     },
     {
       "id": "frontend_src_tools_connectorline_fromobjectfn",
@@ -661,7 +709,7 @@
       "file_type": "code",
       "norm_label": "fromobjectfn()",
       "source_file": "frontend/src/tools/ConnectorLine.js",
-      "source_location": "L144"
+      "source_location": "L172"
     },
     {
       "id": "frontend_src_tools_useconnectortool_useconnectortool",
@@ -676,6 +724,18 @@
       "source_location": "L8"
     },
     {
+      "id": "frontend_src_utils_anchorpoints_canvastoscreen",
+      "label": "canvasToScreen()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "canvastoscreen()",
+      "source_file": "frontend/src/utils/anchorPoints.js",
+      "source_location": "L23"
+    },
+    {
       "id": "frontend_src_utils_anchorpoints_findclosestanchor",
       "label": "findClosestAnchor()",
       "_callable": true,
@@ -685,7 +745,7 @@
       "file_type": "code",
       "norm_label": "findclosestanchor()",
       "source_file": "frontend/src/utils/anchorPoints.js",
-      "source_location": "L51"
+      "source_location": "L48"
     },
     {
       "id": "frontend_src_utils_anchorpoints_getanchorpoint",
@@ -697,19 +757,19 @@
       "file_type": "code",
       "norm_label": "getanchorpoint()",
       "source_file": "frontend/src/utils/anchorPoints.js",
-      "source_location": "L11"
+      "source_location": "L35"
     },
     {
-      "id": "frontend_src_utils_anchorpoints_getobjectanchors",
-      "label": "getObjectAnchors()",
+      "id": "frontend_src_utils_anchorpoints_localanchoroffset",
+      "label": "localAnchorOffset()",
       "_callable": true,
       "_origin": "ast",
       "community": 6,
       "community_name": "App.jsx",
       "file_type": "code",
-      "norm_label": "getobjectanchors()",
+      "norm_label": "localanchoroffset()",
       "source_file": "frontend/src/utils/anchorPoints.js",
-      "source_location": "L35"
+      "source_location": "L6"
     },
     {
       "id": "frontend_package",
@@ -958,7 +1018,7 @@
       "label": "ai.service.js",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "ai.service.js",
       "source_file": "server/ai.service.js",
@@ -969,7 +1029,7 @@
       "label": "index.js",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "index.js",
       "source_file": "server/index.js",
@@ -980,7 +1040,7 @@
       "label": "activeUsers",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "activeusers",
       "source_file": "server/index.js",
@@ -991,7 +1051,7 @@
       "label": "admin",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "admin",
       "source_file": "server/index.js",
@@ -1002,7 +1062,7 @@
       "label": "aiLimiter",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "ailimiter",
       "source_file": "server/index.js",
@@ -1013,7 +1073,7 @@
       "label": "auth",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "auth",
       "source_file": "server/index.js",
@@ -1024,7 +1084,7 @@
       "label": "authLimiter",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "authlimiter",
       "source_file": "server/index.js",
@@ -1035,7 +1095,7 @@
       "label": "bcrypt",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "bcrypt",
       "source_file": "server/index.js",
@@ -1046,7 +1106,7 @@
       "label": "cors",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "cors",
       "source_file": "server/index.js",
@@ -1057,7 +1117,7 @@
       "label": "{ createAdapter }",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "{ createadapter }",
       "source_file": "server/index.js",
@@ -1068,7 +1128,7 @@
       "label": "ElementContext",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "elementcontext",
       "source_file": "server/index.js",
@@ -1079,7 +1139,7 @@
       "label": "express",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "express",
       "source_file": "server/index.js",
@@ -1090,7 +1150,7 @@
       "label": "fs",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "fs",
       "source_file": "server/index.js",
@@ -1101,7 +1161,7 @@
       "label": "http",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "http",
       "source_file": "server/index.js",
@@ -1112,7 +1172,7 @@
       "label": "httpServer",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "httpserver",
       "source_file": "server/index.js",
@@ -1123,7 +1183,7 @@
       "label": "io",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "io",
       "source_file": "server/index.js",
@@ -1134,7 +1194,7 @@
       "label": "jwt",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "jwt",
       "source_file": "server/index.js",
@@ -1145,7 +1205,7 @@
       "label": "mongoose",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "mongoose",
       "source_file": "server/index.js",
@@ -1156,7 +1216,7 @@
       "label": "multer",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "multer",
       "source_file": "server/index.js",
@@ -1167,7 +1227,7 @@
       "label": "path",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "path",
       "source_file": "server/index.js",
@@ -1178,7 +1238,7 @@
       "label": "rateLimit",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "ratelimit",
       "source_file": "server/index.js",
@@ -1189,7 +1249,7 @@
       "label": "redis",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "redis",
       "source_file": "server/index.js",
@@ -1200,7 +1260,7 @@
       "label": "{ Server }",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "{ server }",
       "source_file": "server/index.js",
@@ -1211,7 +1271,7 @@
       "label": "storage",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "storage",
       "source_file": "server/index.js",
@@ -1222,7 +1282,7 @@
       "label": "upload",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "upload",
       "source_file": "server/index.js",
@@ -1233,7 +1293,7 @@
       "label": "uploadsDir",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "uploadsdir",
       "source_file": "server/index.js",
@@ -1244,7 +1304,7 @@
       "label": "User",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "user",
       "source_file": "server/index.js",
@@ -1255,7 +1315,7 @@
       "label": "Whiteboard",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "whiteboard",
       "source_file": "server/index.js",
@@ -1266,7 +1326,7 @@
       "label": "whiteboards",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "whiteboards",
       "source_file": "server/index.js",
@@ -1277,7 +1337,7 @@
       "label": "middleware/admin.js",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "middleware/admin.js",
       "source_file": "server/middleware/admin.js",
@@ -1288,7 +1348,7 @@
       "label": "auth.js",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "auth.js",
       "source_file": "server/middleware/auth.js",
@@ -1299,7 +1359,7 @@
       "label": "jwt",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "jwt",
       "source_file": "server/middleware/auth.js",
@@ -1310,7 +1370,7 @@
       "label": "sockets.test.js",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "sockets.test.js",
       "source_file": "server/tests/sockets.test.js",
@@ -1321,7 +1381,7 @@
       "label": "{ app, httpServer, io }",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "{ app, httpserver, io }",
       "source_file": "server/tests/sockets.test.js",
@@ -1332,7 +1392,7 @@
       "label": "http",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "http",
       "source_file": "server/tests/sockets.test.js",
@@ -1343,10 +1403,21 @@
       "label": "ioClient",
       "_origin": "ast",
       "community": 1,
-      "community_name": "Backend Server Initialization",
+      "community_name": "index.js",
       "file_type": "code",
       "norm_label": "ioclient",
       "source_file": "server/tests/sockets.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "frontend_src_main",
+      "label": "main.jsx",
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "App",
+      "file_type": "code",
+      "norm_label": "main.jsx",
+      "source_file": "frontend/src/main.jsx",
       "source_location": "L1"
     },
     {
@@ -1354,7 +1425,7 @@
       "label": "pathLassoSplit.js",
       "_origin": "ast",
       "community": 10,
-      "community_name": "pathLassoSplit.js",
+      "community_name": "App",
       "file_type": "code",
       "norm_label": "pathlassosplit.js",
       "source_file": "frontend/src/pathLassoSplit.js",
@@ -2346,7 +2417,7 @@
       "node_kind": "heading",
       "norm_label": "api surface",
       "source_file": "README.md",
-      "source_location": "L81"
+      "source_location": "L83"
     },
     {
       "id": "readme_configuration",
@@ -2358,7 +2429,7 @@
       "node_kind": "heading",
       "norm_label": "configuration",
       "source_file": "README.md",
-      "source_location": "L35"
+      "source_location": "L37"
     },
     {
       "id": "readme_current_limitations",
@@ -2370,7 +2441,7 @@
       "node_kind": "heading",
       "norm_label": "current limitations",
       "source_file": "README.md",
-      "source_location": "L99"
+      "source_location": "L101"
     },
     {
       "id": "readme_data_model",
@@ -2382,7 +2453,7 @@
       "node_kind": "heading",
       "norm_label": "data model",
       "source_file": "README.md",
-      "source_location": "L95"
+      "source_location": "L97"
     },
     {
       "id": "readme_future_improvements",
@@ -2394,7 +2465,7 @@
       "node_kind": "heading",
       "norm_label": "future improvements",
       "source_file": "README.md",
-      "source_location": "L127"
+      "source_location": "L129"
     },
     {
       "id": "readme_how_it_works",
@@ -2406,7 +2477,19 @@
       "node_kind": "heading",
       "norm_label": "how it works",
       "source_file": "README.md",
-      "source_location": "L73"
+      "source_location": "L75"
+    },
+    {
+      "id": "readme_live_url_https_visual_whiteboard_pro_vercel_app",
+      "label": "Live Url: https://visual-whiteboard-pro.vercel.app/",
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "Visual Whiteboard Pro",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "live url: https://visual-whiteboard-pro.vercel.app/",
+      "source_file": "README.md",
+      "source_location": "L7"
     },
     {
       "id": "readme_local_setup",
@@ -2418,7 +2501,7 @@
       "node_kind": "heading",
       "norm_label": "local setup",
       "source_file": "README.md",
-      "source_location": "L43"
+      "source_location": "L45"
     },
     {
       "id": "readme_notes_for_development",
@@ -2430,7 +2513,7 @@
       "node_kind": "heading",
       "norm_label": "notes for development",
       "source_file": "README.md",
-      "source_location": "L121"
+      "source_location": "L123"
     },
     {
       "id": "readme_prerequisites",
@@ -2442,7 +2525,7 @@
       "node_kind": "heading",
       "norm_label": "prerequisites",
       "source_file": "README.md",
-      "source_location": "L29"
+      "source_location": "L31"
     },
     {
       "id": "readme_repository_layout",
@@ -2454,7 +2537,7 @@
       "node_kind": "heading",
       "norm_label": "repository layout",
       "source_file": "README.md",
-      "source_location": "L15"
+      "source_location": "L17"
     },
     {
       "id": "readme_roadmap_reference",
@@ -2466,7 +2549,7 @@
       "node_kind": "heading",
       "norm_label": "roadmap reference",
       "source_file": "README.md",
-      "source_location": "L103"
+      "source_location": "L105"
     },
     {
       "id": "readme_run_the_app",
@@ -2478,7 +2561,7 @@
       "node_kind": "heading",
       "norm_label": "run the app",
       "source_file": "README.md",
-      "source_location": "L59"
+      "source_location": "L61"
     },
     {
       "id": "readme_tech_stack",
@@ -2490,7 +2573,7 @@
       "node_kind": "heading",
       "norm_label": "tech stack",
       "source_file": "README.md",
-      "source_location": "L22"
+      "source_location": "L24"
     },
     {
       "id": "readme_useful_files",
@@ -2502,7 +2585,7 @@
       "node_kind": "heading",
       "norm_label": "useful files",
       "source_file": "README.md",
-      "source_location": "L114"
+      "source_location": "L116"
     },
     {
       "id": "readme_visual_whiteboard_pro",
@@ -2526,7 +2609,7 @@
       "node_kind": "heading",
       "norm_label": "what it does today",
       "source_file": "README.md",
-      "source_location": "L7"
+      "source_location": "L9"
     },
     {
       "id": "frontend_src_app",
@@ -2680,17 +2763,6 @@
       "file_type": "code",
       "norm_label": "useconnectorsync.js",
       "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "frontend_src_main",
-      "label": "main.jsx",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "main.jsx",
-      "source_file": "frontend/src/main.jsx",
       "source_location": "L1"
     },
     {
@@ -3724,18 +3796,6 @@
   "links": [
     {
       "source": "frontend_src_app_app",
-      "target": "frontend_src_utils_anchorpoints_getanchorpoint",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L2396",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_src_app_app",
       "target": "frontend_src_hooks_useconnectorsync_useconnectorsync",
       "relation": "calls",
       "_origin": "ast",
@@ -3743,7 +3803,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L362",
+      "source_location": "L361",
       "weight": 1.0
     },
     {
@@ -3755,7 +3815,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L365",
+      "source_location": "L364",
       "weight": 1.0
     },
     {
@@ -3767,7 +3827,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L540",
+      "source_location": "L539",
       "weight": 1.0
     },
     {
@@ -3779,7 +3839,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1154",
+      "source_location": "L1153",
       "weight": 1.0
     },
     {
@@ -3791,7 +3851,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1239",
+      "source_location": "L1238",
       "weight": 1.0
     },
     {
@@ -3803,7 +3863,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1482",
+      "source_location": "L1481",
       "weight": 1.0
     },
     {
@@ -3815,7 +3875,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1692",
+      "source_location": "L1691",
       "weight": 1.0
     },
     {
@@ -3827,7 +3887,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1699",
+      "source_location": "L1698",
       "weight": 1.0
     },
     {
@@ -3839,7 +3899,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1709",
+      "source_location": "L1708",
       "weight": 1.0
     },
     {
@@ -3851,7 +3911,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1171",
+      "source_location": "L1170",
       "weight": 1.0
     },
     {
@@ -3863,7 +3923,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2754",
+      "source_location": "L2736",
       "weight": 1.0
     },
     {
@@ -3875,7 +3935,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2790",
+      "source_location": "L2772",
       "weight": 1.0
     },
     {
@@ -3891,7 +3951,7 @@
       "weight": 1.0
     },
     {
-      "source": "frontend_src_hooks_useconnectorsync_updateallconnectors",
+      "source": "frontend_src_hooks_useconnectorsync_applyconnectoranchors",
       "target": "frontend_src_utils_anchorpoints_getanchorpoint",
       "relation": "calls",
       "_origin": "ast",
@@ -3899,19 +3959,79 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L80",
+      "source_location": "L44",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_hooks_useconnectorsync_updateallconnectors",
+      "target": "frontend_src_hooks_useconnectorsync_shapesmapfromcanvas",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L121",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_hooks_useconnectorsync_updateallconnectors",
+      "target": "frontend_src_hooks_useconnectorsync_applyconnectoranchors",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L126",
       "weight": 1.0
     },
     {
       "source": "frontend_src_hooks_useconnectorsync_useconnectorsync",
-      "target": "frontend_src_utils_anchorpoints_getanchorpoint",
+      "target": "frontend_src_hooks_useconnectorsync_collectmovedshapes",
       "relation": "calls",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L27",
+      "source_location": "L77",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_hooks_useconnectorsync_useconnectorsync",
+      "target": "frontend_src_hooks_useconnectorsync_shapesmapfromcanvas",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L81",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_hooks_useconnectorsync_useconnectorsync",
+      "target": "frontend_src_hooks_useconnectorsync_applyconnectoranchors",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L88",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_hooks_useconnectorsync_useconnectorsync",
+      "target": "frontend_src_hooks_useconnectorsync_stripconnectorsfromselection",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L98",
       "weight": 1.0
     },
     {
@@ -4127,7 +4247,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/tools/useConnectorTool.js",
-      "source_location": "L145",
+      "source_location": "L122",
       "weight": 1.0
     },
     {
@@ -4143,6 +4263,18 @@
       "weight": 1.0
     },
     {
+      "source": "frontend_src_tools_useconnectortool_useconnectortool",
+      "target": "frontend_src_utils_anchorpoints_canvastoscreen",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/src/tools/useConnectorTool.js",
+      "source_location": "L76",
+      "weight": 1.0
+    },
+    {
       "source": "frontend_src_utils_anchorpoints_findclosestanchor",
       "target": "frontend_src_utils_anchorpoints_getanchorpoint",
       "relation": "calls",
@@ -4151,12 +4283,24 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/utils/anchorPoints.js",
-      "source_location": "L69",
+      "source_location": "L60",
       "weight": 1.0
     },
     {
-      "source": "frontend_src_utils_anchorpoints_getobjectanchors",
-      "target": "frontend_src_utils_anchorpoints_getanchorpoint",
+      "source": "frontend_src_utils_anchorpoints_findclosestanchor",
+      "target": "frontend_src_utils_anchorpoints_canvastoscreen",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/src/utils/anchorPoints.js",
+      "source_location": "L64",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_utils_anchorpoints_getanchorpoint",
+      "target": "frontend_src_utils_anchorpoints_localanchoroffset",
       "relation": "calls",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -4451,7 +4595,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1040",
+      "source_location": "L1039",
       "weight": 1.0
     },
     {
@@ -4463,7 +4607,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1049",
+      "source_location": "L1048",
       "weight": 1.0
     },
     {
@@ -4475,7 +4619,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1141",
+      "source_location": "L1140",
       "weight": 1.0
     },
     {
@@ -4487,7 +4631,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1175",
+      "source_location": "L1174",
       "weight": 1.0
     },
     {
@@ -4499,7 +4643,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1213",
+      "source_location": "L1212",
       "weight": 1.0
     },
     {
@@ -4511,7 +4655,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2065",
+      "source_location": "L2064",
       "weight": 1.0
     },
     {
@@ -4523,7 +4667,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2757",
+      "source_location": "L2739",
       "weight": 1.0
     },
     {
@@ -4756,18 +4900,6 @@
     },
     {
       "source": "frontend_src_app",
-      "target": "frontend_src_utils_anchorpoints_getanchorpoint",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L23",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_src_app",
       "target": "frontend_src_components_topbar_topbar",
       "relation": "imports",
       "_origin": "ast",
@@ -4884,6 +5016,18 @@
       "context": "import",
       "source_file": "frontend/src/main.jsx",
       "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_tools_useconnectortool",
+      "target": "frontend_src_utils_anchorpoints_canvastoscreen",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/tools/useConnectorTool.js",
+      "source_location": "L2",
       "weight": 1.0
     },
     {
@@ -5352,18 +5496,6 @@
       "context": "import",
       "source_file": "frontend/src/App.jsx",
       "source_location": "L22",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_src_app",
-      "target": "frontend_src_utils_anchorpoints",
-      "relation": "imports_from",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L23",
       "weight": 1.0
     },
     {
@@ -6043,7 +6175,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L28",
+      "source_location": "L27",
       "weight": 1.0
     },
     {
@@ -6054,7 +6186,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1167",
+      "source_location": "L1166",
       "weight": 1.0
     },
     {
@@ -6065,7 +6197,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2684",
+      "source_location": "L2666",
       "weight": 1.0
     },
     {
@@ -6076,7 +6208,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2751",
+      "source_location": "L2733",
       "weight": 1.0
     },
     {
@@ -6208,7 +6340,51 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L63",
+      "source_location": "L118",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_hooks_useconnectorsync",
+      "target": "frontend_src_hooks_useconnectorsync_stripconnectorsfromselection",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_hooks_useconnectorsync",
+      "target": "frontend_src_hooks_useconnectorsync_applyconnectoranchors",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L37",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_hooks_useconnectorsync",
+      "target": "frontend_src_hooks_useconnectorsync_collectmovedshapes",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_hooks_useconnectorsync",
+      "target": "frontend_src_hooks_useconnectorsync_shapesmapfromcanvas",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L64",
       "weight": 1.0
     },
     {
@@ -6219,7 +6395,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L7",
+      "source_location": "L72",
       "weight": 1.0
     },
     {
@@ -6384,7 +6560,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/tools/ConnectorLine.js",
-      "source_location": "L144",
+      "source_location": "L172",
       "weight": 1.0
     },
     {
@@ -6411,18 +6587,18 @@
     },
     {
       "source": "frontend_src_utils_anchorpoints",
-      "target": "frontend_src_utils_anchorpoints_getanchorpoint",
+      "target": "frontend_src_utils_anchorpoints_canvastoscreen",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/utils/anchorPoints.js",
-      "source_location": "L11",
+      "source_location": "L23",
       "weight": 1.0
     },
     {
       "source": "frontend_src_utils_anchorpoints",
-      "target": "frontend_src_utils_anchorpoints_getobjectanchors",
+      "target": "frontend_src_utils_anchorpoints_getanchorpoint",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -6439,7 +6615,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/utils/anchorPoints.js",
-      "source_location": "L51",
+      "source_location": "L48",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_utils_anchorpoints",
+      "target": "frontend_src_utils_anchorpoints_localanchoroffset",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/utils/anchorPoints.js",
+      "source_location": "L6",
       "weight": 1.0
     },
     {
@@ -6873,13 +7060,24 @@
     },
     {
       "source": "readme_visual_whiteboard_pro",
+      "target": "readme_current_limitations",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L101",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_visual_whiteboard_pro",
       "target": "readme_roadmap_reference",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L103",
+      "source_location": "L105",
       "weight": 1.0
     },
     {
@@ -6890,7 +7088,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L114",
+      "source_location": "L116",
       "weight": 1.0
     },
     {
@@ -6901,7 +7099,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L121",
+      "source_location": "L123",
       "weight": 1.0
     },
     {
@@ -6912,7 +7110,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L127",
+      "source_location": "L129",
       "weight": 1.0
     },
     {
@@ -6923,7 +7121,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L15",
+      "source_location": "L17",
       "weight": 1.0
     },
     {
@@ -6934,7 +7132,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L22",
+      "source_location": "L24",
       "weight": 1.0
     },
     {
@@ -6945,7 +7143,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L29",
+      "source_location": "L31",
       "weight": 1.0
     },
     {
@@ -6956,7 +7154,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L35",
+      "source_location": "L37",
       "weight": 1.0
     },
     {
@@ -6967,7 +7165,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L43",
+      "source_location": "L45",
       "weight": 1.0
     },
     {
@@ -6978,12 +7176,12 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L59",
+      "source_location": "L61",
       "weight": 1.0
     },
     {
       "source": "readme_visual_whiteboard_pro",
-      "target": "readme_what_it_does_today",
+      "target": "readme_live_url_https_visual_whiteboard_pro_vercel_app",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -7000,7 +7198,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L73",
+      "source_location": "L75",
       "weight": 1.0
     },
     {
@@ -7011,7 +7209,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L81",
+      "source_location": "L83",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_visual_whiteboard_pro",
+      "target": "readme_what_it_does_today",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L9",
       "weight": 1.0
     },
     {
@@ -7022,18 +7231,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L95",
-      "weight": 1.0
-    },
-    {
-      "source": "readme_visual_whiteboard_pro",
-      "target": "readme_current_limitations",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": "L99",
+      "source_location": "L97",
       "weight": 1.0
     },
     {
@@ -8525,5 +8723,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "87ac2aae0652878bbf6522119ff527482b949fcc"
+  "built_at_commit": "415ed8370970fd9fb219d6e0ec8dfb34507f2af9"
 }

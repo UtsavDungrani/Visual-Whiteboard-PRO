@@ -1,6 +1,6 @@
 {
   "0": "Frontend Package Configuration",
-  "1": "Backend Server Initialization",
+  "1": "index.js",
   "2": "Project Description and Requirements",
   "3": "dependencies",
   "4": "Visual Whiteboard Pro",
@@ -8,7 +8,7 @@
   "6": "App.jsx",
   "8": "package.json",
   "9": "context.test.js",
-  "10": "pathLassoSplit.js",
+  "10": "App",
   "11": "Visual Whiteboard Pro — Deployment Guide",
   "12": "Visual Whiteboard - Feature Backlog & Task Tracking",
   "13": "GEMINI.md",
