@@ -51,6 +51,14 @@ export function getBoardUrl(id, title) {
   return `${window.location.origin}/board/${slug}`;
 }
 
+const RESERVED_ROUTES = new Set([
+  "dashboard",
+  "landing",
+  "auth",
+  "login",
+  "register",
+]);
+
 // Helper to extract board identifier (slug, ID, or query param) from URL
 export function parseBoardIdFromUrl() {
   const pathParts = window.location.pathname.split("/").filter(Boolean);
@@ -58,11 +66,120 @@ export function parseBoardIdFromUrl() {
     if (pathParts[0] === "board" || pathParts[0] === "b") {
       return pathParts.slice(1).join("/") || null;
     }
-    // Direct /:slug or /:id path
-    return pathParts[0];
+    // Direct /:slug or /:id path (ignoring reserved screens)
+    if (!RESERVED_ROUTES.has(pathParts[0].toLowerCase())) {
+      return pathParts.join("/");
+    }
   }
   const params = new URLSearchParams(window.location.search);
   return params.get("board");
+}
+
+// Reactive overlay for element context badges that updates smoothly with canvas transforms and drags
+function ContextBadgesOverlay({ canvas, contextMap, onBadgeClick }) {
+  const [, setTick] = useState(0);
+
+  useEffect(() => {
+    if (!canvas) return;
+    let animId = null;
+    const scheduleUpdate = () => {
+      if (!animId) {
+        animId = requestAnimationFrame(() => {
+          animId = null;
+          setTick((t) => (t + 1) % 1000000);
+        });
+      }
+    };
+
+    canvas.on("after:render", scheduleUpdate);
+    canvas.on("object:moving", scheduleUpdate);
+    canvas.on("object:scaling", scheduleUpdate);
+    canvas.on("object:rotating", scheduleUpdate);
+    canvas.on("object:modified", scheduleUpdate);
+
+    return () => {
+      if (animId) cancelAnimationFrame(animId);
+      canvas.off("after:render", scheduleUpdate);
+      canvas.off("object:moving", scheduleUpdate);
+      canvas.off("object:scaling", scheduleUpdate);
+      canvas.off("object:rotating", scheduleUpdate);
+      canvas.off("object:modified", scheduleUpdate);
+    };
+  }, [canvas]);
+
+  if (!canvas || !contextMap || Object.keys(contextMap).length === 0)
+    return null;
+
+  const objects = (canvas.getObjects ? canvas.getObjects() : []).filter(
+    (obj) =>
+      obj &&
+      obj.id &&
+      obj.id !== "page-boundary" &&
+      obj.visible !== false &&
+      contextMap[obj.id],
+  );
+
+  if (objects.length === 0) return null;
+
+  const F = window.fabric;
+  if (!F || !canvas.viewportTransform) return null;
+
+  return (
+    <>
+      {objects.map((obj) => {
+        let canvasPt = null;
+        if (typeof obj.calcACoords === "function") {
+          const ac = obj.calcACoords();
+          if (ac?.tr) {
+            canvasPt = new F.Point(ac.tr.x, ac.tr.y);
+          }
+        }
+        if (!canvasPt && typeof obj.calcTransformMatrix === "function") {
+          canvasPt = F.util.transformPoint(
+            new F.Point((obj.width || 0) / 2, -(obj.height || 0) / 2),
+            obj.calcTransformMatrix(),
+          );
+        }
+        if (!canvasPt) {
+          const center = obj.getCenterPoint
+            ? obj.getCenterPoint()
+            : { x: obj.left || 0, y: obj.top || 0 };
+          const width = (obj.width || 50) * (obj.scaleX || 1);
+          const height = (obj.height || 50) * (obj.scaleY || 1);
+          canvasPt = new F.Point(center.x + width / 2, center.y - height / 2);
+        }
+
+        const screenPt = F.util.transformPoint(
+          canvasPt,
+          canvas.viewportTransform,
+        );
+
+        return (
+          <div
+            key={obj.id}
+            className="context-badge"
+            style={{
+              left: `${screenPt.x}px`,
+              top: `${screenPt.y}px`,
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              onBadgeClick(obj);
+            }}
+            title="View notes, links & files"
+          >
+            <svg viewBox="0 0 24 24" stroke="currentColor">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"
+              />
+            </svg>
+          </div>
+        );
+      })}
+    </>
+  );
 }
 
 export default function App() {
@@ -1141,6 +1258,8 @@ export default function App() {
       });
 
       const newUrl = getBoardUrl(data.id, boardTitle);
+      localStorage.setItem("wb_active_board_id", data.id);
+      localStorage.setItem("wb_active_board_slug", slugifyTitle(boardTitle));
       window.history.pushState({ path: newUrl }, "", newUrl);
 
       navigateTo("editor", {
@@ -3134,8 +3253,10 @@ export default function App() {
         owner: prev.owner || user.id || user._id || null,
       }));
 
-      // Update clean direct URL: /board/:slug-:id
+      // Update clean direct URL: /board/:slug
       const newUrl = getBoardUrl(data.id, title);
+      localStorage.setItem("wb_active_board_id", data.id);
+      localStorage.setItem("wb_active_board_slug", slugifyTitle(title));
       window.history.pushState({ path: newUrl }, "", newUrl);
 
       // Fetch contexts for the saved board
@@ -3160,9 +3281,24 @@ export default function App() {
       const headers = {};
       if (token) headers["Authorization"] = `Bearer ${token}`;
 
-      const res = await fetch(`${API_BASE_URL}/api/whiteboards/${id}`, {
+      let targetId = id;
+      const cachedSlug = localStorage.getItem("wb_active_board_slug");
+      const cachedId = localStorage.getItem("wb_active_board_id");
+      if (cachedSlug === id && cachedId) {
+        targetId = cachedId;
+      }
+
+      let res = await fetch(`${API_BASE_URL}/api/whiteboards/${targetId}`, {
         headers,
       });
+
+      // If lookup with cached ID failed with 404, fallback to querying by slug
+      if (!res.ok && targetId !== id) {
+        res = await fetch(`${API_BASE_URL}/api/whiteboards/${id}`, {
+          headers,
+        });
+      }
+
       if (!res.ok) {
         if (res.status === 401 || res.status === 403) {
           throw new Error("authentication_required");
@@ -3170,6 +3306,8 @@ export default function App() {
         throw new Error("Whiteboard not found");
       }
       const data = await res.json();
+
+      setScreen("editor");
 
       if (data.title) setTitle(data.title);
 
@@ -3209,12 +3347,17 @@ export default function App() {
 
       const realId = data.id || data._id || id;
       setSavedId(realId);
+      localStorage.setItem("wb_active_board_id", realId);
+      localStorage.setItem(
+        "wb_active_board_slug",
+        slugifyTitle(data.title || "board"),
+      );
 
       // Fetch contexts for this whiteboard
       fetchContextMap(realId);
 
       const newUrl = getBoardUrl(realId, data.title || title);
-      window.history.pushState({ path: newUrl }, "", newUrl);
+      window.history.replaceState({ path: newUrl }, "", newUrl);
     } catch (err) {
       console.error("loadBoardById error:", err);
       if (err.message === "authentication_required") {
@@ -4025,57 +4168,18 @@ export default function App() {
               })}
 
               {/* Element Context Badges Overlay */}
-              {fabricRef.current &&
-                fabricRef.current
-                  .getObjects()
-                  .filter(
-                    (obj) =>
-                      obj.id &&
-                      obj.id !== "page-boundary" &&
-                      contextMap[obj.id],
-                  )
-                  .map((obj) => {
-                    const center = obj.getCenterPoint();
-                    const width = obj.width * obj.scaleX || 50;
-                    const height = obj.height * obj.scaleY || 50;
-
-                    const badgePt = new window.fabric.Point(
-                      center.x + width / 2,
-                      center.y - height / 2,
-                    );
-                    const screenPt = window.fabric.util.transformPoint(
-                      badgePt,
-                      fabricRef.current.viewportTransform,
-                    );
-
-                    return (
-                      <div
-                        key={obj.id}
-                        className="context-badge"
-                        style={{
-                          left: `${screenPt.x}px`,
-                          top: `${screenPt.y}px`,
-                          transition: "left 0.05s ease-out, top 0.05s ease-out",
-                        }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          fabricRef.current.setActiveObject(obj);
-                          fabricRef.current.requestRenderAll();
-                          updateInspectorProperties(obj);
-                          setIsContextPanelOpen(true);
-                        }}
-                        title="View notes, links & files"
-                      >
-                        <svg viewBox="0 0 24 24" stroke="currentColor">
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"
-                          />
-                        </svg>
-                      </div>
-                    );
-                  })}
+              <ContextBadgesOverlay
+                canvas={canvasInstance || fabricRef.current}
+                contextMap={contextMap}
+                onBadgeClick={(obj) => {
+                  if (fabricRef.current) {
+                    fabricRef.current.setActiveObject(obj);
+                    fabricRef.current.requestRenderAll();
+                  }
+                  updateInspectorProperties(obj);
+                  setIsContextPanelOpen(true);
+                }}
+              />
             </div>
 
             {/* Floating Canvas Controls (Bottom Left) */}
@@ -4122,6 +4226,14 @@ export default function App() {
             onChangeDrawSize={handleChangeDrawSize}
             isCollapsed={isRightPanelCollapsed}
             onToggleCollapse={toggleRightPanel}
+            pageMode={pageMode}
+            onChangePageMode={(mode) => {
+              setPageMode(mode);
+              renderPageBoundary(fabricRef.current, mode, pageSize);
+            }}
+            zoom={zoom}
+            onZoom={handleZoom}
+            onZoomReset={handleZoomReset}
           />
 
           {isRightPanelCollapsed && (

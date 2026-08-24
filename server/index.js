@@ -310,45 +310,76 @@ app.post("/api/whiteboards", auth, async (req, res) => {
   }
 });
 
+// Helper to slugify titles for clean URL lookup
+function slugifyTitle(title) {
+  if (!title) return "board";
+  return title
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 // GET load whiteboard content (supports public or authenticated, by ID or by Slug/Title)
 app.get("/api/whiteboards/:id", async (req, res) => {
   const identifier = req.params.id;
   try {
+    let userId = null;
+    const authHeader = req.header("Authorization");
+    if (authHeader) {
+      const parts = authHeader.split(" ");
+      if (parts.length === 2 && parts[0] === "Bearer") {
+        try {
+          const decoded = jwt.verify(parts[1], JWT_SECRET);
+          userId = decoded.id;
+        } catch (e) {
+          // Token expired or invalid
+        }
+      }
+    }
+
     let board = null;
     if (mongoose.Types.ObjectId.isValid(identifier)) {
       board = await Whiteboard.findById(identifier);
     }
+
     if (!board) {
       // Look up by slug or title
-      const cleanSlug = identifier.replace(/^[/-]+|[/-]+$/g, "");
-      const regexPattern = cleanSlug.replace(/-/g, "[\\s\\-_]+");
-      board = await Whiteboard.findOne({
-        title: { $regex: new RegExp(`^${regexPattern}$`, "i") },
-      });
+      const cleanSlug = identifier.replace(/^[/-]+|[/-]+$/g, "").toLowerCase();
+
+      // First query boards belonging to the logged-in user or public
+      const candidates = userId
+        ? await Whiteboard.find({
+            $or: [
+              { owner: userId },
+              { collaborators: userId },
+              { isPublic: true },
+            ],
+          }).sort({ updatedAt: -1 })
+        : await Whiteboard.find({ isPublic: true }).sort({ updatedAt: -1 });
+
+      board = candidates.find((b) => slugifyTitle(b.title) === cleanSlug);
+
+      // If still not found, check all boards
+      if (!board) {
+        const allBoards = await Whiteboard.find({}).sort({ updatedAt: -1 });
+        board = allBoards.find((b) => slugifyTitle(b.title) === cleanSlug);
+      }
     }
+
     if (!board) return res.status(404).json({ error: "Not found" });
 
     // Validate access
     if (!board.isPublic) {
-      const authHeader = req.header("Authorization");
-      if (!authHeader)
+      if (!userId) {
         return res.status(401).json({ error: "unauthorized_missing_token" });
-
-      const parts = authHeader.split(" ");
-      if (parts.length !== 2 || parts[0] !== "Bearer") {
-        return res.status(401).json({ error: "token_format_invalid" });
       }
 
-      try {
-        const decoded = jwt.verify(parts[1], JWT_SECRET);
-        const isAuthorized =
-          board.owner.toString() === decoded.id ||
-          board.collaborators.map((c) => c.toString()).includes(decoded.id);
-        if (!isAuthorized) {
-          return res.status(403).json({ error: "forbidden_access_denied" });
-        }
-      } catch (err) {
-        return res.status(401).json({ error: "unauthorized_token_invalid" });
+      const isAuthorized =
+        board.owner.toString() === userId ||
+        board.collaborators.map((c) => c.toString()).includes(userId);
+      if (!isAuthorized) {
+        return res.status(403).json({ error: "forbidden_access_denied" });
       }
     }
 
@@ -554,15 +585,28 @@ const aiLimiter = rateLimit({
 });
 
 // GET map of all elements with active context on a whiteboard
-app.get("/api/context/:whiteboardId", auth, async (req, res) => {
+app.get("/api/context/:whiteboardId", async (req, res) => {
   try {
+    const { whiteboardId } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(whiteboardId)) {
+      return res.status(400).json({ error: "invalid_whiteboard_id" });
+    }
     const contexts = await ElementContext.find(
-      { whiteboard_id: req.params.whiteboardId },
-      "element_id",
+      { whiteboard_id: whiteboardId },
+      "element_id notes links code_snippet files",
     );
     const activeMap = {};
     contexts.forEach((c) => {
-      activeMap[c.element_id] = true;
+      const hasContent =
+        (c.notes && c.notes.trim() !== "") ||
+        (c.links &&
+          c.links.length > 0 &&
+          c.links.some((l) => l.url && l.url.trim() !== "")) ||
+        (c.code_snippet && c.code_snippet.trim() !== "") ||
+        (c.files && c.files.length > 0);
+      if (hasContent) {
+        activeMap[c.element_id] = true;
+      }
     });
     return res.json(activeMap);
   } catch (err) {
@@ -572,9 +616,12 @@ app.get("/api/context/:whiteboardId", auth, async (req, res) => {
 });
 
 // GET single element context details
-app.get("/api/context/:whiteboardId/:elementId", auth, async (req, res) => {
+app.get("/api/context/:whiteboardId/:elementId", async (req, res) => {
   try {
     const { whiteboardId, elementId } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(whiteboardId)) {
+      return res.status(400).json({ error: "invalid_whiteboard_id" });
+    }
     let context = await ElementContext.findOne({
       whiteboard_id: whiteboardId,
       element_id: elementId,
@@ -597,21 +644,29 @@ app.get("/api/context/:whiteboardId/:elementId", auth, async (req, res) => {
   }
 });
 
-// POST update element context text fields
+// POST update element context text fields (preserves existing file attachments)
 app.post("/api/context/:whiteboardId/:elementId", auth, async (req, res) => {
   try {
     const { whiteboardId, elementId } = req.params;
-    const { notes, links, code_snippet, code_language } = req.body;
+    if (!mongoose.Types.ObjectId.isValid(whiteboardId)) {
+      return res.status(400).json({ error: "invalid_whiteboard_id" });
+    }
+    const { notes, links, code_snippet, code_language, files } = req.body;
+
+    const updateFields = {
+      notes: notes !== undefined ? notes : "",
+      links: links || [],
+      code_snippet: code_snippet !== undefined ? code_snippet : "",
+      code_language: code_language || "javascript",
+    };
+    if (files !== undefined) {
+      updateFields.files = files;
+    }
 
     const context = await ElementContext.findOneAndUpdate(
       { whiteboard_id: whiteboardId, element_id: elementId },
-      {
-        notes: notes !== undefined ? notes : "",
-        links: links || [],
-        code_snippet: code_snippet !== undefined ? code_snippet : "",
-        code_language: code_language || "javascript",
-      },
-      { new: true, upsert: true },
+      { $set: updateFields },
+      { new: true, upsert: true, setDefaultsOnInsert: true },
     );
     return res.json(context);
   } catch (err) {
@@ -631,6 +686,9 @@ app.post(
         return res.status(400).json({ error: "no_file_uploaded" });
       }
       const { whiteboardId, elementId } = req.params;
+      if (!mongoose.Types.ObjectId.isValid(whiteboardId)) {
+        return res.status(400).json({ error: "invalid_whiteboard_id" });
+      }
       const fileUrl = `/uploads/${req.file.filename}`;
 
       const context = await ElementContext.findOneAndUpdate(
@@ -641,10 +699,11 @@ app.post(
               name: req.file.originalname,
               path: fileUrl,
               mimetype: req.file.mimetype,
+              size: req.file.size || 0,
             },
           },
         },
-        { new: true, upsert: true },
+        { new: true, upsert: true, setDefaultsOnInsert: true },
       );
       return res.json(context);
     } catch (err) {
@@ -661,12 +720,38 @@ app.delete(
   async (req, res) => {
     try {
       const { whiteboardId, elementId, fileId } = req.params;
+      if (!mongoose.Types.ObjectId.isValid(whiteboardId)) {
+        return res.status(400).json({ error: "invalid_whiteboard_id" });
+      }
+
+      // Clean up physical file from uploads folder if it exists
+      const existing = await ElementContext.findOne({
+        whiteboard_id: whiteboardId,
+        element_id: elementId,
+      });
+      if (existing && Array.isArray(existing.files)) {
+        const targetFile = existing.files.find(
+          (f) => String(f._id) === String(fileId),
+        );
+        if (targetFile && targetFile.path) {
+          const diskFilename = path.basename(targetFile.path);
+          const diskPath = path.join(uploadsDir, diskFilename);
+          if (fs.existsSync(diskPath)) {
+            try {
+              fs.unlinkSync(diskPath);
+            } catch (unlinkErr) {
+              console.error("Failed to delete physical file", unlinkErr);
+            }
+          }
+        }
+      }
+
       const context = await ElementContext.findOneAndUpdate(
         { whiteboard_id: whiteboardId, element_id: elementId },
         { $pull: { files: { _id: fileId } } },
         { new: true },
       );
-      return res.json(context);
+      return res.json(context || { files: [] });
     } catch (err) {
       console.error("Failed to delete file from context", err);
       return res.status(500).json({ error: "delete_file_failed" });

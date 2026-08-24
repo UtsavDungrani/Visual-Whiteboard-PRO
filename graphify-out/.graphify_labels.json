@@ -1,12 +1,12 @@
 {
-  "0": "Frontend Package Configuration",
+  "0": "frontend/package.json",
   "1": "index.js",
   "2": "Project Description and Requirements",
   "3": "dependencies",
   "4": "Visual Whiteboard Pro",
   "5": "Frontend Application & Collaboration UI",
   "6": "App.jsx",
-  "7": "server/package.json",
+  "7": "useConnectorSync.js",
   "8": "package.json",
   "9": "context.test.js",
   "10": "pathLassoSplit.js",
@@ -20,11 +20,11 @@
   "18": "workflows/graphify.md",
   "19": "copilot-instructions.md",
   "20": "app",
-  "21": "useConnectorTool.js",
+  "21": "App",
   "22": "sockets.test.js",
-  "23": "ai.test.js",
+  "23": "server/package.json",
   "24": "whiteboards.test.js",
-  "25": "ai.service.js",
-  "26": "auth.js",
-  "27": "App"
+  "25": "ai.test.js",
+  "26": "ai.service.js",
+  "27": "auth.js"
 }

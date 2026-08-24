@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 
 const LANGUAGES = [
   { value: "javascript", label: "JavaScript" },
@@ -13,6 +13,16 @@ const rawApiUrl = import.meta.env.VITE_API_URL || "http://localhost:4000";
 const API_BASE_URL = rawApiUrl.endsWith("/")
   ? rawApiUrl.slice(0, -1)
   : rawApiUrl;
+
+const ensureAbsoluteUrl = (url) => {
+  if (!url || typeof url !== "string") return "";
+  const trimmed = url.trim();
+  if (!trimmed) return "";
+  if (/^[a-zA-Z][a-zA-Z\d+\-.]*:/.test(trimmed) || trimmed.startsWith("//")) {
+    return trimmed;
+  }
+  return `https://${trimmed}`;
+};
 
 export default function ContextPanel({
   isOpen,
@@ -32,13 +42,151 @@ export default function ContextPanel({
 
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [syncStatus, setSyncStatus] = useState("saved"); // "saved" | "saving" | "error"
   const [isNotesPreview, setIsNotesPreview] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [statusMessage, setStatusMessage] = useState({ type: "", text: "" });
 
+  const currentContextRef = useRef({
+    notes: "",
+    links: [],
+    codeSnippet: "",
+    codeLanguage: "javascript",
+  });
+  const autoSaveTimerRef = useRef(null);
+  const isDirtyRef = useRef(false);
+  const activeTargetRef = useRef({ whiteboardId, elementId });
+
+  // Keep refs updated with current state
+  useEffect(() => {
+    currentContextRef.current = {
+      notes,
+      links,
+      codeSnippet,
+      codeLanguage,
+    };
+  }, [notes, links, codeSnippet, codeLanguage]);
+
+  useEffect(() => {
+    activeTargetRef.current = { whiteboardId, elementId };
+  }, [whiteboardId, elementId]);
+
+  const formatFileSize = (bytes) => {
+    if (!bytes || bytes <= 0) return "";
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  };
+
+  // Perform API save
+  const performSave = useCallback(
+    async (manual = false, overrideTarget = null) => {
+      const targetWbId = overrideTarget
+        ? overrideTarget.whiteboardId
+        : activeTargetRef.current.whiteboardId;
+      const targetElId = overrideTarget
+        ? overrideTarget.elementId
+        : activeTargetRef.current.elementId;
+
+      if (!targetWbId || !targetElId || isReadOnly) return;
+
+      if (autoSaveTimerRef.current) {
+        clearTimeout(autoSaveTimerRef.current);
+        autoSaveTimerRef.current = null;
+      }
+
+      setSyncStatus("saving");
+      if (manual) {
+        setIsSaving(true);
+        setStatusMessage({ type: "", text: "" });
+      }
+
+      const {
+        notes: curNotes,
+        links: curLinks,
+        codeSnippet: curCodeSnippet,
+        codeLanguage: curCodeLanguage,
+      } = currentContextRef.current;
+
+      try {
+        const token = localStorage.getItem("wb_token");
+        const headers = { "Content-Type": "application/json" };
+        if (token) headers["Authorization"] = `Bearer ${token}`;
+
+        const res = await fetch(
+          `${API_BASE_URL}/api/context/${targetWbId}/${targetElId}`,
+          {
+            method: "POST",
+            headers,
+            body: JSON.stringify({
+              notes: curNotes,
+              links: curLinks,
+              code_snippet: curCodeSnippet,
+              code_language: curCodeLanguage,
+            }),
+          },
+        );
+
+        if (!res.ok) throw new Error("Save failed");
+        const data = await res.json();
+
+        isDirtyRef.current = false;
+        setSyncStatus("saved");
+
+        if (data.files) {
+          setFiles(data.files);
+        }
+
+        if (manual) {
+          setStatusMessage({
+            type: "success",
+            text: "Context saved successfully!",
+          });
+          setTimeout(() => setStatusMessage({ type: "", text: "" }), 3000);
+        }
+
+        if (onContextUpdated) {
+          const hasContent =
+            (curNotes && curNotes.trim() !== "") ||
+            (curLinks &&
+              curLinks.length > 0 &&
+              curLinks.some((l) => l.url && l.url.trim() !== "")) ||
+            (curCodeSnippet && curCodeSnippet.trim() !== "") ||
+            (data.files && data.files.length > 0);
+          onContextUpdated(targetElId, hasContent);
+        }
+      } catch (err) {
+        console.error("Context save error:", err);
+        setSyncStatus("error");
+        if (manual) {
+          setStatusMessage({ type: "error", text: "Failed to save context" });
+        }
+      } finally {
+        if (manual) setIsSaving(false);
+      }
+    },
+    [isReadOnly, onContextUpdated],
+  );
+
+  // Trigger debounced auto-save
+  const triggerAutoSave = useCallback(() => {
+    if (isReadOnly) return;
+    isDirtyRef.current = true;
+    setSyncStatus("saving");
+
+    if (autoSaveTimerRef.current) {
+      clearTimeout(autoSaveTimerRef.current);
+    }
+    autoSaveTimerRef.current = setTimeout(() => {
+      performSave(false);
+    }, 600);
+  }, [isReadOnly, performSave]);
+
   // Load context on mount / element change
   useEffect(() => {
     if (!whiteboardId || !elementId || !isOpen) return;
+
+    let isSubscribed = true;
 
     const fetchContext = async () => {
       setIsLoading(true);
@@ -53,89 +201,128 @@ export default function ContextPanel({
         );
         if (!res.ok) throw new Error("Failed to load element details");
         const data = await res.json();
-        setNotes(data.notes || "");
-        setLinks(data.links || []);
-        setCodeSnippet(data.code_snippet || "");
-        setCodeLanguage(data.code_language || "javascript");
-        setFiles(data.files || []);
-        if (isReadOnly) {
-          setIsNotesPreview(true);
+        if (isSubscribed) {
+          setNotes(data.notes || "");
+          setLinks(data.links || []);
+          setCodeSnippet(data.code_snippet || "");
+          setCodeLanguage(data.code_language || "javascript");
+          setFiles(data.files || []);
+          isDirtyRef.current = false;
+          setSyncStatus("saved");
+          if (isReadOnly) {
+            setIsNotesPreview(true);
+          }
         }
       } catch (err) {
         console.error("Error fetching context:", err);
-        setStatusMessage({
-          type: "error",
-          text: "Failed to load element details",
-        });
+        if (isSubscribed) {
+          setStatusMessage({
+            type: "error",
+            text: "Failed to load element details",
+          });
+        }
       } finally {
-        setIsLoading(false);
+        if (isSubscribed) {
+          setIsLoading(false);
+        }
       }
     };
 
     fetchContext();
-  }, [whiteboardId, elementId, isOpen]);
 
-  // Save text-based context (notes, links, code)
-  const handleSave = async () => {
-    if (!whiteboardId || !elementId) return;
-    setIsSaving(true);
-    setStatusMessage({ type: "", text: "" });
-
-    try {
-      const token = localStorage.getItem("wb_token");
-      const headers = { "Content-Type": "application/json" };
-      if (token) headers["Authorization"] = `Bearer ${token}`;
-      const res = await fetch(
-        `${API_BASE_URL}/api/context/${whiteboardId}/${elementId}`,
-        {
-          method: "POST",
-          headers,
-          body: JSON.stringify({
-            notes,
-            links,
-            code_snippet: codeSnippet,
-            code_language: codeLanguage,
-          }),
-        },
-      );
-
-      if (!res.ok) throw new Error("Save failed");
-      const data = await res.json();
-
-      setStatusMessage({
-        type: "success",
-        text: "Context saved successfully!",
-      });
-      if (onContextUpdated) {
-        onContextUpdated(elementId, true);
+    return () => {
+      isSubscribed = false;
+      if (isDirtyRef.current) {
+        performSave(false, { whiteboardId, elementId });
       }
-      setTimeout(() => setStatusMessage({ type: "", text: "" }), 3000);
-    } catch (err) {
-      console.error("Save error:", err);
-      setStatusMessage({ type: "error", text: "Failed to save context" });
-    } finally {
-      setIsSaving(false);
+    };
+  }, [whiteboardId, elementId, isOpen, isReadOnly, performSave]);
+
+  // Save text-based context explicitly
+  const handleSave = () => {
+    if (!whiteboardId) {
+      setStatusMessage({
+        type: "error",
+        text: "Please save the whiteboard first before saving context.",
+      });
+      return;
     }
+    if (!elementId) {
+      setStatusMessage({
+        type: "error",
+        text: "No element selected.",
+      });
+      return;
+    }
+    performSave(true);
+  };
+
+  // Notes change handler
+  const handleNotesChange = (e) => {
+    setNotes(e.target.value);
+    triggerAutoSave();
   };
 
   // Link modification functions
   const handleAddLink = () => {
-    setLinks([...links, { label: "", url: "" }]);
+    const updated = [...links, { label: "", url: "" }];
+    setLinks(updated);
+    triggerAutoSave();
   };
 
   const handleLinkChange = (index, field, value) => {
     const updated = [...links];
-    updated[index][field] = value;
+    updated[index] = { ...updated[index], [field]: value };
     setLinks(updated);
+    triggerAutoSave();
   };
 
   const handleRemoveLink = (index) => {
-    setLinks(links.filter((_, idx) => idx !== index));
+    const updated = links.filter((_, idx) => idx !== index);
+    setLinks(updated);
+    triggerAutoSave();
+  };
+
+  // Code change handlers
+  const handleCodeChange = (e) => {
+    setCodeSnippet(e.target.value);
+    triggerAutoSave();
+  };
+
+  const handleCodeLanguageChange = (e) => {
+    setCodeLanguage(e.target.value);
+    triggerAutoSave();
   };
 
   // File Upload Handlers
   const handleFileUpload = async (file) => {
     if (!file) return;
+
+    if (!whiteboardId) {
+      setStatusMessage({
+        type: "error",
+        text: "Please save the whiteboard first before uploading attachments.",
+      });
+      return;
+    }
+    if (!elementId) {
+      setStatusMessage({
+        type: "error",
+        text: "No element selected to attach file to.",
+      });
+      return;
+    }
+
+    // 10MB limit check
+    const MAX_SIZE = 10 * 1024 * 1024;
+    if (file.size > MAX_SIZE) {
+      setStatusMessage({
+        type: "error",
+        text: `File "${file.name}" exceeds the 10MB limit (${formatFileSize(file.size)}).`,
+      });
+      return;
+    }
+
     setIsLoading(true);
     setStatusMessage({ type: "", text: "" });
 
@@ -154,7 +341,10 @@ export default function ContextPanel({
           body: formData,
         },
       );
-      if (!res.ok) throw new Error("Upload failed");
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || "Upload failed");
+      }
       const data = await res.json();
       setFiles(data.files || []);
       setStatusMessage({
@@ -167,7 +357,12 @@ export default function ContextPanel({
       setTimeout(() => setStatusMessage({ type: "", text: "" }), 3000);
     } catch (err) {
       console.error("File upload error:", err);
-      setStatusMessage({ type: "error", text: "File upload failed" });
+      setStatusMessage({
+        type: "error",
+        text: err.message
+          ? `Upload failed: ${err.message}`
+          : "File upload failed",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -176,6 +371,7 @@ export default function ContextPanel({
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       handleFileUpload(e.target.files[0]);
+      e.target.value = "";
     }
   };
 
@@ -199,6 +395,7 @@ export default function ContextPanel({
   };
 
   const handleRemoveFile = async (fileId) => {
+    if (!whiteboardId || !elementId) return;
     if (
       !window.confirm("Are you sure you want to delete this file attachment?")
     )
@@ -264,7 +461,8 @@ export default function ContextPanel({
     // Links: [text](url)
     html = html.replace(
       /\[([^\]]+)\]\(([^)]+)\)/g,
-      '<a href="$2" target="_blank" rel="noopener noreferrer" class="md-link">$1 ↗</a>',
+      (_, text, url) =>
+        `<a href="${ensureAbsoluteUrl(url)}" target="_blank" rel="noopener noreferrer" class="md-link">${text} ↗</a>`,
     );
 
     // Lines
@@ -347,14 +545,28 @@ export default function ContextPanel({
     <div className={`context-panel-drawer ${isOpen ? "open" : ""}`}>
       <div className="context-panel-header">
         <div className="header-info">
-          <h3>Context Details</h3>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <h3>Context Details</h3>
+            {whiteboardId && !isReadOnly && (
+              <span className={`context-sync-indicator ${syncStatus}`}>
+                {syncStatus === "saving" && "Saving..."}
+                {syncStatus === "saved" && "Saved ✓"}
+                {syncStatus === "error" && "Save failed"}
+              </span>
+            )}
+          </div>
           <span className="element-badge">
             {elementName || "Selected Shape"}
           </span>
         </div>
         <button
           className="btn-close"
-          onClick={onClose}
+          onClick={() => {
+            if (isDirtyRef.current) {
+              performSave(false);
+            }
+            onClose();
+          }}
           title="Close Context Inspector"
         >
           <svg
@@ -377,6 +589,20 @@ export default function ContextPanel({
       {statusMessage.text && (
         <div className={`context-status-bar ${statusMessage.type}`}>
           {statusMessage.text}
+        </div>
+      )}
+
+      {!whiteboardId && (
+        <div
+          className="context-status-bar error"
+          style={{
+            background: "#fffbeb",
+            color: "#92400e",
+            border: "1px solid #fde68a",
+          }}
+        >
+          ⚠️ Whiteboard not saved yet. Please click &quot;Save&quot; in the top
+          bar to enable persistent file attachments and context.
         </div>
       )}
 
@@ -420,7 +646,7 @@ export default function ContextPanel({
             className="fa-solid fa-paperclip"
             style={{ marginRight: "6px" }}
           ></i>
-          Files
+          Files ({files.length})
         </button>
       </div>
 
@@ -450,7 +676,9 @@ export default function ContextPanel({
                 className="notes-textarea"
                 placeholder="Write markdown notes for this element here..."
                 value={notes}
-                onChange={(e) => setNotes(e.target.value)}
+                onChange={handleNotesChange}
+                onBlur={() => performSave(false)}
+                disabled={isReadOnly}
               />
             )}
           </div>
@@ -483,10 +711,11 @@ export default function ContextPanel({
                       type="text"
                       placeholder="Link Label (e.g. API Docs)"
                       className="link-input label-input"
-                      value={link.label}
+                      value={link.label || ""}
                       onChange={(e) =>
                         handleLinkChange(index, "label", e.target.value)
                       }
+                      onBlur={() => performSave(false)}
                       disabled={isReadOnly}
                     />
                     <div className="link-row">
@@ -494,10 +723,11 @@ export default function ContextPanel({
                         type="url"
                         placeholder="https://example.com"
                         className="link-input url-input"
-                        value={link.url}
+                        value={link.url || ""}
                         onChange={(e) =>
                           handleLinkChange(index, "url", e.target.value)
                         }
+                        onBlur={() => performSave(false)}
                         disabled={isReadOnly}
                       />
                       {!isReadOnly && (
@@ -524,7 +754,7 @@ export default function ContextPanel({
                     </div>
                     {link.url && (
                       <a
-                        href={link.url}
+                        href={ensureAbsoluteUrl(link.url)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="link-test-btn"
@@ -548,7 +778,7 @@ export default function ContextPanel({
                 <select
                   className="language-dropdown"
                   value={codeLanguage}
-                  onChange={(e) => setCodeLanguage(e.target.value)}
+                  onChange={handleCodeLanguageChange}
                 >
                   {LANGUAGES.map((lang) => (
                     <option key={lang.value} value={lang.value}>
@@ -564,7 +794,8 @@ export default function ContextPanel({
                 className="code-textarea"
                 placeholder="Paste or write your code snippet here..."
                 value={codeSnippet}
-                onChange={(e) => setCodeSnippet(e.target.value)}
+                onChange={handleCodeChange}
+                onBlur={() => performSave(false)}
               />
             ) : (
               !codeSnippet && (
@@ -653,15 +884,37 @@ export default function ContextPanel({
                         <span className="file-name" title={file.name}>
                           {file.name}
                         </span>
-                        <a
-                          href={`${API_BASE_URL}${file.path}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="file-download-link"
-                          download={file.name}
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "8px",
+                            alignItems: "center",
+                          }}
                         >
-                          Download file
-                        </a>
+                          {file.size > 0 && (
+                            <span
+                              style={{
+                                fontSize: "10px",
+                                color: "var(--color-text-muted)",
+                              }}
+                            >
+                              {formatFileSize(file.size)}
+                            </span>
+                          )}
+                          <a
+                            href={
+                              file.path?.startsWith("http")
+                                ? file.path
+                                : `${API_BASE_URL}${file.path?.startsWith("/") ? file.path : `/${file.path || ""}`}`
+                            }
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="file-download-link"
+                            download={file.name}
+                          >
+                            Download file
+                          </a>
+                        </div>
                       </div>
                     </div>
                     {!isReadOnly && (
