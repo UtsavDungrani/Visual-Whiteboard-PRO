@@ -1,5 +1,8 @@
 export default [
   {
+    ignores: ["drawio-dev/**", "graphify-out/**", "dist/**", "build/**"],
+  },
+  {
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: "module",

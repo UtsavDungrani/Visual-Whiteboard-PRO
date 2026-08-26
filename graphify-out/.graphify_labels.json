@@ -19,12 +19,7 @@
   "17": "rules/graphify.md",
   "18": "workflows/graphify.md",
   "19": "copilot-instructions.md",
-  "20": "app",
+  "20": "vite.config.js",
   "21": "App",
-  "22": "sockets.test.js",
-  "23": "server/package.json",
-  "24": "whiteboards.test.js",
-  "25": "ai.test.js",
-  "26": "ai.service.js",
-  "27": "auth.js"
+  "23": "server/package.json"
 }

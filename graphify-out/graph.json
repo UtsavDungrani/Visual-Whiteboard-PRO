@@ -4,6 +4,30 @@
   "graph": {},
   "nodes": [
     {
+      "id": "server_ai_service_architectureassist",
+      "label": "architectureAssist()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "architectureassist()",
+      "source_file": "server/ai.service.js",
+      "source_location": "L234"
+    },
+    {
+      "id": "server_ai_service_cleanuplayout",
+      "label": "cleanupLayout()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "cleanuplayout()",
+      "source_file": "server/ai.service.js",
+      "source_location": "L13"
+    },
+    {
       "id": "server_index_broadcastroomusers",
       "label": "broadcastRoomUsers()",
       "_callable": true,
@@ -13,7 +37,7 @@
       "file_type": "code",
       "norm_label": "broadcastroomusers()",
       "source_file": "server/index.js",
-      "source_location": "L982"
+      "source_location": "L990"
     },
     {
       "id": "server_index_isredisenabled",
@@ -25,7 +49,7 @@
       "file_type": "code",
       "norm_label": "isredisenabled()",
       "source_file": "server/index.js",
-      "source_location": "L103"
+      "source_location": "L109"
     },
     {
       "id": "server_index_seedadminuser",
@@ -37,7 +61,7 @@
       "file_type": "code",
       "norm_label": "seedadminuser()",
       "source_file": "server/index.js",
-      "source_location": "L1237"
+      "source_location": "L1245"
     },
     {
       "id": "server_index_slugifytitle",
@@ -49,7 +73,7 @@
       "file_type": "code",
       "norm_label": "slugifytitle()",
       "source_file": "server/index.js",
-      "source_location": "L314"
+      "source_location": "L320"
     },
     {
       "id": "server_index_startserver",
@@ -61,7 +85,7 @@
       "file_type": "code",
       "norm_label": "startserver()",
       "source_file": "server/index.js",
-      "source_location": "L1198"
+      "source_location": "L1206"
     },
     {
       "id": "frontend_src_pathlassosplit_bboxcornersinpolygon",
@@ -373,7 +397,7 @@
       "file_type": "code",
       "norm_label": "app()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L182"
+      "source_location": "L186"
     },
     {
       "id": "frontend_src_app_app_addnewelement",
@@ -385,7 +409,7 @@
       "file_type": "code",
       "norm_label": "addnewelement()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2529"
+      "source_location": "L2563"
     },
     {
       "id": "frontend_src_app_app_applyremotecanvas",
@@ -397,7 +421,7 @@
       "file_type": "code",
       "norm_label": "applyremotecanvas()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1486"
+      "source_location": "L1520"
     },
     {
       "id": "frontend_src_app_app_attachfabriclisteners",
@@ -409,7 +433,7 @@
       "file_type": "code",
       "norm_label": "attachfabriclisteners()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1563"
+      "source_location": "L1597"
     },
     {
       "id": "frontend_src_app_app_debounce",
@@ -421,7 +445,7 @@
       "file_type": "code",
       "norm_label": "debounce()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1379"
+      "source_location": "L1413"
     },
     {
       "id": "frontend_src_app_app_flushpendingremotecanvas",
@@ -433,7 +457,7 @@
       "file_type": "code",
       "norm_label": "flushpendingremotecanvas()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1512"
+      "source_location": "L1546"
     },
     {
       "id": "frontend_src_app_app_loadboard",
@@ -445,7 +469,7 @@
       "file_type": "code",
       "norm_label": "loadboard()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3269"
+      "source_location": "L3305"
     },
     {
       "id": "frontend_src_app_app_loadboardbyid",
@@ -457,7 +481,7 @@
       "file_type": "code",
       "norm_label": "loadboardbyid()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3275"
+      "source_location": "L3311"
     },
     {
       "id": "frontend_src_app_app_saveboard",
@@ -469,7 +493,7 @@
       "file_type": "code",
       "norm_label": "saveboard()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3196"
+      "source_location": "L3230"
     },
     {
       "id": "frontend_src_app_app_throttle",
@@ -481,7 +505,7 @@
       "file_type": "code",
       "norm_label": "throttle()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1388"
+      "source_location": "L1422"
     },
     {
       "id": "frontend_src_app_app_updateinspectorproperties",
@@ -493,7 +517,7 @@
       "file_type": "code",
       "norm_label": "updateinspectorproperties()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1520"
+      "source_location": "L1554"
     },
     {
       "id": "frontend_src_app_getboardurl",
@@ -505,7 +529,7 @@
       "file_type": "code",
       "norm_label": "getboardurl()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L49"
+      "source_location": "L50"
     },
     {
       "id": "frontend_src_app_parseboardidfromurl",
@@ -517,7 +541,7 @@
       "file_type": "code",
       "norm_label": "parseboardidfromurl()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L63"
+      "source_location": "L64"
     },
     {
       "id": "frontend_src_app_slugifytitle",
@@ -529,31 +553,7 @@
       "file_type": "code",
       "norm_label": "slugifytitle()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L38"
-    },
-    {
-      "id": "server_ai_service_architectureassist",
-      "label": "architectureAssist()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "ai.service.js",
-      "file_type": "code",
-      "norm_label": "architectureassist()",
-      "source_file": "server/ai.service.js",
-      "source_location": "L234"
-    },
-    {
-      "id": "server_ai_service_cleanuplayout",
-      "label": "cleanupLayout()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "ai.service.js",
-      "file_type": "code",
-      "norm_label": "cleanuplayout()",
-      "source_file": "server/ai.service.js",
-      "source_location": "L13"
+      "source_location": "L39"
     },
     {
       "id": "frontend_src_app_contextbadgesoverlay",
@@ -565,7 +565,7 @@
       "file_type": "code",
       "norm_label": "contextbadgesoverlay()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L79"
+      "source_location": "L80"
     },
     {
       "id": "frontend_src_components_assistpanel_assistpanel",
@@ -661,6 +661,18 @@
       "file_type": "code",
       "norm_label": "dashboardpage()",
       "source_file": "frontend/src/components/DashboardPage.jsx",
+      "source_location": "L3"
+    },
+    {
+      "id": "frontend_src_components_drawiocanvas_drawiocanvas",
+      "label": "DrawioCanvas()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "drawiocanvas()",
+      "source_file": "frontend/src/components/DrawioCanvas.jsx",
       "source_location": "L3"
     },
     {
@@ -1146,6 +1158,17 @@
       "source_location": "L18"
     },
     {
+      "id": "server_ai_service",
+      "label": "ai.service.js",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "ai.service.js",
+      "source_file": "server/ai.service.js",
+      "source_location": "L1"
+    },
+    {
       "id": "server_index",
       "label": "index.js",
       "_origin": "ast",
@@ -1165,7 +1188,7 @@
       "file_type": "code",
       "norm_label": "activeusers",
       "source_file": "server/index.js",
-      "source_location": "L980"
+      "source_location": "L988"
     },
     {
       "id": "server_index_admin",
@@ -1187,7 +1210,7 @@
       "file_type": "code",
       "norm_label": "ailimiter",
       "source_file": "server/index.js",
-      "source_location": "L581"
+      "source_location": "L587"
     },
     {
       "id": "server_index_auth",
@@ -1209,7 +1232,7 @@
       "file_type": "code",
       "norm_label": "authlimiter",
       "source_file": "server/index.js",
-      "source_location": "L125"
+      "source_location": "L131"
     },
     {
       "id": "server_index_bcrypt",
@@ -1243,6 +1266,17 @@
       "norm_label": "{ createadapter }",
       "source_file": "server/index.js",
       "source_location": "L19"
+    },
+    {
+      "id": "server_index_drawiodir",
+      "label": "drawioDir",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "drawiodir",
+      "source_file": "server/index.js",
+      "source_location": "L50"
     },
     {
       "id": "server_index_elementcontext",
@@ -1287,6 +1321,28 @@
       "norm_label": "http",
       "source_file": "server/index.js",
       "source_location": "L3"
+    },
+    {
+      "id": "server_index_httpserver",
+      "label": "httpServer",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "httpserver",
+      "source_file": "server/index.js",
+      "source_location": "L939"
+    },
+    {
+      "id": "server_index_io",
+      "label": "io",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "io",
+      "source_file": "server/index.js",
+      "source_location": "L940"
     },
     {
       "id": "server_index_jwt",
@@ -1429,7 +1485,7 @@
       "file_type": "code",
       "norm_label": "whiteboards",
       "source_file": "server/index.js",
-      "source_location": "L110"
+      "source_location": "L116"
     },
     {
       "id": "server_middleware_admin",
@@ -1440,6 +1496,72 @@
       "file_type": "code",
       "norm_label": "middleware/admin.js",
       "source_file": "server/middleware/admin.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_middleware_auth",
+      "label": "auth.js",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "auth.js",
+      "source_file": "server/middleware/auth.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_middleware_auth_jwt",
+      "label": "jwt",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "jwt",
+      "source_file": "server/middleware/auth.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_tests_sockets_test",
+      "label": "sockets.test.js",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "sockets.test.js",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_tests_sockets_test_app_httpserver_io",
+      "label": "{ app, httpServer, io }",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "{ app, httpserver, io }",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L3"
+    },
+    {
+      "id": "server_tests_sockets_test_http",
+      "label": "http",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "http",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L2"
+    },
+    {
+      "id": "server_tests_sockets_test_ioclient",
+      "label": "ioClient",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "ioclient",
+      "source_file": "server/tests/sockets.test.js",
       "source_location": "L1"
     },
     {
@@ -2012,102 +2134,14 @@
       "source_location": "L1"
     },
     {
-      "id": "server_index_app",
-      "label": "app",
+      "id": "frontend_vite_config",
+      "label": "vite.config.js",
       "_origin": "ast",
       "community": 20,
-      "community_name": "app",
+      "community_name": "vite.config.js",
       "file_type": "code",
-      "norm_label": "app",
-      "source_file": "server/index.js",
-      "source_location": "L5"
-    },
-    {
-      "id": "server_tests_auth_test",
-      "label": "auth.test.js",
-      "_origin": "ast",
-      "community": 20,
-      "community_name": "app",
-      "file_type": "code",
-      "norm_label": "auth.test.js",
-      "source_file": "server/tests/auth.test.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_tests_auth_test_app",
-      "label": "{ app }",
-      "_origin": "ast",
-      "community": 20,
-      "community_name": "app",
-      "file_type": "code",
-      "norm_label": "{ app }",
-      "source_file": "server/tests/auth.test.js",
-      "source_location": "L2"
-    },
-    {
-      "id": "server_tests_auth_test_mongoose",
-      "label": "mongoose",
-      "_origin": "ast",
-      "community": 20,
-      "community_name": "app",
-      "file_type": "code",
-      "norm_label": "mongoose",
-      "source_file": "server/tests/auth.test.js",
-      "source_location": "L3"
-    },
-    {
-      "id": "server_tests_auth_test_request",
-      "label": "request",
-      "_origin": "ast",
-      "community": 20,
-      "community_name": "app",
-      "file_type": "code",
-      "norm_label": "request",
-      "source_file": "server/tests/auth.test.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_tests_auth_test_user",
-      "label": "User",
-      "_origin": "ast",
-      "community": 20,
-      "community_name": "app",
-      "file_type": "code",
-      "norm_label": "user",
-      "source_file": "server/tests/auth.test.js",
-      "source_location": "L4"
-    },
-    {
-      "id": "server_tests_health_test",
-      "label": "health.test.js",
-      "_origin": "ast",
-      "community": 20,
-      "community_name": "app",
-      "file_type": "code",
-      "norm_label": "health.test.js",
-      "source_file": "server/tests/health.test.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_tests_health_test_app",
-      "label": "{ app }",
-      "_origin": "ast",
-      "community": 20,
-      "community_name": "app",
-      "file_type": "code",
-      "norm_label": "{ app }",
-      "source_file": "server/tests/health.test.js",
-      "source_location": "L2"
-    },
-    {
-      "id": "server_tests_health_test_request",
-      "label": "request",
-      "_origin": "ast",
-      "community": 20,
-      "community_name": "app",
-      "file_type": "code",
-      "norm_label": "request",
-      "source_file": "server/tests/health.test.js",
+      "norm_label": "vite.config.js",
+      "source_file": "frontend/vite.config.js",
       "source_location": "L1"
     },
     {
@@ -2119,72 +2153,6 @@
       "file_type": "code",
       "norm_label": "main.jsx",
       "source_file": "frontend/src/main.jsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_index_httpserver",
-      "label": "httpServer",
-      "_origin": "ast",
-      "community": 22,
-      "community_name": "sockets.test.js",
-      "file_type": "code",
-      "norm_label": "httpserver",
-      "source_file": "server/index.js",
-      "source_location": "L931"
-    },
-    {
-      "id": "server_index_io",
-      "label": "io",
-      "_origin": "ast",
-      "community": 22,
-      "community_name": "sockets.test.js",
-      "file_type": "code",
-      "norm_label": "io",
-      "source_file": "server/index.js",
-      "source_location": "L932"
-    },
-    {
-      "id": "server_tests_sockets_test",
-      "label": "sockets.test.js",
-      "_origin": "ast",
-      "community": 22,
-      "community_name": "sockets.test.js",
-      "file_type": "code",
-      "norm_label": "sockets.test.js",
-      "source_file": "server/tests/sockets.test.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_tests_sockets_test_app_httpserver_io",
-      "label": "{ app, httpServer, io }",
-      "_origin": "ast",
-      "community": 22,
-      "community_name": "sockets.test.js",
-      "file_type": "code",
-      "norm_label": "{ app, httpserver, io }",
-      "source_file": "server/tests/sockets.test.js",
-      "source_location": "L3"
-    },
-    {
-      "id": "server_tests_sockets_test_http",
-      "label": "http",
-      "_origin": "ast",
-      "community": 22,
-      "community_name": "sockets.test.js",
-      "file_type": "code",
-      "norm_label": "http",
-      "source_file": "server/tests/sockets.test.js",
-      "source_location": "L2"
-    },
-    {
-      "id": "server_tests_sockets_test_ioclient",
-      "label": "ioClient",
-      "_origin": "ast",
-      "community": 22,
-      "community_name": "sockets.test.js",
-      "file_type": "code",
-      "norm_label": "ioclient",
-      "source_file": "server/tests/sockets.test.js",
       "source_location": "L1"
     },
     {
@@ -2351,248 +2319,6 @@
       "norm_label": "supertest",
       "source_file": "server/package.json",
       "source_location": "L26"
-    },
-    {
-      "id": "server_models_whiteboard",
-      "label": "Whiteboard.js",
-      "_origin": "ast",
-      "community": 24,
-      "community_name": "whiteboards.test.js",
-      "file_type": "code",
-      "norm_label": "whiteboard.js",
-      "source_file": "server/models/Whiteboard.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_models_whiteboard_mongoose",
-      "label": "mongoose",
-      "_origin": "ast",
-      "community": 24,
-      "community_name": "whiteboards.test.js",
-      "file_type": "code",
-      "norm_label": "mongoose",
-      "source_file": "server/models/Whiteboard.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_models_whiteboard_whiteboardschema",
-      "label": "WhiteboardSchema",
-      "_origin": "ast",
-      "community": 24,
-      "community_name": "whiteboards.test.js",
-      "file_type": "code",
-      "norm_label": "whiteboardschema",
-      "source_file": "server/models/Whiteboard.js",
-      "source_location": "L4"
-    },
-    {
-      "id": "server_tests_whiteboards_test",
-      "label": "whiteboards.test.js",
-      "_origin": "ast",
-      "community": 24,
-      "community_name": "whiteboards.test.js",
-      "file_type": "code",
-      "norm_label": "whiteboards.test.js",
-      "source_file": "server/tests/whiteboards.test.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_tests_whiteboards_test_app",
-      "label": "{ app }",
-      "_origin": "ast",
-      "community": 24,
-      "community_name": "whiteboards.test.js",
-      "file_type": "code",
-      "norm_label": "{ app }",
-      "source_file": "server/tests/whiteboards.test.js",
-      "source_location": "L2"
-    },
-    {
-      "id": "server_tests_whiteboards_test_jwt",
-      "label": "jwt",
-      "_origin": "ast",
-      "community": 24,
-      "community_name": "whiteboards.test.js",
-      "file_type": "code",
-      "norm_label": "jwt",
-      "source_file": "server/tests/whiteboards.test.js",
-      "source_location": "L6"
-    },
-    {
-      "id": "server_tests_whiteboards_test_mongoose",
-      "label": "mongoose",
-      "_origin": "ast",
-      "community": 24,
-      "community_name": "whiteboards.test.js",
-      "file_type": "code",
-      "norm_label": "mongoose",
-      "source_file": "server/tests/whiteboards.test.js",
-      "source_location": "L3"
-    },
-    {
-      "id": "server_tests_whiteboards_test_request",
-      "label": "request",
-      "_origin": "ast",
-      "community": 24,
-      "community_name": "whiteboards.test.js",
-      "file_type": "code",
-      "norm_label": "request",
-      "source_file": "server/tests/whiteboards.test.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_tests_whiteboards_test_user",
-      "label": "User",
-      "_origin": "ast",
-      "community": 24,
-      "community_name": "whiteboards.test.js",
-      "file_type": "code",
-      "norm_label": "user",
-      "source_file": "server/tests/whiteboards.test.js",
-      "source_location": "L4"
-    },
-    {
-      "id": "server_tests_whiteboards_test_whiteboard",
-      "label": "Whiteboard",
-      "_origin": "ast",
-      "community": 24,
-      "community_name": "whiteboards.test.js",
-      "file_type": "code",
-      "norm_label": "whiteboard",
-      "source_file": "server/tests/whiteboards.test.js",
-      "source_location": "L5"
-    },
-    {
-      "id": "server_models_user",
-      "label": "User.js",
-      "_origin": "ast",
-      "community": 25,
-      "community_name": "ai.test.js",
-      "file_type": "code",
-      "norm_label": "user.js",
-      "source_file": "server/models/User.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_models_user_mongoose",
-      "label": "mongoose",
-      "_origin": "ast",
-      "community": 25,
-      "community_name": "ai.test.js",
-      "file_type": "code",
-      "norm_label": "mongoose",
-      "source_file": "server/models/User.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_models_user_userschema",
-      "label": "UserSchema",
-      "_origin": "ast",
-      "community": 25,
-      "community_name": "ai.test.js",
-      "file_type": "code",
-      "norm_label": "userschema",
-      "source_file": "server/models/User.js",
-      "source_location": "L4"
-    },
-    {
-      "id": "server_tests_ai_test",
-      "label": "ai.test.js",
-      "_origin": "ast",
-      "community": 25,
-      "community_name": "ai.test.js",
-      "file_type": "code",
-      "norm_label": "ai.test.js",
-      "source_file": "server/tests/ai.test.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_tests_ai_test_app",
-      "label": "{ app }",
-      "_origin": "ast",
-      "community": 25,
-      "community_name": "ai.test.js",
-      "file_type": "code",
-      "norm_label": "{ app }",
-      "source_file": "server/tests/ai.test.js",
-      "source_location": "L2"
-    },
-    {
-      "id": "server_tests_ai_test_jwt",
-      "label": "jwt",
-      "_origin": "ast",
-      "community": 25,
-      "community_name": "ai.test.js",
-      "file_type": "code",
-      "norm_label": "jwt",
-      "source_file": "server/tests/ai.test.js",
-      "source_location": "L5"
-    },
-    {
-      "id": "server_tests_ai_test_mongoose",
-      "label": "mongoose",
-      "_origin": "ast",
-      "community": 25,
-      "community_name": "ai.test.js",
-      "file_type": "code",
-      "norm_label": "mongoose",
-      "source_file": "server/tests/ai.test.js",
-      "source_location": "L3"
-    },
-    {
-      "id": "server_tests_ai_test_request",
-      "label": "request",
-      "_origin": "ast",
-      "community": 25,
-      "community_name": "ai.test.js",
-      "file_type": "code",
-      "norm_label": "request",
-      "source_file": "server/tests/ai.test.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_tests_ai_test_user",
-      "label": "User",
-      "_origin": "ast",
-      "community": 25,
-      "community_name": "ai.test.js",
-      "file_type": "code",
-      "norm_label": "user",
-      "source_file": "server/tests/ai.test.js",
-      "source_location": "L4"
-    },
-    {
-      "id": "server_ai_service",
-      "label": "ai.service.js",
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "ai.service.js",
-      "file_type": "code",
-      "norm_label": "ai.service.js",
-      "source_file": "server/ai.service.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_middleware_auth",
-      "label": "auth.js",
-      "_origin": "ast",
-      "community": 27,
-      "community_name": "auth.js",
-      "file_type": "code",
-      "norm_label": "auth.js",
-      "source_file": "server/middleware/auth.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_middleware_auth_jwt",
-      "label": "jwt",
-      "_origin": "ast",
-      "community": 27,
-      "community_name": "auth.js",
-      "file_type": "code",
-      "norm_label": "jwt",
-      "source_file": "server/middleware/auth.js",
-      "source_location": "L1"
     },
     {
       "id": "server_package_dependencies",
@@ -3071,7 +2797,7 @@
       "file_type": "code",
       "norm_label": "reserved_routes",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L54"
+      "source_location": "L55"
     },
     {
       "id": "frontend_src_components_assistpanel",
@@ -3159,6 +2885,17 @@
       "file_type": "code",
       "norm_label": "dashboardpage.jsx",
       "source_file": "frontend/src/components/DashboardPage.jsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "frontend_src_components_drawiocanvas",
+      "label": "DrawioCanvas.jsx",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "drawiocanvas.jsx",
+      "source_file": "frontend/src/components/DrawioCanvas.jsx",
       "source_location": "L1"
     },
     {
@@ -3679,6 +3416,17 @@
       "source_location": "L30"
     },
     {
+      "id": "server_index_app",
+      "label": "app",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "app",
+      "source_file": "server/index.js",
+      "source_location": "L5"
+    },
+    {
       "id": "server_models_elementcontext",
       "label": "ElementContext.js",
       "_origin": "ast",
@@ -3710,6 +3458,193 @@
       "norm_label": "mongoose",
       "source_file": "server/models/ElementContext.js",
       "source_location": "L1"
+    },
+    {
+      "id": "server_models_user",
+      "label": "User.js",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "user.js",
+      "source_file": "server/models/User.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_models_user_mongoose",
+      "label": "mongoose",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "mongoose",
+      "source_file": "server/models/User.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_models_user_userschema",
+      "label": "UserSchema",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "userschema",
+      "source_file": "server/models/User.js",
+      "source_location": "L4"
+    },
+    {
+      "id": "server_models_whiteboard",
+      "label": "Whiteboard.js",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "whiteboard.js",
+      "source_file": "server/models/Whiteboard.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_models_whiteboard_mongoose",
+      "label": "mongoose",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "mongoose",
+      "source_file": "server/models/Whiteboard.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_models_whiteboard_whiteboardschema",
+      "label": "WhiteboardSchema",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "whiteboardschema",
+      "source_file": "server/models/Whiteboard.js",
+      "source_location": "L4"
+    },
+    {
+      "id": "server_tests_ai_test",
+      "label": "ai.test.js",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "ai.test.js",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_tests_ai_test_app",
+      "label": "{ app }",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "{ app }",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L2"
+    },
+    {
+      "id": "server_tests_ai_test_jwt",
+      "label": "jwt",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "jwt",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L5"
+    },
+    {
+      "id": "server_tests_ai_test_mongoose",
+      "label": "mongoose",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "mongoose",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L3"
+    },
+    {
+      "id": "server_tests_ai_test_request",
+      "label": "request",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "request",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_tests_ai_test_user",
+      "label": "User",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "user",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L4"
+    },
+    {
+      "id": "server_tests_auth_test",
+      "label": "auth.test.js",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "auth.test.js",
+      "source_file": "server/tests/auth.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_tests_auth_test_app",
+      "label": "{ app }",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "{ app }",
+      "source_file": "server/tests/auth.test.js",
+      "source_location": "L2"
+    },
+    {
+      "id": "server_tests_auth_test_mongoose",
+      "label": "mongoose",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "mongoose",
+      "source_file": "server/tests/auth.test.js",
+      "source_location": "L3"
+    },
+    {
+      "id": "server_tests_auth_test_request",
+      "label": "request",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "request",
+      "source_file": "server/tests/auth.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_tests_auth_test_user",
+      "label": "User",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "user",
+      "source_file": "server/tests/auth.test.js",
+      "source_location": "L4"
     },
     {
       "id": "server_tests_context_test",
@@ -3819,6 +3754,116 @@
       "file_type": "code",
       "norm_label": "whiteboard",
       "source_file": "server/tests/context.test.js",
+      "source_location": "L5"
+    },
+    {
+      "id": "server_tests_health_test",
+      "label": "health.test.js",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "health.test.js",
+      "source_file": "server/tests/health.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_tests_health_test_app",
+      "label": "{ app }",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "{ app }",
+      "source_file": "server/tests/health.test.js",
+      "source_location": "L2"
+    },
+    {
+      "id": "server_tests_health_test_request",
+      "label": "request",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "request",
+      "source_file": "server/tests/health.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_tests_whiteboards_test",
+      "label": "whiteboards.test.js",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "whiteboards.test.js",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_tests_whiteboards_test_app",
+      "label": "{ app }",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "{ app }",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L2"
+    },
+    {
+      "id": "server_tests_whiteboards_test_jwt",
+      "label": "jwt",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "jwt",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L6"
+    },
+    {
+      "id": "server_tests_whiteboards_test_mongoose",
+      "label": "mongoose",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "mongoose",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L3"
+    },
+    {
+      "id": "server_tests_whiteboards_test_request",
+      "label": "request",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "request",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_tests_whiteboards_test_user",
+      "label": "User",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "user",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L4"
+    },
+    {
+      "id": "server_tests_whiteboards_test_whiteboard",
+      "label": "Whiteboard",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "whiteboard",
+      "source_file": "server/tests/whiteboards.test.js",
       "source_location": "L5"
     },
     {
@@ -4012,7 +4057,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1257",
+      "source_location": "L1291",
       "weight": 1.0
     },
     {
@@ -4024,7 +4069,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1259",
+      "source_location": "L1293",
       "weight": 1.0
     },
     {
@@ -4036,7 +4081,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L191",
+      "source_location": "L195",
       "weight": 1.0
     },
     {
@@ -4048,7 +4093,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L631",
+      "source_location": "L664",
       "weight": 1.0
     },
     {
@@ -4060,7 +4105,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L634",
+      "source_location": "L667",
       "weight": 1.0
     },
     {
@@ -4072,7 +4117,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L812",
+      "source_location": "L845",
       "weight": 1.0
     },
     {
@@ -4084,7 +4129,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1499",
+      "source_location": "L1533",
       "weight": 1.0
     },
     {
@@ -4096,7 +4141,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1597",
+      "source_location": "L1631",
       "weight": 1.0
     },
     {
@@ -4108,7 +4153,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1859",
+      "source_location": "L1893",
       "weight": 1.0
     },
     {
@@ -4120,7 +4165,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2096",
+      "source_location": "L2130",
       "weight": 1.0
     },
     {
@@ -4132,7 +4177,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2103",
+      "source_location": "L2137",
       "weight": 1.0
     },
     {
@@ -4144,7 +4189,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2113",
+      "source_location": "L2147",
       "weight": 1.0
     },
     {
@@ -4156,7 +4201,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1516",
+      "source_location": "L1550",
       "weight": 1.0
     },
     {
@@ -4168,7 +4213,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3272",
+      "source_location": "L3308",
       "weight": 1.0
     },
     {
@@ -4180,7 +4225,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3327",
+      "source_location": "L3365",
       "weight": 1.0
     },
     {
@@ -4192,7 +4237,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3350",
+      "source_location": "L3388",
       "weight": 1.0
     },
     {
@@ -4204,7 +4249,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3356",
+      "source_location": "L3394",
       "weight": 1.0
     },
     {
@@ -4216,7 +4261,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3254",
+      "source_location": "L3290",
       "weight": 1.0
     },
     {
@@ -4228,7 +4273,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3256",
+      "source_location": "L3292",
       "weight": 1.0
     },
     {
@@ -4240,7 +4285,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L50",
+      "source_location": "L51",
       "weight": 1.0
     },
     {
@@ -4252,7 +4297,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/components/ContextPanel.jsx",
-      "source_location": "L463",
+      "source_location": "L465",
       "weight": 1.0
     },
     {
@@ -4912,7 +4957,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1379",
+      "source_location": "L1413",
       "weight": 1.0
     },
     {
@@ -4924,7 +4969,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1388",
+      "source_location": "L1422",
       "weight": 1.0
     },
     {
@@ -4936,7 +4981,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1486",
+      "source_location": "L1520",
       "weight": 1.0
     },
     {
@@ -4948,7 +4993,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1520",
+      "source_location": "L1554",
       "weight": 1.0
     },
     {
@@ -4960,7 +5005,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1563",
+      "source_location": "L1597",
       "weight": 1.0
     },
     {
@@ -4972,7 +5017,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2529",
+      "source_location": "L2563",
       "weight": 1.0
     },
     {
@@ -4984,7 +5029,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3275",
+      "source_location": "L3311",
       "weight": 1.0
     },
     {
@@ -5181,6 +5226,18 @@
     },
     {
       "source": "frontend_src_app",
+      "target": "frontend_src_components_drawiocanvas_drawiocanvas",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_app",
       "target": "frontend_src_pathlassosplit_getobjectselectionmode",
       "relation": "imports",
       "_origin": "ast",
@@ -5188,7 +5245,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L18",
+      "source_location": "L19",
       "weight": 1.0
     },
     {
@@ -5200,7 +5257,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L18",
+      "source_location": "L19",
       "weight": 1.0
     },
     {
@@ -5212,7 +5269,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L18",
+      "source_location": "L19",
       "weight": 1.0
     },
     {
@@ -5224,7 +5281,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L18",
+      "source_location": "L19",
       "weight": 1.0
     },
     {
@@ -5236,7 +5293,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L24",
+      "source_location": "L25",
       "weight": 1.0
     },
     {
@@ -5248,7 +5305,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L25",
+      "source_location": "L26",
       "weight": 1.0
     },
     {
@@ -5260,7 +5317,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L26",
+      "source_location": "L27",
       "weight": 1.0
     },
     {
@@ -5272,7 +5329,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L27",
+      "source_location": "L28",
       "weight": 1.0
     },
     {
@@ -5284,7 +5341,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L27",
+      "source_location": "L28",
       "weight": 1.0
     },
     {
@@ -5512,7 +5569,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/index.js",
-      "source_location": "L773",
+      "source_location": "L781",
       "weight": 1.0
     },
     {
@@ -5524,7 +5581,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/index.js",
-      "source_location": "L789",
+      "source_location": "L797",
       "weight": 1.0
     },
     {
@@ -5877,7 +5934,7 @@
     },
     {
       "source": "frontend_src_app",
-      "target": "frontend_src_fabric_eraser",
+      "target": "frontend_src_components_drawiocanvas",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -5889,7 +5946,7 @@
     },
     {
       "source": "frontend_src_app",
-      "target": "frontend_src_pathlassosplit",
+      "target": "frontend_src_fabric_eraser",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -5901,19 +5958,19 @@
     },
     {
       "source": "frontend_src_app",
-      "target": "frontend_src_tools_connectorline",
+      "target": "frontend_src_pathlassosplit",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L24",
+      "source_location": "L19",
       "weight": 1.0
     },
     {
       "source": "frontend_src_app",
-      "target": "frontend_src_components_canvasoverlay",
+      "target": "frontend_src_tools_connectorline",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -5925,7 +5982,7 @@
     },
     {
       "source": "frontend_src_app",
-      "target": "frontend_src_tools_useconnectortool",
+      "target": "frontend_src_components_canvasoverlay",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -5937,7 +5994,7 @@
     },
     {
       "source": "frontend_src_app",
-      "target": "frontend_src_hooks_useconnectorsync",
+      "target": "frontend_src_tools_useconnectortool",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -5945,6 +6002,18 @@
       "context": "import",
       "source_file": "frontend/src/App.jsx",
       "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_app",
+      "target": "frontend_src_hooks_useconnectorsync",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L28",
       "weight": 1.0
     },
     {
@@ -6160,7 +6229,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/index.js",
-      "source_location": "L789",
+      "source_location": "L797",
       "weight": 1.0
     },
     {
@@ -6624,7 +6693,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L182",
+      "source_location": "L186",
       "weight": 1.0
     },
     {
@@ -6635,7 +6704,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L38",
+      "source_location": "L39",
       "weight": 1.0
     },
     {
@@ -6646,7 +6715,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L49",
+      "source_location": "L50",
       "weight": 1.0
     },
     {
@@ -6657,7 +6726,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L54",
+      "source_location": "L55",
       "weight": 1.0
     },
     {
@@ -6668,7 +6737,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L63",
+      "source_location": "L64",
       "weight": 1.0
     },
     {
@@ -6679,7 +6748,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L79",
+      "source_location": "L80",
       "weight": 1.0
     },
     {
@@ -6690,7 +6759,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1512",
+      "source_location": "L1546",
       "weight": 1.0
     },
     {
@@ -6701,7 +6770,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3196",
+      "source_location": "L3230",
       "weight": 1.0
     },
     {
@@ -6712,7 +6781,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3269",
+      "source_location": "L3305",
       "weight": 1.0
     },
     {
@@ -6811,6 +6880,17 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/components/DashboardPage.jsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_components_drawiocanvas",
+      "target": "frontend_src_components_drawiocanvas_drawiocanvas",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/DrawioCanvas.jsx",
       "source_location": "L3",
       "weight": 1.0
     },
@@ -7966,7 +8046,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L103",
+      "source_location": "L109",
       "weight": 1.0
     },
     {
@@ -7988,18 +8068,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L110",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
-      "target": "server_index_startserver",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "server/index.js",
-      "source_location": "L1198",
+      "source_location": "L116",
       "weight": 1.0
     },
     {
@@ -8015,24 +8084,24 @@
     },
     {
       "source": "server_index",
+      "target": "server_index_startserver",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L1206",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
       "target": "server_index_seedadminuser",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L1237",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
-      "target": "server_index_authlimiter",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "server/index.js",
-      "source_location": "L125",
+      "source_location": "L1245",
       "weight": 1.0
     },
     {
@@ -8044,6 +8113,17 @@
       "confidence_score": 1.0,
       "source_file": "server/index.js",
       "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_index_authlimiter",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L131",
       "weight": 1.0
     },
     {
@@ -8186,7 +8266,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L314",
+      "source_location": "L320",
       "weight": 1.0
     },
     {
@@ -8235,13 +8315,24 @@
     },
     {
       "source": "server_index",
+      "target": "server_index_drawiodir",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L50",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
       "target": "server_index_ailimiter",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L581",
+      "source_location": "L587",
       "weight": 1.0
     },
     {
@@ -8263,7 +8354,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L931",
+      "source_location": "L939",
       "weight": 1.0
     },
     {
@@ -8274,7 +8365,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L932",
+      "source_location": "L940",
       "weight": 1.0
     },
     {
@@ -8285,7 +8376,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L980",
+      "source_location": "L988",
       "weight": 1.0
     },
     {
@@ -8296,7 +8387,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L982",
+      "source_location": "L990",
       "weight": 1.0
     },
     {
@@ -9315,5 +9406,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "eb1e3442778a975023e62907fb9f185037ae7afb"
+  "built_at_commit": "e2819a05f52b191765d978db1b18de48226ca604"
 }

@@ -3,6 +3,9 @@ import React from "react";
 export default function Topbar({
   title,
   setTitle,
+  canvasMode = "freehand",
+  setCanvasMode = () => {},
+  isOwner = true,
   onSave,
   onLoad,
   onExport,
@@ -20,6 +23,16 @@ export default function Topbar({
   onOpenPermissionsPanel,
   boardMeta = { owner: null, collaborators: [], isPublic: false },
 }) {
+  const getInitials = (name) => {
+    if (!name) return "U";
+    return name
+      .split(" ")
+      .map((part) => part[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
   const handleShare = () => {
     if (savedId) {
       const slug = title
@@ -35,17 +48,6 @@ export default function Topbar({
     } else {
       alert("Please save the board first to generate a shareable link!");
     }
-  };
-
-  // Get initials from user name
-  const getInitials = (name) => {
-    if (!name) return "?";
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
   };
 
   return (
@@ -120,6 +122,95 @@ export default function Topbar({
               View Only
             </span>
           )}
+        </div>
+
+        {/* Mode Switcher: Freehand vs Draw.io */}
+        <div
+          className="canvas-mode-toggle"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            background: "rgba(255, 255, 255, 0.08)",
+            borderRadius: "8px",
+            padding: "3px",
+            border: "1px solid rgba(255, 255, 255, 0.12)",
+            marginLeft: "12px",
+            opacity: isOwner ? 1 : 0.85,
+          }}
+          title={
+            isOwner
+              ? "Switch canvas mode (Owner only)"
+              : "Only the board owner can change canvas mode"
+          }
+        >
+          <button
+            className={`btn-mode ${canvasMode === "freehand" ? "active" : ""}`}
+            onClick={() => isOwner && setCanvasMode("freehand")}
+            style={{
+              padding: "4px 12px",
+              fontSize: "12px",
+              fontWeight: "600",
+              borderRadius: "6px",
+              border: "none",
+              cursor: isOwner ? "pointer" : "not-allowed",
+              background:
+                canvasMode === "freehand"
+                  ? "var(--color-accent, #6366f1)"
+                  : "transparent",
+              color: canvasMode === "freehand" ? "#ffffff" : "#94a3b8",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              transition: "all 0.2s ease",
+              opacity: isOwner || canvasMode === "freehand" ? 1 : 0.6,
+            }}
+            title={
+              isOwner
+                ? "Switch to Freehand Canvas Mode"
+                : "Only the board owner can change canvas mode"
+            }
+          >
+            <span>✏️</span> Freehand
+          </button>
+          <button
+            className={`btn-mode ${canvasMode === "drawio" ? "active" : ""}`}
+            onClick={() => isOwner && setCanvasMode("drawio")}
+            style={{
+              padding: "4px 12px",
+              fontSize: "12px",
+              fontWeight: "600",
+              borderRadius: "6px",
+              border: "none",
+              cursor: isOwner ? "pointer" : "not-allowed",
+              background:
+                canvasMode === "drawio"
+                  ? "var(--color-accent, #6366f1)"
+                  : "transparent",
+              color: canvasMode === "drawio" ? "#ffffff" : "#94a3b8",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              transition: "all 0.2s ease",
+              opacity: isOwner || canvasMode === "drawio" ? 1 : 0.6,
+            }}
+            title={
+              isOwner
+                ? "Switch to Draw.io Architecture Diagrammer"
+                : "Only the board owner can change canvas mode"
+            }
+          >
+            <span>📐</span> Draw.io{" "}
+            {!isOwner && (
+              <i
+                className="fa-solid fa-lock"
+                style={{
+                  fontSize: "10px",
+                  marginLeft: "2px",
+                  color: "#fbbf24",
+                }}
+              />
+            )}
+          </button>
         </div>
       </div>
 
@@ -216,46 +307,50 @@ export default function Topbar({
               Export
             </button>
 
-            <button
-              onClick={onClearPage}
-              className="btn btn-secondary btn-danger-hover"
-              title="Clear all elements from current page"
-            >
-              <svg
-                width="16"
-                height="16"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                ></path>
-              </svg>
-              <span>Clear</span>
-            </button>
+            {canvasMode === "freehand" && (
+              <>
+                <button
+                  onClick={onClearPage}
+                  className="btn btn-secondary btn-danger-hover"
+                  title="Clear all elements from current page"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    ></path>
+                  </svg>
+                  <span>Clear</span>
+                </button>
 
-            <button
-              onClick={onCleanup}
-              className="btn btn-secondary btn-ai"
-              disabled={isCleanupLoading}
-            >
-              {isCleanupLoading ? (
-                <span className="spinner-ai"></span>
-              ) : (
-                <>
-                  <i
-                    className="fa-solid fa-wand-magic-sparkles"
-                    style={{ marginRight: "6px" }}
-                  ></i>
-                  <span>Cleanup</span>
-                </>
-              )}
-            </button>
+                <button
+                  onClick={onCleanup}
+                  className="btn btn-secondary btn-ai"
+                  disabled={isCleanupLoading}
+                >
+                  {isCleanupLoading ? (
+                    <span className="spinner-ai"></span>
+                  ) : (
+                    <>
+                      <i
+                        className="fa-solid fa-wand-magic-sparkles"
+                        style={{ marginRight: "6px" }}
+                      ></i>
+                      <span>Cleanup</span>
+                    </>
+                  )}
+                </button>
+              </>
+            )}
 
             <button onClick={onSave} className="btn btn-primary">
               <svg

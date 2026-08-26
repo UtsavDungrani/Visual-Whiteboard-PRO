@@ -14,6 +14,7 @@ import AuthPage from "./components/AuthPage";
 import DashboardPage from "./components/DashboardPage";
 import CustomCursor from "./components/CustomCursor";
 import LoadingScreen from "./components/LoadingScreen";
+import DrawioCanvas from "./components/DrawioCanvas";
 import "./fabric-eraser";
 import {
   isPointInPolygon,
@@ -245,6 +246,17 @@ export default function App() {
   // State variables
   const [title, setTitle] = useState("My Whiteboard");
   const [savedId, setSavedId] = useState(null);
+  const [canvasMode, setCanvasMode] = useState("freehand"); // "freehand" | "drawio"
+  const [drawioXml, setDrawioXml] = useState("");
+  const [remoteDrawioXml, setRemoteDrawioXml] = useState(null);
+  const [modeNotification, setModeNotification] = useState(null);
+
+  const showModeNotification = (msg) => {
+    setModeNotification(msg);
+    setTimeout(() => {
+      setModeNotification((prev) => (prev === msg ? null : prev));
+    }, 3500);
+  };
   const [activeTool, setActiveTool] = useState("select"); // select, square-select, circle-select, lasso-select, pan, draw, rect, circle, diamond, text, arrow
   const [drawType, setDrawType] = useState("pencil"); // pencil, pen, highlighter, eraser
   const [drawSizes, setDrawSizes] = useState({
@@ -539,6 +551,24 @@ export default function App() {
   useEffect(() => {
     isReadOnlyRef.current = isReadOnly;
   }, [isReadOnly]);
+
+  // Derived board owner check
+  const isOwner =
+    !savedId ||
+    (() => {
+      if (!user || !boardMeta?.owner) return true;
+      const ownerId =
+        typeof boardMeta.owner === "object"
+          ? boardMeta.owner._id || boardMeta.owner.id
+          : boardMeta.owner;
+      const userId = user.id || user._id;
+      return String(ownerId) === String(userId);
+    })();
+
+  const canvasModeRef = useRef(canvasMode);
+  useEffect(() => {
+    canvasModeRef.current = canvasMode;
+  }, [canvasMode]);
 
   const lockObjectsIfReadOnly = (canvasInstance) => {
     if (!canvasInstance) return;
@@ -1043,6 +1073,7 @@ export default function App() {
       pages: updatedPages,
       mode: pageModeRef.current,
       pageSize: pageSizeRef.current,
+      canvasMode: canvasModeRef.current || canvasMode,
     });
   };
 
@@ -3220,6 +3251,8 @@ export default function App() {
     const payload = {
       title,
       mode: pageMode,
+      canvasMode,
+      drawioXml,
       pageSize,
       pages: updatedPages,
     };
@@ -3310,6 +3343,8 @@ export default function App() {
       setScreen("editor");
 
       if (data.title) setTitle(data.title);
+      if (data.canvasMode) setCanvasMode(data.canvasMode);
+      if (data.drawioXml) setDrawioXml(data.drawioXml);
 
       // Set metadata
       setBoardMeta({
@@ -3393,6 +3428,64 @@ export default function App() {
       console.error("Failed to emit canvas update", e);
     }
   }, 200);
+
+  const handleCanvasModeChange = (newMode) => {
+    if (newMode === canvasMode) return;
+
+    if (!isOwner) {
+      alert("Only the board owner can change the canvas mode.");
+      return;
+    }
+
+    setCanvasMode(newMode);
+    if (typeof showModeNotification === "function") {
+      showModeNotification(
+        newMode === "drawio"
+          ? "📐 Switched canvas mode to Draw.io Architecture Diagrammer"
+          : "✏️ Switched canvas mode to Freehand Whiteboard",
+      );
+    }
+
+    const room = savedIdRef.current || "global";
+    if (socketRef.current) {
+      socketRef.current.emit("canvas-mode:change", {
+        id: room,
+        roomId: room,
+        mode: newMode,
+      });
+    }
+  };
+
+  const handleDrawioXmlChange = (xml) => {
+    setDrawioXml(xml);
+    const room = savedIdRef.current || "global";
+    if (socketRef.current) {
+      socketRef.current.emit("drawio:update", {
+        id: room,
+        pageId: activePageIdRef.current,
+        xml,
+      });
+    }
+  };
+
+  // Recalculate FabricJS canvas bounds when switching back to freehand mode
+  useEffect(() => {
+    if (canvasMode === "freehand" && fabricRef.current) {
+      setTimeout(() => {
+        const viewport = document.getElementById("canvas-viewport");
+        if (viewport && fabricRef.current) {
+          const w = viewport.clientWidth - 40;
+          const h = viewport.clientHeight - 40;
+          if (w > 0 && h > 0) {
+            fabricRef.current.setWidth(w);
+            fabricRef.current.setHeight(h);
+          }
+          fabricRef.current.calcOffset();
+          fabricRef.current.requestRenderAll();
+        }
+      }, 50);
+    }
+  }, [canvasMode]);
 
   // Initialize Canvas
   useEffect(() => {
@@ -3771,9 +3864,30 @@ export default function App() {
       }
     });
 
+    socket.on("drawio:update", ({ roomId, pageId, xml }) => {
+      setRemoteDrawioXml(xml);
+      setDrawioXml(xml);
+    });
+
+    socket.on("canvas-mode:updated", ({ roomId, mode }) => {
+      if (mode && (mode === "freehand" || mode === "drawio")) {
+        setCanvasMode(mode);
+        showModeNotification(
+          mode === "drawio"
+            ? "📐 Board Owner switched canvas mode to Draw.io Architecture Diagrammer"
+            : "✏️ Board Owner switched canvas mode to Freehand Whiteboard",
+        );
+      }
+    });
+
     socket.on(
       "board:structure-update",
-      ({ pages: remotePages, mode: remoteMode, pageSize: remotePageSize }) => {
+      ({
+        pages: remotePages,
+        mode: remoteMode,
+        pageSize: remotePageSize,
+        canvasMode: remoteCanvasMode,
+      }) => {
         // If our current page is gone, switch to first available
         if (!remotePages.find((p) => p.page_id === activePageIdRef.current)) {
           const firstPage = remotePages[0];
@@ -3785,6 +3899,12 @@ export default function App() {
         setPages(remotePages);
         setPageMode(remoteMode);
         setPageSize(remotePageSize);
+        if (
+          remoteCanvasMode &&
+          (remoteCanvasMode === "freehand" || remoteCanvasMode === "drawio")
+        ) {
+          setCanvasMode(remoteCanvasMode);
+        }
       },
     );
 
@@ -4003,10 +4123,40 @@ export default function App() {
         />
       )}
       <div className="app-container">
+        {modeNotification && (
+          <div
+            style={{
+              position: "fixed",
+              top: "70px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              background: "rgba(15, 23, 42, 0.94)",
+              backdropFilter: "blur(12px)",
+              color: "#ffffff",
+              padding: "8px 20px",
+              borderRadius: "20px",
+              fontSize: "13px",
+              fontWeight: "600",
+              boxShadow:
+                "0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 0 12px rgba(99, 102, 241, 0.4)",
+              border: "1px solid rgba(99, 102, 241, 0.4)",
+              zIndex: 2000,
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              pointerEvents: "none",
+            }}
+          >
+            <span>{modeNotification}</span>
+          </div>
+        )}
         {/* Top Header Bar */}
         <Topbar
           title={title}
           setTitle={setTitle}
+          canvasMode={canvasMode}
+          setCanvasMode={handleCanvasModeChange}
+          isOwner={isOwner}
           onSave={saveBoard}
           onLoad={loadBoard}
           onClearPage={handleClearPage}
@@ -4054,25 +4204,27 @@ export default function App() {
 
         {/* Main Workspace Area */}
         <div className="workspace-container">
-          {/* Left Sidebar Page Navigator */}
-          <PageStrip
-            pages={pages}
-            activePageId={activePageId}
-            onSwitchPage={switchPage}
-            onAddPage={addPage}
-            onDeletePage={deletePage}
-            onDuplicatePage={duplicatePage}
-            onRenamePage={renamePage}
-            onReorderPage={reorderPage}
-            onSharePage={sharePage}
-            canManagePages={
-              !isReadOnly && (boardMeta.owner === user.id || !savedId)
-            }
-            isCollapsed={isLeftPanelCollapsed}
-            onToggleCollapse={toggleLeftPanel}
-          />
+          {/* Left Sidebar Page Navigator (Freehand mode only) */}
+          {canvasMode === "freehand" && (
+            <PageStrip
+              pages={pages}
+              activePageId={activePageId}
+              onSwitchPage={switchPage}
+              onAddPage={addPage}
+              onDeletePage={deletePage}
+              onDuplicatePage={duplicatePage}
+              onRenamePage={renamePage}
+              onReorderPage={reorderPage}
+              onSharePage={sharePage}
+              canManagePages={
+                !isReadOnly && (boardMeta.owner === user.id || !savedId)
+              }
+              isCollapsed={isLeftPanelCollapsed}
+              onToggleCollapse={toggleLeftPanel}
+            />
+          )}
 
-          {isLeftPanelCollapsed && (
+          {canvasMode === "freehand" && isLeftPanelCollapsed && (
             <div
               className="strip-expand-trigger"
               onClick={toggleLeftPanel}
@@ -4092,7 +4244,7 @@ export default function App() {
           )}
 
           {/* Toolbar Left Side */}
-          {!isReadOnly && (
+          {!isReadOnly && canvasMode === "freehand" && (
             <Toolbar
               activeTool={activeTool}
               setActiveTool={setActiveTool}
@@ -4104,8 +4256,25 @@ export default function App() {
 
           <div id="canvas-viewport" className="canvas-viewport">
             <div
+              style={{
+                display: canvasMode === "drawio" ? "block" : "none",
+                width: "100%",
+                height: "100%",
+              }}
+            >
+              <DrawioCanvas
+                initialXml={drawioXml}
+                remoteXml={remoteDrawioXml}
+                onXmlChange={handleDrawioXmlChange}
+              />
+            </div>
+
+            <div
               id="canvas-wrapper"
               className={`canvas-wrapper ${activeTool === "pan" ? "pan-mode" : ""} ${activeTool === "draw" && drawType === "eraser" ? "eraser-mode" : ""}`}
+              style={{
+                display: canvasMode === "freehand" ? "block" : "none",
+              }}
             >
               <canvas id="whiteboard-canvas" />
               <CanvasOverlay
@@ -4182,61 +4351,65 @@ export default function App() {
               />
             </div>
 
-            {/* Floating Canvas Controls (Bottom Left) */}
-            <CanvasControls
-              zoom={zoom}
-              onZoomIn={() => handleZoom(zoom + 0.1)}
-              onZoomOut={() => handleZoom(zoom - 0.1)}
-              onZoomReset={handleZoomReset}
-              snapToGrid={snapToGrid}
-              onToggleSnapToGrid={() => setSnapToGrid((prev) => !prev)}
-              onUndo={undo}
-              onRedo={redo}
-              canUndo={canUndo}
-              canRedo={canRedo}
-              isReadOnly={isReadOnly}
-            />
+            {/* Floating Canvas Controls (Bottom Left - Freehand mode only) */}
+            {canvasMode === "freehand" && (
+              <CanvasControls
+                zoom={zoom}
+                onZoomIn={() => handleZoom(zoom + 0.1)}
+                onZoomOut={() => handleZoom(zoom - 0.1)}
+                onZoomReset={handleZoomReset}
+                snapToGrid={snapToGrid}
+                onToggleSnapToGrid={() => setSnapToGrid((prev) => !prev)}
+                onUndo={undo}
+                onRedo={redo}
+                canUndo={canUndo}
+                canRedo={canRedo}
+                isReadOnly={isReadOnly}
+              />
+            )}
           </div>
 
-          {/* Properties Panel Right Side */}
-          <PropertiesPanel
-            selectedObject={selectedObject}
-            properties={properties}
-            onChangeProperty={handleChangeProperty}
-            onBringToFront={handleBringToFront}
-            onSendToBack={handleSendToBack}
-            onDelete={handleDeleteElement}
-            onGroup={handleGroup}
-            onUngroup={handleUngroup}
-            onToggleLock={handleToggleLock}
-            onEditContext={() => {
-              if (!savedId) {
-                alert(
-                  'Please save the whiteboard first (click "Save" in the top bar) to enable attaching notes, code, and files.',
-                );
-                return;
-              }
-              setIsContextPanelOpen(true);
-            }}
-            isReadOnly={isReadOnly}
-            activeTool={activeTool}
-            drawType={drawType}
-            setDrawType={setDrawType}
-            drawSizes={drawSizes}
-            onChangeDrawSize={handleChangeDrawSize}
-            isCollapsed={isRightPanelCollapsed}
-            onToggleCollapse={toggleRightPanel}
-            pageMode={pageMode}
-            onChangePageMode={(mode) => {
-              setPageMode(mode);
-              renderPageBoundary(fabricRef.current, mode, pageSize);
-            }}
-            zoom={zoom}
-            onZoom={handleZoom}
-            onZoomReset={handleZoomReset}
-          />
+          {/* Properties Panel Right Side (Freehand mode only) */}
+          {canvasMode === "freehand" && (
+            <PropertiesPanel
+              selectedObject={selectedObject}
+              properties={properties}
+              onChangeProperty={handleChangeProperty}
+              onBringToFront={handleBringToFront}
+              onSendToBack={handleSendToBack}
+              onDelete={handleDeleteElement}
+              onGroup={handleGroup}
+              onUngroup={handleUngroup}
+              onToggleLock={handleToggleLock}
+              onEditContext={() => {
+                if (!savedId) {
+                  alert(
+                    'Please save the whiteboard first (click "Save" in the top bar) to enable attaching notes, code, and files.',
+                  );
+                  return;
+                }
+                setIsContextPanelOpen(true);
+              }}
+              isReadOnly={isReadOnly}
+              activeTool={activeTool}
+              drawType={drawType}
+              setDrawType={setDrawType}
+              drawSizes={drawSizes}
+              onChangeDrawSize={handleChangeDrawSize}
+              isCollapsed={isRightPanelCollapsed}
+              onToggleCollapse={toggleRightPanel}
+              pageMode={pageMode}
+              onChangePageMode={(mode) => {
+                setPageMode(mode);
+                renderPageBoundary(fabricRef.current, mode, pageSize);
+              }}
+              zoom={zoom}
+              onZoom={handleZoom}
+              onZoomReset={handleZoomReset}
+            />
+          )}
 
-          {isRightPanelCollapsed && (
+          {canvasMode === "freehand" && isRightPanelCollapsed && (
             <div
               className="panel-expand-trigger"
               onClick={toggleRightPanel}

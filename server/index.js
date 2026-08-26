@@ -46,6 +46,19 @@ const upload = multer({ storage });
 app.use(cors());
 app.use(express.json());
 
+// Serve static Draw.io webapp assets
+const drawioDir = path.join(
+  __dirname,
+  "..",
+  "drawio-dev",
+  "src",
+  "main",
+  "webapp",
+);
+if (fs.existsSync(drawioDir)) {
+  app.use("/drawio", express.static(drawioDir));
+}
+
 // Development Content Security Policy to avoid blocking DevTools probes
 if (process.env.NODE_ENV !== "production") {
   app.use((req, res, next) => {
