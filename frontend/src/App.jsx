@@ -3341,6 +3341,7 @@ export default function App() {
       const data = await res.json();
 
       setScreen("editor");
+      setSavedId(data.id || data._id);
 
       if (data.title) setTitle(data.title);
       if (data.canvasMode) setCanvasMode(data.canvasMode);

@@ -6,9 +6,9 @@
     "semantic_hash": ""
   },
   "frontend/src/App.jsx": {
-    "mtime": 1787738531.6120088,
-    "seen": 1787738641.017886,
-    "ast_hash": "8ea9b0722cce11ceb16b7e195aef4f8c",
+    "mtime": 1787742410.4852157,
+    "seen": 1787747611.1240675,
+    "ast_hash": "79fcf294ff9eff9e8c2d29d9c506b8ae",
     "semantic_hash": ""
   },
   "frontend/src/main.jsx": {
@@ -18,9 +18,9 @@
     "semantic_hash": "1805ad7bae3bf603446eed7431bab36a"
   },
   "server/index.js": {
-    "mtime": 1787738340.5377111,
-    "seen": 1787738641.0219672,
-    "ast_hash": "906850b22fbb7d6b59f45358413870f9",
+    "mtime": 1787738947.5261748,
+    "seen": 1787739072.4281588,
+    "ast_hash": "578a911d99a19a55c9317259ef88a400",
     "semantic_hash": ""
   },
   "server/models/Whiteboard.js": {
@@ -90,15 +90,15 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Topbar.jsx": {
-    "mtime": 1787738736.4473336,
-    "seen": 1787738763.2909994,
-    "ast_hash": "63d62ffcacf527dde2c8c88e499ed5f1",
+    "mtime": 1787738947.40379,
+    "seen": 1787739072.4260323,
+    "ast_hash": "1a0160e7e88fc1f111fc0fd8e3b0573d",
     "semantic_hash": ""
   },
   "frontend/src/components/ExportModal.jsx": {
-    "mtime": 1787381975.6674514,
-    "seen": 1787381992.4111297,
-    "ast_hash": "f0327bb3a87c6a1d9a07ae9b585c5950",
+    "mtime": 1787747120.8606355,
+    "seen": 1787747611.1254983,
+    "ast_hash": "8ab092bd045d03573d57b51cf36e96b7",
     "semantic_hash": ""
   },
   "frontend/src/components/PageStrip.jsx": {
@@ -329,9 +329,9 @@
     "semantic_hash": ""
   },
   "frontend/src/components/DrawioCanvas.jsx": {
-    "mtime": 1787738834.657347,
-    "seen": 1787738852.603984,
-    "ast_hash": "e3e2cf4603284fd745026c94740441f4",
+    "mtime": 1787747535.1833763,
+    "seen": 1787747611.1254964,
+    "ast_hash": "dcef294535b1bd09a2e4349de8927b74",
     "semantic_hash": ""
   },
   "frontend/vite.config.js": {

@@ -15,6 +15,20 @@ export default function DrawioCanvas({
     }
   }, []);
 
+  // Sync initialXml into iframe when board finishes loading from backend
+  useEffect(() => {
+    if (initialXml && initialXml !== currentXmlRef.current) {
+      currentXmlRef.current = initialXml;
+      if (isLoadedRef.current) {
+        postToDrawio({
+          action: "load",
+          autosave: 1,
+          xml: initialXml,
+        });
+      }
+    }
+  }, [initialXml, postToDrawio]);
+
   // Handle messages from Draw.io iframe (embed postMessage API)
   useEffect(() => {
     const handleMessage = (event) => {
@@ -32,12 +46,18 @@ export default function DrawioCanvas({
         } else if (
           msg.event === "autosave" ||
           msg.event === "save" ||
-          msg.event === "change"
+          msg.event === "export"
         ) {
           if (msg.xml) {
             currentXmlRef.current = msg.xml;
             onXmlChange(msg.xml);
           }
+        } else if (msg.event === "change") {
+          // Whenever a change occurs inside Draw.io, request an XML export so parent state stays fresh
+          postToDrawio({
+            action: "export",
+            format: "xml",
+          });
         }
       } catch (e) {
         // Ignore non-json postMessages
@@ -48,7 +68,7 @@ export default function DrawioCanvas({
     return () => window.removeEventListener("message", handleMessage);
   }, [postToDrawio, onXmlChange]);
 
-  // Sync remote XML updates into Draw.io iframe
+  // Sync remote XML updates from socket into Draw.io iframe
   useEffect(() => {
     if (
       remoteXml &&
@@ -78,7 +98,7 @@ export default function DrawioCanvas({
       <iframe
         ref={iframeRef}
         title="Draw.io Diagrammer"
-        src="https://embed.diagrams.net/?embed=1&proto=json&spin=1&libraries=1"
+        src="https://embed.diagrams.net/?embed=1&proto=json&spin=1&libraries=1&noExitBtn=1&stealth=1"
         style={{
           width: "100%",
           height: "100%",

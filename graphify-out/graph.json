@@ -37,7 +37,7 @@
       "file_type": "code",
       "norm_label": "broadcastroomusers()",
       "source_file": "server/index.js",
-      "source_location": "L990"
+      "source_location": "L997"
     },
     {
       "id": "server_index_isredisenabled",
@@ -49,7 +49,7 @@
       "file_type": "code",
       "norm_label": "isredisenabled()",
       "source_file": "server/index.js",
-      "source_location": "L109"
+      "source_location": "L116"
     },
     {
       "id": "server_index_seedadminuser",
@@ -61,7 +61,7 @@
       "file_type": "code",
       "norm_label": "seedadminuser()",
       "source_file": "server/index.js",
-      "source_location": "L1245"
+      "source_location": "L1252"
     },
     {
       "id": "server_index_slugifytitle",
@@ -73,7 +73,7 @@
       "file_type": "code",
       "norm_label": "slugifytitle()",
       "source_file": "server/index.js",
-      "source_location": "L320"
+      "source_location": "L327"
     },
     {
       "id": "server_index_startserver",
@@ -85,7 +85,7 @@
       "file_type": "code",
       "norm_label": "startserver()",
       "source_file": "server/index.js",
-      "source_location": "L1206"
+      "source_location": "L1213"
     },
     {
       "id": "frontend_src_pathlassosplit_bboxcornersinpolygon",
@@ -1188,7 +1188,7 @@
       "file_type": "code",
       "norm_label": "activeusers",
       "source_file": "server/index.js",
-      "source_location": "L988"
+      "source_location": "L995"
     },
     {
       "id": "server_index_admin",
@@ -1210,7 +1210,7 @@
       "file_type": "code",
       "norm_label": "ailimiter",
       "source_file": "server/index.js",
-      "source_location": "L587"
+      "source_location": "L594"
     },
     {
       "id": "server_index_auth",
@@ -1232,7 +1232,7 @@
       "file_type": "code",
       "norm_label": "authlimiter",
       "source_file": "server/index.js",
-      "source_location": "L131"
+      "source_location": "L138"
     },
     {
       "id": "server_index_bcrypt",
@@ -1331,7 +1331,7 @@
       "file_type": "code",
       "norm_label": "httpserver",
       "source_file": "server/index.js",
-      "source_location": "L939"
+      "source_location": "L946"
     },
     {
       "id": "server_index_io",
@@ -1342,7 +1342,7 @@
       "file_type": "code",
       "norm_label": "io",
       "source_file": "server/index.js",
-      "source_location": "L940"
+      "source_location": "L947"
     },
     {
       "id": "server_index_jwt",
@@ -1485,7 +1485,7 @@
       "file_type": "code",
       "norm_label": "whiteboards",
       "source_file": "server/index.js",
-      "source_location": "L116"
+      "source_location": "L123"
     },
     {
       "id": "server_middleware_admin",
@@ -4225,7 +4225,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3365",
+      "source_location": "L3366",
       "weight": 1.0
     },
     {
@@ -4237,7 +4237,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3388",
+      "source_location": "L3389",
       "weight": 1.0
     },
     {
@@ -4249,7 +4249,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3394",
+      "source_location": "L3395",
       "weight": 1.0
     },
     {
@@ -5569,7 +5569,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/index.js",
-      "source_location": "L781",
+      "source_location": "L788",
       "weight": 1.0
     },
     {
@@ -5581,7 +5581,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/index.js",
-      "source_location": "L797",
+      "source_location": "L804",
       "weight": 1.0
     },
     {
@@ -6229,7 +6229,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/index.js",
-      "source_location": "L797",
+      "source_location": "L804",
       "weight": 1.0
     },
     {
@@ -8040,17 +8040,6 @@
     },
     {
       "source": "server_index",
-      "target": "server_index_isredisenabled",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "server/index.js",
-      "source_location": "L109",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
       "target": "server_index_elementcontext",
       "relation": "contains",
       "_origin": "ast",
@@ -8062,7 +8051,7 @@
     },
     {
       "source": "server_index",
-      "target": "server_index_whiteboards",
+      "target": "server_index_isredisenabled",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -8090,7 +8079,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L1206",
+      "source_location": "L1213",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_index_whiteboards",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L123",
       "weight": 1.0
     },
     {
@@ -8101,7 +8101,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L1245",
+      "source_location": "L1252",
       "weight": 1.0
     },
     {
@@ -8123,7 +8123,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L131",
+      "source_location": "L138",
       "weight": 1.0
     },
     {
@@ -8266,7 +8266,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L320",
+      "source_location": "L327",
       "weight": 1.0
     },
     {
@@ -8332,7 +8332,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L587",
+      "source_location": "L594",
       "weight": 1.0
     },
     {
@@ -8354,7 +8354,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L939",
+      "source_location": "L946",
       "weight": 1.0
     },
     {
@@ -8365,7 +8365,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L940",
+      "source_location": "L947",
       "weight": 1.0
     },
     {
@@ -8376,7 +8376,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L988",
+      "source_location": "L995",
       "weight": 1.0
     },
     {
@@ -8387,7 +8387,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L990",
+      "source_location": "L997",
       "weight": 1.0
     },
     {
@@ -9406,5 +9406,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "e2819a05f52b191765d978db1b18de48226ca604"
+  "built_at_commit": "a9540167f1c2005059d367a2a7cc42122dabd6de"
 }
