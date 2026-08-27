@@ -61,7 +61,7 @@
       "file_type": "code",
       "norm_label": "seedadminuser()",
       "source_file": "server/index.js",
-      "source_location": "L1252"
+      "source_location": "L1262"
     },
     {
       "id": "server_index_slugifytitle",
@@ -85,7 +85,7 @@
       "file_type": "code",
       "norm_label": "startserver()",
       "source_file": "server/index.js",
-      "source_location": "L1213"
+      "source_location": "L1223"
     },
     {
       "id": "frontend_src_pathlassosplit_bboxcornersinpolygon",
@@ -2175,7 +2175,7 @@
       "file_type": "code",
       "norm_label": "devdependencies",
       "source_file": "server/package.json",
-      "source_location": "L23"
+      "source_location": "L24"
     },
     {
       "id": "server_package_devdependencies_jest",
@@ -2186,7 +2186,7 @@
       "file_type": "code",
       "norm_label": "jest",
       "source_file": "server/package.json",
-      "source_location": "L24"
+      "source_location": "L25"
     },
     {
       "id": "server_package_devdependencies_socket_io_client",
@@ -2197,7 +2197,7 @@
       "file_type": "code",
       "norm_label": "socket.io-client",
       "source_file": "server/package.json",
-      "source_location": "L25"
+      "source_location": "L26"
     },
     {
       "id": "server_package_devdependencies_supertest",
@@ -2208,7 +2208,7 @@
       "file_type": "code",
       "norm_label": "supertest",
       "source_file": "server/package.json",
-      "source_location": "L26"
+      "source_location": "L27"
     },
     {
       "id": "server_package_main",
@@ -2255,6 +2255,17 @@
       "source_location": "L6"
     },
     {
+      "id": "server_package_scripts_dev",
+      "label": "dev",
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "server/package.json",
+      "file_type": "code",
+      "norm_label": "dev",
+      "source_file": "server/package.json",
+      "source_location": "L8"
+    },
+    {
       "id": "server_package_scripts_start",
       "label": "start",
       "_origin": "ast",
@@ -2274,7 +2285,7 @@
       "file_type": "code",
       "norm_label": "test",
       "source_file": "server/package.json",
-      "source_location": "L8"
+      "source_location": "L9"
     },
     {
       "id": "server_package_version",
@@ -2296,7 +2307,7 @@
       "file_type": "concept",
       "norm_label": "jest",
       "source_file": "server/package.json",
-      "source_location": "L24"
+      "source_location": "L25"
     },
     {
       "id": "server_package_json_socket_io_client",
@@ -2307,7 +2318,7 @@
       "file_type": "concept",
       "norm_label": "socket.io-client",
       "source_file": "server/package.json",
-      "source_location": "L25"
+      "source_location": "L26"
     },
     {
       "id": "supertest",
@@ -2318,7 +2329,7 @@
       "file_type": "concept",
       "norm_label": "supertest",
       "source_file": "server/package.json",
-      "source_location": "L26"
+      "source_location": "L27"
     },
     {
       "id": "server_package_dependencies",
@@ -2329,7 +2340,7 @@
       "file_type": "code",
       "norm_label": "dependencies",
       "source_file": "server/package.json",
-      "source_location": "L10"
+      "source_location": "L11"
     },
     {
       "id": "server_package_dependencies_bcryptjs",
@@ -2340,7 +2351,7 @@
       "file_type": "code",
       "norm_label": "bcryptjs",
       "source_file": "server/package.json",
-      "source_location": "L12"
+      "source_location": "L13"
     },
     {
       "id": "server_package_dependencies_cors",
@@ -2351,7 +2362,7 @@
       "file_type": "code",
       "norm_label": "cors",
       "source_file": "server/package.json",
-      "source_location": "L13"
+      "source_location": "L14"
     },
     {
       "id": "server_package_dependencies_dotenv",
@@ -2362,7 +2373,7 @@
       "file_type": "code",
       "norm_label": "dotenv",
       "source_file": "server/package.json",
-      "source_location": "L14"
+      "source_location": "L15"
     },
     {
       "id": "server_package_dependencies_express",
@@ -2373,7 +2384,7 @@
       "file_type": "code",
       "norm_label": "express",
       "source_file": "server/package.json",
-      "source_location": "L15"
+      "source_location": "L16"
     },
     {
       "id": "server_package_dependencies_express_rate_limit",
@@ -2384,7 +2395,7 @@
       "file_type": "code",
       "norm_label": "express-rate-limit",
       "source_file": "server/package.json",
-      "source_location": "L16"
+      "source_location": "L17"
     },
     {
       "id": "server_package_dependencies_jsonwebtoken",
@@ -2395,7 +2406,7 @@
       "file_type": "code",
       "norm_label": "jsonwebtoken",
       "source_file": "server/package.json",
-      "source_location": "L17"
+      "source_location": "L18"
     },
     {
       "id": "server_package_dependencies_mongoose",
@@ -2406,7 +2417,7 @@
       "file_type": "code",
       "norm_label": "mongoose",
       "source_file": "server/package.json",
-      "source_location": "L18"
+      "source_location": "L19"
     },
     {
       "id": "server_package_dependencies_multer",
@@ -2417,7 +2428,7 @@
       "file_type": "code",
       "norm_label": "multer",
       "source_file": "server/package.json",
-      "source_location": "L19"
+      "source_location": "L20"
     },
     {
       "id": "server_package_dependencies_redis",
@@ -2428,7 +2439,7 @@
       "file_type": "code",
       "norm_label": "redis",
       "source_file": "server/package.json",
-      "source_location": "L20"
+      "source_location": "L21"
     },
     {
       "id": "server_package_dependencies_socket_io",
@@ -2439,7 +2450,7 @@
       "file_type": "code",
       "norm_label": "socket.io",
       "source_file": "server/package.json",
-      "source_location": "L21"
+      "source_location": "L22"
     },
     {
       "id": "server_package_dependencies_socket_io_redis_adapter",
@@ -2450,7 +2461,7 @@
       "file_type": "code",
       "norm_label": "@socket.io/redis-adapter",
       "source_file": "server/package.json",
-      "source_location": "L11"
+      "source_location": "L12"
     },
     {
       "id": "bcryptjs",
@@ -2461,7 +2472,7 @@
       "file_type": "concept",
       "norm_label": "bcryptjs",
       "source_file": "server/package.json",
-      "source_location": "L12"
+      "source_location": "L13"
     },
     {
       "id": "cors",
@@ -2472,7 +2483,7 @@
       "file_type": "concept",
       "norm_label": "cors",
       "source_file": "server/package.json",
-      "source_location": "L13"
+      "source_location": "L14"
     },
     {
       "id": "dotenv",
@@ -2483,7 +2494,7 @@
       "file_type": "concept",
       "norm_label": "dotenv",
       "source_file": "server/package.json",
-      "source_location": "L14"
+      "source_location": "L15"
     },
     {
       "id": "express",
@@ -2494,7 +2505,7 @@
       "file_type": "concept",
       "norm_label": "express",
       "source_file": "server/package.json",
-      "source_location": "L15"
+      "source_location": "L16"
     },
     {
       "id": "express_rate_limit",
@@ -2505,7 +2516,7 @@
       "file_type": "concept",
       "norm_label": "express-rate-limit",
       "source_file": "server/package.json",
-      "source_location": "L16"
+      "source_location": "L17"
     },
     {
       "id": "jsonwebtoken",
@@ -2516,7 +2527,7 @@
       "file_type": "concept",
       "norm_label": "jsonwebtoken",
       "source_file": "server/package.json",
-      "source_location": "L17"
+      "source_location": "L18"
     },
     {
       "id": "mongoose",
@@ -2527,7 +2538,7 @@
       "file_type": "concept",
       "norm_label": "mongoose",
       "source_file": "server/package.json",
-      "source_location": "L18"
+      "source_location": "L19"
     },
     {
       "id": "multer",
@@ -2538,7 +2549,7 @@
       "file_type": "concept",
       "norm_label": "multer",
       "source_file": "server/package.json",
-      "source_location": "L19"
+      "source_location": "L20"
     },
     {
       "id": "redis",
@@ -2549,7 +2560,7 @@
       "file_type": "concept",
       "norm_label": "redis",
       "source_file": "server/package.json",
-      "source_location": "L20"
+      "source_location": "L21"
     },
     {
       "id": "socket_io",
@@ -2560,7 +2571,7 @@
       "file_type": "concept",
       "norm_label": "socket.io",
       "source_file": "server/package.json",
-      "source_location": "L21"
+      "source_location": "L22"
     },
     {
       "id": "socket_io_redis_adapter",
@@ -2571,7 +2582,7 @@
       "file_type": "concept",
       "norm_label": "@socket.io/redis-adapter",
       "source_file": "server/package.json",
-      "source_location": "L11"
+      "source_location": "L12"
     },
     {
       "id": "readme_api_surface",
@@ -5593,7 +5604,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/package.json",
-      "source_location": "L12",
+      "source_location": "L13",
       "weight": 1.0
     },
     {
@@ -5605,7 +5616,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/package.json",
-      "source_location": "L13",
+      "source_location": "L14",
       "weight": 1.0
     },
     {
@@ -5617,7 +5628,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/package.json",
-      "source_location": "L14",
+      "source_location": "L15",
       "weight": 1.0
     },
     {
@@ -5629,7 +5640,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/package.json",
-      "source_location": "L15",
+      "source_location": "L16",
       "weight": 1.0
     },
     {
@@ -5641,7 +5652,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/package.json",
-      "source_location": "L16",
+      "source_location": "L17",
       "weight": 1.0
     },
     {
@@ -5653,7 +5664,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/package.json",
-      "source_location": "L17",
+      "source_location": "L18",
       "weight": 1.0
     },
     {
@@ -5665,7 +5676,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/package.json",
-      "source_location": "L18",
+      "source_location": "L19",
       "weight": 1.0
     },
     {
@@ -5677,7 +5688,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/package.json",
-      "source_location": "L19",
+      "source_location": "L20",
       "weight": 1.0
     },
     {
@@ -5689,7 +5700,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/package.json",
-      "source_location": "L20",
+      "source_location": "L21",
       "weight": 1.0
     },
     {
@@ -5701,7 +5712,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/package.json",
-      "source_location": "L21",
+      "source_location": "L22",
       "weight": 1.0
     },
     {
@@ -5713,7 +5724,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/package.json",
-      "source_location": "L11",
+      "source_location": "L12",
       "weight": 1.0
     },
     {
@@ -5725,7 +5736,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/package.json",
-      "source_location": "L24",
+      "source_location": "L25",
       "weight": 1.0
     },
     {
@@ -5737,7 +5748,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/package.json",
-      "source_location": "L25",
+      "source_location": "L26",
       "weight": 1.0
     },
     {
@@ -5749,7 +5760,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/package.json",
-      "source_location": "L26",
+      "source_location": "L27",
       "weight": 1.0
     },
     {
@@ -8079,7 +8090,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L1213",
+      "source_location": "L1223",
       "weight": 1.0
     },
     {
@@ -8101,7 +8112,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L1252",
+      "source_location": "L1262",
       "weight": 1.0
     },
     {
@@ -8475,7 +8486,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/package.json",
-      "source_location": "L10",
+      "source_location": "L11",
       "weight": 1.0
     },
     {
@@ -8497,7 +8508,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/package.json",
-      "source_location": "L23",
+      "source_location": "L24",
       "weight": 1.0
     },
     {
@@ -8552,7 +8563,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/package.json",
-      "source_location": "L11",
+      "source_location": "L12",
       "weight": 1.0
     },
     {
@@ -8563,7 +8574,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/package.json",
-      "source_location": "L12",
+      "source_location": "L13",
       "weight": 1.0
     },
     {
@@ -8574,7 +8585,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/package.json",
-      "source_location": "L13",
+      "source_location": "L14",
       "weight": 1.0
     },
     {
@@ -8585,7 +8596,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/package.json",
-      "source_location": "L14",
+      "source_location": "L15",
       "weight": 1.0
     },
     {
@@ -8596,7 +8607,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/package.json",
-      "source_location": "L15",
+      "source_location": "L16",
       "weight": 1.0
     },
     {
@@ -8607,7 +8618,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/package.json",
-      "source_location": "L16",
+      "source_location": "L17",
       "weight": 1.0
     },
     {
@@ -8618,7 +8629,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/package.json",
-      "source_location": "L17",
+      "source_location": "L18",
       "weight": 1.0
     },
     {
@@ -8629,7 +8640,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/package.json",
-      "source_location": "L18",
+      "source_location": "L19",
       "weight": 1.0
     },
     {
@@ -8640,7 +8651,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/package.json",
-      "source_location": "L19",
+      "source_location": "L20",
       "weight": 1.0
     },
     {
@@ -8651,7 +8662,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/package.json",
-      "source_location": "L20",
+      "source_location": "L21",
       "weight": 1.0
     },
     {
@@ -8662,7 +8673,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/package.json",
-      "source_location": "L21",
+      "source_location": "L22",
       "weight": 1.0
     },
     {
@@ -8673,7 +8684,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/package.json",
-      "source_location": "L24",
+      "source_location": "L25",
       "weight": 1.0
     },
     {
@@ -8684,7 +8695,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/package.json",
-      "source_location": "L25",
+      "source_location": "L26",
       "weight": 1.0
     },
     {
@@ -8695,7 +8706,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/package.json",
-      "source_location": "L26",
+      "source_location": "L27",
       "weight": 1.0
     },
     {
@@ -8711,13 +8722,24 @@
     },
     {
       "source": "server_package_scripts",
-      "target": "server_package_scripts_test",
+      "target": "server_package_scripts_dev",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/package.json",
       "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "server_package_scripts",
+      "target": "server_package_scripts_test",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/package.json",
+      "source_location": "L9",
       "weight": 1.0
     },
     {
@@ -9406,5 +9428,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "a9540167f1c2005059d367a2a7cc42122dabd6de"
+  "built_at_commit": "ee8ee6b9f1b5e82523f8a1ee3c744e3bc3da3fda"
 }

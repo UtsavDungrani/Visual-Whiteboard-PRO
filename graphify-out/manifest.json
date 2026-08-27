@@ -6,9 +6,9 @@
     "semantic_hash": ""
   },
   "frontend/src/App.jsx": {
-    "mtime": 1787742410.4852157,
-    "seen": 1787747611.1240675,
-    "ast_hash": "79fcf294ff9eff9e8c2d29d9c506b8ae",
+    "mtime": 1787803475.5697875,
+    "seen": 1787803608.1292853,
+    "ast_hash": "8bac9cbcb6461ff103557f062f1b1be7",
     "semantic_hash": ""
   },
   "frontend/src/main.jsx": {
@@ -18,9 +18,9 @@
     "semantic_hash": "1805ad7bae3bf603446eed7431bab36a"
   },
   "server/index.js": {
-    "mtime": 1787738947.5261748,
-    "seen": 1787739072.4281588,
-    "ast_hash": "578a911d99a19a55c9317259ef88a400",
+    "mtime": 1787803475.631276,
+    "seen": 1787803608.1341636,
+    "ast_hash": "77f9d3d53afb64ba8f455ca2b17f40ea",
     "semantic_hash": ""
   },
   "server/models/Whiteboard.js": {
@@ -30,9 +30,9 @@
     "semantic_hash": ""
   },
   "server/package.json": {
-    "mtime": 1782101817.5628917,
-    "seen": 1787378086.4252717,
-    "ast_hash": "98c5893bcf8ecd93ffa6d27d01251b0f",
+    "mtime": 1787759873.8355658,
+    "seen": 1787760165.6421297,
+    "ast_hash": "f47c07088013d828605fee7d04b466ab",
     "semantic_hash": ""
   },
   ".agents/rules/graphify.md": {
@@ -90,15 +90,15 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Topbar.jsx": {
-    "mtime": 1787738947.40379,
-    "seen": 1787739072.4260323,
-    "ast_hash": "1a0160e7e88fc1f111fc0fd8e3b0573d",
+    "mtime": 1787760659.053671,
+    "seen": 1787760675.5512385,
+    "ast_hash": "e3d69b33d38ff5b64f92a4a796145a7b",
     "semantic_hash": ""
   },
   "frontend/src/components/ExportModal.jsx": {
-    "mtime": 1787747120.8606355,
-    "seen": 1787747611.1254983,
-    "ast_hash": "8ab092bd045d03573d57b51cf36e96b7",
+    "mtime": 1787759270.8183315,
+    "seen": 1787759286.3586903,
+    "ast_hash": "0706f6ea5fc2b08a4a280650554c2254",
     "semantic_hash": ""
   },
   "frontend/src/components/PageStrip.jsx": {
@@ -329,9 +329,9 @@
     "semantic_hash": ""
   },
   "frontend/src/components/DrawioCanvas.jsx": {
-    "mtime": 1787747535.1833763,
-    "seen": 1787747611.1254964,
-    "ast_hash": "dcef294535b1bd09a2e4349de8927b74",
+    "mtime": 1787803475.3213108,
+    "seen": 1787803608.1306124,
+    "ast_hash": "5b7abece7c5e9a48120eac081cc580b6",
     "semantic_hash": ""
   },
   "frontend/vite.config.js": {

@@ -1132,9 +1132,24 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("board:structure-update", ({ roomId, pages, mode, pageSize }) => {
-    const room = roomId || "global";
-    socket.to(room).emit("board:structure-update", { pages, mode, pageSize });
+  socket.on(
+    "board:structure-update",
+    ({ roomId, pages, mode, pageSize, canvasMode }) => {
+      const room = roomId || "global";
+      socket
+        .to(room)
+        .emit("board:structure-update", { pages, mode, pageSize, canvasMode });
+    },
+  );
+
+  socket.on("canvas-mode:change", ({ id, roomId, mode }) => {
+    const room = roomId || id || "global";
+    socket.to(room).emit("canvas-mode:updated", { roomId: room, mode });
+  });
+
+  socket.on("drawio:update", ({ id, roomId, pageId, xml }) => {
+    const room = roomId || id || "global";
+    socket.to(room).emit("drawio:update", { roomId: room, pageId, xml });
   });
 
   socket.on(

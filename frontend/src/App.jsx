@@ -3442,7 +3442,7 @@ export default function App() {
     if (typeof showModeNotification === "function") {
       showModeNotification(
         newMode === "drawio"
-          ? "📐 Switched canvas mode to Draw.io Architecture Diagrammer"
+          ? "🏛️ Switched canvas mode to Architecture Diagrammer"
           : "✏️ Switched canvas mode to Freehand Whiteboard",
       );
     }
@@ -3875,7 +3875,7 @@ export default function App() {
         setCanvasMode(mode);
         showModeNotification(
           mode === "drawio"
-            ? "📐 Board Owner switched canvas mode to Draw.io Architecture Diagrammer"
+            ? "🏛️ Board Owner switched canvas mode to Architecture Diagrammer"
             : "✏️ Board Owner switched canvas mode to Freehand Whiteboard",
         );
       }
@@ -4267,6 +4267,7 @@ export default function App() {
                 initialXml={drawioXml}
                 remoteXml={remoteDrawioXml}
                 onXmlChange={handleDrawioXmlChange}
+                isReadOnly={isReadOnly}
               />
             </div>
 

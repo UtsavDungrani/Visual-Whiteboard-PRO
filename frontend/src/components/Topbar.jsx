@@ -124,94 +124,67 @@ export default function Topbar({
           )}
         </div>
 
-        {/* Mode Switcher: Freehand vs Draw.io */}
-        <div
-          className="canvas-mode-toggle"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            background: "rgba(255, 255, 255, 0.08)",
-            borderRadius: "8px",
-            padding: "3px",
-            border: "1px solid rgba(255, 255, 255, 0.12)",
-            marginLeft: "12px",
-            opacity: isOwner ? 1 : 0.85,
-          }}
-          title={
-            isOwner
-              ? "Switch canvas mode (Owner only)"
-              : "Only the board owner can change canvas mode"
-          }
-        >
+        {/* Mode Selector / Label */}
+        {isOwner ? (
           <button
-            className={`btn-mode ${canvasMode === "freehand" ? "active" : ""}`}
-            onClick={() => isOwner && setCanvasMode("freehand")}
+            onClick={() =>
+              setCanvasMode(canvasMode === "drawio" ? "freehand" : "drawio")
+            }
+            className="btn btn-secondary"
             style={{
-              padding: "4px 12px",
-              fontSize: "12px",
-              fontWeight: "600",
-              borderRadius: "6px",
-              border: "none",
-              cursor: isOwner ? "pointer" : "not-allowed",
-              background:
-                canvasMode === "freehand"
-                  ? "var(--color-accent, #6366f1)"
-                  : "transparent",
-              color: canvasMode === "freehand" ? "#ffffff" : "#94a3b8",
+              marginLeft: "12px",
               display: "flex",
               alignItems: "center",
               gap: "6px",
-              transition: "all 0.2s ease",
-              opacity: isOwner || canvasMode === "freehand" ? 1 : 0.6,
             }}
-            title={
-              isOwner
-                ? "Switch to Freehand Canvas Mode"
-                : "Only the board owner can change canvas mode"
-            }
+            title={`Current mode: ${canvasMode === "drawio" ? "Architecture" : "Freehand"} (Click to toggle)`}
           >
-            <span>✏️</span> Freehand
-          </button>
-          <button
-            className={`btn-mode ${canvasMode === "drawio" ? "active" : ""}`}
-            onClick={() => isOwner && setCanvasMode("drawio")}
-            style={{
-              padding: "4px 12px",
-              fontSize: "12px",
-              fontWeight: "600",
-              borderRadius: "6px",
-              border: "none",
-              cursor: isOwner ? "pointer" : "not-allowed",
-              background:
+            <i
+              className={
                 canvasMode === "drawio"
-                  ? "var(--color-accent, #6366f1)"
-                  : "transparent",
-              color: canvasMode === "drawio" ? "#ffffff" : "#94a3b8",
+                  ? "fa-solid fa-diagram-project"
+                  : "fa-solid fa-pen-nib"
+              }
+              style={{
+                fontSize: "13px",
+                color: canvasMode === "drawio" ? "#818cf8" : "#38bdf8",
+              }}
+            />
+            <span>{canvasMode === "drawio" ? "Architecture" : "Freehand"}</span>
+          </button>
+        ) : (
+          <div
+            style={{
+              marginLeft: "12px",
               display: "flex",
               alignItems: "center",
               gap: "6px",
-              transition: "all 0.2s ease",
-              opacity: isOwner || canvasMode === "drawio" ? 1 : 0.6,
+              padding: "5px 10px",
+              borderRadius: "6px",
+              background: "rgba(255, 255, 255, 0.05)",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+              fontSize: "12px",
+              fontWeight: "600",
+              color: "#cbd5e1",
             }}
-            title={
-              isOwner
-                ? "Switch to Draw.io Architecture Diagrammer"
-                : "Only the board owner can change canvas mode"
-            }
+            title="Board canvas mode set by owner"
           >
-            <span>📐</span> Draw.io{" "}
-            {!isOwner && (
-              <i
-                className="fa-solid fa-lock"
-                style={{
-                  fontSize: "10px",
-                  marginLeft: "2px",
-                  color: "#fbbf24",
-                }}
-              />
-            )}
-          </button>
-        </div>
+            <i
+              className={
+                canvasMode === "drawio"
+                  ? "fa-solid fa-diagram-project"
+                  : "fa-solid fa-pen-nib"
+              }
+              style={{
+                fontSize: "12px",
+                color: canvasMode === "drawio" ? "#818cf8" : "#38bdf8",
+              }}
+            />
+            <span>
+              {canvasMode === "drawio" ? "Architecture Mode" : "Freehand Mode"}
+            </span>
+          </div>
+        )}
       </div>
 
       <div className="topbar-right">
@@ -288,24 +261,26 @@ export default function Topbar({
               Share
             </button>
 
-            <button onClick={onExport} className="btn btn-secondary">
-              <svg
-                width="16"
-                height="16"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                ></path>
-              </svg>
-              Export
-            </button>
+            {canvasMode === "freehand" && (
+              <button onClick={onExport} className="btn btn-secondary">
+                <svg
+                  width="16"
+                  height="16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                  ></path>
+                </svg>
+                Export
+              </button>
+            )}
 
             {canvasMode === "freehand" && (
               <>
