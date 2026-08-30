@@ -7,7 +7,6 @@ build/
 .agents/
 .cursor/
 .gemini/
-.github/
 deploy_data.txt
 graphify-out/cache/
 graphify-out/2026-*/

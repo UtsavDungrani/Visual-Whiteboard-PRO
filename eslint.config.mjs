@@ -1,6 +1,6 @@
 export default [
   {
-    ignores: ["drawio-dev/**", "graphify-out/**", "dist/**", "build/**"],
+    ignores: ["drawio-dev/**", "graphify-out/**", "dist/**", "**/dist/**", "build/**"],
   },
   {
     languageOptions: {
