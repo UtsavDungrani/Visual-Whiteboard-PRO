@@ -32,6 +32,11 @@ jobs:
   test-server:
     name: Server Unit Tests
     runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo:6.0
+        ports:
+          - 27017:27017
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -48,8 +53,11 @@ jobs:
         working-directory: server
 
       - name: Run Server Tests
-        run: npm test
+        run: npm test -- --runInBand --forceExit
         working-directory: server
+        env:
+          MONGO_URI: mongodb://127.0.0.1:27017/visual-whiteboard-ci
+          JWT_SECRET: ci_secret_key_123
 
   build-frontend:
     name: Frontend Build Check
