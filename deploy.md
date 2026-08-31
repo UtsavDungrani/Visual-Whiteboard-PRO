@@ -30,7 +30,9 @@ This document outlines the step-by-step procedure to deploy the **Visual Whitebo
 ---
 
 ## Pre-requisites & Accounts Needed
+
 Before starting, create free accounts on the following platforms:
+
 1. **MongoDB Atlas** (for the database)
 2. **Upstash** or **Render** (for Redis caching and Pub/Sub room synchronization)
 3. **Render** or **Railway** (for hosting the Backend server)
@@ -70,21 +72,21 @@ We will deploy the Node.js/Express server to **Render** as a Web Service.
 2. Log into [Render Dashboard](https://dashboard.render.com/) and click **New** -> **Web Service**.
 3. Connect your repository containing `Visual Whiteboard Pro`.
 4. Configure the Web Service settings:
-   * **Name**: `visual-whiteboard-backend`
-   * **Region**: Choose the closest region to your users.
-   * **Root Directory**: `server` (crucial, since the backend code is in the `/server` folder)
-   * **Runtime**: `Node`
-   * **Build Command**: `npm install`
-   * **Start Command**: `npm start`
+   - **Name**: `visual-whiteboard-backend`
+   - **Region**: Choose the closest region to your users.
+   - **Root Directory**: `server` (crucial, since the backend code is in the `/server` folder)
+   - **Runtime**: `Node`
+   - **Build Command**: `npm install`
+   - **Start Command**: `npm start`
 5. Click **Advanced** and add the following Environment Variables:
-   
-   | Key | Value | Description |
-   |:---|:---|:---|
-   | `NODE_ENV` | `production` | Sets the application to production mode. |
-   | `MONGO_URI` | *Your MongoDB Atlas Connection String* | Database connection string. |
-   | `JWT_SECRET` | *Generates a random secure key* | Key used to sign user auth tokens (e.g. `s3cr3t_123_abc`). |
-   | `REDIS_URL` | *Your Upstash Redis URL* | (Optional) Redis cache link. |
-   | `PORT` | `10000` | Port to start the server (Render defaults to this). |
+
+   | Key          | Value                                  | Description                                                |
+   | :----------- | :------------------------------------- | :--------------------------------------------------------- |
+   | `NODE_ENV`   | `production`                           | Sets the application to production mode.                   |
+   | `MONGO_URI`  | _Your MongoDB Atlas Connection String_ | Database connection string.                                |
+   | `JWT_SECRET` | _Generates a random secure key_        | Key used to sign user auth tokens (e.g. `s3cr3t_123_abc`). |
+   | `REDIS_URL`  | _Your Upstash Redis URL_               | (Optional) Redis cache link.                               |
+   | `PORT`       | `10000`                                | Port to start the server (Render defaults to this).        |
 
 6. Deploy the Web Service. Once active, note the deployed URL (e.g., `https://visual-whiteboard-backend.onrender.com`).
 
@@ -96,7 +98,7 @@ To support production domains, configure the frontend to talk to your production
 
 1. To enable dynamic routing, update the API request targets in `frontend/src/App.jsx` and component files to use an environment variable:
    ```javascript
-   const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+   const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
    ```
 2. Make sure calls like `fetch('http://localhost:4000/api/auth/me')` are changed to `fetch(`${API_BASE_URL}/api/auth/me`)`.
 3. Make sure the Socket.io initialization:
@@ -117,14 +119,14 @@ We will deploy the Vite + React frontend to **Vercel**.
 1. Log into [Vercel](https://vercel.com).
 2. Click **Add New** -> **Project** and import your Git repository.
 3. Configure the Project:
-   * **Root Directory**: `frontend` (crucial, since the client React app is in `/frontend`)
-   * **Framework Preset**: `Vite`
-   * **Build Command**: `npm run build`
-   * **Output Directory**: `dist`
+   - **Root Directory**: `frontend` (crucial, since the client React app is in `/frontend`)
+   - **Framework Preset**: `Vite`
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
 4. Expand the **Environment Variables** section and add:
-   * **Key**: `VITE_API_URL`
-   * **Value**: `https://visual-whiteboard-backend.onrender.com` (your deployed backend Render URL)
-5. Click **Deploy**. Vercel will build the frontend assets and provide you with a production URL (e.g., `https://visual-whiteboard-pro.vercel.app`).
+   - **Key**: `VITE_API_URL`
+   - **Value**: `https://visual-whiteboard-backend.onrender.com` (your deployed backend Render URL)
+5. Click **Deploy**. Vercel will build the frontend assets using the `vercel.json` rewrite configuration (redirecting client routes like `/board/*` to `/index.html`) and provide you with a production URL (e.g., `https://visual-whiteboard-pro.vercel.app`).
 
 ---
 
