@@ -5,6 +5,7 @@ const User = require("../models/User");
 const Whiteboard = require("../models/Whiteboard");
 const ElementContext = require("../models/ElementContext");
 const jwt = require("jsonwebtoken");
+const { JWT_SECRET } = require("../config");
 const fs = require("fs");
 const path = require("path");
 
@@ -33,10 +34,7 @@ describe("Element Context API", () => {
       password: "password123",
     });
     await user.save();
-    token = jwt.sign(
-      { id: user._id, email: user.email },
-      process.env.JWT_SECRET || "visual_whiteboard_secret_key_123",
-    );
+    token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET);
 
     whiteboard = new Whiteboard({
       title: "Context Board",

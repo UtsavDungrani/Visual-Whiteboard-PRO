@@ -1609,7 +1609,7 @@
       "node_kind": "heading",
       "norm_label": "step 1: database setup (mongodb atlas)",
       "source_file": "deploy.md",
-      "source_location": "L41"
+      "source_location": "L43"
     },
     {
       "id": "deploy_step_2_caching_setup_upstash_redis",
@@ -1621,7 +1621,7 @@
       "node_kind": "heading",
       "norm_label": "step 2: caching setup (upstash redis)",
       "source_file": "deploy.md",
-      "source_location": "L55"
+      "source_location": "L57"
     },
     {
       "id": "deploy_step_3_backend_deployment_render",
@@ -1633,7 +1633,7 @@
       "node_kind": "heading",
       "norm_label": "step 3: backend deployment (render)",
       "source_file": "deploy.md",
-      "source_location": "L65"
+      "source_location": "L67"
     },
     {
       "id": "deploy_step_4_frontend_api_config",
@@ -1645,7 +1645,7 @@
       "node_kind": "heading",
       "norm_label": "step 4: frontend api config",
       "source_file": "deploy.md",
-      "source_location": "L93"
+      "source_location": "L95"
     },
     {
       "id": "deploy_step_5_frontend_deployment_vercel",
@@ -1657,7 +1657,7 @@
       "node_kind": "heading",
       "norm_label": "step 5: frontend deployment (vercel)",
       "source_file": "deploy.md",
-      "source_location": "L113"
+      "source_location": "L115"
     },
     {
       "id": "deploy_step_6_post_deployment_testing",
@@ -1669,7 +1669,7 @@
       "node_kind": "heading",
       "norm_label": "step 6: post-deployment testing",
       "source_file": "deploy.md",
-      "source_location": "L131"
+      "source_location": "L133"
     },
     {
       "id": "deploy_visual_whiteboard_pro_deployment_guide",
@@ -1978,35 +1978,11 @@
       "source_location": "L1"
     },
     {
-      "id": "readme",
-      "label": "README.md",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "Project Description and Requirements",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "readme.md",
-      "source_file": "README.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "tasks",
-      "label": "TASKS.md",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "Project Description and Requirements",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "tasks.md",
-      "source_file": "TASKS.md",
-      "source_location": "L1"
-    },
-    {
       "id": "tasks_phase_0_project_setup",
       "label": "Phase 0 \u2014 Project Setup",
       "_origin": "ast",
       "community": 2,
-      "community_name": "Project Description and Requirements",
+      "community_name": "Visual Whiteboard Pro \u2014 Phased Task Breakdown",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "phase 0 \u2014 project setup",
@@ -2018,7 +1994,7 @@
       "label": "Phase 1 \u2014 Core Editor MVP",
       "_origin": "ast",
       "community": 2,
-      "community_name": "Project Description and Requirements",
+      "community_name": "Visual Whiteboard Pro \u2014 Phased Task Breakdown",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "phase 1 \u2014 core editor mvp",
@@ -2030,7 +2006,7 @@
       "label": "Phase 2 \u2014 Real-time Collaboration",
       "_origin": "ast",
       "community": 2,
-      "community_name": "Project Description and Requirements",
+      "community_name": "Visual Whiteboard Pro \u2014 Phased Task Breakdown",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "phase 2 \u2014 real-time collaboration",
@@ -2042,7 +2018,7 @@
       "label": "Phase 3 \u2014 Pages & Export System",
       "_origin": "ast",
       "community": 2,
-      "community_name": "Project Description and Requirements",
+      "community_name": "Visual Whiteboard Pro \u2014 Phased Task Breakdown",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "phase 3 \u2014 pages & export system",
@@ -2054,7 +2030,7 @@
       "label": "Phase 4 \u2014 Context Layer & UI Polish",
       "_origin": "ast",
       "community": 2,
-      "community_name": "Project Description and Requirements",
+      "community_name": "Visual Whiteboard Pro \u2014 Phased Task Breakdown",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "phase 4 \u2014 context layer & ui polish",
@@ -2066,7 +2042,7 @@
       "label": "Phase 5 \u2014 AI Features (Mess Cleanup + Architecture Assist)",
       "_origin": "ast",
       "community": 2,
-      "community_name": "Project Description and Requirements",
+      "community_name": "Visual Whiteboard Pro \u2014 Phased Task Breakdown",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "phase 5 \u2014 ai features (mess cleanup + architecture assist)",
@@ -2078,7 +2054,7 @@
       "label": "Phase 6 \u2014 Testing, Auth & Security",
       "_origin": "ast",
       "community": 2,
-      "community_name": "Project Description and Requirements",
+      "community_name": "Visual Whiteboard Pro \u2014 Phased Task Breakdown",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "phase 6 \u2014 testing, auth & security",
@@ -2090,7 +2066,7 @@
       "label": "Phase 7 \u2014 Deployment & Monitoring",
       "_origin": "ast",
       "community": 2,
-      "community_name": "Project Description and Requirements",
+      "community_name": "Visual Whiteboard Pro \u2014 Phased Task Breakdown",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "phase 7 \u2014 deployment & monitoring",
@@ -2102,7 +2078,7 @@
       "label": "PR / Review Checklist",
       "_origin": "ast",
       "community": 2,
-      "community_name": "Project Description and Requirements",
+      "community_name": "Visual Whiteboard Pro \u2014 Phased Task Breakdown",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "pr / review checklist",
@@ -2114,7 +2090,7 @@
       "label": "Visual Whiteboard Pro \u2014 Phased Task Breakdown",
       "_origin": "ast",
       "community": 2,
-      "community_name": "Project Description and Requirements",
+      "community_name": "Visual Whiteboard Pro \u2014 Phased Task Breakdown",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "visual whiteboard pro \u2014 phased task breakdown",
@@ -2142,6 +2118,28 @@
       "norm_label": "main.jsx",
       "source_file": "frontend/src/main.jsx",
       "source_location": "L1"
+    },
+    {
+      "id": "frontend_vercel",
+      "label": "frontend/vercel.json",
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "frontend/vercel.json",
+      "file_type": "code",
+      "norm_label": "frontend/vercel.json",
+      "source_file": "frontend/vercel.json",
+      "source_location": "L1"
+    },
+    {
+      "id": "frontend_vercel_rewrites",
+      "label": "rewrites",
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "frontend/vercel.json",
+      "file_type": "code",
+      "norm_label": "rewrites",
+      "source_file": "frontend/vercel.json",
+      "source_location": "L2"
     },
     {
       "id": "server_package",
@@ -2318,6 +2316,28 @@
       "norm_label": "supertest",
       "source_file": "server/package.json",
       "source_location": "L27"
+    },
+    {
+      "id": "vercel",
+      "label": "vercel.json",
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "vercel.json",
+      "file_type": "code",
+      "norm_label": "vercel.json",
+      "source_file": "vercel.json",
+      "source_location": "L1"
+    },
+    {
+      "id": "vercel_rewrites",
+      "label": "rewrites",
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "vercel.json",
+      "file_type": "code",
+      "norm_label": "rewrites",
+      "source_file": "vercel.json",
+      "source_location": "L2"
     },
     {
       "id": "server_package_dependencies",
@@ -2573,6 +2593,18 @@
       "source_location": "L12"
     },
     {
+      "id": "readme",
+      "label": "README.md",
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "Visual Whiteboard Pro",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "readme.md",
+      "source_file": "README.md",
+      "source_location": "L1"
+    },
+    {
       "id": "readme_api_surface",
       "label": "API Surface",
       "_origin": "ast",
@@ -2775,6 +2807,18 @@
       "norm_label": "what it does today",
       "source_file": "README.md",
       "source_location": "L9"
+    },
+    {
+      "id": "tasks",
+      "label": "TASKS.md",
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "Visual Whiteboard Pro",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "tasks.md",
+      "source_file": "TASKS.md",
+      "source_location": "L1"
     },
     {
       "id": "frontend_src_app",
@@ -3882,8 +3926,8 @@
       "_origin": "semantic",
       "author": null,
       "captured_at": null,
-      "community": 2,
-      "community_name": "Project Description and Requirements",
+      "community": 4,
+      "community_name": "Visual Whiteboard Pro",
       "contributor": null,
       "file_type": "concept",
       "norm_label": "architecture assist ai",
@@ -3897,8 +3941,8 @@
       "_origin": "semantic",
       "author": null,
       "captured_at": null,
-      "community": 2,
-      "community_name": "Project Description and Requirements",
+      "community": 4,
+      "community_name": "Visual Whiteboard Pro",
       "contributor": null,
       "file_type": "concept",
       "norm_label": "real-time collaboration",
@@ -3912,8 +3956,8 @@
       "_origin": "semantic",
       "author": null,
       "captured_at": null,
-      "community": 2,
-      "community_name": "Project Description and Requirements",
+      "community": 4,
+      "community_name": "Visual Whiteboard Pro",
       "contributor": null,
       "file_type": "concept",
       "norm_label": "context layer",
@@ -3927,8 +3971,8 @@
       "_origin": "semantic",
       "author": null,
       "captured_at": null,
-      "community": 2,
-      "community_name": "Project Description and Requirements",
+      "community": 4,
+      "community_name": "Visual Whiteboard Pro",
       "contributor": null,
       "file_type": "concept",
       "norm_label": "drawing canvas",
@@ -3942,8 +3986,8 @@
       "_origin": "semantic",
       "author": null,
       "captured_at": null,
-      "community": 2,
-      "community_name": "Project Description and Requirements",
+      "community": 4,
+      "community_name": "Visual Whiteboard Pro",
       "contributor": null,
       "file_type": "concept",
       "norm_label": "html/css export",
@@ -3957,8 +4001,8 @@
       "_origin": "semantic",
       "author": null,
       "captured_at": null,
-      "community": 2,
-      "community_name": "Project Description and Requirements",
+      "community": 4,
+      "community_name": "Visual Whiteboard Pro",
       "contributor": null,
       "file_type": "concept",
       "norm_label": "pdf export",
@@ -3972,8 +4016,8 @@
       "_origin": "semantic",
       "author": null,
       "captured_at": null,
-      "community": 2,
-      "community_name": "Project Description and Requirements",
+      "community": 4,
+      "community_name": "Visual Whiteboard Pro",
       "contributor": null,
       "file_type": "concept",
       "norm_label": "mess cleanup ai",
@@ -3987,8 +4031,8 @@
       "_origin": "semantic",
       "author": null,
       "captured_at": null,
-      "community": 2,
-      "community_name": "Project Description and Requirements",
+      "community": 4,
+      "community_name": "Visual Whiteboard Pro",
       "contributor": null,
       "file_type": "concept",
       "norm_label": "mongodb storage",
@@ -4002,8 +4046,8 @@
       "_origin": "semantic",
       "author": null,
       "captured_at": null,
-      "community": 2,
-      "community_name": "Project Description and Requirements",
+      "community": 4,
+      "community_name": "Visual Whiteboard Pro",
       "contributor": null,
       "file_type": "concept",
       "norm_label": "multi-page system",
@@ -4017,8 +4061,8 @@
       "_origin": "semantic",
       "author": null,
       "captured_at": null,
-      "community": 2,
-      "community_name": "Project Description and Requirements",
+      "community": 4,
+      "community_name": "Visual Whiteboard Pro",
       "contributor": null,
       "file_type": "concept",
       "norm_label": "socket.io event protocol",
@@ -4032,8 +4076,8 @@
       "_origin": "semantic",
       "author": null,
       "captured_at": null,
-      "community": 2,
-      "community_name": "Project Description and Requirements",
+      "community": 4,
+      "community_name": "Visual Whiteboard Pro",
       "contributor": null,
       "file_type": "document",
       "norm_label": "project description and requirements",
@@ -6450,7 +6494,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "deploy.md",
-      "source_location": "L113",
+      "source_location": "L115",
       "weight": 1.0
     },
     {
@@ -6461,7 +6505,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "deploy.md",
-      "source_location": "L131",
+      "source_location": "L133",
       "weight": 1.0
     },
     {
@@ -6483,7 +6527,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "deploy.md",
-      "source_location": "L41",
+      "source_location": "L43",
       "weight": 1.0
     },
     {
@@ -6494,7 +6538,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "deploy.md",
-      "source_location": "L55",
+      "source_location": "L57",
       "weight": 1.0
     },
     {
@@ -6505,7 +6549,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "deploy.md",
-      "source_location": "L65",
+      "source_location": "L67",
       "weight": 1.0
     },
     {
@@ -6527,7 +6571,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "deploy.md",
-      "source_location": "L93",
+      "source_location": "L95",
       "weight": 1.0
     },
     {
@@ -7287,6 +7331,17 @@
       "confidence_score": 1.0,
       "source_file": "frontend/src/utils/anchorPoints.js",
       "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_vercel",
+      "target": "frontend_vercel_rewrites",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/vercel.json",
+      "source_location": "L2",
       "weight": 1.0
     },
     {
@@ -9171,6 +9226,17 @@
       "weight": 1.0
     },
     {
+      "source": "vercel",
+      "target": "vercel_rewrites",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "vercel.json",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
       "source": "server_ai_service",
       "target": "server_ai_service_cleanuplayout",
       "relation": "indirect_call",
@@ -9427,5 +9493,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "e276a775a63058987c3ae52924be8cf3da7d436c"
+  "built_at_commit": "dcc895b6cefebf5c06fbf4d4a7213e130aa48dd8"
 }

@@ -1,7 +1,7 @@
 {
   "0": "frontend/package.json",
   "1": "index.js",
-  "2": "Project Description and Requirements",
+  "2": "Visual Whiteboard Pro — Phased Task Breakdown",
   "3": "dependencies",
   "4": "Visual Whiteboard Pro",
   "5": "Frontend Application & Collaboration UI",
@@ -21,5 +21,7 @@
   "19": "copilot-instructions.md",
   "20": "vite.config.js",
   "21": "App",
-  "23": "server/package.json"
+  "22": "frontend/vercel.json",
+  "23": "server/package.json",
+  "24": "vercel.json"
 }

@@ -233,9 +233,9 @@
     "semantic_hash": ""
   },
   "deploy.md": {
-    "mtime": 1782101817.4886813,
-    "seen": 1787378086.4252925,
-    "ast_hash": "eea1cdf9907bcf3d0fcf2c8d43827740",
+    "mtime": 1788188802.5566523,
+    "seen": 1788188836.2504969,
+    "ast_hash": "5fc965438e7c8a33472d141e99530da2",
     "semantic_hash": ""
   },
   "frontend/src/components/CanvasOverlay.jsx": {
@@ -344,6 +344,18 @@
     "mtime": 1788070831.4475942,
     "seen": 1788159624.4864717,
     "ast_hash": "d2275fc05b6d000f4a3ad6ce9bc62232",
+    "semantic_hash": ""
+  },
+  "frontend/vercel.json": {
+    "mtime": 1788188762.4336462,
+    "seen": 1788188836.2450697,
+    "ast_hash": "61bd31a2b0ac08f10f13c932b32d6ca1",
+    "semantic_hash": ""
+  },
+  "vercel.json": {
+    "mtime": 1788188766.280268,
+    "seen": 1788188836.2488906,
+    "ast_hash": "61bd31a2b0ac08f10f13c932b32d6ca1",
     "semantic_hash": ""
   }
 }

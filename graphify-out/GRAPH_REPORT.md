@@ -1,23 +1,23 @@
 # Graph Report - Visual Whiteboard Pro  (2026-08-31)
 
 ## Corpus Check
-- 53 files · ~56,341 words
+- 55 files · ~56,426 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 351 nodes · 470 edges · 23 communities (18 shown, 5 thin omitted)
+- 355 nodes · 472 edges · 25 communities (18 shown, 7 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 8 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `e276a775`
+- Built from commit: `dcc895b6`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - frontend/package.json
 - index.js
-- Project Description and Requirements
+- Visual Whiteboard Pro — Phased Task Breakdown
 - dependencies
 - Visual Whiteboard Pro
 - App.jsx
@@ -34,7 +34,9 @@
 - workflows/graphify.md
 - copilot-instructions.md
 - App
+- frontend/vercel.json
 - server/package.json
+- vercel.json
 
 ## God Nodes (most connected - your core abstractions)
 1. `App()` - 18 edges
@@ -63,7 +65,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (23 total, 5 thin omitted)
+## Communities (25 total, 7 thin omitted)
 
 ### Community 0 - "frontend/package.json"
 Cohesion: 0.09
@@ -73,17 +75,17 @@ Nodes (21): dependencies, jspdf, jszip, react, react-dom, socket.io-client, devD
 Cohesion: 0.05
 Nodes (34): architectureAssist(), cleanupLayout(), activeUsers, admin, aiLimiter, auth, authLimiter, bcrypt (+26 more)
 
-### Community 2 - "Project Description and Requirements"
-Cohesion: 0.11
-Nodes (21): Architecture Assist AI, Real-time Collaboration, Context Layer, Drawing Canvas, HTML/CSS Export, PDF Export, Mess Cleanup AI, MongoDB Storage (+13 more)
+### Community 2 - "Visual Whiteboard Pro — Phased Task Breakdown"
+Cohesion: 0.20
+Nodes (10): Phase 0 — Project Setup, Phase 1 — Core Editor MVP, Phase 2 — Real-time Collaboration, Phase 3 — Pages & Export System, Phase 4 — Context Layer & UI Polish, Phase 5 — AI Features (Mess Cleanup + Architecture Assist), Phase 6 — Testing, Auth & Security, Phase 7 — Deployment & Monitoring (+2 more)
 
 ### Community 3 - "dependencies"
 Cohesion: 0.09
 Nodes (23): bcryptjs, cors, dotenv, express, express-rate-limit, jsonwebtoken, mongoose, multer (+15 more)
 
 ### Community 4 - "Visual Whiteboard Pro"
-Cohesion: 0.12
-Nodes (17): API Surface, Configuration, Current Limitations, Data Model, Future Improvements, How It Works, Live Url: https://visual-whiteboard-pro.vercel.app/, Local Setup (+9 more)
+Cohesion: 0.08
+Nodes (28): Architecture Assist AI, Real-time Collaboration, Context Layer, Drawing Canvas, HTML/CSS Export, PDF Export, Mess Cleanup AI, MongoDB Storage (+20 more)
 
 ### Community 6 - "App.jsx"
 Cohesion: 0.08
@@ -126,24 +128,24 @@ Cohesion: 0.12
 Nodes (15): jest, devDependencies, jest, socket.io-client, supertest, socket.io-client, main, name (+7 more)
 
 ## Knowledge Gaps
-- **166 isolated node(s):** `name`, `version`, `private`, `dev`, `build` (+161 more)
+- **168 isolated node(s):** `name`, `version`, `private`, `dev`, `build` (+163 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **7 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Visual Whiteboard Pro` connect `Visual Whiteboard Pro` to `Project Description and Requirements`?**
-  _High betweenness centrality (0.030) - this node is a cross-community bridge._
-- **Why does `Real-time Collaboration` connect `Project Description and Requirements` to `index.js`?**
+- **Why does `Real-time Collaboration` connect `Visual Whiteboard Pro` to `index.js`?**
   _High betweenness centrality (0.026) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `private` to the rest of the system?**
-  _166 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _168 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `frontend/package.json` be split into smaller, more focused modules?**
   _Cohesion score 0.09090909090909091 - nodes in this community are weakly interconnected._
 - **Should `index.js` be split into smaller, more focused modules?**
   _Cohesion score 0.049682875264270614 - nodes in this community are weakly interconnected._
-- **Should `Project Description and Requirements` be split into smaller, more focused modules?**
-  _Cohesion score 0.11462450592885376 - nodes in this community are weakly interconnected._
 - **Should `dependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.08695652173913043 - nodes in this community are weakly interconnected._
+- **Should `Visual Whiteboard Pro` be split into smaller, more focused modules?**
+  _Cohesion score 0.08275862068965517 - nodes in this community are weakly interconnected._
+- **Should `App.jsx` be split into smaller, more focused modules?**
+  _Cohesion score 0.08095238095238096 - nodes in this community are weakly interconnected._

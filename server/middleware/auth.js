@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const JWT_SECRET = process.env.JWT_SECRET || "visual_whiteboard_secret_key_123";
+const { JWT_SECRET } = require("../config");
 
 module.exports = function (req, res, next) {
   // Get token from Authorization header

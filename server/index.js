@@ -21,7 +21,7 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-const JWT_SECRET = process.env.JWT_SECRET || "visual_whiteboard_secret_key_123";
+const { JWT_SECRET } = require("./config");
 
 const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 4000;
 
@@ -1264,26 +1264,37 @@ if (require.main === module) {
     });
 }
 
+// Seeds an admin only from explicit env credentials. There is deliberately no
+// fallback: a hardcoded default would be a publicly known login on every deploy.
 async function seedAdminUser() {
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+
+  if (!adminEmail || !adminPassword) {
+    console.log(
+      "[Seeder] ADMIN_EMAIL/ADMIN_PASSWORD not set - skipping admin seed.",
+    );
+    return;
+  }
+
   try {
-    const adminEmail = "admin@whiteboard.com";
-    const existingAdmin = await User.findOne({ email: adminEmail });
-    if (!existingAdmin) {
-      const hashedPassword = await bcrypt.hash("adminpassword", 10);
-      const admin = new User({
-        name: "System Administrator",
-        email: adminEmail,
-        password: hashedPassword,
-        avatar_color: "#1E3A8A",
-        role: "admin",
-      });
-      await admin.save();
-      console.log(
-        "[Seeder] Default Admin user created: admin@whiteboard.com / adminpassword",
-      );
-    } else {
-      console.log("[Seeder] Admin user already exists: admin@whiteboard.com");
+    // Match the casing normalisation used by the login route.
+    const email = adminEmail.toLowerCase().trim();
+    const existingAdmin = await User.findOne({ email });
+    if (existingAdmin) {
+      console.log(`[Seeder] Admin user already exists: ${email}`);
+      return;
     }
+
+    const hashedPassword = await bcrypt.hash(adminPassword, 10);
+    await new User({
+      name: "System Administrator",
+      email,
+      password: hashedPassword,
+      avatar_color: "#1E3A8A",
+      role: "admin",
+    }).save();
+    console.log(`[Seeder] Admin user created: ${email}`);
   } catch (err) {
     console.error("[Seeder] Error seeding admin user:", err);
   }
