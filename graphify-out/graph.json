@@ -28,6 +28,54 @@
       "source_location": "L13"
     },
     {
+      "id": "server_boardaccess_accessforboard",
+      "label": "accessForBoard()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "accessforboard()",
+      "source_file": "server/boardAccess.js",
+      "source_location": "L16"
+    },
+    {
+      "id": "server_boardaccess_canedit",
+      "label": "canEdit()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "canedit()",
+      "source_file": "server/boardAccess.js",
+      "source_location": "L28"
+    },
+    {
+      "id": "server_boardaccess_getboardaccess",
+      "label": "getBoardAccess()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "getboardaccess()",
+      "source_file": "server/boardAccess.js",
+      "source_location": "L35"
+    },
+    {
+      "id": "server_boardaccess_isboardid",
+      "label": "isBoardId()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "isboardid()",
+      "source_file": "server/boardAccess.js",
+      "source_location": "L10"
+    },
+    {
       "id": "server_index_broadcastroomusers",
       "label": "broadcastRoomUsers()",
       "_callable": true,
@@ -37,7 +85,7 @@
       "file_type": "code",
       "norm_label": "broadcastroomusers()",
       "source_file": "server/index.js",
-      "source_location": "L997"
+      "source_location": "L1012"
     },
     {
       "id": "server_index_isredisenabled",
@@ -49,7 +97,19 @@
       "file_type": "code",
       "norm_label": "isredisenabled()",
       "source_file": "server/index.js",
-      "source_location": "L116"
+      "source_location": "L124"
+    },
+    {
+      "id": "server_index_refreshroomaccess",
+      "label": "refreshRoomAccess()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "refreshroomaccess()",
+      "source_file": "server/index.js",
+      "source_location": "L1042"
     },
     {
       "id": "server_index_seedadminuser",
@@ -61,7 +121,7 @@
       "file_type": "code",
       "norm_label": "seedadminuser()",
       "source_file": "server/index.js",
-      "source_location": "L1267"
+      "source_location": "L1350"
     },
     {
       "id": "server_index_slugifytitle",
@@ -73,7 +133,7 @@
       "file_type": "code",
       "norm_label": "slugifytitle()",
       "source_file": "server/index.js",
-      "source_location": "L327"
+      "source_location": "L335"
     },
     {
       "id": "server_index_startserver",
@@ -85,7 +145,19 @@
       "file_type": "code",
       "norm_label": "startserver()",
       "source_file": "server/index.js",
-      "source_location": "L1228"
+      "source_location": "L1309"
+    },
+    {
+      "id": "server_index_writableroom",
+      "label": "writableRoom()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "writableroom()",
+      "source_file": "server/index.js",
+      "source_location": "L1032"
     },
     {
       "id": "frontend_src_pathlassosplit_bboxcornersinpolygon",
@@ -556,6 +628,18 @@
       "source_location": "L39"
     },
     {
+      "id": "server_config_resolvejwtsecret",
+      "label": "resolveJwtSecret()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "config.js",
+      "file_type": "code",
+      "norm_label": "resolvejwtsecret()",
+      "source_file": "server/config.js",
+      "source_location": "L11"
+    },
+    {
       "id": "frontend_src_app_contextbadgesoverlay",
       "label": "ContextBadgesOverlay()",
       "_callable": true,
@@ -664,6 +748,18 @@
       "source_location": "L3"
     },
     {
+      "id": "frontend_src_components_exportmodal_exportmodal",
+      "label": "ExportModal()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "exportmodal()",
+      "source_file": "frontend/src/components/ExportModal.jsx",
+      "source_location": "L6"
+    },
+    {
       "id": "frontend_src_components_landingpage_landingpage",
       "label": "LandingPage()",
       "_callable": true,
@@ -748,24 +844,12 @@
       "source_location": "L3"
     },
     {
-      "id": "frontend_src_components_exportmodal_exportmodal",
-      "label": "ExportModal()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "useConnectorSync.js",
-      "file_type": "code",
-      "norm_label": "exportmodal()",
-      "source_file": "frontend/src/components/ExportModal.jsx",
-      "source_location": "L6"
-    },
-    {
       "id": "frontend_src_hooks_useconnectorsync_applyconnectoranchors",
       "label": "applyConnectorAnchors()",
       "_callable": true,
       "_origin": "ast",
-      "community": 7,
-      "community_name": "useConnectorSync.js",
+      "community": 6,
+      "community_name": "App.jsx",
       "file_type": "code",
       "norm_label": "applyconnectoranchors()",
       "source_file": "frontend/src/hooks/useConnectorSync.js",
@@ -776,8 +860,8 @@
       "label": "collectMovedShapes()",
       "_callable": true,
       "_origin": "ast",
-      "community": 7,
-      "community_name": "useConnectorSync.js",
+      "community": 6,
+      "community_name": "App.jsx",
       "file_type": "code",
       "norm_label": "collectmovedshapes()",
       "source_file": "frontend/src/hooks/useConnectorSync.js",
@@ -788,8 +872,8 @@
       "label": "shapesMapFromCanvas()",
       "_callable": true,
       "_origin": "ast",
-      "community": 7,
-      "community_name": "useConnectorSync.js",
+      "community": 6,
+      "community_name": "App.jsx",
       "file_type": "code",
       "norm_label": "shapesmapfromcanvas()",
       "source_file": "frontend/src/hooks/useConnectorSync.js",
@@ -800,8 +884,8 @@
       "label": "stripConnectorsFromSelection()",
       "_callable": true,
       "_origin": "ast",
-      "community": 7,
-      "community_name": "useConnectorSync.js",
+      "community": 6,
+      "community_name": "App.jsx",
       "file_type": "code",
       "norm_label": "stripconnectorsfromselection()",
       "source_file": "frontend/src/hooks/useConnectorSync.js",
@@ -812,8 +896,8 @@
       "label": "updateAllConnectors()",
       "_callable": true,
       "_origin": "ast",
-      "community": 7,
-      "community_name": "useConnectorSync.js",
+      "community": 6,
+      "community_name": "App.jsx",
       "file_type": "code",
       "norm_label": "updateallconnectors()",
       "source_file": "frontend/src/hooks/useConnectorSync.js",
@@ -824,8 +908,8 @@
       "label": "useConnectorSync()",
       "_callable": true,
       "_origin": "ast",
-      "community": 7,
-      "community_name": "useConnectorSync.js",
+      "community": 6,
+      "community_name": "App.jsx",
       "file_type": "code",
       "norm_label": "useconnectorsync()",
       "source_file": "frontend/src/hooks/useConnectorSync.js",
@@ -837,7 +921,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 7,
-      "community_name": "useConnectorSync.js",
+      "community_name": "useConnectorTool.js",
       "file_type": "code",
       "norm_label": "fromobjectfn()",
       "source_file": "frontend/src/tools/ConnectorLine.js",
@@ -849,7 +933,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 7,
-      "community_name": "useConnectorSync.js",
+      "community_name": "useConnectorTool.js",
       "file_type": "code",
       "norm_label": "useconnectortool()",
       "source_file": "frontend/src/tools/useConnectorTool.js",
@@ -861,7 +945,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 7,
-      "community_name": "useConnectorSync.js",
+      "community_name": "useConnectorTool.js",
       "file_type": "code",
       "norm_label": "canvastoscreen()",
       "source_file": "frontend/src/utils/anchorPoints.js",
@@ -873,7 +957,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 7,
-      "community_name": "useConnectorSync.js",
+      "community_name": "useConnectorTool.js",
       "file_type": "code",
       "norm_label": "findclosestanchor()",
       "source_file": "frontend/src/utils/anchorPoints.js",
@@ -885,7 +969,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 7,
-      "community_name": "useConnectorSync.js",
+      "community_name": "useConnectorTool.js",
       "file_type": "code",
       "norm_label": "getanchorpoint()",
       "source_file": "frontend/src/utils/anchorPoints.js",
@@ -897,7 +981,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 7,
-      "community_name": "useConnectorSync.js",
+      "community_name": "useConnectorTool.js",
       "file_type": "code",
       "norm_label": "localanchoroffset()",
       "source_file": "frontend/src/utils/anchorPoints.js",
@@ -1157,6 +1241,39 @@
       "source_location": "L1"
     },
     {
+      "id": "server_boardaccess",
+      "label": "boardAccess.js",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "boardaccess.js",
+      "source_file": "server/boardAccess.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_boardaccess_mongoose",
+      "label": "mongoose",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "mongoose",
+      "source_file": "server/boardAccess.js",
+      "source_location": "L5"
+    },
+    {
+      "id": "server_boardaccess_whiteboard",
+      "label": "Whiteboard",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "whiteboard",
+      "source_file": "server/boardAccess.js",
+      "source_location": "L6"
+    },
+    {
       "id": "server_index",
       "label": "index.js",
       "_origin": "ast",
@@ -1168,6 +1285,17 @@
       "source_location": "L1"
     },
     {
+      "id": "server_index_accessforboard_canedit_getboardaccess_isboardid",
+      "label": "{\r\n  accessForBoard,\r\n  canEdit,\r\n  getBoardAccess,\r\n  isBoardId,\r\n}",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "{\r\n  accessforboard,\r\n  canedit,\r\n  getboardaccess,\r\n  isboardid,\r\n}",
+      "source_file": "server/index.js",
+      "source_location": "L27"
+    },
+    {
       "id": "server_index_activeusers",
       "label": "activeUsers",
       "_origin": "ast",
@@ -1176,7 +1304,7 @@
       "file_type": "code",
       "norm_label": "activeusers",
       "source_file": "server/index.js",
-      "source_location": "L995"
+      "source_location": "L1010"
     },
     {
       "id": "server_index_admin",
@@ -1198,7 +1326,7 @@
       "file_type": "code",
       "norm_label": "ailimiter",
       "source_file": "server/index.js",
-      "source_location": "L594"
+      "source_location": "L607"
     },
     {
       "id": "server_index_auth",
@@ -1220,7 +1348,7 @@
       "file_type": "code",
       "norm_label": "authlimiter",
       "source_file": "server/index.js",
-      "source_location": "L138"
+      "source_location": "L146"
     },
     {
       "id": "server_index_bcrypt",
@@ -1231,7 +1359,7 @@
       "file_type": "code",
       "norm_label": "bcrypt",
       "source_file": "server/index.js",
-      "source_location": "L16"
+      "source_location": "L18"
     },
     {
       "id": "server_index_cors",
@@ -1253,7 +1381,7 @@
       "file_type": "code",
       "norm_label": "{ createadapter }",
       "source_file": "server/index.js",
-      "source_location": "L19"
+      "source_location": "L21"
     },
     {
       "id": "server_index_drawiodir",
@@ -1264,7 +1392,7 @@
       "file_type": "code",
       "norm_label": "drawiodir",
       "source_file": "server/index.js",
-      "source_location": "L50"
+      "source_location": "L58"
     },
     {
       "id": "server_index_elementcontext",
@@ -1297,7 +1425,7 @@
       "file_type": "code",
       "norm_label": "fs",
       "source_file": "server/index.js",
-      "source_location": "L22"
+      "source_location": "L24"
     },
     {
       "id": "server_index_http",
@@ -1311,28 +1439,6 @@
       "source_location": "L3"
     },
     {
-      "id": "server_index_httpserver",
-      "label": "httpServer",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "index.js",
-      "file_type": "code",
-      "norm_label": "httpserver",
-      "source_file": "server/index.js",
-      "source_location": "L946"
-    },
-    {
-      "id": "server_index_io",
-      "label": "io",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "index.js",
-      "file_type": "code",
-      "norm_label": "io",
-      "source_file": "server/index.js",
-      "source_location": "L947"
-    },
-    {
       "id": "server_index_jwt",
       "label": "jwt",
       "_origin": "ast",
@@ -1341,7 +1447,18 @@
       "file_type": "code",
       "norm_label": "jwt",
       "source_file": "server/index.js",
-      "source_location": "L15"
+      "source_location": "L17"
+    },
+    {
+      "id": "server_index_jwt_secret",
+      "label": "{ JWT_SECRET }",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "{ jwt_secret }",
+      "source_file": "server/index.js",
+      "source_location": "L26"
     },
     {
       "id": "server_index_mongoose",
@@ -1363,7 +1480,18 @@
       "file_type": "code",
       "norm_label": "multer",
       "source_file": "server/index.js",
-      "source_location": "L20"
+      "source_location": "L22"
+    },
+    {
+      "id": "server_index_optionalauth",
+      "label": "optionalAuth",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "optionalauth",
+      "source_file": "server/index.js",
+      "source_location": "L15"
     },
     {
       "id": "server_index_path",
@@ -1374,7 +1502,7 @@
       "file_type": "code",
       "norm_label": "path",
       "source_file": "server/index.js",
-      "source_location": "L21"
+      "source_location": "L23"
     },
     {
       "id": "server_index_ratelimit",
@@ -1385,7 +1513,7 @@
       "file_type": "code",
       "norm_label": "ratelimit",
       "source_file": "server/index.js",
-      "source_location": "L17"
+      "source_location": "L19"
     },
     {
       "id": "server_index_redis",
@@ -1396,7 +1524,18 @@
       "file_type": "code",
       "norm_label": "redis",
       "source_file": "server/index.js",
-      "source_location": "L18"
+      "source_location": "L20"
+    },
+    {
+      "id": "server_index_requireboardaccess",
+      "label": "requireBoardAccess",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "requireboardaccess",
+      "source_file": "server/index.js",
+      "source_location": "L16"
     },
     {
       "id": "server_index_server",
@@ -1418,7 +1557,7 @@
       "file_type": "code",
       "norm_label": "storage",
       "source_file": "server/index.js",
-      "source_location": "L35"
+      "source_location": "L43"
     },
     {
       "id": "server_index_upload",
@@ -1429,7 +1568,7 @@
       "file_type": "code",
       "norm_label": "upload",
       "source_file": "server/index.js",
-      "source_location": "L44"
+      "source_location": "L52"
     },
     {
       "id": "server_index_uploadsdir",
@@ -1440,7 +1579,7 @@
       "file_type": "code",
       "norm_label": "uploadsdir",
       "source_file": "server/index.js",
-      "source_location": "L29"
+      "source_location": "L37"
     },
     {
       "id": "server_index_user",
@@ -1473,7 +1612,7 @@
       "file_type": "code",
       "norm_label": "whiteboards",
       "source_file": "server/index.js",
-      "source_location": "L123"
+      "source_location": "L131"
     },
     {
       "id": "server_middleware_admin",
@@ -1487,69 +1626,25 @@
       "source_location": "L1"
     },
     {
-      "id": "server_middleware_auth",
-      "label": "auth.js",
+      "id": "server_middleware_requireboardaccess",
+      "label": "requireBoardAccess.js",
       "_origin": "ast",
       "community": 1,
       "community_name": "index.js",
       "file_type": "code",
-      "norm_label": "auth.js",
-      "source_file": "server/middleware/auth.js",
+      "norm_label": "requireboardaccess.js",
+      "source_file": "server/middleware/requireBoardAccess.js",
       "source_location": "L1"
     },
     {
-      "id": "server_middleware_auth_jwt",
-      "label": "jwt",
+      "id": "server_middleware_requireboardaccess_getboardaccess_canedit_isboardid",
+      "label": "{ getBoardAccess, canEdit, isBoardId }",
       "_origin": "ast",
       "community": 1,
       "community_name": "index.js",
       "file_type": "code",
-      "norm_label": "jwt",
-      "source_file": "server/middleware/auth.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_tests_sockets_test",
-      "label": "sockets.test.js",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "index.js",
-      "file_type": "code",
-      "norm_label": "sockets.test.js",
-      "source_file": "server/tests/sockets.test.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_tests_sockets_test_app_httpserver_io",
-      "label": "{ app, httpServer, io }",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "index.js",
-      "file_type": "code",
-      "norm_label": "{ app, httpserver, io }",
-      "source_file": "server/tests/sockets.test.js",
-      "source_location": "L3"
-    },
-    {
-      "id": "server_tests_sockets_test_http",
-      "label": "http",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "index.js",
-      "file_type": "code",
-      "norm_label": "http",
-      "source_file": "server/tests/sockets.test.js",
-      "source_location": "L2"
-    },
-    {
-      "id": "server_tests_sockets_test_ioclient",
-      "label": "ioClient",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "index.js",
-      "file_type": "code",
-      "norm_label": "ioclient",
-      "source_file": "server/tests/sockets.test.js",
+      "norm_label": "{ getboardaccess, canedit, isboardid }",
+      "source_file": "server/middleware/requireBoardAccess.js",
       "source_location": "L1"
     },
     {
@@ -1978,11 +2073,35 @@
       "source_location": "L1"
     },
     {
+      "id": "readme",
+      "label": "README.md",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "Project Description and Requirements",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "readme.md",
+      "source_file": "README.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "tasks",
+      "label": "TASKS.md",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "Project Description and Requirements",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "tasks.md",
+      "source_file": "TASKS.md",
+      "source_location": "L1"
+    },
+    {
       "id": "tasks_phase_0_project_setup",
       "label": "Phase 0 \u2014 Project Setup",
       "_origin": "ast",
       "community": 2,
-      "community_name": "Visual Whiteboard Pro \u2014 Phased Task Breakdown",
+      "community_name": "Project Description and Requirements",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "phase 0 \u2014 project setup",
@@ -1994,7 +2113,7 @@
       "label": "Phase 1 \u2014 Core Editor MVP",
       "_origin": "ast",
       "community": 2,
-      "community_name": "Visual Whiteboard Pro \u2014 Phased Task Breakdown",
+      "community_name": "Project Description and Requirements",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "phase 1 \u2014 core editor mvp",
@@ -2006,7 +2125,7 @@
       "label": "Phase 2 \u2014 Real-time Collaboration",
       "_origin": "ast",
       "community": 2,
-      "community_name": "Visual Whiteboard Pro \u2014 Phased Task Breakdown",
+      "community_name": "Project Description and Requirements",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "phase 2 \u2014 real-time collaboration",
@@ -2018,7 +2137,7 @@
       "label": "Phase 3 \u2014 Pages & Export System",
       "_origin": "ast",
       "community": 2,
-      "community_name": "Visual Whiteboard Pro \u2014 Phased Task Breakdown",
+      "community_name": "Project Description and Requirements",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "phase 3 \u2014 pages & export system",
@@ -2030,7 +2149,7 @@
       "label": "Phase 4 \u2014 Context Layer & UI Polish",
       "_origin": "ast",
       "community": 2,
-      "community_name": "Visual Whiteboard Pro \u2014 Phased Task Breakdown",
+      "community_name": "Project Description and Requirements",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "phase 4 \u2014 context layer & ui polish",
@@ -2042,7 +2161,7 @@
       "label": "Phase 5 \u2014 AI Features (Mess Cleanup + Architecture Assist)",
       "_origin": "ast",
       "community": 2,
-      "community_name": "Visual Whiteboard Pro \u2014 Phased Task Breakdown",
+      "community_name": "Project Description and Requirements",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "phase 5 \u2014 ai features (mess cleanup + architecture assist)",
@@ -2054,7 +2173,7 @@
       "label": "Phase 6 \u2014 Testing, Auth & Security",
       "_origin": "ast",
       "community": 2,
-      "community_name": "Visual Whiteboard Pro \u2014 Phased Task Breakdown",
+      "community_name": "Project Description and Requirements",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "phase 6 \u2014 testing, auth & security",
@@ -2066,7 +2185,7 @@
       "label": "Phase 7 \u2014 Deployment & Monitoring",
       "_origin": "ast",
       "community": 2,
-      "community_name": "Visual Whiteboard Pro \u2014 Phased Task Breakdown",
+      "community_name": "Project Description and Requirements",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "phase 7 \u2014 deployment & monitoring",
@@ -2078,7 +2197,7 @@
       "label": "PR / Review Checklist",
       "_origin": "ast",
       "community": 2,
-      "community_name": "Visual Whiteboard Pro \u2014 Phased Task Breakdown",
+      "community_name": "Project Description and Requirements",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "pr / review checklist",
@@ -2090,7 +2209,7 @@
       "label": "Visual Whiteboard Pro \u2014 Phased Task Breakdown",
       "_origin": "ast",
       "community": 2,
-      "community_name": "Visual Whiteboard Pro \u2014 Phased Task Breakdown",
+      "community_name": "Project Description and Requirements",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "visual whiteboard pro \u2014 phased task breakdown",
@@ -2338,6 +2457,501 @@
       "norm_label": "rewrites",
       "source_file": "vercel.json",
       "source_location": "L2"
+    },
+    {
+      "id": "server_index_httpserver",
+      "label": "httpServer",
+      "_origin": "ast",
+      "community": 25,
+      "community_name": "sockets.test.js",
+      "file_type": "code",
+      "norm_label": "httpserver",
+      "source_file": "server/index.js",
+      "source_location": "L961"
+    },
+    {
+      "id": "server_index_io",
+      "label": "io",
+      "_origin": "ast",
+      "community": 25,
+      "community_name": "sockets.test.js",
+      "file_type": "code",
+      "norm_label": "io",
+      "source_file": "server/index.js",
+      "source_location": "L962"
+    },
+    {
+      "id": "server_tests_sockets_test",
+      "label": "sockets.test.js",
+      "_origin": "ast",
+      "community": 25,
+      "community_name": "sockets.test.js",
+      "file_type": "code",
+      "norm_label": "sockets.test.js",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_tests_sockets_test_app_httpserver_io",
+      "label": "{ app, httpServer, io }",
+      "_origin": "ast",
+      "community": 25,
+      "community_name": "sockets.test.js",
+      "file_type": "code",
+      "norm_label": "{ app, httpserver, io }",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L3"
+    },
+    {
+      "id": "server_tests_sockets_test_http",
+      "label": "http",
+      "_origin": "ast",
+      "community": 25,
+      "community_name": "sockets.test.js",
+      "file_type": "code",
+      "norm_label": "http",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L2"
+    },
+    {
+      "id": "server_tests_sockets_test_ioclient",
+      "label": "ioClient",
+      "_origin": "ast",
+      "community": 25,
+      "community_name": "sockets.test.js",
+      "file_type": "code",
+      "norm_label": "ioclient",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_tests_sockets_test_jwt",
+      "label": "jwt",
+      "_origin": "ast",
+      "community": 25,
+      "community_name": "sockets.test.js",
+      "file_type": "code",
+      "norm_label": "jwt",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L5"
+    },
+    {
+      "id": "server_tests_sockets_test_jwt_secret",
+      "label": "{ JWT_SECRET }",
+      "_origin": "ast",
+      "community": 25,
+      "community_name": "sockets.test.js",
+      "file_type": "code",
+      "norm_label": "{ jwt_secret }",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L6"
+    },
+    {
+      "id": "server_tests_sockets_test_mongoose",
+      "label": "mongoose",
+      "_origin": "ast",
+      "community": 25,
+      "community_name": "sockets.test.js",
+      "file_type": "code",
+      "norm_label": "mongoose",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L4"
+    },
+    {
+      "id": "server_tests_sockets_test_user",
+      "label": "User",
+      "_origin": "ast",
+      "community": 25,
+      "community_name": "sockets.test.js",
+      "file_type": "code",
+      "norm_label": "user",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L7"
+    },
+    {
+      "id": "server_tests_sockets_test_whiteboard",
+      "label": "Whiteboard",
+      "_origin": "ast",
+      "community": 25,
+      "community_name": "sockets.test.js",
+      "file_type": "code",
+      "norm_label": "whiteboard",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L8"
+    },
+    {
+      "id": "server_models_whiteboard",
+      "label": "Whiteboard.js",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "whiteboards.test.js",
+      "file_type": "code",
+      "norm_label": "whiteboard.js",
+      "source_file": "server/models/Whiteboard.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_models_whiteboard_mongoose",
+      "label": "mongoose",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "whiteboards.test.js",
+      "file_type": "code",
+      "norm_label": "mongoose",
+      "source_file": "server/models/Whiteboard.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_models_whiteboard_whiteboardschema",
+      "label": "WhiteboardSchema",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "whiteboards.test.js",
+      "file_type": "code",
+      "norm_label": "whiteboardschema",
+      "source_file": "server/models/Whiteboard.js",
+      "source_location": "L4"
+    },
+    {
+      "id": "server_tests_whiteboards_test",
+      "label": "whiteboards.test.js",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "whiteboards.test.js",
+      "file_type": "code",
+      "norm_label": "whiteboards.test.js",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_tests_whiteboards_test_app",
+      "label": "{ app }",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "whiteboards.test.js",
+      "file_type": "code",
+      "norm_label": "{ app }",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L2"
+    },
+    {
+      "id": "server_tests_whiteboards_test_jwt",
+      "label": "jwt",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "whiteboards.test.js",
+      "file_type": "code",
+      "norm_label": "jwt",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L6"
+    },
+    {
+      "id": "server_tests_whiteboards_test_jwt_secret",
+      "label": "{ JWT_SECRET }",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "whiteboards.test.js",
+      "file_type": "code",
+      "norm_label": "{ jwt_secret }",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L7"
+    },
+    {
+      "id": "server_tests_whiteboards_test_mongoose",
+      "label": "mongoose",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "whiteboards.test.js",
+      "file_type": "code",
+      "norm_label": "mongoose",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L3"
+    },
+    {
+      "id": "server_tests_whiteboards_test_request",
+      "label": "request",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "whiteboards.test.js",
+      "file_type": "code",
+      "norm_label": "request",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_tests_whiteboards_test_user",
+      "label": "User",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "whiteboards.test.js",
+      "file_type": "code",
+      "norm_label": "user",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L4"
+    },
+    {
+      "id": "server_tests_whiteboards_test_whiteboard",
+      "label": "Whiteboard",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "whiteboards.test.js",
+      "file_type": "code",
+      "norm_label": "whiteboard",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L5"
+    },
+    {
+      "id": "server_config",
+      "label": "config.js",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "config.js",
+      "file_type": "code",
+      "norm_label": "config.js",
+      "source_file": "server/config.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_config_crypto",
+      "label": "crypto",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "config.js",
+      "file_type": "code",
+      "norm_label": "crypto",
+      "source_file": "server/config.js",
+      "source_location": "L9"
+    },
+    {
+      "id": "server_middleware_auth",
+      "label": "auth.js",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "config.js",
+      "file_type": "code",
+      "norm_label": "auth.js",
+      "source_file": "server/middleware/auth.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_middleware_auth_jwt",
+      "label": "jwt",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "config.js",
+      "file_type": "code",
+      "norm_label": "jwt",
+      "source_file": "server/middleware/auth.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_middleware_auth_jwt_secret",
+      "label": "{ JWT_SECRET }",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "config.js",
+      "file_type": "code",
+      "norm_label": "{ jwt_secret }",
+      "source_file": "server/middleware/auth.js",
+      "source_location": "L2"
+    },
+    {
+      "id": "server_middleware_optionalauth",
+      "label": "optionalAuth.js",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "config.js",
+      "file_type": "code",
+      "norm_label": "optionalauth.js",
+      "source_file": "server/middleware/optionalAuth.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_middleware_optionalauth_jwt",
+      "label": "jwt",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "config.js",
+      "file_type": "code",
+      "norm_label": "jwt",
+      "source_file": "server/middleware/optionalAuth.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_middleware_optionalauth_jwt_secret",
+      "label": "{ JWT_SECRET }",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "config.js",
+      "file_type": "code",
+      "norm_label": "{ jwt_secret }",
+      "source_file": "server/middleware/optionalAuth.js",
+      "source_location": "L2"
+    },
+    {
+      "id": "server_models_user",
+      "label": "User.js",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "User.js",
+      "file_type": "code",
+      "norm_label": "user.js",
+      "source_file": "server/models/User.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_models_user_mongoose",
+      "label": "mongoose",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "User.js",
+      "file_type": "code",
+      "norm_label": "mongoose",
+      "source_file": "server/models/User.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_models_user_userschema",
+      "label": "UserSchema",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "User.js",
+      "file_type": "code",
+      "norm_label": "userschema",
+      "source_file": "server/models/User.js",
+      "source_location": "L4"
+    },
+    {
+      "id": "server_tests_auth_test",
+      "label": "auth.test.js",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "User.js",
+      "file_type": "code",
+      "norm_label": "auth.test.js",
+      "source_file": "server/tests/auth.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_tests_auth_test_app",
+      "label": "{ app }",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "User.js",
+      "file_type": "code",
+      "norm_label": "{ app }",
+      "source_file": "server/tests/auth.test.js",
+      "source_location": "L2"
+    },
+    {
+      "id": "server_tests_auth_test_mongoose",
+      "label": "mongoose",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "User.js",
+      "file_type": "code",
+      "norm_label": "mongoose",
+      "source_file": "server/tests/auth.test.js",
+      "source_location": "L3"
+    },
+    {
+      "id": "server_tests_auth_test_request",
+      "label": "request",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "User.js",
+      "file_type": "code",
+      "norm_label": "request",
+      "source_file": "server/tests/auth.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_tests_auth_test_user",
+      "label": "User",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "User.js",
+      "file_type": "code",
+      "norm_label": "user",
+      "source_file": "server/tests/auth.test.js",
+      "source_location": "L4"
+    },
+    {
+      "id": "server_tests_ai_test",
+      "label": "ai.test.js",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "ai.test.js",
+      "file_type": "code",
+      "norm_label": "ai.test.js",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_tests_ai_test_app",
+      "label": "{ app }",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "ai.test.js",
+      "file_type": "code",
+      "norm_label": "{ app }",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L2"
+    },
+    {
+      "id": "server_tests_ai_test_jwt",
+      "label": "jwt",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "ai.test.js",
+      "file_type": "code",
+      "norm_label": "jwt",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L5"
+    },
+    {
+      "id": "server_tests_ai_test_jwt_secret",
+      "label": "{ JWT_SECRET }",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "ai.test.js",
+      "file_type": "code",
+      "norm_label": "{ jwt_secret }",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L6"
+    },
+    {
+      "id": "server_tests_ai_test_mongoose",
+      "label": "mongoose",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "ai.test.js",
+      "file_type": "code",
+      "norm_label": "mongoose",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L3"
+    },
+    {
+      "id": "server_tests_ai_test_request",
+      "label": "request",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "ai.test.js",
+      "file_type": "code",
+      "norm_label": "request",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_tests_ai_test_user",
+      "label": "User",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "ai.test.js",
+      "file_type": "code",
+      "norm_label": "user",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L4"
     },
     {
       "id": "server_package_dependencies",
@@ -2593,15 +3207,47 @@
       "source_location": "L12"
     },
     {
-      "id": "readme",
-      "label": "README.md",
+      "id": "server_index_app",
+      "label": "app",
       "_origin": "ast",
-      "community": 4,
-      "community_name": "Visual Whiteboard Pro",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "readme.md",
-      "source_file": "README.md",
+      "community": 30,
+      "community_name": "app",
+      "file_type": "code",
+      "norm_label": "app",
+      "source_file": "server/index.js",
+      "source_location": "L5"
+    },
+    {
+      "id": "server_tests_health_test",
+      "label": "health.test.js",
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "app",
+      "file_type": "code",
+      "norm_label": "health.test.js",
+      "source_file": "server/tests/health.test.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_tests_health_test_app",
+      "label": "{ app }",
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "app",
+      "file_type": "code",
+      "norm_label": "{ app }",
+      "source_file": "server/tests/health.test.js",
+      "source_location": "L2"
+    },
+    {
+      "id": "server_tests_health_test_request",
+      "label": "request",
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "app",
+      "file_type": "code",
+      "norm_label": "request",
+      "source_file": "server/tests/health.test.js",
       "source_location": "L1"
     },
     {
@@ -2809,18 +3455,6 @@
       "source_location": "L9"
     },
     {
-      "id": "tasks",
-      "label": "TASKS.md",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "Visual Whiteboard Pro",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "tasks.md",
-      "source_file": "TASKS.md",
-      "source_location": "L1"
-    },
-    {
       "id": "frontend_src_app",
       "label": "App.jsx",
       "_origin": "ast",
@@ -2953,6 +3587,17 @@
       "source_location": "L9"
     },
     {
+      "id": "frontend_src_components_exportmodal",
+      "label": "ExportModal.jsx",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "exportmodal.jsx",
+      "source_file": "frontend/src/components/ExportModal.jsx",
+      "source_location": "L1"
+    },
+    {
       "id": "frontend_src_components_landingpage",
       "label": "LandingPage.jsx",
       "_origin": "ast",
@@ -3041,22 +3686,11 @@
       "source_location": "L1"
     },
     {
-      "id": "frontend_src_components_exportmodal",
-      "label": "ExportModal.jsx",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "useConnectorSync.js",
-      "file_type": "code",
-      "norm_label": "exportmodal.jsx",
-      "source_file": "frontend/src/components/ExportModal.jsx",
-      "source_location": "L1"
-    },
-    {
       "id": "frontend_src_hooks_useconnectorsync",
       "label": "useConnectorSync.js",
       "_origin": "ast",
-      "community": 7,
-      "community_name": "useConnectorSync.js",
+      "community": 6,
+      "community_name": "App.jsx",
       "file_type": "code",
       "norm_label": "useconnectorsync.js",
       "source_file": "frontend/src/hooks/useConnectorSync.js",
@@ -3067,7 +3701,7 @@
       "label": "ConnectorLine.js",
       "_origin": "ast",
       "community": 7,
-      "community_name": "useConnectorSync.js",
+      "community_name": "useConnectorTool.js",
       "file_type": "code",
       "norm_label": "connectorline.js",
       "source_file": "frontend/src/tools/ConnectorLine.js",
@@ -3078,7 +3712,7 @@
       "label": "ConnectorLine",
       "_origin": "ast",
       "community": 7,
-      "community_name": "useConnectorSync.js",
+      "community_name": "useConnectorTool.js",
       "file_type": "code",
       "norm_label": "connectorline",
       "source_file": "frontend/src/tools/ConnectorLine.js",
@@ -3089,7 +3723,7 @@
       "label": "useConnectorTool.js",
       "_origin": "ast",
       "community": 7,
-      "community_name": "useConnectorSync.js",
+      "community_name": "useConnectorTool.js",
       "file_type": "code",
       "norm_label": "useconnectortool.js",
       "source_file": "frontend/src/tools/useConnectorTool.js",
@@ -3100,7 +3734,7 @@
       "label": "anchorPoints.js",
       "_origin": "ast",
       "community": 7,
-      "community_name": "useConnectorSync.js",
+      "community_name": "useConnectorTool.js",
       "file_type": "code",
       "norm_label": "anchorpoints.js",
       "source_file": "frontend/src/utils/anchorPoints.js",
@@ -3470,17 +4104,6 @@
       "source_location": "L30"
     },
     {
-      "id": "server_index_app",
-      "label": "app",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "app",
-      "source_file": "server/index.js",
-      "source_location": "L5"
-    },
-    {
       "id": "server_models_elementcontext",
       "label": "ElementContext.js",
       "_origin": "ast",
@@ -3512,193 +4135,6 @@
       "norm_label": "mongoose",
       "source_file": "server/models/ElementContext.js",
       "source_location": "L1"
-    },
-    {
-      "id": "server_models_user",
-      "label": "User.js",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "user.js",
-      "source_file": "server/models/User.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_models_user_mongoose",
-      "label": "mongoose",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "mongoose",
-      "source_file": "server/models/User.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_models_user_userschema",
-      "label": "UserSchema",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "userschema",
-      "source_file": "server/models/User.js",
-      "source_location": "L4"
-    },
-    {
-      "id": "server_models_whiteboard",
-      "label": "Whiteboard.js",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "whiteboard.js",
-      "source_file": "server/models/Whiteboard.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_models_whiteboard_mongoose",
-      "label": "mongoose",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "mongoose",
-      "source_file": "server/models/Whiteboard.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_models_whiteboard_whiteboardschema",
-      "label": "WhiteboardSchema",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "whiteboardschema",
-      "source_file": "server/models/Whiteboard.js",
-      "source_location": "L4"
-    },
-    {
-      "id": "server_tests_ai_test",
-      "label": "ai.test.js",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "ai.test.js",
-      "source_file": "server/tests/ai.test.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_tests_ai_test_app",
-      "label": "{ app }",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "{ app }",
-      "source_file": "server/tests/ai.test.js",
-      "source_location": "L2"
-    },
-    {
-      "id": "server_tests_ai_test_jwt",
-      "label": "jwt",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "jwt",
-      "source_file": "server/tests/ai.test.js",
-      "source_location": "L5"
-    },
-    {
-      "id": "server_tests_ai_test_mongoose",
-      "label": "mongoose",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "mongoose",
-      "source_file": "server/tests/ai.test.js",
-      "source_location": "L3"
-    },
-    {
-      "id": "server_tests_ai_test_request",
-      "label": "request",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "request",
-      "source_file": "server/tests/ai.test.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_tests_ai_test_user",
-      "label": "User",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "user",
-      "source_file": "server/tests/ai.test.js",
-      "source_location": "L4"
-    },
-    {
-      "id": "server_tests_auth_test",
-      "label": "auth.test.js",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "auth.test.js",
-      "source_file": "server/tests/auth.test.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_tests_auth_test_app",
-      "label": "{ app }",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "{ app }",
-      "source_file": "server/tests/auth.test.js",
-      "source_location": "L2"
-    },
-    {
-      "id": "server_tests_auth_test_mongoose",
-      "label": "mongoose",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "mongoose",
-      "source_file": "server/tests/auth.test.js",
-      "source_location": "L3"
-    },
-    {
-      "id": "server_tests_auth_test_request",
-      "label": "request",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "request",
-      "source_file": "server/tests/auth.test.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_tests_auth_test_user",
-      "label": "User",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "user",
-      "source_file": "server/tests/auth.test.js",
-      "source_location": "L4"
     },
     {
       "id": "server_tests_context_test",
@@ -3742,7 +4178,7 @@
       "file_type": "code",
       "norm_label": "fs",
       "source_file": "server/tests/context.test.js",
-      "source_location": "L8"
+      "source_location": "L9"
     },
     {
       "id": "server_tests_context_test_jwt",
@@ -3754,6 +4190,17 @@
       "norm_label": "jwt",
       "source_file": "server/tests/context.test.js",
       "source_location": "L7"
+    },
+    {
+      "id": "server_tests_context_test_jwt_secret",
+      "label": "{ JWT_SECRET }",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "context.test.js",
+      "file_type": "code",
+      "norm_label": "{ jwt_secret }",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L8"
     },
     {
       "id": "server_tests_context_test_mongoose",
@@ -3775,7 +4222,7 @@
       "file_type": "code",
       "norm_label": "path",
       "source_file": "server/tests/context.test.js",
-      "source_location": "L9"
+      "source_location": "L10"
     },
     {
       "id": "server_tests_context_test_request",
@@ -3811,123 +4258,13 @@
       "source_location": "L5"
     },
     {
-      "id": "server_tests_health_test",
-      "label": "health.test.js",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "health.test.js",
-      "source_file": "server/tests/health.test.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_tests_health_test_app",
-      "label": "{ app }",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "{ app }",
-      "source_file": "server/tests/health.test.js",
-      "source_location": "L2"
-    },
-    {
-      "id": "server_tests_health_test_request",
-      "label": "request",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "request",
-      "source_file": "server/tests/health.test.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_tests_whiteboards_test",
-      "label": "whiteboards.test.js",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "whiteboards.test.js",
-      "source_file": "server/tests/whiteboards.test.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_tests_whiteboards_test_app",
-      "label": "{ app }",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "{ app }",
-      "source_file": "server/tests/whiteboards.test.js",
-      "source_location": "L2"
-    },
-    {
-      "id": "server_tests_whiteboards_test_jwt",
-      "label": "jwt",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "jwt",
-      "source_file": "server/tests/whiteboards.test.js",
-      "source_location": "L6"
-    },
-    {
-      "id": "server_tests_whiteboards_test_mongoose",
-      "label": "mongoose",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "mongoose",
-      "source_file": "server/tests/whiteboards.test.js",
-      "source_location": "L3"
-    },
-    {
-      "id": "server_tests_whiteboards_test_request",
-      "label": "request",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "request",
-      "source_file": "server/tests/whiteboards.test.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_tests_whiteboards_test_user",
-      "label": "User",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "user",
-      "source_file": "server/tests/whiteboards.test.js",
-      "source_location": "L4"
-    },
-    {
-      "id": "server_tests_whiteboards_test_whiteboard",
-      "label": "Whiteboard",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "context.test.js",
-      "file_type": "code",
-      "norm_label": "whiteboard",
-      "source_file": "server/tests/whiteboards.test.js",
-      "source_location": "L5"
-    },
-    {
       "id": "concept_architecture_assist",
       "label": "Architecture Assist AI",
       "_origin": "semantic",
       "author": null,
       "captured_at": null,
-      "community": 4,
-      "community_name": "Visual Whiteboard Pro",
+      "community": 2,
+      "community_name": "Project Description and Requirements",
       "contributor": null,
       "file_type": "concept",
       "norm_label": "architecture assist ai",
@@ -3941,8 +4278,8 @@
       "_origin": "semantic",
       "author": null,
       "captured_at": null,
-      "community": 4,
-      "community_name": "Visual Whiteboard Pro",
+      "community": 2,
+      "community_name": "Project Description and Requirements",
       "contributor": null,
       "file_type": "concept",
       "norm_label": "real-time collaboration",
@@ -3956,8 +4293,8 @@
       "_origin": "semantic",
       "author": null,
       "captured_at": null,
-      "community": 4,
-      "community_name": "Visual Whiteboard Pro",
+      "community": 2,
+      "community_name": "Project Description and Requirements",
       "contributor": null,
       "file_type": "concept",
       "norm_label": "context layer",
@@ -3971,8 +4308,8 @@
       "_origin": "semantic",
       "author": null,
       "captured_at": null,
-      "community": 4,
-      "community_name": "Visual Whiteboard Pro",
+      "community": 2,
+      "community_name": "Project Description and Requirements",
       "contributor": null,
       "file_type": "concept",
       "norm_label": "drawing canvas",
@@ -3986,8 +4323,8 @@
       "_origin": "semantic",
       "author": null,
       "captured_at": null,
-      "community": 4,
-      "community_name": "Visual Whiteboard Pro",
+      "community": 2,
+      "community_name": "Project Description and Requirements",
       "contributor": null,
       "file_type": "concept",
       "norm_label": "html/css export",
@@ -4001,8 +4338,8 @@
       "_origin": "semantic",
       "author": null,
       "captured_at": null,
-      "community": 4,
-      "community_name": "Visual Whiteboard Pro",
+      "community": 2,
+      "community_name": "Project Description and Requirements",
       "contributor": null,
       "file_type": "concept",
       "norm_label": "pdf export",
@@ -4016,8 +4353,8 @@
       "_origin": "semantic",
       "author": null,
       "captured_at": null,
-      "community": 4,
-      "community_name": "Visual Whiteboard Pro",
+      "community": 2,
+      "community_name": "Project Description and Requirements",
       "contributor": null,
       "file_type": "concept",
       "norm_label": "mess cleanup ai",
@@ -4031,8 +4368,8 @@
       "_origin": "semantic",
       "author": null,
       "captured_at": null,
-      "community": 4,
-      "community_name": "Visual Whiteboard Pro",
+      "community": 2,
+      "community_name": "Project Description and Requirements",
       "contributor": null,
       "file_type": "concept",
       "norm_label": "mongodb storage",
@@ -4046,8 +4383,8 @@
       "_origin": "semantic",
       "author": null,
       "captured_at": null,
-      "community": 4,
-      "community_name": "Visual Whiteboard Pro",
+      "community": 2,
+      "community_name": "Project Description and Requirements",
       "contributor": null,
       "file_type": "concept",
       "norm_label": "multi-page system",
@@ -4061,8 +4398,8 @@
       "_origin": "semantic",
       "author": null,
       "captured_at": null,
-      "community": 4,
-      "community_name": "Visual Whiteboard Pro",
+      "community": 2,
+      "community_name": "Project Description and Requirements",
       "contributor": null,
       "file_type": "concept",
       "norm_label": "socket.io event protocol",
@@ -4076,8 +4413,8 @@
       "_origin": "semantic",
       "author": null,
       "captured_at": null,
-      "community": 4,
-      "community_name": "Visual Whiteboard Pro",
+      "community": 2,
+      "community_name": "Project Description and Requirements",
       "contributor": null,
       "file_type": "document",
       "norm_label": "project description and requirements",
@@ -5003,6 +5340,66 @@
       "weight": 1.0
     },
     {
+      "source": "server_boardaccess_getboardaccess",
+      "target": "server_boardaccess_isboardid",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "server/boardAccess.js",
+      "source_location": "L36",
+      "weight": 1.0
+    },
+    {
+      "source": "server_boardaccess_getboardaccess",
+      "target": "server_boardaccess_accessforboard",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "server/boardAccess.js",
+      "source_location": "L41",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index_refreshroomaccess",
+      "target": "server_boardaccess_accessforboard",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "server/index.js",
+      "source_location": "L1046",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index_writableroom",
+      "target": "server_boardaccess_canedit",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "server/index.js",
+      "source_location": "L1035",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index_writableroom",
+      "target": "server_boardaccess_isboardid",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "server/index.js",
+      "source_location": "L1035",
+      "weight": 1.0
+    },
+    {
       "source": "frontend_src_app_app",
       "target": "frontend_src_app_app_debounce",
       "relation": "contains",
@@ -5616,6 +6013,54 @@
     },
     {
       "source": "server_index",
+      "target": "server_boardaccess_accessforboard",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "server/index.js",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_boardaccess_canedit",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "server/index.js",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_boardaccess_getboardaccess",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "server/index.js",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_boardaccess_isboardid",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "server/index.js",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
       "target": "server_ai_service_cleanuplayout",
       "relation": "imports",
       "_origin": "ast",
@@ -5623,7 +6068,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/index.js",
-      "source_location": "L788",
+      "source_location": "L803",
       "weight": 1.0
     },
     {
@@ -5635,7 +6080,43 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/index.js",
-      "source_location": "L804",
+      "source_location": "L819",
+      "weight": 1.0
+    },
+    {
+      "source": "server_middleware_requireboardaccess",
+      "target": "server_boardaccess_canedit",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "server/middleware/requireBoardAccess.js",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "server_middleware_requireboardaccess",
+      "target": "server_boardaccess_getboardaccess",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "server/middleware/requireBoardAccess.js",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "server_middleware_requireboardaccess",
+      "target": "server_boardaccess_isboardid",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "server/middleware/requireBoardAccess.js",
+      "source_location": "L1",
       "weight": 1.0
     },
     {
@@ -6215,6 +6696,18 @@
       "weight": 1.0
     },
     {
+      "source": "server_boardaccess",
+      "target": "server_models_whiteboard",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "server/boardAccess.js",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
       "source": "server_index",
       "target": "server_models_whiteboard",
       "relation": "imports_from",
@@ -6276,6 +6769,54 @@
     },
     {
       "source": "server_index",
+      "target": "server_middleware_optionalauth",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "server/index.js",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_middleware_requireboardaccess",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "server/index.js",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_config",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "server/index.js",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_boardaccess",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "server/index.js",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
       "target": "server_ai_service",
       "relation": "imports_from",
       "_origin": "ast",
@@ -6283,7 +6824,43 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/index.js",
-      "source_location": "L804",
+      "source_location": "L819",
+      "weight": 1.0
+    },
+    {
+      "source": "server_middleware_auth",
+      "target": "server_config",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "server/middleware/auth.js",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "server_middleware_optionalauth",
+      "target": "server_config",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "server/middleware/optionalAuth.js",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "server_middleware_requireboardaccess",
+      "target": "server_boardaccess",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "server/middleware/requireBoardAccess.js",
+      "source_location": "L1",
       "weight": 1.0
     },
     {
@@ -6308,6 +6885,18 @@
       "context": "import",
       "source_file": "server/tests/ai.test.js",
       "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "server_tests_ai_test",
+      "target": "server_config",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L6",
       "weight": 1.0
     },
     {
@@ -6383,6 +6972,18 @@
       "weight": 1.0
     },
     {
+      "source": "server_tests_context_test",
+      "target": "server_config",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
       "source": "server_tests_health_test",
       "target": "server_index",
       "relation": "imports_from",
@@ -6404,6 +7005,42 @@
       "context": "import",
       "source_file": "server/tests/sockets.test.js",
       "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "server_tests_sockets_test",
+      "target": "server_config",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "server_tests_sockets_test",
+      "target": "server_models_user",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "server_tests_sockets_test",
+      "target": "server_models_whiteboard",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L8",
       "weight": 1.0
     },
     {
@@ -6440,6 +7077,18 @@
       "context": "import",
       "source_file": "server/tests/whiteboards.test.js",
       "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "server_tests_whiteboards_test",
+      "target": "server_config",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L7",
       "weight": 1.0
     },
     {
@@ -8082,6 +8731,50 @@
       "weight": 1.0
     },
     {
+      "source": "server_boardaccess",
+      "target": "server_boardaccess_mongoose",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/boardAccess.js",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "server_boardaccess",
+      "target": "server_boardaccess_whiteboard",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/boardAccess.js",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "server_config",
+      "target": "server_config_resolvejwtsecret",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/config.js",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "server_config",
+      "target": "server_config_crypto",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/config.js",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
       "source": "server_index",
       "target": "server_index_express",
       "relation": "contains",
@@ -8105,6 +8798,50 @@
     },
     {
       "source": "server_index",
+      "target": "server_index_activeusers",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L1010",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_index_broadcastroomusers",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L1012",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_index_writableroom",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L1032",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_index_refreshroomaccess",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L1042",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
       "target": "server_index_elementcontext",
       "relation": "contains",
       "_origin": "ast",
@@ -8112,17 +8849,6 @@
       "confidence_score": 1.0,
       "source_file": "server/index.js",
       "source_location": "L11",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
-      "target": "server_index_isredisenabled",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "server/index.js",
-      "source_location": "L116",
       "weight": 1.0
     },
     {
@@ -8138,35 +8864,13 @@
     },
     {
       "source": "server_index",
-      "target": "server_index_startserver",
+      "target": "server_index_isredisenabled",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L1228",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
-      "target": "server_index_whiteboards",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "server/index.js",
-      "source_location": "L123",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
-      "target": "server_index_seedadminuser",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "server/index.js",
-      "source_location": "L1267",
+      "source_location": "L124",
       "weight": 1.0
     },
     {
@@ -8182,13 +8886,35 @@
     },
     {
       "source": "server_index",
-      "target": "server_index_authlimiter",
+      "target": "server_index_startserver",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L138",
+      "source_location": "L1309",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_index_whiteboards",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L131",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_index_seedadminuser",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L1350",
       "weight": 1.0
     },
     {
@@ -8204,7 +8930,18 @@
     },
     {
       "source": "server_index",
-      "target": "server_index_jwt",
+      "target": "server_index_authlimiter",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L146",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_index_optionalauth",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -8215,7 +8952,7 @@
     },
     {
       "source": "server_index",
-      "target": "server_index_bcrypt",
+      "target": "server_index_requireboardaccess",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -8226,7 +8963,7 @@
     },
     {
       "source": "server_index",
-      "target": "server_index_ratelimit",
+      "target": "server_index_jwt",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -8237,7 +8974,7 @@
     },
     {
       "source": "server_index",
-      "target": "server_index_redis",
+      "target": "server_index_bcrypt",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -8248,7 +8985,7 @@
     },
     {
       "source": "server_index",
-      "target": "server_index_createadapter",
+      "target": "server_index_ratelimit",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -8270,7 +9007,7 @@
     },
     {
       "source": "server_index",
-      "target": "server_index_multer",
+      "target": "server_index_redis",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -8281,7 +9018,7 @@
     },
     {
       "source": "server_index",
-      "target": "server_index_path",
+      "target": "server_index_createadapter",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -8292,7 +9029,7 @@
     },
     {
       "source": "server_index",
-      "target": "server_index_fs",
+      "target": "server_index_multer",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -8303,13 +9040,46 @@
     },
     {
       "source": "server_index",
-      "target": "server_index_uploadsdir",
+      "target": "server_index_path",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L29",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_index_fs",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L24",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_index_jwt_secret",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_index_accessforboard_canedit_getboardaccess_isboardid",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L27",
       "weight": 1.0
     },
     {
@@ -8331,18 +9101,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L327",
+      "source_location": "L335",
       "weight": 1.0
     },
     {
       "source": "server_index",
-      "target": "server_index_storage",
+      "target": "server_index_uploadsdir",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L35",
+      "source_location": "L37",
       "weight": 1.0
     },
     {
@@ -8358,13 +9128,13 @@
     },
     {
       "source": "server_index",
-      "target": "server_index_upload",
+      "target": "server_index_storage",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L44",
+      "source_location": "L43",
       "weight": 1.0
     },
     {
@@ -8380,13 +9150,24 @@
     },
     {
       "source": "server_index",
+      "target": "server_index_upload",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L52",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
       "target": "server_index_drawiodir",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L50",
+      "source_location": "L58",
       "weight": 1.0
     },
     {
@@ -8397,7 +9178,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L594",
+      "source_location": "L607",
       "weight": 1.0
     },
     {
@@ -8419,7 +9200,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L946",
+      "source_location": "L961",
       "weight": 1.0
     },
     {
@@ -8430,29 +9211,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L947",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
-      "target": "server_index_activeusers",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "server/index.js",
-      "source_location": "L995",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
-      "target": "server_index_broadcastroomusers",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "server/index.js",
-      "source_location": "L997",
+      "source_location": "L962",
       "weight": 1.0
     },
     {
@@ -8463,6 +9222,50 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/middleware/auth.js",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "server_middleware_auth",
+      "target": "server_middleware_auth_jwt_secret",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/middleware/auth.js",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "server_middleware_optionalauth",
+      "target": "server_middleware_optionalauth_jwt",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/middleware/optionalAuth.js",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "server_middleware_optionalauth",
+      "target": "server_middleware_optionalauth_jwt_secret",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/middleware/optionalAuth.js",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "server_middleware_requireboardaccess",
+      "target": "server_middleware_requireboardaccess_getboardaccess_canedit_isboardid",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/middleware/requireBoardAccess.js",
       "source_location": "L1",
       "weight": 1.0
     },
@@ -8852,6 +9655,17 @@
       "weight": 1.0
     },
     {
+      "source": "server_tests_ai_test",
+      "target": "server_tests_ai_test_jwt_secret",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/tests/ai.test.js",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
       "source": "server_tests_auth_test",
       "target": "server_tests_auth_test_request",
       "relation": "contains",
@@ -8904,6 +9718,17 @@
       "confidence_score": 1.0,
       "source_file": "server/tests/context.test.js",
       "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "server_tests_context_test",
+      "target": "server_tests_context_test_path",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/tests/context.test.js",
+      "source_location": "L10",
       "weight": 1.0
     },
     {
@@ -8974,7 +9799,7 @@
     },
     {
       "source": "server_tests_context_test",
-      "target": "server_tests_context_test_fs",
+      "target": "server_tests_context_test_jwt_secret",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -8985,7 +9810,7 @@
     },
     {
       "source": "server_tests_context_test",
-      "target": "server_tests_context_test_path",
+      "target": "server_tests_context_test_fs",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -9047,6 +9872,61 @@
       "confidence_score": 1.0,
       "source_file": "server/tests/sockets.test.js",
       "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "server_tests_sockets_test",
+      "target": "server_tests_sockets_test_mongoose",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "server_tests_sockets_test",
+      "target": "server_tests_sockets_test_jwt",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "server_tests_sockets_test",
+      "target": "server_tests_sockets_test_jwt_secret",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "server_tests_sockets_test",
+      "target": "server_tests_sockets_test_user",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "server_tests_sockets_test",
+      "target": "server_tests_sockets_test_whiteboard",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/tests/sockets.test.js",
+      "source_location": "L8",
       "weight": 1.0
     },
     {
@@ -9113,6 +9993,17 @@
       "confidence_score": 1.0,
       "source_file": "server/tests/whiteboards.test.js",
       "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "server_tests_whiteboards_test",
+      "target": "server_tests_whiteboards_test_jwt_secret",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/tests/whiteboards.test.js",
+      "source_location": "L7",
       "weight": 1.0
     },
     {
@@ -9258,6 +10149,54 @@
       "context": "collection",
       "source_file": "server/ai.service.js",
       "source_location": "L401",
+      "weight": 1.0
+    },
+    {
+      "source": "server_boardaccess",
+      "target": "server_boardaccess_accessforboard",
+      "relation": "indirect_call",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "collection",
+      "source_file": "server/boardAccess.js",
+      "source_location": "L45",
+      "weight": 1.0
+    },
+    {
+      "source": "server_boardaccess",
+      "target": "server_boardaccess_canedit",
+      "relation": "indirect_call",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "collection",
+      "source_file": "server/boardAccess.js",
+      "source_location": "L46",
+      "weight": 1.0
+    },
+    {
+      "source": "server_boardaccess",
+      "target": "server_boardaccess_getboardaccess",
+      "relation": "indirect_call",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "collection",
+      "source_file": "server/boardAccess.js",
+      "source_location": "L47",
+      "weight": 1.0
+    },
+    {
+      "source": "server_boardaccess",
+      "target": "server_boardaccess_isboardid",
+      "relation": "indirect_call",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "collection",
+      "source_file": "server/boardAccess.js",
+      "source_location": "L48",
       "weight": 1.0
     },
     {
@@ -9493,5 +10432,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "dcc895b6cefebf5c06fbf4d4a7213e130aa48dd8"
+  "built_at_commit": "e7f6aebaedd48e860a410499712012131de25dfa"
 }

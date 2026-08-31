@@ -12,6 +12,8 @@ const ElementContext = require("./models/ElementContext");
 const User = require("./models/User");
 const auth = require("./middleware/auth");
 const admin = require("./middleware/admin");
+const optionalAuth = require("./middleware/optionalAuth");
+const requireBoardAccess = require("./middleware/requireBoardAccess");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const rateLimit = require("express-rate-limit");
@@ -22,6 +24,12 @@ const path = require("path");
 const fs = require("fs");
 
 const { JWT_SECRET } = require("./config");
+const {
+  accessForBoard,
+  canEdit,
+  getBoardAccess,
+  isBoardId,
+} = require("./boardAccess");
 
 const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 4000;
 
@@ -518,6 +526,7 @@ app.post("/api/whiteboards/:id/share", auth, async (req, res) => {
       if (!board.collaborators.includes(user._id)) {
         board.collaborators.push(user._id);
         await board.save();
+        refreshRoomAccess(board);
       }
       return res.json({
         success: true,
@@ -527,6 +536,7 @@ app.post("/api/whiteboards/:id/share", auth, async (req, res) => {
       // Toggle public status
       board.isPublic = !board.isPublic;
       await board.save();
+      refreshRoomAccess(board);
       return res.json({ isPublic: board.isPublic });
     }
   } catch (err) {
@@ -567,6 +577,9 @@ app.post("/api/whiteboards/:id/permissions", auth, async (req, res) => {
       await board.save();
     }
 
+    // Connected sockets cache their access, so re-resolve it here too.
+    refreshRoomAccess(board);
+
     // Broadcast permission change event through sockets to all clients in the room
     io.to(boardId).emit("board:permissions-update", {
       owner: board.owner.toString(),
@@ -598,100 +611,107 @@ const aiLimiter = rateLimit({
 });
 
 // GET map of all elements with active context on a whiteboard
-app.get("/api/context/:whiteboardId", async (req, res) => {
-  try {
-    const { whiteboardId } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(whiteboardId)) {
-      return res.status(400).json({ error: "invalid_whiteboard_id" });
+app.get(
+  "/api/context/:whiteboardId",
+  optionalAuth,
+  requireBoardAccess("view"),
+  async (req, res) => {
+    try {
+      const { whiteboardId } = req.params;
+      const contexts = await ElementContext.find(
+        { whiteboard_id: whiteboardId },
+        "element_id notes links code_snippet files",
+      );
+      const activeMap = {};
+      contexts.forEach((c) => {
+        const hasContent =
+          (c.notes && c.notes.trim() !== "") ||
+          (c.links &&
+            c.links.length > 0 &&
+            c.links.some((l) => l.url && l.url.trim() !== "")) ||
+          (c.code_snippet && c.code_snippet.trim() !== "") ||
+          (c.files && c.files.length > 0);
+        if (hasContent) {
+          activeMap[c.element_id] = true;
+        }
+      });
+      return res.json(activeMap);
+    } catch (err) {
+      console.error("Failed to get context map", err);
+      return res.status(500).json({ error: "load_map_failed" });
     }
-    const contexts = await ElementContext.find(
-      { whiteboard_id: whiteboardId },
-      "element_id notes links code_snippet files",
-    );
-    const activeMap = {};
-    contexts.forEach((c) => {
-      const hasContent =
-        (c.notes && c.notes.trim() !== "") ||
-        (c.links &&
-          c.links.length > 0 &&
-          c.links.some((l) => l.url && l.url.trim() !== "")) ||
-        (c.code_snippet && c.code_snippet.trim() !== "") ||
-        (c.files && c.files.length > 0);
-      if (hasContent) {
-        activeMap[c.element_id] = true;
-      }
-    });
-    return res.json(activeMap);
-  } catch (err) {
-    console.error("Failed to get context map", err);
-    return res.status(500).json({ error: "load_map_failed" });
-  }
-});
+  },
+);
 
 // GET single element context details
-app.get("/api/context/:whiteboardId/:elementId", async (req, res) => {
-  try {
-    const { whiteboardId, elementId } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(whiteboardId)) {
-      return res.status(400).json({ error: "invalid_whiteboard_id" });
-    }
-    let context = await ElementContext.findOne({
-      whiteboard_id: whiteboardId,
-      element_id: elementId,
-    });
-    if (!context) {
-      return res.json({
+app.get(
+  "/api/context/:whiteboardId/:elementId",
+  optionalAuth,
+  requireBoardAccess("view"),
+  async (req, res) => {
+    try {
+      const { whiteboardId, elementId } = req.params;
+      let context = await ElementContext.findOne({
         whiteboard_id: whiteboardId,
         element_id: elementId,
-        notes: "",
-        links: [],
-        code_snippet: "",
-        code_language: "javascript",
-        files: [],
       });
+      if (!context) {
+        return res.json({
+          whiteboard_id: whiteboardId,
+          element_id: elementId,
+          notes: "",
+          links: [],
+          code_snippet: "",
+          code_language: "javascript",
+          files: [],
+        });
+      }
+      return res.json(context);
+    } catch (err) {
+      console.error("Failed to get element context", err);
+      return res.status(500).json({ error: "load_context_failed" });
     }
-    return res.json(context);
-  } catch (err) {
-    console.error("Failed to get element context", err);
-    return res.status(500).json({ error: "load_context_failed" });
-  }
-});
+  },
+);
 
 // POST update element context text fields (preserves existing file attachments)
-app.post("/api/context/:whiteboardId/:elementId", auth, async (req, res) => {
-  try {
-    const { whiteboardId, elementId } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(whiteboardId)) {
-      return res.status(400).json({ error: "invalid_whiteboard_id" });
-    }
-    const { notes, links, code_snippet, code_language, files } = req.body;
+app.post(
+  "/api/context/:whiteboardId/:elementId",
+  auth,
+  requireBoardAccess("edit"),
+  async (req, res) => {
+    try {
+      const { whiteboardId, elementId } = req.params;
+      const { notes, links, code_snippet, code_language, files } = req.body;
 
-    const updateFields = {
-      notes: notes !== undefined ? notes : "",
-      links: links || [],
-      code_snippet: code_snippet !== undefined ? code_snippet : "",
-      code_language: code_language || "javascript",
-    };
-    if (files !== undefined) {
-      updateFields.files = files;
-    }
+      const updateFields = {
+        notes: notes !== undefined ? notes : "",
+        links: links || [],
+        code_snippet: code_snippet !== undefined ? code_snippet : "",
+        code_language: code_language || "javascript",
+      };
+      if (files !== undefined) {
+        updateFields.files = files;
+      }
 
-    const context = await ElementContext.findOneAndUpdate(
-      { whiteboard_id: whiteboardId, element_id: elementId },
-      { $set: updateFields },
-      { new: true, upsert: true, setDefaultsOnInsert: true },
-    );
-    return res.json(context);
-  } catch (err) {
-    console.error("Failed to save element context", err);
-    return res.status(500).json({ error: "save_context_failed" });
-  }
-});
+      const context = await ElementContext.findOneAndUpdate(
+        { whiteboard_id: whiteboardId, element_id: elementId },
+        { $set: updateFields },
+        { new: true, upsert: true, setDefaultsOnInsert: true },
+      );
+      return res.json(context);
+    } catch (err) {
+      console.error("Failed to save element context", err);
+      return res.status(500).json({ error: "save_context_failed" });
+    }
+  },
+);
 
 // POST upload file attachment to element context
 app.post(
   "/api/context/:whiteboardId/:elementId/upload",
   auth,
+  requireBoardAccess("edit"),
   upload.single("file"),
   async (req, res) => {
     try {
@@ -699,9 +719,6 @@ app.post(
         return res.status(400).json({ error: "no_file_uploaded" });
       }
       const { whiteboardId, elementId } = req.params;
-      if (!mongoose.Types.ObjectId.isValid(whiteboardId)) {
-        return res.status(400).json({ error: "invalid_whiteboard_id" });
-      }
       const fileUrl = `/uploads/${req.file.filename}`;
 
       const context = await ElementContext.findOneAndUpdate(
@@ -730,12 +747,10 @@ app.post(
 app.delete(
   "/api/context/:whiteboardId/:elementId/files/:fileId",
   auth,
+  requireBoardAccess("edit"),
   async (req, res) => {
     try {
       const { whiteboardId, elementId, fileId } = req.params;
-      if (!mongoose.Types.ObjectId.isValid(whiteboardId)) {
-        return res.status(400).json({ error: "invalid_whiteboard_id" });
-      }
 
       // Clean up physical file from uploads folder if it exists
       const existing = await ElementContext.findOne({
@@ -1012,6 +1027,41 @@ function broadcastRoomUsers(roomId) {
   io.to(roomId).emit("room:users", roomUsers);
 }
 
+// The room a socket may write to, or null. Always derived from server state:
+// a client-supplied roomId let anyone broadcast into a room they never joined.
+function writableRoom(socket) {
+  const u = activeUsers.get(socket.id);
+  if (!u) return null;
+  if (isBoardId(u.roomId) && !canEdit(u.access)) return null;
+  return u.roomId;
+}
+
+// Re-resolves cached access for everyone in a room after its permissions
+// change, so a demoted collaborator stops being able to write immediately
+// instead of at their next reconnect.
+function refreshRoomAccess(board) {
+  const roomId = board._id.toString();
+  for (const [sid, u] of activeUsers.entries()) {
+    if (u.roomId !== roomId) continue;
+    const access = accessForBoard(board, u.dbUserId);
+    if (!access) {
+      // Lost all access: drop them out of the room.
+      const sock = io.sockets.sockets.get(sid);
+      if (sock) {
+        sock.leave(roomId);
+        sock.emit("board:access-denied", { roomId });
+      }
+      activeUsers.delete(sid);
+      continue;
+    }
+    activeUsers.set(sid, {
+      ...u,
+      access,
+      sessionAccess: access === "view" ? "view" : "full",
+    });
+  }
+}
+
 // Socket.io JWT authentication handshake middleware
 io.use((socket, next) => {
   const token = socket.handshake.auth?.token;
@@ -1051,7 +1101,7 @@ io.use((socket, next) => {
 io.on("connection", (socket) => {
   console.log("socket connected", socket.id);
 
-  socket.on("join", (payload) => {
+  socket.on("join", async (payload) => {
     let roomId = "global";
     let user = socket.user || { name: "Collaborator", color: "#6B7280" };
     let pageId = "page-1";
@@ -1068,6 +1118,22 @@ io.on("connection", (socket) => {
       roomId = payload;
     }
 
+    const dbUserId =
+      socket.user && !socket.user.isGuest ? socket.user.id : null;
+
+    // Authorise before joining. Room membership is what grants sight of and
+    // write access to live board traffic, so an unchecked join bypassed every
+    // permission the REST routes enforce. "global" holds unsaved boards only.
+    let access = "edit";
+    if (isBoardId(roomId)) {
+      ({ access } = await getBoardAccess(roomId, dbUserId));
+      if (!access) {
+        console.warn(`socket ${socket.id} denied join for board ${roomId}`);
+        socket.emit("board:access-denied", { roomId });
+        return;
+      }
+    }
+
     // Leave old room if switching
     const oldUser = activeUsers.get(socket.id);
     if (oldUser && oldUser.roomId !== roomId) {
@@ -1080,8 +1146,10 @@ io.on("connection", (socket) => {
       name: user.name,
       color: user.color,
       pageId,
-      dbUserId: socket.user && !socket.user.isGuest ? socket.user.id : null,
+      dbUserId,
       isGuest: !socket.user || socket.user.isGuest,
+      access,
+      sessionAccess: access === "view" ? "view" : "full",
     });
     console.log(
       `socket ${socket.id} (${user.name}) joined ${roomId} (page: ${pageId})`,
@@ -1091,8 +1159,10 @@ io.on("connection", (socket) => {
     broadcastRoomUsers(roomId);
   });
 
-  socket.on("canvas:update", ({ id, pageId, json }) => {
-    const room = id || "global";
+  socket.on("canvas:update", ({ pageId, json }) => {
+    const room = writableRoom(socket);
+    if (!room) return;
+
     // broadcast to others in same room
     socket.to(room).emit("canvas:update", { roomId: room, pageId, json });
 
@@ -1108,10 +1178,10 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("cursor:move", ({ roomId, pageId, x, y }) => {
+  socket.on("cursor:move", ({ pageId, x, y }) => {
     const u = activeUsers.get(socket.id);
     if (u) {
-      socket.to(roomId || "global").emit("cursor:update", {
+      socket.to(u.roomId).emit("cursor:update", {
         userId: socket.id,
         name: u.name,
         color: u.color,
@@ -1122,33 +1192,39 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("page-switch", ({ roomId, pageId }) => {
-    const room = roomId || "global";
+  socket.on("page-switch", ({ pageId }) => {
     const u = activeUsers.get(socket.id);
     if (u) {
       activeUsers.set(socket.id, { ...u, pageId });
       console.log(`socket ${socket.id} (${u.name}) switched to page ${pageId}`);
-      broadcastRoomUsers(room);
+      broadcastRoomUsers(u.roomId);
     }
   });
 
   socket.on(
     "board:structure-update",
-    ({ roomId, pages, mode, pageSize, canvasMode }) => {
-      const room = roomId || "global";
+    ({ pages, mode, pageSize, canvasMode }) => {
+      const room = writableRoom(socket);
+      if (!room) return;
+
       socket
         .to(room)
         .emit("board:structure-update", { pages, mode, pageSize, canvasMode });
     },
   );
 
-  socket.on("canvas-mode:change", ({ id, roomId, mode }) => {
-    const room = roomId || id || "global";
-    socket.to(room).emit("canvas-mode:updated", { roomId: room, mode });
+  socket.on("canvas-mode:change", ({ mode }) => {
+    const u = activeUsers.get(socket.id);
+    // The client already restricts this to the owner; enforce it server side.
+    if (!u || (isBoardId(u.roomId) && u.access !== "owner")) return;
+
+    socket.to(u.roomId).emit("canvas-mode:updated", { roomId: u.roomId, mode });
   });
 
-  socket.on("drawio:update", ({ id, roomId, pageId, xml }) => {
-    const room = roomId || id || "global";
+  socket.on("drawio:update", ({ pageId, xml }) => {
+    const room = writableRoom(socket);
+    if (!room) return;
+
     socket.to(room).emit("drawio:update", { roomId: room, pageId, xml });
   });
 
@@ -1194,8 +1270,9 @@ io.on("connection", (socket) => {
             }
           }
 
-          targetUser.sessionAccess = access;
-          activeUsers.set(targetSocketId, targetUser);
+          // Re-resolve from the saved board rather than trusting the request,
+          // so the cached access a socket writes with cannot drift from the DB.
+          refreshRoomAccess(board);
 
           io.to(roomId).emit("board:user-permission-changed", {
             socketId: targetSocketId,

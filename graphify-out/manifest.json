@@ -6,9 +6,9 @@
     "semantic_hash": ""
   },
   "frontend/src/App.jsx": {
-    "mtime": 1788188405.854796,
-    "seen": 1788188715.7811441,
-    "ast_hash": "59a1203e0cde24a35fe872fe880cd58c",
+    "mtime": 1788191288.2003012,
+    "seen": 1788191898.363675,
+    "ast_hash": "9d0fb9b799a3a6dc551203486e061a79",
     "semantic_hash": ""
   },
   "frontend/src/main.jsx": {
@@ -18,9 +18,9 @@
     "semantic_hash": "1805ad7bae3bf603446eed7431bab36a"
   },
   "server/index.js": {
-    "mtime": 1788070254.1773708,
-    "seen": 1788159624.4838789,
-    "ast_hash": "7f69dd98e97a54d909f41eabc7f295e8",
+    "mtime": 1788191745.5801058,
+    "seen": 1788191898.3691263,
+    "ast_hash": "06ed3a83165496c81053acc934f1f502",
     "semantic_hash": ""
   },
   "server/models/Whiteboard.js": {
@@ -144,9 +144,9 @@
     "semantic_hash": ""
   },
   "server/middleware/auth.js": {
-    "mtime": 1782101817.559378,
-    "seen": 1787378086.4252663,
-    "ast_hash": "ad07f79769f7fbe144f59f1d40a21b57",
+    "mtime": 1788190774.4421644,
+    "seen": 1788191898.3693206,
+    "ast_hash": "acf69595f3d0766a008c79cb8e0ae370",
     "semantic_hash": ""
   },
   "server/models/User.js": {
@@ -209,27 +209,27 @@
     "semantic_hash": ""
   },
   "server/tests/ai.test.js": {
-    "mtime": 1787574263.6485946,
-    "seen": 1787738641.0229282,
-    "ast_hash": "a15d4c818cbd42771caa7b5f6e579c44",
+    "mtime": 1788190774.4626563,
+    "seen": 1788191898.37013,
+    "ast_hash": "60a80048b723cbe94a5dfaf087c25304",
     "semantic_hash": ""
   },
   "server/tests/context.test.js": {
-    "mtime": 1787562517.4490724,
-    "seen": 1787738641.0231278,
-    "ast_hash": "5fcba7b67521c0090dd55207ecc675cb",
+    "mtime": 1788191721.5350718,
+    "seen": 1788191898.3703427,
+    "ast_hash": "2d31c16dce1a7671c391f9a03252883a",
     "semantic_hash": ""
   },
   "server/tests/sockets.test.js": {
-    "mtime": 1782101817.5658915,
-    "seen": 1787378086.425279,
-    "ast_hash": "a506cea15e8ea091333ace6a1bf60554",
+    "mtime": 1788191224.483318,
+    "seen": 1788191898.3705354,
+    "ast_hash": "05eab2b5fcbee12d5161fd141d8b0c6a",
     "semantic_hash": ""
   },
   "server/tests/whiteboards.test.js": {
-    "mtime": 1782101817.5669124,
-    "seen": 1787378086.4252806,
-    "ast_hash": "da0f6150097ea8baafbaa071860983c6",
+    "mtime": 1788190774.5188577,
+    "seen": 1788191898.3705375,
+    "ast_hash": "03c7dc5116a05ee95f2eaba37ddc482e",
     "semantic_hash": ""
   },
   "deploy.md": {
@@ -287,9 +287,9 @@
     "semantic_hash": ""
   },
   "server/admin/login.html": {
-    "mtime": 1782540719.8972375,
-    "seen": 1787378086.4252994,
-    "ast_hash": "abbcc6c229454a2c92cc4fd62b9f04f6",
+    "mtime": 1788189506.054194,
+    "seen": 1788191898.374498,
+    "ast_hash": "232f7b46d47de62a2e82f48f68ad3050",
     "semantic_hash": ""
   },
   "AGENTS.md": {
@@ -356,6 +356,30 @@
     "mtime": 1788188766.280268,
     "seen": 1788188836.2488906,
     "ast_hash": "61bd31a2b0ac08f10f13c932b32d6ca1",
+    "semantic_hash": ""
+  },
+  "server/boardAccess.js": {
+    "mtime": 1788191622.8151145,
+    "seen": 1788191898.369122,
+    "ast_hash": "4dba7f034fc35fba85545a00bcb742ea",
+    "semantic_hash": ""
+  },
+  "server/config.js": {
+    "mtime": 1788190140.2944522,
+    "seen": 1788191898.3691242,
+    "ast_hash": "c6d76b37c6f0b01450ad1312ee39e434",
+    "semantic_hash": ""
+  },
+  "server/middleware/optionalAuth.js": {
+    "mtime": 1788191783.6282487,
+    "seen": 1788191898.369323,
+    "ast_hash": "22fd3bdfc97b98e862cfa19dbd34e000",
+    "semantic_hash": ""
+  },
+  "server/middleware/requireBoardAccess.js": {
+    "mtime": 1788191611.653338,
+    "seen": 1788191898.3693242,
+    "ast_hash": "01827f4e7a59b8bd8006c5f4244ff058",
     "semantic_hash": ""
   }
 }

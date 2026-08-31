@@ -3875,6 +3875,14 @@ export default function App() {
       setDrawioXml(xml);
     });
 
+    // The server refuses room membership for boards we may not see, so live
+    // collaboration is simply unavailable rather than silently doing nothing.
+    socket.on("board:access-denied", () => {
+      showModeNotification(
+        "🔒 Live collaboration unavailable: you do not have access to this board.",
+      );
+    });
+
     socket.on("canvas-mode:updated", ({ roomId, mode }) => {
       if (mode && (mode === "freehand" || mode === "drawio")) {
         setCanvasMode(mode);

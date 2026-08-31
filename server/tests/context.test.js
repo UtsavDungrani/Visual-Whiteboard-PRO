@@ -13,6 +13,7 @@ describe("Element Context API", () => {
   let user;
   let token;
   let whiteboard;
+  let outsiderToken;
   let elementId = "rect-12345";
 
   beforeAll(async () => {
@@ -35,6 +36,16 @@ describe("Element Context API", () => {
     });
     await user.save();
     token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET);
+
+    const outsider = await new User({
+      name: "Unrelated User",
+      email: "outsider@example.com",
+      password: "password123",
+    }).save();
+    outsiderToken = jwt.sign(
+      { id: outsider._id, email: outsider.email },
+      JWT_SECRET,
+    );
 
     whiteboard = new Whiteboard({
       title: "Context Board",
@@ -180,5 +191,61 @@ describe("Element Context API", () => {
 
     // Verify physical file was removed
     expect(fs.existsSync(filePath)).toBe(false);
+  });
+
+  // These routes only validated that the id was a well-formed ObjectId, so any
+  // account could read, overwrite or wipe the notes and code of any board.
+  describe("board authorisation", () => {
+    it("denies an unrelated user the context map of a private board", async () => {
+      const res = await request(app)
+        .get(`/api/context/${whiteboard._id}`)
+        .set("Authorization", `Bearer ${outsiderToken}`);
+
+      expect(res.statusCode).toEqual(403);
+    });
+
+    it("denies an unrelated user a single element context", async () => {
+      const res = await request(app)
+        .get(`/api/context/${whiteboard._id}/${elementId}`)
+        .set("Authorization", `Bearer ${outsiderToken}`);
+
+      expect(res.statusCode).toEqual(403);
+    });
+
+    it("denies an anonymous caller a private board context", async () => {
+      const res = await request(app).get(`/api/context/${whiteboard._id}`);
+
+      expect(res.statusCode).toEqual(401);
+    });
+
+    it("stops an unrelated user overwriting context, leaving it intact", async () => {
+      await request(app)
+        .post(`/api/context/${whiteboard._id}/${elementId}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send({ notes: "owner notes" });
+
+      const res = await request(app)
+        .post(`/api/context/${whiteboard._id}/${elementId}`)
+        .set("Authorization", `Bearer ${outsiderToken}`)
+        .send({ notes: "" });
+
+      expect(res.statusCode).toEqual(403);
+
+      const stored = await ElementContext.findOne({
+        whiteboard_id: whiteboard._id,
+        element_id: elementId,
+      });
+      expect(stored.notes).toBe("owner notes");
+    });
+
+    it("denies an unrelated user deleting a file attachment", async () => {
+      const res = await request(app)
+        .delete(
+          `/api/context/${whiteboard._id}/${elementId}/files/${new mongoose.Types.ObjectId()}`,
+        )
+        .set("Authorization", `Bearer ${outsiderToken}`);
+
+      expect(res.statusCode).toEqual(403);
+    });
   });
 });

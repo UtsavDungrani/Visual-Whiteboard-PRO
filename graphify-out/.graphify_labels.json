@@ -1,12 +1,12 @@
 {
   "0": "frontend/package.json",
   "1": "index.js",
-  "2": "Visual Whiteboard Pro — Phased Task Breakdown",
+  "2": "Project Description and Requirements",
   "3": "dependencies",
   "4": "Visual Whiteboard Pro",
   "5": "Frontend Application & Collaboration UI",
   "6": "App.jsx",
-  "7": "useConnectorSync.js",
+  "7": "useConnectorTool.js",
   "8": "package.json",
   "9": "context.test.js",
   "10": "pathLassoSplit.js",
@@ -23,5 +23,11 @@
   "21": "App",
   "22": "frontend/vercel.json",
   "23": "server/package.json",
-  "24": "vercel.json"
+  "24": "vercel.json",
+  "25": "sockets.test.js",
+  "26": "whiteboards.test.js",
+  "27": "config.js",
+  "28": "User.js",
+  "29": "ai.test.js",
+  "30": "app"
 }
