@@ -31,5 +31,7 @@
   "29": "ai.test.js",
   "30": "app",
   "31": "adminPanel.test.js",
-  "32": "frontendUrlSanitize.test.js"
+  "32": "frontendUrlSanitize.test.js",
+  "33": "boardAccess.js",
+  "34": "ai.service.js"
 }

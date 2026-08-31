@@ -4,78 +4,6 @@
   "graph": {},
   "nodes": [
     {
-      "id": "server_ai_service_architectureassist",
-      "label": "architectureAssist()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "index.js",
-      "file_type": "code",
-      "norm_label": "architectureassist()",
-      "source_file": "server/ai.service.js",
-      "source_location": "L234"
-    },
-    {
-      "id": "server_ai_service_cleanuplayout",
-      "label": "cleanupLayout()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "index.js",
-      "file_type": "code",
-      "norm_label": "cleanuplayout()",
-      "source_file": "server/ai.service.js",
-      "source_location": "L13"
-    },
-    {
-      "id": "server_boardaccess_accessforboard",
-      "label": "accessForBoard()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "index.js",
-      "file_type": "code",
-      "norm_label": "accessforboard()",
-      "source_file": "server/boardAccess.js",
-      "source_location": "L16"
-    },
-    {
-      "id": "server_boardaccess_canedit",
-      "label": "canEdit()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "index.js",
-      "file_type": "code",
-      "norm_label": "canedit()",
-      "source_file": "server/boardAccess.js",
-      "source_location": "L28"
-    },
-    {
-      "id": "server_boardaccess_getboardaccess",
-      "label": "getBoardAccess()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "index.js",
-      "file_type": "code",
-      "norm_label": "getboardaccess()",
-      "source_file": "server/boardAccess.js",
-      "source_location": "L35"
-    },
-    {
-      "id": "server_boardaccess_isboardid",
-      "label": "isBoardId()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "index.js",
-      "file_type": "code",
-      "norm_label": "isboardid()",
-      "source_file": "server/boardAccess.js",
-      "source_location": "L10"
-    },
-    {
       "id": "server_index_broadcastroomusers",
       "label": "broadcastRoomUsers()",
       "_callable": true,
@@ -85,7 +13,7 @@
       "file_type": "code",
       "norm_label": "broadcastroomusers()",
       "source_file": "server/index.js",
-      "source_location": "L1012"
+      "source_location": "L1085"
     },
     {
       "id": "server_index_isredisenabled",
@@ -97,19 +25,7 @@
       "file_type": "code",
       "norm_label": "isredisenabled()",
       "source_file": "server/index.js",
-      "source_location": "L124"
-    },
-    {
-      "id": "server_index_refreshroomaccess",
-      "label": "refreshRoomAccess()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "index.js",
-      "file_type": "code",
-      "norm_label": "refreshroomaccess()",
-      "source_file": "server/index.js",
-      "source_location": "L1042"
+      "source_location": "L183"
     },
     {
       "id": "server_index_seedadminuser",
@@ -121,7 +37,7 @@
       "file_type": "code",
       "norm_label": "seedadminuser()",
       "source_file": "server/index.js",
-      "source_location": "L1346"
+      "source_location": "L1419"
     },
     {
       "id": "server_index_slugifytitle",
@@ -133,7 +49,7 @@
       "file_type": "code",
       "norm_label": "slugifytitle()",
       "source_file": "server/index.js",
-      "source_location": "L335"
+      "source_location": "L394"
     },
     {
       "id": "server_index_startserver",
@@ -145,19 +61,19 @@
       "file_type": "code",
       "norm_label": "startserver()",
       "source_file": "server/index.js",
-      "source_location": "L1305"
+      "source_location": "L1378"
     },
     {
-      "id": "server_index_writableroom",
-      "label": "writableRoom()",
+      "id": "server_index_uploadsinglefile",
+      "label": "uploadSingleFile()",
       "_callable": true,
       "_origin": "ast",
       "community": 1,
       "community_name": "index.js",
       "file_type": "code",
-      "norm_label": "writableroom()",
+      "norm_label": "uploadsinglefile()",
       "source_file": "server/index.js",
-      "source_location": "L1032"
+      "source_location": "L98"
     },
     {
       "id": "frontend_src_pathlassosplit_bboxcornersinpolygon",
@@ -337,7 +253,7 @@
       "file_type": "code",
       "norm_label": "deleteboard()",
       "source_file": "server/admin/admin.js",
-      "source_location": "L255"
+      "source_location": "L283"
     },
     {
       "id": "server_admin_admin_deleteuser",
@@ -349,7 +265,7 @@
       "file_type": "code",
       "norm_label": "deleteuser()",
       "source_file": "server/admin/admin.js",
-      "source_location": "L239"
+      "source_location": "L262"
     },
     {
       "id": "server_admin_admin_escapehtml",
@@ -373,7 +289,7 @@
       "file_type": "code",
       "norm_label": "getheaders()",
       "source_file": "server/admin/admin.js",
-      "source_location": "L66"
+      "source_location": "L67"
     },
     {
       "id": "server_admin_admin_handleresponse",
@@ -385,7 +301,7 @@
       "file_type": "code",
       "norm_label": "handleresponse()",
       "source_file": "server/admin/admin.js",
-      "source_location": "L73"
+      "source_location": "L74"
     },
     {
       "id": "server_admin_admin_loadalldata",
@@ -397,7 +313,7 @@
       "file_type": "code",
       "norm_label": "loadalldata()",
       "source_file": "server/admin/admin.js",
-      "source_location": "L295"
+      "source_location": "L332"
     },
     {
       "id": "server_admin_admin_loadboardslist",
@@ -409,7 +325,7 @@
       "file_type": "code",
       "norm_label": "loadboardslist()",
       "source_file": "server/admin/admin.js",
-      "source_location": "L174"
+      "source_location": "L187"
     },
     {
       "id": "server_admin_admin_loaddashboardstats",
@@ -421,7 +337,7 @@
       "file_type": "code",
       "norm_label": "loaddashboardstats()",
       "source_file": "server/admin/admin.js",
-      "source_location": "L88"
+      "source_location": "L89"
     },
     {
       "id": "server_admin_admin_loaduserslist",
@@ -433,7 +349,7 @@
       "file_type": "code",
       "norm_label": "loaduserslist()",
       "source_file": "server/admin/admin.js",
-      "source_location": "L120"
+      "source_location": "L127"
     },
     {
       "id": "server_admin_admin_safecolor",
@@ -457,7 +373,7 @@
       "file_type": "code",
       "norm_label": "showerror()",
       "source_file": "server/admin/admin.js",
-      "source_location": "L300"
+      "source_location": "L341"
     },
     {
       "id": "server_admin_admin_switchtab",
@@ -469,7 +385,7 @@
       "file_type": "code",
       "norm_label": "switchtab()",
       "source_file": "server/admin/admin.js",
-      "source_location": "L47"
+      "source_location": "L48"
     },
     {
       "id": "server_admin_admin_updaterole",
@@ -481,7 +397,7 @@
       "file_type": "code",
       "norm_label": "updaterole()",
       "source_file": "server/admin/admin.js",
-      "source_location": "L221"
+      "source_location": "L239"
     },
     {
       "id": "frontend_src_app_app",
@@ -662,6 +578,102 @@
       "norm_label": "resolvejwtsecret()",
       "source_file": "server/config.js",
       "source_location": "L11"
+    },
+    {
+      "id": "server_boardaccess_accessforboard",
+      "label": "accessForBoard()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "boardAccess.js",
+      "file_type": "code",
+      "norm_label": "accessforboard()",
+      "source_file": "server/boardAccess.js",
+      "source_location": "L16"
+    },
+    {
+      "id": "server_boardaccess_canedit",
+      "label": "canEdit()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "boardAccess.js",
+      "file_type": "code",
+      "norm_label": "canedit()",
+      "source_file": "server/boardAccess.js",
+      "source_location": "L28"
+    },
+    {
+      "id": "server_boardaccess_getboardaccess",
+      "label": "getBoardAccess()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "boardAccess.js",
+      "file_type": "code",
+      "norm_label": "getboardaccess()",
+      "source_file": "server/boardAccess.js",
+      "source_location": "L35"
+    },
+    {
+      "id": "server_boardaccess_isboardid",
+      "label": "isBoardId()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "boardAccess.js",
+      "file_type": "code",
+      "norm_label": "isboardid()",
+      "source_file": "server/boardAccess.js",
+      "source_location": "L10"
+    },
+    {
+      "id": "server_index_refreshroomaccess",
+      "label": "refreshRoomAccess()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "boardAccess.js",
+      "file_type": "code",
+      "norm_label": "refreshroomaccess()",
+      "source_file": "server/index.js",
+      "source_location": "L1115"
+    },
+    {
+      "id": "server_index_writableroom",
+      "label": "writableRoom()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "boardAccess.js",
+      "file_type": "code",
+      "norm_label": "writableroom()",
+      "source_file": "server/index.js",
+      "source_location": "L1105"
+    },
+    {
+      "id": "server_ai_service_architectureassist",
+      "label": "architectureAssist()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "ai.service.js",
+      "file_type": "code",
+      "norm_label": "architectureassist()",
+      "source_file": "server/ai.service.js",
+      "source_location": "L234"
+    },
+    {
+      "id": "server_ai_service_cleanuplayout",
+      "label": "cleanupLayout()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "ai.service.js",
+      "file_type": "code",
+      "norm_label": "cleanuplayout()",
+      "source_file": "server/ai.service.js",
+      "source_location": "L13"
     },
     {
       "id": "frontend_src_app_contextbadgesoverlay",
@@ -997,7 +1009,7 @@
       "file_type": "code",
       "norm_label": "contextpanel()",
       "source_file": "frontend/src/components/ContextPanel.jsx",
-      "source_location": "L50"
+      "source_location": "L52"
     },
     {
       "id": "frontend_src_components_contextpanel_ensureabsoluteurl",
@@ -1021,7 +1033,7 @@
       "file_type": "code",
       "norm_label": "escapeattr()",
       "source_file": "frontend/src/components/ContextPanel.jsx",
-      "source_location": "L42"
+      "source_location": "L44"
     },
     {
       "id": "frontend_package",
@@ -1266,50 +1278,6 @@
       "source_location": "L18"
     },
     {
-      "id": "server_ai_service",
-      "label": "ai.service.js",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "index.js",
-      "file_type": "code",
-      "norm_label": "ai.service.js",
-      "source_file": "server/ai.service.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_boardaccess",
-      "label": "boardAccess.js",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "index.js",
-      "file_type": "code",
-      "norm_label": "boardaccess.js",
-      "source_file": "server/boardAccess.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_boardaccess_mongoose",
-      "label": "mongoose",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "index.js",
-      "file_type": "code",
-      "norm_label": "mongoose",
-      "source_file": "server/boardAccess.js",
-      "source_location": "L5"
-    },
-    {
-      "id": "server_boardaccess_whiteboard",
-      "label": "Whiteboard",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "index.js",
-      "file_type": "code",
-      "norm_label": "whiteboard",
-      "source_file": "server/boardAccess.js",
-      "source_location": "L6"
-    },
-    {
       "id": "server_index",
       "label": "index.js",
       "_origin": "ast",
@@ -1340,7 +1308,7 @@
       "file_type": "code",
       "norm_label": "activeusers",
       "source_file": "server/index.js",
-      "source_location": "L1010"
+      "source_location": "L1083"
     },
     {
       "id": "server_index_admin",
@@ -1362,7 +1330,18 @@
       "file_type": "code",
       "norm_label": "ailimiter",
       "source_file": "server/index.js",
-      "source_location": "L607"
+      "source_location": "L680"
+    },
+    {
+      "id": "server_index_allowed_upload_extensions",
+      "label": "ALLOWED_UPLOAD_EXTENSIONS",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "index.js",
+      "file_type": "code",
+      "norm_label": "allowed_upload_extensions",
+      "source_file": "server/index.js",
+      "source_location": "L60"
     },
     {
       "id": "server_index_auth",
@@ -1384,7 +1363,7 @@
       "file_type": "code",
       "norm_label": "authlimiter",
       "source_file": "server/index.js",
-      "source_location": "L146"
+      "source_location": "L205"
     },
     {
       "id": "server_index_bcrypt",
@@ -1428,7 +1407,7 @@
       "file_type": "code",
       "norm_label": "drawiodir",
       "source_file": "server/index.js",
-      "source_location": "L58"
+      "source_location": "L117"
     },
     {
       "id": "server_index_elementcontext",
@@ -1604,7 +1583,7 @@
       "file_type": "code",
       "norm_label": "upload",
       "source_file": "server/index.js",
-      "source_location": "L52"
+      "source_location": "L83"
     },
     {
       "id": "server_index_uploadsdir",
@@ -1648,7 +1627,7 @@
       "file_type": "code",
       "norm_label": "whiteboards",
       "source_file": "server/index.js",
-      "source_location": "L131"
+      "source_location": "L190"
     },
     {
       "id": "server_middleware_admin",
@@ -1659,28 +1638,6 @@
       "file_type": "code",
       "norm_label": "middleware/admin.js",
       "source_file": "server/middleware/admin.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_middleware_requireboardaccess",
-      "label": "requireBoardAccess.js",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "index.js",
-      "file_type": "code",
-      "norm_label": "requireboardaccess.js",
-      "source_file": "server/middleware/requireBoardAccess.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "server_middleware_requireboardaccess_getboardaccess_canedit_isboardid",
-      "label": "{ getBoardAccess, canEdit, isBoardId }",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "index.js",
-      "file_type": "code",
-      "norm_label": "{ getboardaccess, canedit, isboardid }",
-      "source_file": "server/middleware/requireBoardAccess.js",
       "source_location": "L1"
     },
     {
@@ -2503,7 +2460,7 @@
       "file_type": "code",
       "norm_label": "httpserver",
       "source_file": "server/index.js",
-      "source_location": "L961"
+      "source_location": "L1034"
     },
     {
       "id": "server_index_io",
@@ -2514,7 +2471,7 @@
       "file_type": "code",
       "norm_label": "io",
       "source_file": "server/index.js",
-      "source_location": "L962"
+      "source_location": "L1035"
     },
     {
       "id": "server_tests_sockets_test",
@@ -3351,6 +3308,72 @@
       "norm_label": "path",
       "source_file": "server/tests/frontendUrlSanitize.test.js",
       "source_location": "L2"
+    },
+    {
+      "id": "server_boardaccess",
+      "label": "boardAccess.js",
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "boardAccess.js",
+      "file_type": "code",
+      "norm_label": "boardaccess.js",
+      "source_file": "server/boardAccess.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_boardaccess_mongoose",
+      "label": "mongoose",
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "boardAccess.js",
+      "file_type": "code",
+      "norm_label": "mongoose",
+      "source_file": "server/boardAccess.js",
+      "source_location": "L5"
+    },
+    {
+      "id": "server_boardaccess_whiteboard",
+      "label": "Whiteboard",
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "boardAccess.js",
+      "file_type": "code",
+      "norm_label": "whiteboard",
+      "source_file": "server/boardAccess.js",
+      "source_location": "L6"
+    },
+    {
+      "id": "server_middleware_requireboardaccess",
+      "label": "requireBoardAccess.js",
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "boardAccess.js",
+      "file_type": "code",
+      "norm_label": "requireboardaccess.js",
+      "source_file": "server/middleware/requireBoardAccess.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_middleware_requireboardaccess_getboardaccess_canedit_isboardid",
+      "label": "{ getBoardAccess, canEdit, isBoardId }",
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "boardAccess.js",
+      "file_type": "code",
+      "norm_label": "{ getboardaccess, canedit, isboardid }",
+      "source_file": "server/middleware/requireBoardAccess.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "server_ai_service",
+      "label": "ai.service.js",
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "ai.service.js",
+      "file_type": "code",
+      "norm_label": "ai.service.js",
+      "source_file": "server/ai.service.js",
+      "source_location": "L1"
     },
     {
       "id": "readme_api_surface",
@@ -4801,7 +4824,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/components/ContextPanel.jsx",
-      "source_location": "L488",
+      "source_location": "L490",
       "weight": 1.0
     },
     {
@@ -4813,7 +4836,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/components/ContextPanel.jsx",
-      "source_location": "L491",
+      "source_location": "L493",
       "weight": 1.0
     },
     {
@@ -5197,7 +5220,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/admin/admin.js",
-      "source_location": "L261",
+      "source_location": "L294",
       "weight": 1.0
     },
     {
@@ -5209,7 +5232,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/admin/admin.js",
-      "source_location": "L263",
+      "source_location": "L296",
       "weight": 1.0
     },
     {
@@ -5221,7 +5244,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/admin/admin.js",
-      "source_location": "L264",
+      "source_location": "L297",
       "weight": 1.0
     },
     {
@@ -5233,7 +5256,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/admin/admin.js",
-      "source_location": "L245",
+      "source_location": "L273",
       "weight": 1.0
     },
     {
@@ -5245,7 +5268,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/admin/admin.js",
-      "source_location": "L247",
+      "source_location": "L275",
       "weight": 1.0
     },
     {
@@ -5257,19 +5280,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/admin/admin.js",
-      "source_location": "L248",
-      "weight": 1.0
-    },
-    {
-      "source": "server_admin_admin_loadalldata",
-      "target": "server_admin_admin_loadboardslist",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "server/admin/admin.js",
-      "source_location": "L297",
+      "source_location": "L276",
       "weight": 1.0
     },
     {
@@ -5281,7 +5292,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/admin/admin.js",
-      "source_location": "L297",
+      "source_location": "L335",
       "weight": 1.0
     },
     {
@@ -5293,7 +5304,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/admin/admin.js",
-      "source_location": "L297",
+      "source_location": "L336",
+      "weight": 1.0
+    },
+    {
+      "source": "server_admin_admin_loadalldata",
+      "target": "server_admin_admin_loadboardslist",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L337",
       "weight": 1.0
     },
     {
@@ -5305,7 +5328,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/admin/admin.js",
-      "source_location": "L176",
+      "source_location": "L189",
       "weight": 1.0
     },
     {
@@ -5317,7 +5340,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/admin/admin.js",
-      "source_location": "L177",
+      "source_location": "L190",
       "weight": 1.0
     },
     {
@@ -5329,7 +5352,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/admin/admin.js",
-      "source_location": "L191",
+      "source_location": "L204",
       "weight": 1.0
     },
     {
@@ -5341,7 +5364,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/admin/admin.js",
-      "source_location": "L212",
+      "source_location": "L230",
       "weight": 1.0
     },
     {
@@ -5353,7 +5376,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/admin/admin.js",
-      "source_location": "L216",
+      "source_location": "L234",
       "weight": 1.0
     },
     {
@@ -5365,24 +5388,12 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/admin/admin.js",
-      "source_location": "L115",
+      "source_location": "L122",
       "weight": 1.0
     },
     {
       "source": "server_admin_admin_loaddashboardstats",
       "target": "server_admin_admin_getheaders",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "server/admin/admin.js",
-      "source_location": "L90",
-      "weight": 1.0
-    },
-    {
-      "source": "server_admin_admin_loaddashboardstats",
-      "target": "server_admin_admin_handleresponse",
       "relation": "calls",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -5393,6 +5404,18 @@
       "weight": 1.0
     },
     {
+      "source": "server_admin_admin_loaddashboardstats",
+      "target": "server_admin_admin_handleresponse",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "server/admin/admin.js",
+      "source_location": "L92",
+      "weight": 1.0
+    },
+    {
       "source": "server_admin_admin_loaduserslist",
       "target": "server_admin_admin_getheaders",
       "relation": "calls",
@@ -5401,7 +5424,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/admin/admin.js",
-      "source_location": "L122",
+      "source_location": "L129",
       "weight": 1.0
     },
     {
@@ -5413,7 +5436,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/admin/admin.js",
-      "source_location": "L123",
+      "source_location": "L130",
       "weight": 1.0
     },
     {
@@ -5425,7 +5448,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/admin/admin.js",
-      "source_location": "L139",
+      "source_location": "L146",
       "weight": 1.0
     },
     {
@@ -5437,7 +5460,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/admin/admin.js",
-      "source_location": "L140",
+      "source_location": "L147",
       "weight": 1.0
     },
     {
@@ -5449,7 +5472,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/admin/admin.js",
-      "source_location": "L162",
+      "source_location": "L170",
       "weight": 1.0
     },
     {
@@ -5461,7 +5484,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/admin/admin.js",
-      "source_location": "L165",
+      "source_location": "L178",
       "weight": 1.0
     },
     {
@@ -5473,7 +5496,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/admin/admin.js",
-      "source_location": "L169",
+      "source_location": "L182",
       "weight": 1.0
     },
     {
@@ -5485,7 +5508,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/admin/admin.js",
-      "source_location": "L228",
+      "source_location": "L251",
       "weight": 1.0
     },
     {
@@ -5497,7 +5520,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/admin/admin.js",
-      "source_location": "L231",
+      "source_location": "L254",
       "weight": 1.0
     },
     {
@@ -5533,7 +5556,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/index.js",
-      "source_location": "L1046",
+      "source_location": "L1119",
       "weight": 1.0
     },
     {
@@ -5545,7 +5568,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/index.js",
-      "source_location": "L1035",
+      "source_location": "L1108",
       "weight": 1.0
     },
     {
@@ -5557,7 +5580,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/index.js",
-      "source_location": "L1035",
+      "source_location": "L1108",
       "weight": 1.0
     },
     {
@@ -6229,7 +6252,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/index.js",
-      "source_location": "L803",
+      "source_location": "L876",
       "weight": 1.0
     },
     {
@@ -6241,7 +6264,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/index.js",
-      "source_location": "L819",
+      "source_location": "L892",
       "weight": 1.0
     },
     {
@@ -6985,7 +7008,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "server/index.js",
-      "source_location": "L819",
+      "source_location": "L892",
       "weight": 1.0
     },
     {
@@ -7733,7 +7756,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/components/ContextPanel.jsx",
-      "source_location": "L42",
+      "source_location": "L44",
       "weight": 1.0
     },
     {
@@ -7744,7 +7767,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/components/ContextPanel.jsx",
-      "source_location": "L50",
+      "source_location": "L52",
       "weight": 1.0
     },
     {
@@ -8800,7 +8823,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/admin/admin.js",
-      "source_location": "L120",
+      "source_location": "L127",
       "weight": 1.0
     },
     {
@@ -8822,7 +8845,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/admin/admin.js",
-      "source_location": "L174",
+      "source_location": "L187",
       "weight": 1.0
     },
     {
@@ -8833,7 +8856,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/admin/admin.js",
-      "source_location": "L221",
+      "source_location": "L239",
       "weight": 1.0
     },
     {
@@ -8844,18 +8867,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/admin/admin.js",
-      "source_location": "L239",
-      "weight": 1.0
-    },
-    {
-      "source": "server_admin_admin",
-      "target": "server_admin_admin_deleteboard",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "server/admin/admin.js",
-      "source_location": "L255",
+      "source_location": "L262",
       "weight": 1.0
     },
     {
@@ -8871,13 +8883,24 @@
     },
     {
       "source": "server_admin_admin",
+      "target": "server_admin_admin_deleteboard",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/admin/admin.js",
+      "source_location": "L283",
+      "weight": 1.0
+    },
+    {
+      "source": "server_admin_admin",
       "target": "server_admin_admin_loadalldata",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/admin/admin.js",
-      "source_location": "L295",
+      "source_location": "L332",
       "weight": 1.0
     },
     {
@@ -8888,7 +8911,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/admin/admin.js",
-      "source_location": "L300",
+      "source_location": "L341",
       "weight": 1.0
     },
     {
@@ -8899,7 +8922,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/admin/admin.js",
-      "source_location": "L47",
+      "source_location": "L48",
       "weight": 1.0
     },
     {
@@ -8910,7 +8933,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/admin/admin.js",
-      "source_location": "L66",
+      "source_location": "L67",
       "weight": 1.0
     },
     {
@@ -8921,7 +8944,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/admin/admin.js",
-      "source_location": "L73",
+      "source_location": "L74",
       "weight": 1.0
     },
     {
@@ -8932,7 +8955,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/admin/admin.js",
-      "source_location": "L88",
+      "source_location": "L89",
       "weight": 1.0
     },
     {
@@ -9003,13 +9026,35 @@
     },
     {
       "source": "server_index",
+      "target": "server_index_httpserver",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L1034",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_index_io",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L1035",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
       "target": "server_index_activeusers",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L1010",
+      "source_location": "L1083",
       "weight": 1.0
     },
     {
@@ -9020,29 +9065,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L1012",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
-      "target": "server_index_writableroom",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "server/index.js",
-      "source_location": "L1032",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
-      "target": "server_index_refreshroomaccess",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "server/index.js",
-      "source_location": "L1042",
+      "source_location": "L1085",
       "weight": 1.0
     },
     {
@@ -9058,6 +9081,39 @@
     },
     {
       "source": "server_index",
+      "target": "server_index_writableroom",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L1105",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_index_refreshroomaccess",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L1115",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_index_drawiodir",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L117",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
       "target": "server_index_user",
       "relation": "contains",
       "_origin": "ast",
@@ -9065,17 +9121,6 @@
       "confidence_score": 1.0,
       "source_file": "server/index.js",
       "source_location": "L12",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
-      "target": "server_index_isredisenabled",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "server/index.js",
-      "source_location": "L124",
       "weight": 1.0
     },
     {
@@ -9097,29 +9142,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L1305",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
-      "target": "server_index_whiteboards",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "server/index.js",
-      "source_location": "L131",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
-      "target": "server_index_seedadminuser",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "server/index.js",
-      "source_location": "L1346",
+      "source_location": "L1378",
       "weight": 1.0
     },
     {
@@ -9135,13 +9158,13 @@
     },
     {
       "source": "server_index",
-      "target": "server_index_authlimiter",
+      "target": "server_index_seedadminuser",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L146",
+      "source_location": "L1419",
       "weight": 1.0
     },
     {
@@ -9190,6 +9213,17 @@
     },
     {
       "source": "server_index",
+      "target": "server_index_isredisenabled",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L183",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
       "target": "server_index_ratelimit",
       "relation": "contains",
       "_origin": "ast",
@@ -9197,6 +9231,17 @@
       "confidence_score": 1.0,
       "source_file": "server/index.js",
       "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_index_whiteboards",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L190",
       "weight": 1.0
     },
     {
@@ -9219,6 +9264,17 @@
       "confidence_score": 1.0,
       "source_file": "server/index.js",
       "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_index_authlimiter",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L205",
       "weight": 1.0
     },
     {
@@ -9300,17 +9356,6 @@
     },
     {
       "source": "server_index",
-      "target": "server_index_slugifytitle",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "server/index.js",
-      "source_location": "L335",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
       "target": "server_index_uploadsdir",
       "relation": "contains",
       "_origin": "ast",
@@ -9318,6 +9363,17 @@
       "confidence_score": 1.0,
       "source_file": "server/index.js",
       "source_location": "L37",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_index_slugifytitle",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L394",
       "weight": 1.0
     },
     {
@@ -9355,24 +9411,13 @@
     },
     {
       "source": "server_index",
-      "target": "server_index_upload",
+      "target": "server_index_allowed_upload_extensions",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L52",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
-      "target": "server_index_drawiodir",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "server/index.js",
-      "source_location": "L58",
+      "source_location": "L60",
       "weight": 1.0
     },
     {
@@ -9383,7 +9428,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L607",
+      "source_location": "L680",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_index_upload",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L83",
       "weight": 1.0
     },
     {
@@ -9395,28 +9451,6 @@
       "confidence_score": 1.0,
       "source_file": "server/index.js",
       "source_location": "L9",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
-      "target": "server_index_httpserver",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "server/index.js",
-      "source_location": "L961",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
-      "target": "server_index_io",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "server/index.js",
-      "source_location": "L962",
       "weight": 1.0
     },
     {
@@ -10377,6 +10411,18 @@
       "weight": 1.0
     },
     {
+      "source": "server_index",
+      "target": "server_index_uploadsinglefile",
+      "relation": "indirect_call",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "argument",
+      "source_file": "server/index.js",
+      "source_location": "L788",
+      "weight": 1.0
+    },
+    {
       "source": "server_ai_service",
       "target": "server_ai_service_cleanuplayout",
       "relation": "indirect_call",
@@ -10681,5 +10727,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "6cf1614eea9e85d82d24c68879de8ab317d6281c"
+  "built_at_commit": "313cb8f7a939e4f494725b7b84276c0818a93bb3"
 }

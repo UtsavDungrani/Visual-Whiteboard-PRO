@@ -122,6 +122,61 @@ describe("Element Context API", () => {
     expect(res.body.files[0].size).toBeGreaterThan(0);
   });
 
+  // Uploads were unrestricted in size and type, and were served back as
+  // active content from the API origin.
+  describe("upload restrictions", () => {
+    it("rejects a scriptable file type", async () => {
+      const res = await request(app)
+        .post(`/api/context/${whiteboard._id}/${elementId}/upload`)
+        .set("Authorization", `Bearer ${token}`)
+        .attach(
+          "file",
+          Buffer.from("<script>alert(document.domain)</script>"),
+          "payload.html",
+        );
+
+      expect(res.statusCode).toEqual(400);
+      expect(res.body.error).toBe("unsupported_file_type");
+    });
+
+    it("rejects an svg, which can carry script", async () => {
+      const res = await request(app)
+        .post(`/api/context/${whiteboard._id}/${elementId}/upload`)
+        .set("Authorization", `Bearer ${token}`)
+        .attach(
+          "file",
+          Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"/>'),
+          "image.svg",
+        );
+
+      expect(res.statusCode).toEqual(400);
+    });
+
+    it("rejects a file over the size limit", async () => {
+      const res = await request(app)
+        .post(`/api/context/${whiteboard._id}/${elementId}/upload`)
+        .set("Authorization", `Bearer ${token}`)
+        .attach("file", Buffer.alloc(11 * 1024 * 1024, "a"), "huge.txt");
+
+      expect(res.statusCode).toEqual(413);
+      expect(res.body.error).toBe("file_too_large");
+    });
+
+    it("serves stored files as inert downloads", async () => {
+      const context = await ElementContext.findOne({
+        whiteboard_id: whiteboard._id,
+        element_id: elementId,
+      });
+      expect(context.files.length).toBeGreaterThan(0);
+
+      const res = await request(app).get(context.files[0].path);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.headers["content-disposition"]).toContain("attachment");
+      expect(res.headers["x-content-type-options"]).toBe("nosniff");
+    });
+  });
+
   it("should preserve uploaded file attachments when saving text/code context", async () => {
     const updateRes = await request(app)
       .post(`/api/context/${whiteboard._id}/${elementId}`)

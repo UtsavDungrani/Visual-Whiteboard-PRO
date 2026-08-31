@@ -1,16 +1,16 @@
 # Graph Report - Visual Whiteboard Pro  (2026-08-31)
 
 ## Corpus Check
-- 61 files · ~58,968 words
+- 61 files · ~59,395 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 395 nodes · 536 edges · 33 communities (24 shown, 9 thin omitted)
-- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 12 edges (avg confidence: 0.85)
+- 397 nodes · 538 edges · 35 communities (25 shown, 10 thin omitted)
+- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 13 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `6cf1614e`
+- Built from commit: `313cb8f7`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -45,6 +45,8 @@
 - app
 - adminPanel.test.js
 - frontendUrlSanitize.test.js
+- boardAccess.js
+- ai.service.js
 
 ## God Nodes (most connected - your core abstractions)
 1. `App()` - 18 edges
@@ -73,7 +75,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (33 total, 9 thin omitted)
+## Communities (35 total, 10 thin omitted)
 
 ### Community 0 - "frontend/package.json"
 Cohesion: 0.09
@@ -81,7 +83,12 @@ Nodes (21): dependencies, jspdf, jszip, react, react-dom, socket.io-client, devD
 
 ### Community 1 - "index.js"
 Cohesion: 0.05
-Nodes (41): architectureAssist(), cleanupLayout(), accessForBoard(), canEdit(), getBoardAccess(), isBoardId(), mongoose, Whiteboard (+33 more)
+Nodes (31): {
+  accessForBoard,
+  canEdit,
+  getBoardAccess,
+  isBoardId,
+}, activeUsers, admin, aiLimiter, ALLOWED_UPLOAD_EXTENSIONS, auth, authLimiter, bcrypt (+23 more)
 
 ### Community 2 - "Project Description and Requirements"
 Cohesion: 0.11
@@ -159,10 +166,14 @@ Nodes (6): { app }, jwt, { JWT_SECRET }, mongoose, request, User
 Cohesion: 0.50
 Nodes (3): app, { app }, request
 
+### Community 33 - "boardAccess.js"
+Cohesion: 0.29
+Nodes (9): accessForBoard(), canEdit(), getBoardAccess(), isBoardId(), mongoose, Whiteboard, refreshRoomAccess(), writableRoom() (+1 more)
+
 ## Knowledge Gaps
-- **192 isolated node(s):** `name`, `version`, `private`, `dev`, `build` (+187 more)
+- **193 isolated node(s):** `name`, `version`, `private`, `dev`, `build` (+188 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **9 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -172,11 +183,11 @@ _Questions this graph is uniquely positioned to answer:_
 - **Why does `Real-time Collaboration` connect `Project Description and Requirements` to `index.js`?**
   _High betweenness centrality (0.028) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `private` to the rest of the system?**
-  _192 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _193 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `frontend/package.json` be split into smaller, more focused modules?**
   _Cohesion score 0.09090909090909091 - nodes in this community are weakly interconnected._
 - **Should `index.js` be split into smaller, more focused modules?**
-  _Cohesion score 0.050980392156862744 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05128205128205128 - nodes in this community are weakly interconnected._
 - **Should `Project Description and Requirements` be split into smaller, more focused modules?**
   _Cohesion score 0.11462450592885376 - nodes in this community are weakly interconnected._
 - **Should `dependencies` be split into smaller, more focused modules?**

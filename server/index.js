@@ -49,7 +49,66 @@ const storage = multer.diskStorage({
     cb(null, uniqueSuffix + "-" + file.originalname);
   },
 });
-const upload = multer({ storage });
+
+const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
+
+// Attachments are reference material for a diagram element: documents, images
+// and archives. Uploads were previously unrestricted in both size and type, so
+// the endpoint doubled as general purpose file hosting. Extend this list if a
+// real workflow needs more; scriptable formats (.svg, .html, .xml, .js) are
+// left out deliberately.
+const ALLOWED_UPLOAD_EXTENSIONS = new Set([
+  ".pdf",
+  ".txt",
+  ".md",
+  ".csv",
+  ".json",
+  ".log",
+  ".yml",
+  ".yaml",
+  ".png",
+  ".jpg",
+  ".jpeg",
+  ".gif",
+  ".webp",
+  ".doc",
+  ".docx",
+  ".xls",
+  ".xlsx",
+  ".ppt",
+  ".pptx",
+  ".zip",
+]);
+
+const upload = multer({
+  storage,
+  limits: { fileSize: MAX_UPLOAD_BYTES, files: 1 },
+  fileFilter: (req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (ALLOWED_UPLOAD_EXTENSIONS.has(ext)) return cb(null, true);
+
+    const err = new Error(`unsupported file type: ${ext || "none"}`);
+    err.code = "UNSUPPORTED_FILE_TYPE";
+    return cb(err);
+  },
+});
+
+// Multer reports rejections through next(err), which the default Express handler
+// turns into a 500 HTML page. Translate them into the JSON the client expects.
+const uploadSingleFile = (req, res, next) =>
+  upload.single("file")(req, res, (err) => {
+    if (!err) return next();
+
+    if (err.code === "LIMIT_FILE_SIZE") {
+      return res.status(413).json({ error: "file_too_large" });
+    }
+    if (err.code === "UNSUPPORTED_FILE_TYPE") {
+      return res.status(400).json({ error: "unsupported_file_type" });
+    }
+
+    console.error("Upload rejected", err);
+    return res.status(400).json({ error: "upload_failed" });
+  });
 
 app.use(cors());
 app.use(express.json());
@@ -598,7 +657,21 @@ app.post("/api/whiteboards/:id/permissions", auth, async (req, res) => {
 });
 
 // Serve /uploads static folder
-app.use("/uploads", express.static(uploadsDir));
+// User supplied files served from an application origin are active content:
+// an uploaded page would run as if we wrote it. The app only ever links to
+// these as downloads, so force that and stop the browser sniffing a type.
+app.use(
+  "/uploads",
+  express.static(uploadsDir, {
+    setHeaders: (res) => {
+      res.setHeader("Content-Disposition", "attachment");
+      res.setHeader("X-Content-Type-Options", "nosniff");
+      res.setHeader("Content-Security-Policy", "default-src 'none'");
+    },
+    dotfiles: "deny",
+    index: false,
+  }),
+);
 
 // Serve /admin static folder for separate Admin Panel app
 app.use("/admin", express.static(path.join(__dirname, "admin")));
@@ -712,7 +785,7 @@ app.post(
   "/api/context/:whiteboardId/:elementId/upload",
   auth,
   requireBoardAccess("edit"),
-  upload.single("file"),
+  uploadSingleFile,
   async (req, res) => {
     try {
       if (!req.file) {
