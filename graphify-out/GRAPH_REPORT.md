@@ -1,16 +1,16 @@
 # Graph Report - Visual Whiteboard Pro  (2026-08-31)
 
 ## Corpus Check
-- 59 files · ~58,072 words
+- 61 files · ~58,968 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 385 nodes · 524 edges · 31 communities (24 shown, 7 thin omitted)
+- 395 nodes · 536 edges · 33 communities (24 shown, 9 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 12 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `e7f6aeba`
+- Built from commit: `6cf1614e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -21,7 +21,7 @@
 - dependencies
 - Visual Whiteboard Pro
 - App.jsx
-- useConnectorTool.js
+- ContextPanel.jsx
 - package.json
 - context.test.js
 - pathLassoSplit.js
@@ -43,6 +43,8 @@
 - User.js
 - ai.test.js
 - app
+- adminPanel.test.js
+- frontendUrlSanitize.test.js
 
 ## God Nodes (most connected - your core abstractions)
 1. `App()` - 18 edges
@@ -50,11 +52,11 @@
 3. `Project Description and Requirements` - 12 edges
 4. `Visual Whiteboard - Feature Backlog & Task Tracking` - 11 edges
 5. `Visual Whiteboard Pro — Phased Task Breakdown` - 10 edges
-6. `Visual Whiteboard Pro — Deployment Guide` - 9 edges
-7. `updateAllConnectors()` - 8 edges
-8. `useConnectorSync()` - 7 edges
-9. `isPointInPolygon()` - 7 edges
-10. `getObjectSelectionMode()` - 7 edges
+6. `loadUsersList()` - 9 edges
+7. `Visual Whiteboard Pro — Deployment Guide` - 9 edges
+8. `updateAllConnectors()` - 8 edges
+9. `useConnectorSync()` - 7 edges
+10. `isPointInPolygon()` - 7 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `App()` --calls--> `updateAllConnectors()`  [EXTRACTED]
@@ -71,7 +73,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (31 total, 7 thin omitted)
+## Communities (33 total, 9 thin omitted)
 
 ### Community 0 - "frontend/package.json"
 Cohesion: 0.09
@@ -95,11 +97,11 @@ Nodes (17): API Surface, Configuration, Current Limitations, Data Model, Future 
 
 ### Community 6 - "App.jsx"
 Cohesion: 0.07
-Nodes (25): RESERVED_ROUTES, AssistPanel(), AuthPage(), CanvasControls(), CanvasOverlay(), ContextPanel(), ensureAbsoluteUrl(), LANGUAGES (+17 more)
+Nodes (28): RESERVED_ROUTES, AssistPanel(), AuthPage(), CanvasControls(), CanvasOverlay(), CustomCursor(), DashboardPage(), DrawioCanvas (+20 more)
 
-### Community 7 - "useConnectorTool.js"
-Cohesion: 0.42
-Nodes (6): ConnectorLine, useConnectorTool(), canvasToScreen(), findClosestAnchor(), getAnchorPoint(), localAnchorOffset()
+### Community 7 - "ContextPanel.jsx"
+Cohesion: 0.47
+Nodes (5): ContextPanel(), ensureAbsoluteUrl(), escapeAttr(), LANGUAGES, SAFE_URL_SCHEMES
 
 ### Community 8 - "package.json"
 Cohesion: 0.06
@@ -122,8 +124,8 @@ Cohesion: 0.17
 Nodes (11): 10. Advanced Lasso & Selection Tool Refactor (On-Demand Implementation), 1. Multi-Page Reordering & Sharing (Restricted Access), 2. Fixed Position Page Navigation UI, 3. Toolbar UX & Optimization, 4. Color Selection State Sync Bug, 5. Optimized PDF Export Pipeline (Sketchbook Book Style), 6. Collapsible Side Menus & Immersive Canvas Mode, 7. Board Loading by ID via Dashboard Input (+3 more)
 
 ### Community 15 - "admin/admin.js"
-Cohesion: 0.52
-Nodes (10): deleteBoard(), deleteUser(), getHeaders(), handleResponse(), loadAllData(), loadBoardsList(), loadDashboardStats(), loadUsersList() (+2 more)
+Cohesion: 0.43
+Nodes (12): deleteBoard(), deleteUser(), escapeHtml(), getHeaders(), handleResponse(), loadAllData(), loadBoardsList(), loadDashboardStats() (+4 more)
 
 ### Community 21 - "App"
 Cohesion: 0.23
@@ -158,19 +160,19 @@ Cohesion: 0.50
 Nodes (3): app, { app }, request
 
 ## Knowledge Gaps
-- **187 isolated node(s):** `name`, `version`, `private`, `dev`, `build` (+182 more)
+- **192 isolated node(s):** `name`, `version`, `private`, `dev`, `build` (+187 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **7 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **9 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Visual Whiteboard Pro` connect `Visual Whiteboard Pro` to `Project Description and Requirements`?**
-  _High betweenness centrality (0.032) - this node is a cross-community bridge._
-- **Why does `Real-time Collaboration` connect `Project Description and Requirements` to `index.js`?**
   _High betweenness centrality (0.030) - this node is a cross-community bridge._
+- **Why does `Real-time Collaboration` connect `Project Description and Requirements` to `index.js`?**
+  _High betweenness centrality (0.028) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `private` to the rest of the system?**
-  _187 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _192 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `frontend/package.json` be split into smaller, more focused modules?**
   _Cohesion score 0.09090909090909091 - nodes in this community are weakly interconnected._
 - **Should `index.js` be split into smaller, more focused modules?**

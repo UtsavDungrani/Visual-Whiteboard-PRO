@@ -14,15 +14,40 @@ const API_BASE_URL = rawApiUrl.endsWith("/")
   ? rawApiUrl.slice(0, -1)
   : rawApiUrl;
 
+// Notes and links are authored by anyone with edit access and rendered for
+// everyone else, so a scheme was all it took to run script on a viewer's click.
+// Anything outside this list is rejected rather than rewritten.
+const SAFE_URL_SCHEMES = ["http:", "https:", "mailto:"];
+
+// Returns a safe absolute URL, or "" when the input cannot be trusted.
 const ensureAbsoluteUrl = (url) => {
   if (!url || typeof url !== "string") return "";
   const trimmed = url.trim();
   if (!trimmed) return "";
-  if (/^[a-zA-Z][a-zA-Z\d+\-.]*:/.test(trimmed) || trimmed.startsWith("//")) {
-    return trimmed;
+
+  // Bare domains and protocol-relative links are treated as https.
+  const hasScheme = /^[a-zA-Z][a-zA-Z\d+\-.]*:/.test(trimmed);
+  const candidate = hasScheme
+    ? trimmed
+    : `https://${trimmed.replace(/^\/\//, "")}`;
+
+  try {
+    const parsed = new URL(candidate);
+    return SAFE_URL_SCHEMES.includes(parsed.protocol) ? parsed.href : "";
+  } catch {
+    return "";
   }
-  return `https://${trimmed}`;
 };
+
+// The markdown pass entity-escapes < > & up front but leaves quotes alone, so a
+// URL could close the href attribute and hang its own handlers on the anchor.
+const escapeAttr = (value) =>
+  String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 
 export default function ContextPanel({
   isOpen,
@@ -459,11 +484,15 @@ export default function ContextPanel({
     html = html.replace(/`(.*?)`/g, "<code>$1</code>");
 
     // Links: [text](url)
-    html = html.replace(
-      /\[([^\]]+)\]\(([^)]+)\)/g,
-      (_, text, url) =>
-        `<a href="${ensureAbsoluteUrl(url)}" target="_blank" rel="noopener noreferrer" class="md-link">${text} ↗</a>`,
-    );
+    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text, url) => {
+      // The url arrives already entity-escaped, so restore ampersands before
+      // parsing or every query string would be mangled.
+      const safeUrl = ensureAbsoluteUrl(url.replace(/&amp;/g, "&"));
+      // A rejected scheme renders as plain text rather than a dead anchor.
+      return safeUrl
+        ? `<a href="${escapeAttr(safeUrl)}" target="_blank" rel="noopener noreferrer" class="md-link">${text} ↗</a>`
+        : text;
+    });
 
     // Lines
     html = html
