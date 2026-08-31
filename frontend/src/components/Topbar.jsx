@@ -33,20 +33,53 @@ export default function Topbar({
       .slice(0, 2);
   };
 
-  const handleShare = () => {
-    if (savedId) {
-      const slug = title
-        ? title
-            .toLowerCase()
-            .trim()
-            .replace(/[^a-z0-9]+/g, "-")
-            .replace(/^-+|-+$/g, "") || "board"
-        : "board";
-      const shareUrl = `${window.location.origin}/board/${slug}`;
-      navigator.clipboard.writeText(shareUrl);
+  // navigator.clipboard is undefined on insecure origins and rejects when the
+  // clipboard-write permissions policy blocks it (e.g. the app running framed),
+  // so fall back to the legacy copy command, then to manual copy.
+  const copyToClipboard = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      // blocked or unavailable - try the legacy path below
+    }
+
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      return document.execCommand("copy");
+    } catch {
+      return false;
+    } finally {
+      ta.remove();
+    }
+  };
+
+  const handleShare = async () => {
+    if (!savedId) {
+      alert("Please save the board first to generate a shareable link!");
+      return;
+    }
+
+    const slug = title
+      ? title
+          .toLowerCase()
+          .trim()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, "") || "board"
+      : "board";
+    const shareUrl = `${window.location.origin}/board/${slug}`;
+
+    if (await copyToClipboard(shareUrl)) {
       alert("Share link copied to clipboard: " + shareUrl);
     } else {
-      alert("Please save the board first to generate a shareable link!");
+      // Nothing could reach the clipboard - let the user copy it by hand.
+      window.prompt("Copy this share link:", shareUrl);
     }
   };
 

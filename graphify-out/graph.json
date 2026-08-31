@@ -61,7 +61,7 @@
       "file_type": "code",
       "norm_label": "seedadminuser()",
       "source_file": "server/index.js",
-      "source_location": "L1262"
+      "source_location": "L1267"
     },
     {
       "id": "server_index_slugifytitle",
@@ -85,7 +85,7 @@
       "file_type": "code",
       "norm_label": "startserver()",
       "source_file": "server/index.js",
-      "source_location": "L1223"
+      "source_location": "L1228"
     },
     {
       "id": "frontend_src_pathlassosplit_bboxcornersinpolygon",
@@ -409,7 +409,7 @@
       "file_type": "code",
       "norm_label": "addnewelement()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2563"
+      "source_location": "L2564"
     },
     {
       "id": "frontend_src_app_app_applyremotecanvas",
@@ -421,7 +421,7 @@
       "file_type": "code",
       "norm_label": "applyremotecanvas()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1520"
+      "source_location": "L1521"
     },
     {
       "id": "frontend_src_app_app_attachfabriclisteners",
@@ -433,7 +433,7 @@
       "file_type": "code",
       "norm_label": "attachfabriclisteners()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1597"
+      "source_location": "L1598"
     },
     {
       "id": "frontend_src_app_app_debounce",
@@ -445,7 +445,7 @@
       "file_type": "code",
       "norm_label": "debounce()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1413"
+      "source_location": "L1414"
     },
     {
       "id": "frontend_src_app_app_flushpendingremotecanvas",
@@ -457,7 +457,7 @@
       "file_type": "code",
       "norm_label": "flushpendingremotecanvas()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1546"
+      "source_location": "L1547"
     },
     {
       "id": "frontend_src_app_app_loadboard",
@@ -469,7 +469,7 @@
       "file_type": "code",
       "norm_label": "loadboard()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3305"
+      "source_location": "L3310"
     },
     {
       "id": "frontend_src_app_app_loadboardbyid",
@@ -481,7 +481,7 @@
       "file_type": "code",
       "norm_label": "loadboardbyid()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3311"
+      "source_location": "L3316"
     },
     {
       "id": "frontend_src_app_app_saveboard",
@@ -493,7 +493,7 @@
       "file_type": "code",
       "norm_label": "saveboard()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3230"
+      "source_location": "L3231"
     },
     {
       "id": "frontend_src_app_app_throttle",
@@ -505,7 +505,7 @@
       "file_type": "code",
       "norm_label": "throttle()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1422"
+      "source_location": "L1423"
     },
     {
       "id": "frontend_src_app_app_updateinspectorproperties",
@@ -517,7 +517,7 @@
       "file_type": "code",
       "norm_label": "updateinspectorproperties()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1554"
+      "source_location": "L1555"
     },
     {
       "id": "frontend_src_app_getboardurl",
@@ -661,18 +661,6 @@
       "file_type": "code",
       "norm_label": "dashboardpage()",
       "source_file": "frontend/src/components/DashboardPage.jsx",
-      "source_location": "L3"
-    },
-    {
-      "id": "frontend_src_components_drawiocanvas_drawiocanvas",
-      "label": "DrawioCanvas()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "drawiocanvas()",
-      "source_file": "frontend/src/components/DrawioCanvas.jsx",
       "source_location": "L3"
     },
     {
@@ -2910,6 +2898,17 @@
       "source_location": "L1"
     },
     {
+      "id": "frontend_src_components_drawiocanvas_drawiocanvas",
+      "label": "DrawioCanvas",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "drawiocanvas",
+      "source_file": "frontend/src/components/DrawioCanvas.jsx",
+      "source_location": "L9"
+    },
+    {
       "id": "frontend_src_components_landingpage",
       "label": "LandingPage.jsx",
       "_origin": "ast",
@@ -4068,7 +4067,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1291",
+      "source_location": "L1292",
       "weight": 1.0
     },
     {
@@ -4080,7 +4079,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1293",
+      "source_location": "L1294",
       "weight": 1.0
     },
     {
@@ -4104,7 +4103,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L664",
+      "source_location": "L665",
       "weight": 1.0
     },
     {
@@ -4116,7 +4115,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L667",
+      "source_location": "L668",
       "weight": 1.0
     },
     {
@@ -4128,7 +4127,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L845",
+      "source_location": "L846",
       "weight": 1.0
     },
     {
@@ -4140,7 +4139,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1533",
+      "source_location": "L1534",
       "weight": 1.0
     },
     {
@@ -4152,7 +4151,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1631",
+      "source_location": "L1632",
       "weight": 1.0
     },
     {
@@ -4164,7 +4163,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1893",
+      "source_location": "L1894",
       "weight": 1.0
     },
     {
@@ -4176,7 +4175,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2130",
+      "source_location": "L2131",
       "weight": 1.0
     },
     {
@@ -4188,7 +4187,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2137",
+      "source_location": "L2138",
       "weight": 1.0
     },
     {
@@ -4200,7 +4199,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2147",
+      "source_location": "L2148",
       "weight": 1.0
     },
     {
@@ -4212,7 +4211,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1550",
+      "source_location": "L1551",
       "weight": 1.0
     },
     {
@@ -4224,7 +4223,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3308",
+      "source_location": "L3313",
       "weight": 1.0
     },
     {
@@ -4236,7 +4235,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3366",
+      "source_location": "L3371",
       "weight": 1.0
     },
     {
@@ -4248,7 +4247,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3389",
+      "source_location": "L3394",
       "weight": 1.0
     },
     {
@@ -4260,7 +4259,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3395",
+      "source_location": "L3400",
       "weight": 1.0
     },
     {
@@ -4272,7 +4271,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3290",
+      "source_location": "L3291",
       "weight": 1.0
     },
     {
@@ -4284,7 +4283,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3292",
+      "source_location": "L3293",
       "weight": 1.0
     },
     {
@@ -4968,7 +4967,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1413",
+      "source_location": "L1414",
       "weight": 1.0
     },
     {
@@ -4980,7 +4979,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1422",
+      "source_location": "L1423",
       "weight": 1.0
     },
     {
@@ -4992,7 +4991,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1520",
+      "source_location": "L1521",
       "weight": 1.0
     },
     {
@@ -5004,7 +5003,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1554",
+      "source_location": "L1555",
       "weight": 1.0
     },
     {
@@ -5016,7 +5015,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1597",
+      "source_location": "L1598",
       "weight": 1.0
     },
     {
@@ -5028,7 +5027,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2563",
+      "source_location": "L2564",
       "weight": 1.0
     },
     {
@@ -5040,7 +5039,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3311",
+      "source_location": "L3316",
       "weight": 1.0
     },
     {
@@ -6770,7 +6769,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1546",
+      "source_location": "L1547",
       "weight": 1.0
     },
     {
@@ -6781,7 +6780,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3230",
+      "source_location": "L3231",
       "weight": 1.0
     },
     {
@@ -6792,7 +6791,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3305",
+      "source_location": "L3310",
       "weight": 1.0
     },
     {
@@ -6902,7 +6901,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/components/DrawioCanvas.jsx",
-      "source_location": "L3",
+      "source_location": "L9",
       "weight": 1.0
     },
     {
@@ -8090,7 +8089,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L1223",
+      "source_location": "L1228",
       "weight": 1.0
     },
     {
@@ -8112,7 +8111,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L1262",
+      "source_location": "L1267",
       "weight": 1.0
     },
     {
@@ -9428,5 +9427,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "ee8ee6b9f1b5e82523f8a1ee3c744e3bc3da3fda"
+  "built_at_commit": "e276a775a63058987c3ae52924be8cf3da7d436c"
 }

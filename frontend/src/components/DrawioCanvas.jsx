@@ -1,11 +1,20 @@
-import React, { useEffect, useRef, useCallback } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useCallback,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 
-export default function DrawioCanvas({
-  initialXml = "",
-  remoteXml = null,
-  onXmlChange = () => {},
-  isReadOnly = false,
-}) {
+const DrawioCanvas = forwardRef(function DrawioCanvas(
+  {
+    initialXml = "",
+    remoteXml = null,
+    onXmlChange = () => {},
+    isReadOnly = false,
+  },
+  ref,
+) {
   const iframeRef = useRef(null);
   const isLoadedRef = useRef(false);
   const currentXmlRef = useRef(initialXml);
@@ -15,6 +24,18 @@ export default function DrawioCanvas({
       iframeRef.current.contentWindow.postMessage(JSON.stringify(msgObj), "*");
     }
   }, []);
+
+  // Parent persists the board (Topbar Save), so it owns the dirty flag too.
+  // Without this the iframe keeps its own "modified" state and warns that
+  // changes may not be saved on unload, even right after a successful save.
+  useImperativeHandle(
+    ref,
+    () => ({
+      markSaved: () =>
+        postToDrawio({ action: "status", message: "Saved", modified: false }),
+    }),
+    [postToDrawio],
+  );
 
   // Sync initialXml into iframe when board finishes loading from backend
   useEffect(() => {
@@ -90,8 +111,8 @@ export default function DrawioCanvas({
   }, [remoteXml, isReadOnly, postToDrawio]);
 
   const iframeSrc = isReadOnly
-    ? "https://embed.diagrams.net/?embed=1&proto=json&spin=1&libraries=0&noExitBtn=1&noSaveBtn=1&chrome=0&editable=0"
-    : "https://embed.diagrams.net/?embed=1&proto=json&spin=1&libraries=1&noExitBtn=1&noSaveBtn=1";
+    ? "https://embed.diagrams.net/?embed=1&proto=json&spin=1&libraries=0&noExitBtn=1&noSaveBtn=1&saveAndExit=0&chrome=0&editable=0&stealth=1"
+    : "https://embed.diagrams.net/?embed=1&proto=json&spin=1&libraries=1&noExitBtn=1&noSaveBtn=1&saveAndExit=0&stealth=1";
 
   return (
     <div
@@ -108,6 +129,7 @@ export default function DrawioCanvas({
         ref={iframeRef}
         title="Draw.io Diagrammer"
         src={iframeSrc}
+        allow="clipboard-read; clipboard-write; storage-access"
         style={{
           width: "100%",
           height: "100%",
@@ -115,34 +137,8 @@ export default function DrawioCanvas({
           display: "block",
         }}
       />
-
-      {/* Non-blocking View Only lock indicator */}
-      {isReadOnly && (
-        <div
-          style={{
-            position: "absolute",
-            top: 14,
-            right: 14,
-            zIndex: 20,
-            background: "rgba(15, 23, 42, 0.88)",
-            backdropFilter: "blur(8px)",
-            color: "#f8fafc",
-            border: "1px solid rgba(239, 68, 68, 0.4)",
-            padding: "6px 14px",
-            borderRadius: "8px",
-            fontSize: "12px",
-            fontWeight: "600",
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            pointerEvents: "none",
-            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
-          }}
-        >
-          <i className="fa-solid fa-lock" style={{ color: "#ef4444" }} />
-          <span>Architecture Diagram: View Only</span>
-        </div>
-      )}
     </div>
   );
-}
+});
+
+export default DrawioCanvas;

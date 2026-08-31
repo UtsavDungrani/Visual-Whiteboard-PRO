@@ -248,6 +248,7 @@ export default function App() {
   const [savedId, setSavedId] = useState(null);
   const [canvasMode, setCanvasMode] = useState("freehand"); // "freehand" | "drawio"
   const [drawioXml, setDrawioXml] = useState("");
+  const drawioRef = useRef(null);
   const [remoteDrawioXml, setRemoteDrawioXml] = useState(null);
   const [modeNotification, setModeNotification] = useState(null);
 
@@ -3295,6 +3296,10 @@ export default function App() {
       // Fetch contexts for the saved board
       fetchContextMap(data.id);
 
+      // Draw.io tracks its own dirty flag; clear it so the iframe stops
+      // warning that changes may not be saved after we just saved them.
+      drawioRef.current?.markSaved();
+
       alert("Board saved successfully! Room ID: " + data.id);
     } catch (err) {
       console.error(err);
@@ -4264,6 +4269,7 @@ export default function App() {
               }}
             >
               <DrawioCanvas
+                ref={drawioRef}
                 initialXml={drawioXml}
                 remoteXml={remoteDrawioXml}
                 onXmlChange={handleDrawioXmlChange}

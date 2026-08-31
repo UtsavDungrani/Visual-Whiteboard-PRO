@@ -1,7 +1,7 @@
-# Graph Report - Visual Whiteboard Pro  (2026-08-27)
+# Graph Report - Visual Whiteboard Pro  (2026-08-31)
 
 ## Corpus Check
-- 53 files · ~56,067 words
+- 53 files · ~56,341 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ee8ee6b9`
+- Built from commit: `e276a775`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
