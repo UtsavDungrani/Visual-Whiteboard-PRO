@@ -1,5 +1,19 @@
 const fabric = window.fabric;
 
+/** Squared distance from point p to segment a-b (avoids a sqrt per test). */
+function pointSegmentDistanceSq(p, a, b) {
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  const lenSq = dx * dx + dy * dy;
+  let t = lenSq === 0 ? 0 : ((p.x - a.x) * dx + (p.y - a.y) * dy) / lenSq;
+  t = Math.max(0, Math.min(1, t));
+  const cx = a.x + t * dx;
+  const cy = a.y + t * dy;
+  const ex = p.x - cx;
+  const ey = p.y - cy;
+  return ex * ex + ey * ey;
+}
+
 /**
  * Custom FabricJS class for connecting shapes magnetic-style
  */
@@ -103,6 +117,30 @@ export const ConnectorLine = fabric.util.createClass(fabric.Line, {
     const angle = Math.atan2(dy, dx);
 
     return { path, endPoint: i, angle };
+  },
+
+  // Hit-test against the actual elbow polyline rather than fabric.Line's
+  // straight-segment bounding box. Without this, clicking empty space inside
+  // the connector's bbox selected it while parts of the drawn elbow did not.
+  containsPoint: function (point) {
+    if (!point) return this.callSuper("containsPoint", point);
+    const { path } = this._getConnectorGeometry();
+    if (!path || path.length < 2) {
+      return this.callSuper("containsPoint", point);
+    }
+    const m = this.calcTransformMatrix();
+    const pts = path.map((p) =>
+      fabric.util.transformPoint(new fabric.Point(p.x, p.y), m),
+    );
+    // Clickable tolerance: half the stroke plus a comfortable margin.
+    const tol = (this.strokeWidth || 2) / 2 + 6;
+    const tolSq = tol * tol;
+    for (let k = 0; k < pts.length - 1; k++) {
+      if (pointSegmentDistanceSq(point, pts[k], pts[k + 1]) <= tolSq) {
+        return true;
+      }
+    }
+    return false;
   },
 
   _render: function (ctx) {
