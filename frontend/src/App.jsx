@@ -302,11 +302,16 @@ export default function App() {
 
     // Keep page boundary if it exists
     const objects = canvas.getObjects();
-    objects.forEach((obj) => {
-      if (obj.id !== "page-boundary") {
-        canvas.remove(obj);
-      }
-    });
+    batchOperationRef.current = true;
+    try {
+      objects.forEach((obj) => {
+        if (obj.id !== "page-boundary") {
+          canvas.remove(obj);
+        }
+      });
+    } finally {
+      batchOperationRef.current = false;
+    }
 
     canvas.requestRenderAll();
     saveHistory();
@@ -487,6 +492,11 @@ export default function App() {
   // snapshot that was queued mid-gesture (otherwise the edit is silently
   // reverted and then re-broadcast as stale — losing the write for everyone).
   const localChangedDuringInteractionRef = useRef(false);
+  // Set while a single logical action touches many objects at once (clear page,
+  // multi-delete). The per-object add/remove handlers skip history/sync while
+  // it is set so the whole batch collapses to one undo entry and one broadcast
+  // instead of one per object.
+  const batchOperationRef = useRef(false);
 
   const activePageIdRef = useRef(activePageId);
   const pagesRef = useRef(pages);
@@ -779,12 +789,31 @@ export default function App() {
       "boxStrokeWidth",
       "padding",
       "data",
+      // Lock state is not part of Fabric's default serialization, so without
+      // these a locked element silently unlocks on undo/redo, reload, sync and
+      // page switch.
+      "lockMovementX",
+      "lockMovementY",
+      "lockScalingX",
+      "lockScalingY",
+      "lockRotation",
+      "hasControls",
+      "isLocked",
     ]);
     if (json && json.objects) {
-      json.objects = json.objects.filter((obj) => obj.id !== "page-boundary");
+      // Drop the page frame and any in-flight preview shapes so they are never
+      // saved to history or broadcast to collaborators.
+      json.objects = json.objects.filter((obj) => !isTransientObjectId(obj.id));
     }
     return json;
   };
+
+  // Ids of objects that exist only during an interaction (the page frame, and
+  // the dashed previews drawn while creating a shape or dragging a selection).
+  const isTransientObjectId = (id) =>
+    id === "page-boundary" ||
+    id === "temp-selection-shape" ||
+    id === "temp-creation-shape";
 
   // Helper: Draw page boundaries for Fixed Page Mode
   const renderPageBoundary = (canvas, mode, size) => {
@@ -1781,6 +1810,7 @@ export default function App() {
         }
 
         if (tempCreationShapeRef.current) {
+          tempCreationShapeRef.current.id = "temp-creation-shape";
           canvas.add(tempCreationShapeRef.current);
         }
         canvas.requestRenderAll();
@@ -2267,6 +2297,10 @@ export default function App() {
     const onObjectAdded = (options) => {
       if (applyingRemoteRef.current || isReadOnlyRef.current) return;
       const obj = options?.target;
+      // Preview shapes are added/removed many times per gesture; they must not
+      // touch history or the sync stream (that flooded both — a single lasso
+      // could evict the entire undo stack and ship dashed ghosts to peers).
+      if (obj && isTransientObjectId(obj.id)) return;
       if (obj) {
         if (!obj.id) {
           obj.id = "el-" + Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -2302,6 +2336,7 @@ export default function App() {
               : "crosshair";
         }
       }
+      if (batchOperationRef.current) return;
       localChangedDuringInteractionRef.current = true;
       saveHistory();
       sendCanvasUpdate();
@@ -2309,6 +2344,9 @@ export default function App() {
 
     const onObjectRemoved = (options) => {
       const removedObj = options?.target;
+      // Removing a preview shape is not a board edit — skip history/sync and
+      // the connector cleanup below.
+      if (removedObj && isTransientObjectId(removedObj.id)) return;
       if (
         removedObj &&
         removedObj.type !== "connector" &&
@@ -2328,6 +2366,7 @@ export default function App() {
         });
       }
       if (applyingRemoteRef.current || isReadOnlyRef.current) return;
+      if (batchOperationRef.current) return;
       localChangedDuringInteractionRef.current = true;
       saveHistory();
       sendCanvasUpdate();
@@ -2742,9 +2781,20 @@ export default function App() {
     if (!canvas) return;
     const activeObject = canvas.getActiveObject();
     if (activeObject) {
-      if (activeObject.type === "activeSelection") {
-        activeObject.forEachObject((obj) => canvas.remove(obj));
+      const isBatch = activeObject.type === "activeSelection";
+      if (isBatch) {
+        // Suppress per-object history/sync so deleting a multi-selection is a
+        // single undoable action and a single broadcast, not one per object.
+        batchOperationRef.current = true;
+        try {
+          activeObject.forEachObject((obj) => canvas.remove(obj));
+        } finally {
+          batchOperationRef.current = false;
+        }
         canvas.discardActiveObject();
+        // The suppressed handlers didn't record anything; do it once here.
+        saveHistory();
+        sendCanvasUpdate();
       } else {
         canvas.remove(activeObject);
         canvas.discardActiveObject();
@@ -2817,16 +2867,29 @@ export default function App() {
     const activeObj = canvas.getActiveObject();
     if (!activeObj) return;
 
-    const isLocked = !activeObj.lockMovementX;
-    activeObj.set({
-      lockMovementX: isLocked,
-      lockMovementY: isLocked,
-      lockScalingX: isLocked,
-      lockScalingY: isLocked,
-      lockRotation: isLocked,
-      hasControls: !isLocked,
-      editable: !isLocked,
-      hoverCursor: isLocked ? "default" : "move",
+    // A multi-selection is a transient activeSelection wrapper; lock flags set
+    // on it vanish when the selection is disbanded. Apply to each underlying
+    // object instead so the lock actually persists.
+    const targets =
+      activeObj.type === "activeSelection" && Array.isArray(activeObj._objects)
+        ? activeObj._objects
+        : [activeObj];
+
+    const isLocked = !(targets[0].lockMovementX || targets[0].isLocked);
+    targets.forEach((obj) => {
+      obj.set({
+        lockMovementX: isLocked,
+        lockMovementY: isLocked,
+        lockScalingX: isLocked,
+        lockScalingY: isLocked,
+        lockRotation: isLocked,
+        hasControls: !isLocked,
+        editable: !isLocked,
+        hoverCursor: isLocked ? "default" : "move",
+      });
+      // Mirror the state onto a serialized flag the cleanup engine and the
+      // properties panel read.
+      obj.isLocked = isLocked;
     });
 
     canvas.requestRenderAll();
@@ -2910,7 +2973,27 @@ export default function App() {
       if (cleaned.length === 0) return;
 
       let completedCount = 0;
+      let finalized = false;
       applyingRemoteRef.current = true; // Disable intermediate history saves during animations
+
+      // Runs exactly once, when every cleaned element has settled. Previously
+      // the "no matching object" path incremented the counter without ever
+      // checking it, so if the last element to finish matched nothing the
+      // finalizer never ran and applyingRemoteRef stayed true forever —
+      // silently disabling all history saves and broadcasts until reload.
+      const finalizeCleanup = () => {
+        if (finalized) return;
+        finalized = true;
+        updateAllConnectors(canvas);
+        canvas.requestRenderAll();
+        applyingRemoteRef.current = false;
+        saveHistory();
+        sendCanvasUpdate();
+      };
+      const markCleanupItemDone = () => {
+        completedCount++;
+        if (completedCount >= cleaned.length) finalizeCleanup();
+      };
 
       const F = window.fabric;
       if (!F?.util?.animate) {
@@ -2951,22 +3034,18 @@ export default function App() {
             },
             onComplete: () => {
               obj.setCoords();
-              completedCount++;
-              if (completedCount === cleaned.length) {
-                updateAllConnectors(canvas);
-                canvas.requestRenderAll();
-                applyingRemoteRef.current = false;
-                saveHistory();
-                sendCanvasUpdate();
-              }
+              markCleanupItemDone();
             },
           });
         } else {
-          completedCount++;
+          markCleanupItemDone();
         }
       });
     } catch (err) {
       console.error("Mess cleanup error:", err);
+      // Never leave the canvas wedged with history/sync disabled if we bailed
+      // out after flipping the flag.
+      applyingRemoteRef.current = false;
       alert("Failed to tidy elements. Please try again.");
     } finally {
       setIsCleanupLoading(false);
@@ -3716,14 +3795,16 @@ export default function App() {
 
       const key = e.key.toLowerCase();
 
-      // Allow zooming shortcuts even if read-only
+      // Allow zooming shortcuts even if read-only. Read the live zoom from the
+      // ref: this handler is bound once per canvas mount, so the captured `zoom`
+      // state is stale and would always compute from the mount-time value.
       if (e.ctrlKey && e.key === "=") {
-        handleZoom(zoom + 0.1);
+        handleZoom(zoomRef.current + 0.1);
         e.preventDefault();
         return;
       }
       if (e.ctrlKey && e.key === "-") {
-        handleZoom(zoom - 0.1);
+        handleZoom(zoomRef.current - 0.1);
         e.preventDefault();
         return;
       }
@@ -3774,23 +3855,7 @@ export default function App() {
         e.preventDefault();
       }
 
-      // Zoom In (Ctrl+=)
-      if (e.ctrlKey && e.key === "=") {
-        handleZoom(zoom + 0.1);
-        e.preventDefault();
-      }
-
-      // Zoom Out (Ctrl+-)
-      if (e.ctrlKey && e.key === "-") {
-        handleZoom(zoom - 0.1);
-        e.preventDefault();
-      }
-
-      // Zoom Reset (Ctrl+0)
-      if (e.ctrlKey && e.key === "0") {
-        handleZoomReset();
-        e.preventDefault();
-      }
+      // (Zoom shortcuts are handled above, before the read-only gate.)
 
       // Group (Ctrl+G)
       if (e.ctrlKey && !e.shiftKey && key === "g") {
