@@ -2,10 +2,13 @@ const express = require("express");
 const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
+// Load .env before anything reads process.env: activeCacheMode used to be
+// assigned one line above this call, so DEFAULT_CACHE_MODE was always ignored.
+require("dotenv").config();
+
 const app = express();
 app.set("trust proxy", 1); // Trust Render load balancers for rate-limiting IP mapping
 global.activeCacheMode = process.env.DEFAULT_CACHE_MODE || "redis"; // "redis" or "memory"
-require("dotenv").config();
 const mongoose = require("mongoose");
 const Whiteboard = require("./models/Whiteboard");
 const ElementContext = require("./models/ElementContext");
@@ -110,8 +113,29 @@ const uploadSingleFile = (req, res, next) =>
     return res.status(400).json({ error: "upload_failed" });
   });
 
-app.use(cors());
-app.use(express.json());
+// Both the API and the socket server accepted any origin. Auth is a Bearer
+// token rather than a cookie so this is defence in depth, not a hole on its
+// own - but there is no reason for anywhere except the frontend to call us.
+// Set CORS_ORIGINS to a comma separated list to lock it down; left unset the
+// previous allow-any behaviour is kept so an unconfigured deploy still works.
+const allowedOrigins = (process.env.CORS_ORIGINS || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+if (!allowedOrigins.length) {
+  console.warn(
+    "[cors] CORS_ORIGINS not set - accepting requests from any origin.",
+  );
+}
+
+const corsOrigin = allowedOrigins.length ? allowedOrigins : "*";
+
+app.use(cors({ origin: corsOrigin }));
+// Board saves carry every page's canvas JSON plus a thumbnail each, which the
+// 100kb default rejected outright. Capped below MongoDB's 16MB document limit,
+// since board.content is stored as a single document and cannot exceed it.
+app.use(express.json({ limit: "15mb" }));
 
 // Serve static Draw.io webapp assets
 const drawioDir = path.join(
@@ -125,6 +149,22 @@ const drawioDir = path.join(
 if (fs.existsSync(drawioDir)) {
   app.use("/drawio", express.static(drawioDir));
 }
+
+// Baseline security headers. Hand rolled rather than pulling in helmet: this
+// is a JSON API plus one static admin page, so only a handful apply.
+app.use((req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("Referrer-Policy", "no-referrer");
+  res.setHeader("X-Permitted-Cross-Domain-Policies", "none");
+  if (process.env.NODE_ENV === "production") {
+    res.setHeader(
+      "Strict-Transport-Security",
+      "max-age=31536000; includeSubDomains",
+    );
+  }
+  next();
+});
 
 // Development Content Security Policy to avoid blocking DevTools probes
 if (process.env.NODE_ENV !== "production") {
@@ -215,6 +255,28 @@ app.post("/api/auth/register", authLimiter, async (req, res) => {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
       return res.status(400).json({ error: "missing_required_fields" });
+    }
+
+    // Registration accepted anything at all: a name is rendered wherever the
+    // user appears and an unbounded one is a denial of service on every view.
+    if (typeof name !== "string" || name.trim().length < 1) {
+      return res.status(400).json({ error: "invalid_name" });
+    }
+    if (name.length > 80) {
+      return res.status(400).json({ error: "name_too_long" });
+    }
+    if (
+      typeof email !== "string" ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    ) {
+      return res.status(400).json({ error: "invalid_email" });
+    }
+    // bcrypt silently truncates beyond 72 bytes, so reject rather than mislead.
+    if (typeof password !== "string" || password.length < 8) {
+      return res.status(400).json({ error: "password_too_short" });
+    }
+    if (Buffer.byteLength(password) > 72) {
+      return res.status(400).json({ error: "password_too_long" });
     }
 
     const emailLower = email.toLowerCase().trim();
@@ -424,26 +486,49 @@ app.get("/api/whiteboards/:id", async (req, res) => {
     }
 
     if (!board) {
-      // Look up by slug or title
+      // Look up by slug or title. Titles are not unique - "My Whiteboard" is the
+      // default for every new board - so a slug can match several boards and the
+      // caller's own must win over a stranger's that merely happens to be public.
       const cleanSlug = identifier.replace(/^[/-]+|[/-]+$/g, "").toLowerCase();
 
-      // First query boards belonging to the logged-in user or public
-      const candidates = userId
-        ? await Whiteboard.find({
+      // Only boards this caller may actually open. The previous version also
+      // fell back to scanning every board on the instance, which could only ever
+      // select one it then had to refuse - turning a 404 into a 401/403 that
+      // confirmed the title exists. It also loaded full canvas content for every
+      // board just to read the title.
+      const visibleToCaller = userId
+        ? {
             $or: [
               { owner: userId },
               { collaborators: userId },
               { isPublic: true },
             ],
-          }).sort({ updatedAt: -1 })
-        : await Whiteboard.find({ isPublic: true }).sort({ updatedAt: -1 });
+          }
+        : { isPublic: true };
 
-      board = candidates.find((b) => slugifyTitle(b.title) === cleanSlug);
+      const candidates = await Whiteboard.find(
+        visibleToCaller,
+        "title owner collaborators isPublic updatedAt",
+      )
+        .sort({ updatedAt: -1 })
+        .lean();
 
-      // If still not found, check all boards
-      if (!board) {
-        const allBoards = await Whiteboard.find({}).sort({ updatedAt: -1 });
-        board = allBoards.find((b) => slugifyTitle(b.title) === cleanSlug);
+      const matches = candidates.filter(
+        (b) => slugifyTitle(b.title) === cleanSlug,
+      );
+
+      // Own boards first, then ones shared with us, then merely public. Sort is
+      // stable, so the most recently updated still wins inside each tier.
+      const ownershipRank = (b) => {
+        if (!userId) return 2;
+        if (String(b.owner) === userId) return 0;
+        if (b.collaborators.some((c) => String(c) === userId)) return 1;
+        return 2;
+      };
+      matches.sort((a, b) => ownershipRank(a) - ownershipRank(b));
+
+      if (matches[0]) {
+        board = await Whiteboard.findById(matches[0]._id);
       }
     }
 
@@ -673,8 +758,32 @@ app.use(
   }),
 );
 
-// Serve /admin static folder for separate Admin Panel app
-app.use("/admin", express.static(path.join(__dirname, "admin")));
+// Serve /admin static folder for separate Admin Panel app.
+// script-src without 'unsafe-inline' blocks inline event handlers, which is what
+// an injected `<img onerror=...>` relies on - a second line of defence behind
+// escaping the values in the first place. Inline style attributes are used
+// throughout the markup, so styles still need 'unsafe-inline'.
+const ADMIN_CSP = [
+  "default-src 'self'",
+  "script-src 'self'",
+  // Both admin pages pull Inter from Google Fonts.
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "font-src 'self' https://fonts.gstatic.com",
+  "img-src 'self' data:",
+  "connect-src 'self'",
+  "frame-ancestors 'none'",
+  "base-uri 'none'",
+  "form-action 'self'",
+].join("; ");
+
+app.use(
+  "/admin",
+  (req, res, next) => {
+    res.setHeader("Content-Security-Policy", ADMIN_CSP);
+    next();
+  },
+  express.static(path.join(__dirname, "admin")),
+);
 
 // Rate limiter for AI endpoints
 const aiLimiter = rateLimit({
@@ -1029,12 +1138,29 @@ app.post("/api/admin/config", auth, admin, (req, res) => {
   return res.json({ success: true, activeCacheMode: global.activeCacheMode });
 });
 
+// Registered after every route so it also catches body parser failures.
+// Express's default handler answers those with an HTML page, which the client
+// then tries to res.json() - surfacing as "Unexpected token '<'" rather than
+// anything describing the real problem.
+app.use((err, req, res, next) => {
+  if (err.type === "entity.too.large") {
+    return res.status(413).json({ error: "payload_too_large" });
+  }
+  if (err instanceof SyntaxError && "body" in err) {
+    return res.status(400).json({ error: "invalid_json" });
+  }
+
+  if (res.headersSent) return next(err);
+  console.error("Unhandled request error", err);
+  return res.status(500).json({ error: "internal_error" });
+});
+
 // Start server with EADDRINUSE handling: try next ports up to 5 times
 // Create HTTP server and attach Socket.io
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "*",
+    origin: corsOrigin,
     methods: ["GET", "POST"],
   },
 });
@@ -1193,6 +1319,13 @@ io.on("connection", (socket) => {
 
     const dbUserId =
       socket.user && !socket.user.isGuest ? socket.user.id : null;
+
+    // Every unsaved board joined a single shared "global" room, so two people
+    // each starting a new board saw each other's strokes, cursors and page
+    // switches. A draft belongs to one socket until the board has an id.
+    if (roomId === "global") {
+      roomId = `draft:${socket.id}`;
+    }
 
     // Authorise before joining. Room membership is what grants sight of and
     // write access to live board traffic, so an unchecked join bypassed every

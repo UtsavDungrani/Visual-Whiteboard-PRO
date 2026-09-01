@@ -211,4 +211,119 @@ describe("Whiteboards API", () => {
 
     expect(res.statusCode).toEqual(200);
   });
+
+  // A board carries every page's canvas JSON plus a thumbnail each, so the
+  // 100kb express.json default rejected ordinary saves with an HTML error the
+  // client could not parse.
+  // Every new board is titled "My Whiteboard", so slugs collide constantly.
+  describe("slug lookup", () => {
+    const sharedTitle = "Shared Title Board";
+    let ownBoard;
+    let strangersPublicBoard;
+
+    beforeAll(async () => {
+      ownBoard = await Whiteboard.create({
+        title: sharedTitle,
+        owner: ownerUser._id,
+        collaborators: [],
+        isPublic: false,
+        content: { marker: "mine" },
+      });
+
+      // Created second, so it is the more recently updated of the two - the
+      // old lookup sorted purely on that and handed over this one.
+      strangersPublicBoard = await Whiteboard.create({
+        title: sharedTitle,
+        owner: otherUser._id,
+        collaborators: [],
+        isPublic: true,
+        content: { marker: "theirs" },
+      });
+    });
+
+    afterAll(async () => {
+      await Whiteboard.deleteMany({ title: sharedTitle });
+    });
+
+    it("prefers your own board over a stranger's public one", async () => {
+      const res = await request(app)
+        .get("/api/whiteboards/shared-title-board")
+        .set("Authorization", `Bearer ${ownerToken}`);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.id).toEqual(ownBoard._id.toString());
+      expect(res.body.marker).toEqual("mine");
+    });
+
+    it("still finds the public board for someone with no match of their own", async () => {
+      const res = await request(app)
+        .get("/api/whiteboards/shared-title-board")
+        .set("Authorization", `Bearer ${collaboratorToken}`);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.id).toEqual(strangersPublicBoard._id.toString());
+    });
+
+    it("returns 404 rather than confirming a private title exists", async () => {
+      const privateOnly = await Whiteboard.create({
+        title: "Strictly Private Board",
+        owner: ownerUser._id,
+        collaborators: [],
+        isPublic: false,
+        content: {},
+      });
+
+      const res = await request(app).get(
+        "/api/whiteboards/strictly-private-board",
+      );
+
+      // The old all-boards fallback found it and answered 401, which told an
+      // anonymous caller the title exists.
+      expect(res.statusCode).toEqual(404);
+
+      await Whiteboard.findByIdAndDelete(privateOnly._id);
+    });
+  });
+
+  describe("request body size", () => {
+    it("accepts a board larger than the old 100kb default", async () => {
+      const res = await request(app)
+        .post("/api/whiteboards")
+        .set("Authorization", `Bearer ${ownerToken}`)
+        .send({
+          title: "Large Board",
+          pages: [
+            {
+              page_id: "page-1",
+              canvas_state: { blob: "x".repeat(400 * 1024) },
+            },
+          ],
+        });
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body).toHaveProperty("id");
+      await Whiteboard.findByIdAndDelete(res.body.id);
+    });
+
+    it("answers an oversized body with json, not an html error page", async () => {
+      const res = await request(app)
+        .post("/api/whiteboards")
+        .set("Authorization", `Bearer ${ownerToken}`)
+        .send({ title: "Too Big", blob: "x".repeat(16 * 1024 * 1024) });
+
+      expect(res.statusCode).toEqual(413);
+      expect(res.body.error).toBe("payload_too_large");
+    });
+
+    it("answers malformed json with json", async () => {
+      const res = await request(app)
+        .post("/api/whiteboards")
+        .set("Authorization", `Bearer ${ownerToken}`)
+        .set("Content-Type", "application/json")
+        .send("{ not valid json");
+
+      expect(res.statusCode).toEqual(400);
+      expect(res.body.error).toBe("invalid_json");
+    });
+  });
 });

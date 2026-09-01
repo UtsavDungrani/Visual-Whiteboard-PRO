@@ -172,6 +172,60 @@ describe("Socket.io Real-Time Synchronization", () => {
     }, 100);
   });
 
+  // Unsaved boards all shared one "global" room, so two strangers each
+  // starting a new board saw each other's canvas, cursors and page switches.
+  it("should isolate unsaved boards from each other", (done) => {
+    let leaked = false;
+    clientSocket2.on("canvas:update", () => {
+      leaked = true;
+    });
+
+    clientSocket1.emit("join", {
+      roomId: "global",
+      user: { name: "Drafter One" },
+      pageId: "page-1",
+    });
+    clientSocket2.emit("join", {
+      roomId: "global",
+      user: { name: "Drafter Two" },
+      pageId: "page-1",
+    });
+
+    setTimeout(() => {
+      clientSocket1.emit("canvas:update", {
+        id: "global",
+        pageId: "page-1",
+        json: { objects: [{ type: "rect" }] },
+      });
+    }, 120);
+
+    setTimeout(() => {
+      expect(leaked).toBe(false);
+      done();
+    }, 450);
+  });
+
+  it("should show only yourself in an unsaved board", (done) => {
+    clientSocket2.emit("join", {
+      roomId: "global",
+      user: { name: "Drafter Two" },
+      pageId: "page-1",
+    });
+
+    clientSocket1.on("room:users", (users) => {
+      expect(users.map((u) => u.name)).toEqual(["Drafter One"]);
+      done();
+    });
+
+    setTimeout(() => {
+      clientSocket1.emit("join", {
+        roomId: "global",
+        user: { name: "Drafter One" },
+        pageId: "page-1",
+      });
+    }, 120);
+  });
+
   // Room membership is what exposes live board traffic, so an unauthorised
   // join must be refused outright - not merely hidden in the UI.
   it("should deny joining a private board room without access", (done) => {
