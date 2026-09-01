@@ -47,12 +47,13 @@ This file lists project phases and concrete tasks (one after another) for review
 - [c] **6.1 Auth:** implement JWT + bcrypt sign-up/login, protect APIs — **Priority:** High — **Estimate:** 5h
 - [c] **6.2 Tests:** unit tests for core components, integration tests for Socket flows, basic E2E smoke — **Priority:** Medium — **Estimate:** 12h (All integration, AI, socket, and context tests fully implemented and passing)
 - [c] **6.3 Security & validation:** input validation, rate limiting on AI endpoints, CORS config — **Priority:** Medium — **Estimate:** 4h
+- [c] **6.4 Review-driven hardening pass** (2026-09-01): fixed all findings from a three-part code review — 4 critical (unauthenticated socket DoS, `join` crash, upload path traversal, lost concurrent edits), the full high/medium tier (draft-room hijack, publish escalation, stale/deleted-board socket access, cross-board file deletion, double Redis init, Draw.io postMessage origin, export HTML escaping, preview-shape history/sync flooding, lock serialization, AI-cleanup wedge), and the low tier + geometry (rotated-shape lasso, connector elbow hit-testing). Server tests 93/93; frontend build clean. See PR #4.
 
 ## Phase 7 — Deployment & Monitoring
 
-- **7.1 Deploy:** FE → Vercel, BE → Render (or alternative), add env config docs — **Priority:** High — **Estimate:** 3h
-- **7.2 Monitoring:** logs, basic Sentry integration, health endpoints (`/health`) — **Priority:** Medium — **Estimate:** 3h
-- **7.3 Demo prep:** wake backend before presentation, create demo script — **Priority:** Low — **Estimate:** 1h
+- [c] **7.1 Deploy:** FE → Vercel, BE → Render (or alternative), add env config docs — **Priority:** High — **Estimate:** 3h (Live at https://visual-whiteboard-pro.vercel.app/)
+- [c] **7.2 Monitoring:** logs, basic Sentry integration, health endpoints (`/health`) — **Priority:** Medium — **Estimate:** 3h
+- [c] **7.3 Demo prep:** wake backend before presentation, create demo script — **Priority:** Low — **Estimate:** 1h
 
 ## PR / Review Checklist
 
