@@ -49,7 +49,13 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + "-" + file.originalname);
+    // Never trust the client-supplied name: strip any directory components and
+    // reduce to a safe charset so "../../package.json" cannot escape uploadsDir.
+    const safeName = path
+      .basename(file.originalname || "file")
+      .replace(/[^a-zA-Z0-9._-]/g, "_")
+      .slice(-100);
+    cb(null, `${uniqueSuffix}-${safeName || "file"}`);
   },
 });
 
@@ -1301,71 +1307,80 @@ io.on("connection", (socket) => {
   console.log("socket connected", socket.id);
 
   socket.on("join", async (payload) => {
-    let roomId = "global";
-    let user = socket.user || { name: "Collaborator", color: "#6B7280" };
-    let pageId = "page-1";
+    try {
+      let roomId = "global";
+      let user = socket.user || { name: "Collaborator", color: "#6B7280" };
+      let pageId = "page-1";
 
-    if (payload && typeof payload === "object") {
-      roomId = payload.roomId || "global";
-      if (socket.user && !socket.user.isGuest) {
-        user = socket.user;
-      } else if (payload.user) {
-        user = payload.user;
+      if (payload && typeof payload === "object") {
+        roomId = payload.roomId || "global";
+        if (socket.user && !socket.user.isGuest) {
+          user = socket.user;
+        } else if (payload.user) {
+          user = payload.user;
+        }
+        pageId = payload.pageId || pageId;
+      } else if (typeof payload === "string") {
+        roomId = payload;
       }
-      pageId = payload.pageId || pageId;
-    } else if (typeof payload === "string") {
-      roomId = payload;
-    }
 
-    const dbUserId =
-      socket.user && !socket.user.isGuest ? socket.user.id : null;
+      const dbUserId =
+        socket.user && !socket.user.isGuest ? socket.user.id : null;
 
-    // Every unsaved board joined a single shared "global" room, so two people
-    // each starting a new board saw each other's strokes, cursors and page
-    // switches. A draft belongs to one socket until the board has an id.
-    if (roomId === "global") {
-      roomId = `draft:${socket.id}`;
-    }
-
-    // Authorise before joining. Room membership is what grants sight of and
-    // write access to live board traffic, so an unchecked join bypassed every
-    // permission the REST routes enforce. "global" holds unsaved boards only.
-    let access = "edit";
-    if (isBoardId(roomId)) {
-      ({ access } = await getBoardAccess(roomId, dbUserId));
-      if (!access) {
-        console.warn(`socket ${socket.id} denied join for board ${roomId}`);
-        socket.emit("board:access-denied", { roomId });
-        return;
+      // Every unsaved board joined a single shared "global" room, so two people
+      // each starting a new board saw each other's strokes, cursors and page
+      // switches. A draft belongs to one socket until the board has an id.
+      if (roomId === "global") {
+        roomId = `draft:${socket.id}`;
       }
+
+      // Authorise before joining. Room membership is what grants sight of and
+      // write access to live board traffic, so an unchecked join bypassed every
+      // permission the REST routes enforce. "global" holds unsaved boards only.
+      let access = "edit";
+      if (isBoardId(roomId)) {
+        ({ access } = await getBoardAccess(roomId, dbUserId));
+        if (!access) {
+          console.warn(`socket ${socket.id} denied join for board ${roomId}`);
+          socket.emit("board:access-denied", { roomId });
+          return;
+        }
+      }
+
+      // Leave old room if switching
+      const oldUser = activeUsers.get(socket.id);
+      if (oldUser && oldUser.roomId !== roomId) {
+        socket.leave(oldUser.roomId);
+      }
+
+      socket.join(roomId);
+      activeUsers.set(socket.id, {
+        roomId,
+        name: user.name,
+        color: user.color,
+        pageId,
+        dbUserId,
+        isGuest: !socket.user || socket.user.isGuest,
+        access,
+        sessionAccess: access === "view" ? "view" : "full",
+      });
+      console.log(
+        `socket ${socket.id} (${user.name}) joined ${roomId} (page: ${pageId})`,
+      );
+
+      // Notify room of updated users list
+      broadcastRoomUsers(roomId);
+    } catch (err) {
+      // A DB hiccup while resolving board access must not take down the
+      // process for every other connected client.
+      console.error(`socket ${socket.id} join failed:`, err);
+      socket.emit("board:access-denied", { roomId: payload && payload.roomId });
     }
-
-    // Leave old room if switching
-    const oldUser = activeUsers.get(socket.id);
-    if (oldUser && oldUser.roomId !== roomId) {
-      socket.leave(oldUser.roomId);
-    }
-
-    socket.join(roomId);
-    activeUsers.set(socket.id, {
-      roomId,
-      name: user.name,
-      color: user.color,
-      pageId,
-      dbUserId,
-      isGuest: !socket.user || socket.user.isGuest,
-      access,
-      sessionAccess: access === "view" ? "view" : "full",
-    });
-    console.log(
-      `socket ${socket.id} (${user.name}) joined ${roomId} (page: ${pageId})`,
-    );
-
-    // Notify room of updated users list
-    broadcastRoomUsers(roomId);
   });
 
-  socket.on("canvas:update", ({ pageId, json }) => {
+  socket.on("canvas:update", (payload) => {
+    if (!payload || typeof payload !== "object") return;
+    const { pageId, json } = payload;
     const room = writableRoom(socket);
     if (!room) return;
 
@@ -1384,7 +1399,9 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("cursor:move", ({ pageId, x, y }) => {
+  socket.on("cursor:move", (payload) => {
+    if (!payload || typeof payload !== "object") return;
+    const { pageId, x, y } = payload;
     const u = activeUsers.get(socket.id);
     if (u) {
       socket.to(u.roomId).emit("cursor:update", {
@@ -1398,7 +1415,9 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("page-switch", ({ pageId }) => {
+  socket.on("page-switch", (payload) => {
+    if (!payload || typeof payload !== "object") return;
+    const { pageId } = payload;
     const u = activeUsers.get(socket.id);
     if (u) {
       activeUsers.set(socket.id, { ...u, pageId });
@@ -1407,19 +1426,20 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on(
-    "board:structure-update",
-    ({ pages, mode, pageSize, canvasMode }) => {
-      const room = writableRoom(socket);
-      if (!room) return;
+  socket.on("board:structure-update", (payload) => {
+    if (!payload || typeof payload !== "object") return;
+    const { pages, mode, pageSize, canvasMode } = payload;
+    const room = writableRoom(socket);
+    if (!room) return;
 
-      socket
-        .to(room)
-        .emit("board:structure-update", { pages, mode, pageSize, canvasMode });
-    },
-  );
+    socket
+      .to(room)
+      .emit("board:structure-update", { pages, mode, pageSize, canvasMode });
+  });
 
-  socket.on("canvas-mode:change", ({ mode }) => {
+  socket.on("canvas-mode:change", (payload) => {
+    if (!payload || typeof payload !== "object") return;
+    const { mode } = payload;
     const u = activeUsers.get(socket.id);
     // The client already restricts this to the owner; enforce it server side.
     if (!u || (isBoardId(u.roomId) && u.access !== "owner")) return;
@@ -1427,75 +1447,74 @@ io.on("connection", (socket) => {
     socket.to(u.roomId).emit("canvas-mode:updated", { roomId: u.roomId, mode });
   });
 
-  socket.on("drawio:update", ({ pageId, xml }) => {
+  socket.on("drawio:update", (payload) => {
+    if (!payload || typeof payload !== "object") return;
+    const { pageId, xml } = payload;
     const room = writableRoom(socket);
     if (!room) return;
 
     socket.to(room).emit("drawio:update", { roomId: room, pageId, xml });
   });
 
-  socket.on(
-    "board:toggle-user-permission",
-    async ({ roomId, targetSocketId, access }) => {
-      try {
-        const board = await Whiteboard.findById(roomId);
-        if (!board) return;
+  socket.on("board:toggle-user-permission", async (payload) => {
+    if (!payload || typeof payload !== "object") return;
+    const { roomId, targetSocketId, access } = payload;
+    try {
+      const board = await Whiteboard.findById(roomId);
+      if (!board) return;
 
-        const senderDbUserId =
-          socket.user && !socket.user.isGuest ? socket.user.id : null;
-        if (board.owner.toString() !== senderDbUserId) {
-          console.warn("Unauthorized permission toggle attempt");
-          return;
-        }
+      const senderDbUserId =
+        socket.user && !socket.user.isGuest ? socket.user.id : null;
+      if (board.owner.toString() !== senderDbUserId) {
+        console.warn("Unauthorized permission toggle attempt");
+        return;
+      }
 
-        const targetUser = activeUsers.get(targetSocketId);
-        if (targetUser) {
-          if (targetUser.dbUserId) {
-            // Prevent toggling board owner's own permissions
-            if (targetUser.dbUserId === board.owner.toString()) {
-              console.warn("Cannot toggle board owner permissions");
-              return;
-            }
-            const userObjectId = new mongoose.Types.ObjectId(
-              targetUser.dbUserId,
-            );
-            if (access === "full") {
-              if (
-                !board.collaborators
-                  .map((c) => c.toString())
-                  .includes(targetUser.dbUserId)
-              ) {
-                board.collaborators.push(userObjectId);
-                await board.save();
-              }
-            } else {
-              board.collaborators = board.collaborators.filter(
-                (c) => c.toString() !== targetUser.dbUserId,
-              );
+      const targetUser = activeUsers.get(targetSocketId);
+      if (targetUser) {
+        if (targetUser.dbUserId) {
+          // Prevent toggling board owner's own permissions
+          if (targetUser.dbUserId === board.owner.toString()) {
+            console.warn("Cannot toggle board owner permissions");
+            return;
+          }
+          const userObjectId = new mongoose.Types.ObjectId(targetUser.dbUserId);
+          if (access === "full") {
+            if (
+              !board.collaborators
+                .map((c) => c.toString())
+                .includes(targetUser.dbUserId)
+            ) {
+              board.collaborators.push(userObjectId);
               await board.save();
             }
+          } else {
+            board.collaborators = board.collaborators.filter(
+              (c) => c.toString() !== targetUser.dbUserId,
+            );
+            await board.save();
           }
-
-          // Re-resolve from the saved board rather than trusting the request,
-          // so the cached access a socket writes with cannot drift from the DB.
-          refreshRoomAccess(board);
-
-          io.to(roomId).emit("board:user-permission-changed", {
-            socketId: targetSocketId,
-            dbUserId: targetUser.dbUserId,
-            access: access,
-            owner: board.owner.toString(),
-            collaborators: board.collaborators.map((c) => c.toString()),
-            isPublic: board.isPublic,
-          });
-
-          broadcastRoomUsers(roomId);
         }
-      } catch (err) {
-        console.error("Failed to toggle user socket permission:", err);
+
+        // Re-resolve from the saved board rather than trusting the request,
+        // so the cached access a socket writes with cannot drift from the DB.
+        refreshRoomAccess(board);
+
+        io.to(roomId).emit("board:user-permission-changed", {
+          socketId: targetSocketId,
+          dbUserId: targetUser.dbUserId,
+          access: access,
+          owner: board.owner.toString(),
+          collaborators: board.collaborators.map((c) => c.toString()),
+          isPublic: board.isPublic,
+        });
+
+        broadcastRoomUsers(roomId);
       }
-    },
-  );
+    } catch (err) {
+      console.error("Failed to toggle user socket permission:", err);
+    }
+  });
 
   socket.on("disconnect", () => {
     const u = activeUsers.get(socket.id);

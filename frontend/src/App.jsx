@@ -482,6 +482,11 @@ export default function App() {
   const applyingRemoteRef = useRef(false);
   const interactingRef = useRef(false);
   const pendingRemoteJsonRef = useRef(null);
+  // Tracks whether the current pointer gesture actually mutated the canvas.
+  // If it did, the local edit is the newest write and must win over any remote
+  // snapshot that was queued mid-gesture (otherwise the edit is silently
+  // reverted and then re-broadcast as stale — losing the write for everyone).
+  const localChangedDuringInteractionRef = useRef(false);
 
   const activePageIdRef = useRef(activePageId);
   const pagesRef = useRef(pages);
@@ -1617,6 +1622,7 @@ export default function App() {
       }
 
       interactingRef.current = true;
+      localChangedDuringInteractionRef.current = false;
 
       // Custom selection tool drawing logic
       if (shapeSelectTools.includes(activeTool) && !isReadOnlyRef.current) {
@@ -1891,7 +1897,18 @@ export default function App() {
     const onMouseUp = (opt) => {
       canvas.isDragging = false;
       interactingRef.current = false;
-      flushPendingRemoteCanvas();
+
+      // If this gesture changed the canvas, the local edit is the most recent
+      // write. Applying the remote snapshot that was queued mid-gesture would
+      // revert it on screen and then re-broadcast the stale state, losing the
+      // edit for every client. Drop the stale snapshot and let the local
+      // edit's own (debounced) broadcast win instead.
+      if (localChangedDuringInteractionRef.current) {
+        localChangedDuringInteractionRef.current = false;
+        pendingRemoteJsonRef.current = null;
+      } else {
+        flushPendingRemoteCanvas();
+      }
 
       const pointer = canvas.getPointer(opt.e);
       const startX = selectionStartRef.current.x;
@@ -2242,6 +2259,7 @@ export default function App() {
 
     const onObjectModified = () => {
       if (applyingRemoteRef.current || isReadOnlyRef.current) return;
+      localChangedDuringInteractionRef.current = true;
       saveHistory();
       sendCanvasUpdate();
     };
@@ -2284,6 +2302,7 @@ export default function App() {
               : "crosshair";
         }
       }
+      localChangedDuringInteractionRef.current = true;
       saveHistory();
       sendCanvasUpdate();
     };
@@ -2309,6 +2328,7 @@ export default function App() {
         });
       }
       if (applyingRemoteRef.current || isReadOnlyRef.current) return;
+      localChangedDuringInteractionRef.current = true;
       saveHistory();
       sendCanvasUpdate();
     };
@@ -2348,6 +2368,7 @@ export default function App() {
         canvas.requestRenderAll();
       }
       if (applyingRemoteRef.current) return;
+      localChangedDuringInteractionRef.current = true;
       saveHistory();
       sendCanvasUpdate();
     };
