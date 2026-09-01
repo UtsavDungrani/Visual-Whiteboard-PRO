@@ -11,6 +11,11 @@ export default function CustomCursor({ isEnabled = true }) {
   const animationFrameId = useRef(null);
 
   useEffect(() => {
+    // Do nothing when disabled: previously the listeners and the perpetual
+    // requestAnimationFrame loop ran regardless, burning CPU on pages where the
+    // custom cursor is off.
+    if (!isEnabled) return;
+
     // Only run on non-touch devices with fine pointers
     if (
       typeof window === "undefined" ||
@@ -21,7 +26,10 @@ export default function CustomCursor({ isEnabled = true }) {
 
     const onMouseMove = (e) => {
       mousePos.current = { x: e.clientX, y: e.clientY };
-      if (!isVisible) setIsVisible(true);
+      // Functional update bails out if already visible, so we no longer need
+      // `isVisible` in the dep array (which re-registered everything on every
+      // show/hide toggle).
+      setIsVisible((v) => v || true);
 
       if (dotRef.current) {
         dotRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
@@ -73,7 +81,7 @@ export default function CustomCursor({ isEnabled = true }) {
         cancelAnimationFrame(animationFrameId.current);
       }
     };
-  }, [isVisible]);
+  }, [isEnabled]);
 
   if (!isEnabled) return null;
 

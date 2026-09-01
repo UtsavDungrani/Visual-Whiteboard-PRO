@@ -328,7 +328,18 @@ export default function App() {
       (cloned) => {
         clipboardRef.current = cloned;
       },
-      ["id", "isLocked"],
+      [
+        "id",
+        "isLocked",
+        "customType",
+        "data",
+        "lockMovementX",
+        "lockMovementY",
+        "lockScalingX",
+        "lockScalingY",
+        "lockRotation",
+        "hasControls",
+      ],
     ); // include custom properties
   };
 
@@ -355,7 +366,18 @@ export default function App() {
         saveHistory();
         sendCanvasUpdate();
       },
-      ["id", "isLocked"],
+      [
+        "id",
+        "isLocked",
+        "customType",
+        "data",
+        "lockMovementX",
+        "lockMovementY",
+        "lockScalingX",
+        "lockScalingY",
+        "lockRotation",
+        "hasControls",
+      ],
     );
   };
 
@@ -401,7 +423,18 @@ export default function App() {
         saveHistory();
         sendCanvasUpdate();
       },
-      ["id", "isLocked"],
+      [
+        "id",
+        "isLocked",
+        "customType",
+        "data",
+        "lockMovementX",
+        "lockMovementY",
+        "lockScalingX",
+        "lockScalingY",
+        "lockRotation",
+        "hasControls",
+      ],
     );
   };
 
@@ -567,6 +600,14 @@ export default function App() {
   useEffect(() => {
     isReadOnlyRef.current = isReadOnly;
   }, [isReadOnly]);
+
+  // The socket effect is keyed on [screen], so any `user` it closes over is
+  // captured at editor mount. When the board is opened by direct URL, auto-login
+  // resolves `user` afterwards, so socket handlers must read it from this ref.
+  const userRef = useRef(user);
+  useEffect(() => {
+    userRef.current = user;
+  }, [user]);
 
   // Derived board owner check
   const isOwner =
@@ -1275,6 +1316,24 @@ export default function App() {
       duration: 1200,
     });
   };
+
+  // Any API call that gets a 401 (expired/invalid token) dispatches this so the
+  // user is taken to sign in once, instead of every fetcher silently failing
+  // with a generic error (autosave in particular would just keep failing).
+  useEffect(() => {
+    const onAuthExpired = () => {
+      if (!localStorage.getItem("wb_token")) return; // already signed out
+      localStorage.removeItem("wb_token");
+      setUser({ name: "Guest Collaborator", color: "#6B7280" });
+      navigateTo("auth", {
+        message: "Session expired",
+        subMessage: "Please sign in again to continue",
+        duration: 1200,
+      });
+    };
+    window.addEventListener("wb:auth-expired", onAuthExpired);
+    return () => window.removeEventListener("wb:auth-expired", onAuthExpired);
+  }, []);
 
   const handleCreateBoard = async (customTitle) => {
     const boardTitle =
@@ -4025,7 +4084,8 @@ export default function App() {
         setBoardMeta({ owner, collaborators, isPublic });
 
         const myId = socketRef.current?.id;
-        const myDbUserId = user.id || user._id;
+        const currentUser = userRef.current || {};
+        const myDbUserId = currentUser.id || currentUser._id;
         if (socketId === myId || (dbUserId && dbUserId === myDbUserId)) {
           setSessionAccess(access);
         }

@@ -152,14 +152,29 @@ export default function ContextPanel({
           },
         );
 
+        if (res.status === 401) {
+          // Token expired: stop the silent retry-on-every-keystroke loop and
+          // hand off to the app's central re-auth flow.
+          window.dispatchEvent(new Event("wb:auth-expired"));
+          throw new Error("Session expired");
+        }
         if (!res.ok) throw new Error("Save failed");
         const data = await res.json();
 
-        isDirtyRef.current = false;
-        setSyncStatus("saved");
+        // This save may be a flush for an element we've already switched away
+        // from (cleanup on element change). If so, don't overwrite the
+        // now-active element's UI (files list, sync badge, dirty flag) with the
+        // old element's response.
+        const stillActive =
+          targetWbId === activeTargetRef.current.whiteboardId &&
+          targetElId === activeTargetRef.current.elementId;
 
-        if (data.files) {
-          setFiles(data.files);
+        if (stillActive) {
+          isDirtyRef.current = false;
+          setSyncStatus("saved");
+          if (data.files) {
+            setFiles(data.files);
+          }
         }
 
         if (manual) {
@@ -224,6 +239,10 @@ export default function ContextPanel({
           `${API_BASE_URL}/api/context/${whiteboardId}/${elementId}`,
           { headers },
         );
+        if (res.status === 401) {
+          window.dispatchEvent(new Event("wb:auth-expired"));
+          throw new Error("Session expired");
+        }
         if (!res.ok) throw new Error("Failed to load element details");
         const data = await res.json();
         if (isSubscribed) {
@@ -533,36 +552,56 @@ export default function ContextPanel({
       sql: /\b(SELECT|FROM|WHERE|INSERT|INTO|UPDATE|DELETE|CREATE|TABLE|JOIN|LEFT|RIGHT|ON|GROUP|BY|ORDER|HAVING|INDEX)\b/gi,
       css: /\b(color|background|margin|padding|width|height|border|display|flex|position|top|left|right|bottom)\b/g,
     };
+    // Line-comment syntax is language specific; applying # and // everywhere
+    // mangled CSS hex colours and any // inside a URL.
+    const commentPatterns = {
+      javascript: /(\/\/[^\n]*)/g,
+      python: /(#[^\n]*)/g,
+      sql: /(--[^\n]*)/g,
+    };
 
-    const regex = keywords[language.toLowerCase()];
-    if (regex) {
-      if (language.toLowerCase() === "html") {
-        highlighted = highlighted.replace(
-          regex,
-          '<span class="code-html-tag">$1</span>',
-        );
-      } else if (language.toLowerCase() === "css") {
-        highlighted = highlighted.replace(
-          regex,
-          '<span class="code-css-prop">$1</span>',
-        );
-      } else {
-        highlighted = highlighted.replace(
-          regex,
-          '<span class="code-keyword">$1</span>',
-        );
-      }
+    const lang = language.toLowerCase();
+
+    // Pull strings and comments out first, replacing each with a plain-text
+    // placeholder, so the later keyword pass cannot reach inside them and these
+    // patterns cannot match the class="..." of a span inserted by an earlier
+    // pass (which is what corrupted the rendered markup).
+    const stash = [];
+    const stashToken = (html) => {
+      stash.push(html);
+      return "WBHLTOKEN" + (stash.length - 1) + "WBHLEND";
+    };
+
+    // Strings (a URL inside quotes is thus protected from the comment pass).
+    highlighted = highlighted.replace(/(["'`])(.*?)\1/g, (m) =>
+      stashToken('<span class="code-string">' + m + "</span>"),
+    );
+
+    const commentRegex = commentPatterns[lang];
+    if (commentRegex) {
+      highlighted = highlighted.replace(commentRegex, (m) =>
+        stashToken('<span class="code-comment">' + m + "</span>"),
+      );
     }
 
-    // Strings
+    const regex = keywords[lang];
+    if (regex) {
+      const cls =
+        lang === "html"
+          ? "code-html-tag"
+          : lang === "css"
+            ? "code-css-prop"
+            : "code-keyword";
+      highlighted = highlighted.replace(
+        regex,
+        '<span class="' + cls + '">$1</span>',
+      );
+    }
+
+    // Restore the stashed strings/comments now that keyword highlighting ran.
     highlighted = highlighted.replace(
-      /(["'`])(.*?)\1/g,
-      '<span class="code-string">$1$2$1</span>',
-    );
-    // Comments
-    highlighted = highlighted.replace(
-      /(\/\/.*|#.*)/g,
-      '<span class="code-comment">$1</span>',
+      /WBHLTOKEN(\d+)WBHLEND/g,
+      (_, i) => stash[Number(i)],
     );
 
     return highlighted;

@@ -31,6 +31,17 @@ export default function AuthPage({
 
   const isLogin = authMode === "login";
 
+  // Registration is the mode that actually has the 6-character rule, so catch
+  // it client-side instead of only learning about it from the server round-trip.
+  const handleSubmit = (e) => {
+    if (!isLogin && (authForm.password || "").length < 6) {
+      e.preventDefault();
+      setAuthError("Password must be at least 6 characters.");
+      return;
+    }
+    return isLogin ? handleLogin(e) : handleRegister(e);
+  };
+
   return (
     <div className="auth-3d-root">
       {/* Background Ambient Glowing Orbs */}
@@ -180,10 +191,7 @@ export default function AuthPage({
             )}
 
             {/* Form */}
-            <form
-              onSubmit={isLogin ? handleLogin : handleRegister}
-              className="auth-input-form"
-            >
+            <form onSubmit={handleSubmit} className="auth-input-form">
               {!isLogin && (
                 <div className="auth-field">
                   <label htmlFor="auth-name">Full Name</label>
@@ -223,7 +231,7 @@ export default function AuthPage({
               <div className="auth-field">
                 <div className="field-label-row">
                   <label htmlFor="auth-password">Password</label>
-                  {isLogin && (
+                  {!isLogin && (
                     <span className="forgot-hint">Minimum 6 characters</span>
                   )}
                 </div>

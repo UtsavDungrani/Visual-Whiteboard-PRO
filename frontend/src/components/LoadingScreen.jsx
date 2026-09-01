@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 export default function LoadingScreen({
   message,
@@ -9,6 +9,16 @@ export default function LoadingScreen({
   const [progress, setProgress] = useState(0);
   const [stageIndex, setStageIndex] = useState(0);
   const [isFadingOut, setIsFadingOut] = useState(false);
+
+  // Parents pass onFinished as an inline arrow, so its identity changes on
+  // every parent render. Keeping it in the progress effect's deps restarted the
+  // timer (progress reset to 0) on each render, and under frequent re-renders
+  // rawLinear never reached 1 so the screen never dismissed. Hold it in a ref
+  // and keep the effect free of that dependency.
+  const onFinishedRef = useRef(onFinished);
+  useEffect(() => {
+    onFinishedRef.current = onFinished;
+  }, [onFinished]);
 
   const stages = message
     ? [
@@ -89,14 +99,14 @@ export default function LoadingScreen({
         setTimeout(() => {
           setIsFadingOut(true);
           setTimeout(() => {
-            if (onFinished) onFinished();
+            if (onFinishedRef.current) onFinishedRef.current();
           }, 450);
         }, 250);
       }
     }, interval);
 
     return () => clearInterval(timer);
-  }, [minDuration, onFinished, message]);
+  }, [minDuration, message]);
 
   return (
     <div className={`pro-loading-screen ${isFadingOut ? "fade-out" : ""}`}>

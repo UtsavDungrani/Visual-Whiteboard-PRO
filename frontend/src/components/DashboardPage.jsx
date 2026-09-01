@@ -23,6 +23,7 @@ export default function DashboardPage({
   const [shareTargetBoard, setShareTargetBoard] = useState(null);
   const [shareEmail, setShareEmail] = useState("");
   const [shareLoading, setShareLoading] = useState(false);
+  const [shareError, setShareError] = useState("");
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newBoardTitle, setNewBoardTitle] = useState("");
 
@@ -73,12 +74,18 @@ export default function DashboardPage({
     e.preventDefault();
     if (!shareTargetBoard || !shareEmail.trim()) return;
     setShareLoading(true);
+    setShareError("");
     try {
       await shareBoard(shareTargetBoard._id, false, shareEmail.trim());
       setShareTargetBoard(null);
       setShareEmail("");
     } catch (err) {
       console.error(err);
+      // Previously swallowed: the modal just sat there with no feedback.
+      setShareError(
+        err?.message ||
+          "Couldn't share the board. Check the email and try again.",
+      );
     } finally {
       setShareLoading(false);
     }
@@ -727,6 +734,14 @@ export default function DashboardPage({
                   The user will be granted real-time collaboration access to
                   this board.
                 </span>
+                {shareError && (
+                  <span
+                    className="field-hint"
+                    style={{ color: "#EF4444", marginTop: "6px" }}
+                  >
+                    {shareError}
+                  </span>
+                )}
               </div>
 
               <div className="modal-actions-row">
@@ -736,6 +751,7 @@ export default function DashboardPage({
                   onClick={() => {
                     setShareTargetBoard(null);
                     setShareEmail("");
+                    setShareError("");
                   }}
                 >
                   Cancel
