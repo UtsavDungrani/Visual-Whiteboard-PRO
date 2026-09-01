@@ -185,46 +185,13 @@ if (process.env.NODE_ENV !== "production") {
   });
 }
 
-// Resilient Redis configuration
+// Resilient Redis configuration. The clients are created and connected once,
+// further down, after the Socket.io `io` instance exists (the connection also
+// attaches the pub/sub adapter). Initialising here as well created a second,
+// orphaned client pair whose error handler would null out the live handles.
 let redisClient = null;
 let subClient = null;
 const REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
-
-(async () => {
-  try {
-    redisClient = redis.createClient({
-      url: REDIS_URL,
-      socket: {
-        // Disable automatic reconnection — try once, fail gracefully
-        reconnectStrategy: false,
-      },
-    });
-    subClient = redisClient.duplicate();
-
-    // Log the error only once, then clean up so we don't keep a broken client
-    redisClient.on("error", (err) => {
-      console.warn(
-        "Redis unavailable. Running in in-memory mode.",
-        err.message,
-      );
-      redisClient = null;
-      subClient = null;
-    });
-    subClient.on("error", (err) => {
-      subClient = null;
-    });
-
-    await Promise.all([redisClient.connect(), subClient.connect()]);
-    console.log("Connected to Redis successfully.");
-  } catch (err) {
-    console.warn(
-      "Redis connection failed. Running server in-memory mode.",
-      err.message,
-    );
-    redisClient = null;
-    subClient = null;
-  }
-})();
 
 function isRedisEnabled() {
   return (
@@ -588,8 +555,9 @@ app.put("/api/whiteboards/:id", auth, async (req, res) => {
     const board = await Whiteboard.findById(boardId);
     if (!board) return res.status(404).json({ error: "Not found" });
 
+    const isOwner = board.owner.toString() === req.user.id;
     const isAuthorized =
-      board.owner.toString() === req.user.id ||
+      isOwner ||
       board.collaborators.map((c) => c.toString()).includes(req.user.id);
     if (!isAuthorized) {
       return res.status(403).json({ error: "forbidden_access_denied" });
@@ -597,15 +565,29 @@ app.put("/api/whiteboards/:id", auth, async (req, res) => {
 
     // Update root level metadata
     board.title = req.body.title || board.title;
-    board.isPublic =
-      req.body.isPublic !== undefined ? req.body.isPublic : board.isPublic;
 
-    if (req.body.collaborators && board.owner.toString() === req.user.id) {
+    // Publishing a board is an ownership decision. A collaborator saving board
+    // content must not be able to flip a private board public through this
+    // route (the dedicated /share route is already owner-only).
+    if (req.body.isPublic !== undefined && isOwner) {
+      board.isPublic = req.body.isPublic;
+    }
+
+    let collaboratorsChanged = false;
+    if (req.body.collaborators && isOwner) {
       board.collaborators = req.body.collaborators;
+      collaboratorsChanged = true;
     }
 
     board.content = req.body;
     await board.save();
+
+    // A removed collaborator's connected socket keeps its cached edit access
+    // (and can keep broadcasting) until it reconnects unless we re-resolve the
+    // room's access now, the same way /share and /permissions do.
+    if (collaboratorsChanged) {
+      refreshRoomAccess(board);
+    }
 
     // Cache updated canvas JSON in Redis
     if (isRedisEnabled()) {
@@ -636,6 +618,16 @@ app.delete("/api/whiteboards/:id", auth, async (req, res) => {
     }
 
     await board.deleteOne();
+
+    // Evict any sockets still connected to this board's room; otherwise they
+    // keep broadcasting into (and rendering) a board that no longer exists.
+    io.in(boardId).emit("board:access-denied", { roomId: boardId });
+    for (const [sid, u] of activeUsers.entries()) {
+      if (u.roomId !== boardId) continue;
+      const sock = io.sockets.sockets.get(sid);
+      if (sock) sock.leave(boardId);
+      activeUsers.delete(sid);
+    }
 
     // Clear Redis Cache
     if (isRedisEnabled()) {
@@ -879,7 +871,20 @@ app.post(
         code_language: code_language || "javascript",
       };
       if (files !== undefined) {
-        updateFields.files = files;
+        // Files may only be introduced through the dedicated upload route,
+        // which assigns a server-controlled path. This text-save accepts a
+        // files list solely so the client can remove/reorder/rename entries
+        // that already belong to this element. Any path that isn't already
+        // stored is dropped — otherwise a client could register another
+        // board's uploaded file here and then delete it from disk.
+        const existing = await ElementContext.findOne({
+          whiteboard_id: whiteboardId,
+          element_id: elementId,
+        }).lean();
+        const knownPaths = new Set((existing?.files || []).map((f) => f.path));
+        updateFields.files = Array.isArray(files)
+          ? files.filter((f) => f && knownPaths.has(f.path))
+          : [];
       }
 
       const context = await ElementContext.findOneAndUpdate(
@@ -1327,16 +1332,16 @@ io.on("connection", (socket) => {
       const dbUserId =
         socket.user && !socket.user.isGuest ? socket.user.id : null;
 
-      // Every unsaved board joined a single shared "global" room, so two people
-      // each starting a new board saw each other's strokes, cursors and page
-      // switches. A draft belongs to one socket until the board has an id.
-      if (roomId === "global") {
-        roomId = `draft:${socket.id}`;
-      }
-
       // Authorise before joining. Room membership is what grants sight of and
       // write access to live board traffic, so an unchecked join bypassed every
-      // permission the REST routes enforce. "global" holds unsaved boards only.
+      // permission the REST routes enforce.
+      //
+      // A room is either a saved board (ObjectId) or an unsaved draft. A draft
+      // belongs to exactly one socket, so its name is derived from this socket's
+      // own id and is never taken from the client — otherwise a client could
+      // pass "draft:<someone-else's-socket-id>" and join their private draft.
+      // Anything that is not a real board id (including "global" and any spoofed
+      // "draft:" name) collapses to this socket's own draft room.
       let access = "edit";
       if (isBoardId(roomId)) {
         ({ access } = await getBoardAccess(roomId, dbUserId));
@@ -1345,6 +1350,8 @@ io.on("connection", (socket) => {
           socket.emit("board:access-denied", { roomId });
           return;
         }
+      } else {
+        roomId = `draft:${socket.id}`;
       }
 
       // Leave old room if switching
