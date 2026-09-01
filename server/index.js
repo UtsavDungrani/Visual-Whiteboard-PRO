@@ -552,6 +552,8 @@ app.get("/api/whiteboards/:id", async (req, res) => {
 app.put("/api/whiteboards/:id", auth, async (req, res) => {
   const boardId = req.params.id;
   try {
+    if (!isBoardId(boardId))
+      return res.status(404).json({ error: "Not found" });
     const board = await Whiteboard.findById(boardId);
     if (!board) return res.status(404).json({ error: "Not found" });
 
@@ -609,6 +611,8 @@ app.put("/api/whiteboards/:id", auth, async (req, res) => {
 app.delete("/api/whiteboards/:id", auth, async (req, res) => {
   const boardId = req.params.id;
   try {
+    if (!isBoardId(boardId))
+      return res.status(404).json({ error: "Not found" });
     const board = await Whiteboard.findById(boardId);
     if (!board) return res.status(404).json({ error: "Not found" });
 
@@ -618,6 +622,24 @@ app.delete("/api/whiteboards/:id", auth, async (req, res) => {
     }
 
     await board.deleteOne();
+
+    // Remove this board's element-context documents and their uploaded files;
+    // otherwise the docs accumulate and the files leak on disk forever.
+    try {
+      const contexts = await ElementContext.find({
+        whiteboard_id: boardId,
+      }).lean();
+      for (const ctx of contexts) {
+        for (const f of ctx.files || []) {
+          if (!f || !f.path) continue;
+          const diskPath = path.join(uploadsDir, path.basename(f.path));
+          fs.promises.unlink(diskPath).catch(() => {});
+        }
+      }
+      await ElementContext.deleteMany({ whiteboard_id: boardId });
+    } catch (cleanupErr) {
+      console.error("Board delete: context cleanup failed", cleanupErr);
+    }
 
     // Evict any sockets still connected to this board's room; otherwise they
     // keep broadcasting into (and rendering) a board that no longer exists.
@@ -645,6 +667,8 @@ app.delete("/api/whiteboards/:id", auth, async (req, res) => {
 app.post("/api/whiteboards/:id/share", auth, async (req, res) => {
   const boardId = req.params.id;
   try {
+    if (!isBoardId(boardId))
+      return res.status(404).json({ error: "Not found" });
     const board = await Whiteboard.findById(boardId);
     if (!board) return res.status(404).json({ error: "Not found" });
 
@@ -691,6 +715,8 @@ app.post("/api/whiteboards/:id/share", auth, async (req, res) => {
 app.post("/api/whiteboards/:id/permissions", auth, async (req, res) => {
   const boardId = req.params.id;
   try {
+    if (!isBoardId(boardId))
+      return res.status(404).json({ error: "Not found" });
     const board = await Whiteboard.findById(boardId);
     if (!board) return res.status(404).json({ error: "Not found" });
 
