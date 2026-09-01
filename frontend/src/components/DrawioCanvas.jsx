@@ -19,9 +19,17 @@ const DrawioCanvas = forwardRef(function DrawioCanvas(
   const isLoadedRef = useRef(false);
   const currentXmlRef = useRef(initialXml);
 
+  // The embed is always served from this origin (see iframeSrc). Pin it so we
+  // neither send the board XML to, nor accept diagram data from, any other
+  // window.
+  const DRAWIO_ORIGIN = "https://embed.diagrams.net";
+
   const postToDrawio = useCallback((msgObj) => {
     if (iframeRef.current && iframeRef.current.contentWindow) {
-      iframeRef.current.contentWindow.postMessage(JSON.stringify(msgObj), "*");
+      iframeRef.current.contentWindow.postMessage(
+        JSON.stringify(msgObj),
+        DRAWIO_ORIGIN,
+      );
     }
   }, []);
 
@@ -55,6 +63,11 @@ const DrawioCanvas = forwardRef(function DrawioCanvas(
   // Handle messages from Draw.io iframe (embed postMessage API)
   useEffect(() => {
     const handleMessage = (event) => {
+      // Only trust messages that actually came from the drawio embed. Without
+      // this, any frame or opened window could post fake "autosave" XML and
+      // have it persisted and broadcast to every collaborator.
+      if (event.origin !== DRAWIO_ORIGIN) return;
+      if (event.source !== iframeRef.current?.contentWindow) return;
       if (!event.data || typeof event.data !== "string") return;
       try {
         const msg = JSON.parse(event.data);

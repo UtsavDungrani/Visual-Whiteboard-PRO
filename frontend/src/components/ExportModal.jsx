@@ -3,6 +3,19 @@ import { jsPDF } from "jspdf";
 import JSZip from "jszip";
 import { updateAllConnectors } from "../hooks/useConnectorSync";
 
+// Board and page titles are user/collaborator controlled. They are dropped into
+// the exported HTML document as markup, so they must be entity-escaped or a
+// title like `<img src=x onerror=...>` becomes script that runs when the file
+// is opened.
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 export default function ExportModal({
   isOpen,
   onClose,
@@ -396,7 +409,7 @@ export default function ExportModal({
             const objects = tempCanvas.getObjects();
             if (objects.length === 0) {
               resolve(
-                `<section class="page-section"><h2>${page.title}</h2><div class="canvas-box empty">Page is empty</div></section>`,
+                `<section class="page-section"><h2>${escapeHtml(page.title)}</h2><div class="canvas-box empty">Page is empty</div></section>`,
               );
               return;
             }
@@ -432,7 +445,7 @@ export default function ExportModal({
 
             resolve(`
               <section class="page-section" style="width: ${Math.max(800, width + 48)}px;">
-                <h2 class="page-header">${page.title}</h2>
+                <h2 class="page-header">${escapeHtml(page.title)}</h2>
                 <div class="canvas-box">
                   ${svgData}
                 </div>
@@ -452,7 +465,7 @@ export default function ExportModal({
 <html>
 <head>
   <meta charset="utf-8">
-  <title>${title} Export</title>
+  <title>${escapeHtml(title)} Export</title>
   <style>
     body {
       background-color: #F3F4F6;
@@ -502,7 +515,7 @@ export default function ExportModal({
   </style>
 </head>
 <body>
-  <h1>${title}</h1>
+  <h1>${escapeHtml(title)}</h1>
   ${sectionsContent}
 </body>
 </html>`;

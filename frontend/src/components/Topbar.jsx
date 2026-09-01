@@ -66,14 +66,12 @@ export default function Topbar({
       return;
     }
 
-    const slug = title
-      ? title
-          .toLowerCase()
-          .trim()
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/^-+|-+$/g, "") || "board"
-      : "board";
-    const shareUrl = `${window.location.origin}/board/${slug}`;
+    // Share by board id, not a title slug. Titles are not unique (every new
+    // board defaults to "My Whiteboard"), the slug reflects the possibly-unsaved
+    // title in the input, and the server resolves a slug per-viewer — so a
+    // slug link could 404 or, worse, open a different board for the recipient.
+    // The id is unique and the loader accepts it directly.
+    const shareUrl = `${window.location.origin}/board/${savedId}`;
 
     if (await copyToClipboard(shareUrl)) {
       alert("Share link copied to clipboard: " + shareUrl);

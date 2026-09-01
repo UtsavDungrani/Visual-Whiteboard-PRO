@@ -302,11 +302,16 @@ export default function App() {
 
     // Keep page boundary if it exists
     const objects = canvas.getObjects();
-    objects.forEach((obj) => {
-      if (obj.id !== "page-boundary") {
-        canvas.remove(obj);
-      }
-    });
+    batchOperationRef.current = true;
+    try {
+      objects.forEach((obj) => {
+        if (obj.id !== "page-boundary") {
+          canvas.remove(obj);
+        }
+      });
+    } finally {
+      batchOperationRef.current = false;
+    }
 
     canvas.requestRenderAll();
     saveHistory();
@@ -323,7 +328,18 @@ export default function App() {
       (cloned) => {
         clipboardRef.current = cloned;
       },
-      ["id", "isLocked"],
+      [
+        "id",
+        "isLocked",
+        "customType",
+        "data",
+        "lockMovementX",
+        "lockMovementY",
+        "lockScalingX",
+        "lockScalingY",
+        "lockRotation",
+        "hasControls",
+      ],
     ); // include custom properties
   };
 
@@ -350,7 +366,18 @@ export default function App() {
         saveHistory();
         sendCanvasUpdate();
       },
-      ["id", "isLocked"],
+      [
+        "id",
+        "isLocked",
+        "customType",
+        "data",
+        "lockMovementX",
+        "lockMovementY",
+        "lockScalingX",
+        "lockScalingY",
+        "lockRotation",
+        "hasControls",
+      ],
     );
   };
 
@@ -396,7 +423,18 @@ export default function App() {
         saveHistory();
         sendCanvasUpdate();
       },
-      ["id", "isLocked"],
+      [
+        "id",
+        "isLocked",
+        "customType",
+        "data",
+        "lockMovementX",
+        "lockMovementY",
+        "lockScalingX",
+        "lockScalingY",
+        "lockRotation",
+        "hasControls",
+      ],
     );
   };
 
@@ -482,6 +520,16 @@ export default function App() {
   const applyingRemoteRef = useRef(false);
   const interactingRef = useRef(false);
   const pendingRemoteJsonRef = useRef(null);
+  // Tracks whether the current pointer gesture actually mutated the canvas.
+  // If it did, the local edit is the newest write and must win over any remote
+  // snapshot that was queued mid-gesture (otherwise the edit is silently
+  // reverted and then re-broadcast as stale — losing the write for everyone).
+  const localChangedDuringInteractionRef = useRef(false);
+  // Set while a single logical action touches many objects at once (clear page,
+  // multi-delete). The per-object add/remove handlers skip history/sync while
+  // it is set so the whole batch collapses to one undo entry and one broadcast
+  // instead of one per object.
+  const batchOperationRef = useRef(false);
 
   const activePageIdRef = useRef(activePageId);
   const pagesRef = useRef(pages);
@@ -552,6 +600,14 @@ export default function App() {
   useEffect(() => {
     isReadOnlyRef.current = isReadOnly;
   }, [isReadOnly]);
+
+  // The socket effect is keyed on [screen], so any `user` it closes over is
+  // captured at editor mount. When the board is opened by direct URL, auto-login
+  // resolves `user` afterwards, so socket handlers must read it from this ref.
+  const userRef = useRef(user);
+  useEffect(() => {
+    userRef.current = user;
+  }, [user]);
 
   // Derived board owner check
   const isOwner =
@@ -774,12 +830,31 @@ export default function App() {
       "boxStrokeWidth",
       "padding",
       "data",
+      // Lock state is not part of Fabric's default serialization, so without
+      // these a locked element silently unlocks on undo/redo, reload, sync and
+      // page switch.
+      "lockMovementX",
+      "lockMovementY",
+      "lockScalingX",
+      "lockScalingY",
+      "lockRotation",
+      "hasControls",
+      "isLocked",
     ]);
     if (json && json.objects) {
-      json.objects = json.objects.filter((obj) => obj.id !== "page-boundary");
+      // Drop the page frame and any in-flight preview shapes so they are never
+      // saved to history or broadcast to collaborators.
+      json.objects = json.objects.filter((obj) => !isTransientObjectId(obj.id));
     }
     return json;
   };
+
+  // Ids of objects that exist only during an interaction (the page frame, and
+  // the dashed previews drawn while creating a shape or dragging a selection).
+  const isTransientObjectId = (id) =>
+    id === "page-boundary" ||
+    id === "temp-selection-shape" ||
+    id === "temp-creation-shape";
 
   // Helper: Draw page boundaries for Fixed Page Mode
   const renderPageBoundary = (canvas, mode, size) => {
@@ -1242,6 +1317,24 @@ export default function App() {
     });
   };
 
+  // Any API call that gets a 401 (expired/invalid token) dispatches this so the
+  // user is taken to sign in once, instead of every fetcher silently failing
+  // with a generic error (autosave in particular would just keep failing).
+  useEffect(() => {
+    const onAuthExpired = () => {
+      if (!localStorage.getItem("wb_token")) return; // already signed out
+      localStorage.removeItem("wb_token");
+      setUser({ name: "Guest Collaborator", color: "#6B7280" });
+      navigateTo("auth", {
+        message: "Session expired",
+        subMessage: "Please sign in again to continue",
+        duration: 1200,
+      });
+    };
+    window.addEventListener("wb:auth-expired", onAuthExpired);
+    return () => window.removeEventListener("wb:auth-expired", onAuthExpired);
+  }, []);
+
   const handleCreateBoard = async (customTitle) => {
     const boardTitle =
       customTitle && customTitle.trim()
@@ -1617,6 +1710,7 @@ export default function App() {
       }
 
       interactingRef.current = true;
+      localChangedDuringInteractionRef.current = false;
 
       // Custom selection tool drawing logic
       if (shapeSelectTools.includes(activeTool) && !isReadOnlyRef.current) {
@@ -1775,6 +1869,7 @@ export default function App() {
         }
 
         if (tempCreationShapeRef.current) {
+          tempCreationShapeRef.current.id = "temp-creation-shape";
           canvas.add(tempCreationShapeRef.current);
         }
         canvas.requestRenderAll();
@@ -1891,7 +1986,18 @@ export default function App() {
     const onMouseUp = (opt) => {
       canvas.isDragging = false;
       interactingRef.current = false;
-      flushPendingRemoteCanvas();
+
+      // If this gesture changed the canvas, the local edit is the most recent
+      // write. Applying the remote snapshot that was queued mid-gesture would
+      // revert it on screen and then re-broadcast the stale state, losing the
+      // edit for every client. Drop the stale snapshot and let the local
+      // edit's own (debounced) broadcast win instead.
+      if (localChangedDuringInteractionRef.current) {
+        localChangedDuringInteractionRef.current = false;
+        pendingRemoteJsonRef.current = null;
+      } else {
+        flushPendingRemoteCanvas();
+      }
 
       const pointer = canvas.getPointer(opt.e);
       const startX = selectionStartRef.current.x;
@@ -2242,6 +2348,7 @@ export default function App() {
 
     const onObjectModified = () => {
       if (applyingRemoteRef.current || isReadOnlyRef.current) return;
+      localChangedDuringInteractionRef.current = true;
       saveHistory();
       sendCanvasUpdate();
     };
@@ -2249,6 +2356,10 @@ export default function App() {
     const onObjectAdded = (options) => {
       if (applyingRemoteRef.current || isReadOnlyRef.current) return;
       const obj = options?.target;
+      // Preview shapes are added/removed many times per gesture; they must not
+      // touch history or the sync stream (that flooded both — a single lasso
+      // could evict the entire undo stack and ship dashed ghosts to peers).
+      if (obj && isTransientObjectId(obj.id)) return;
       if (obj) {
         if (!obj.id) {
           obj.id = "el-" + Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -2284,12 +2395,17 @@ export default function App() {
               : "crosshair";
         }
       }
+      if (batchOperationRef.current) return;
+      localChangedDuringInteractionRef.current = true;
       saveHistory();
       sendCanvasUpdate();
     };
 
     const onObjectRemoved = (options) => {
       const removedObj = options?.target;
+      // Removing a preview shape is not a board edit — skip history/sync and
+      // the connector cleanup below.
+      if (removedObj && isTransientObjectId(removedObj.id)) return;
       if (
         removedObj &&
         removedObj.type !== "connector" &&
@@ -2309,6 +2425,8 @@ export default function App() {
         });
       }
       if (applyingRemoteRef.current || isReadOnlyRef.current) return;
+      if (batchOperationRef.current) return;
+      localChangedDuringInteractionRef.current = true;
       saveHistory();
       sendCanvasUpdate();
     };
@@ -2348,6 +2466,7 @@ export default function App() {
         canvas.requestRenderAll();
       }
       if (applyingRemoteRef.current) return;
+      localChangedDuringInteractionRef.current = true;
       saveHistory();
       sendCanvasUpdate();
     };
@@ -2721,9 +2840,20 @@ export default function App() {
     if (!canvas) return;
     const activeObject = canvas.getActiveObject();
     if (activeObject) {
-      if (activeObject.type === "activeSelection") {
-        activeObject.forEachObject((obj) => canvas.remove(obj));
+      const isBatch = activeObject.type === "activeSelection";
+      if (isBatch) {
+        // Suppress per-object history/sync so deleting a multi-selection is a
+        // single undoable action and a single broadcast, not one per object.
+        batchOperationRef.current = true;
+        try {
+          activeObject.forEachObject((obj) => canvas.remove(obj));
+        } finally {
+          batchOperationRef.current = false;
+        }
         canvas.discardActiveObject();
+        // The suppressed handlers didn't record anything; do it once here.
+        saveHistory();
+        sendCanvasUpdate();
       } else {
         canvas.remove(activeObject);
         canvas.discardActiveObject();
@@ -2796,16 +2926,29 @@ export default function App() {
     const activeObj = canvas.getActiveObject();
     if (!activeObj) return;
 
-    const isLocked = !activeObj.lockMovementX;
-    activeObj.set({
-      lockMovementX: isLocked,
-      lockMovementY: isLocked,
-      lockScalingX: isLocked,
-      lockScalingY: isLocked,
-      lockRotation: isLocked,
-      hasControls: !isLocked,
-      editable: !isLocked,
-      hoverCursor: isLocked ? "default" : "move",
+    // A multi-selection is a transient activeSelection wrapper; lock flags set
+    // on it vanish when the selection is disbanded. Apply to each underlying
+    // object instead so the lock actually persists.
+    const targets =
+      activeObj.type === "activeSelection" && Array.isArray(activeObj._objects)
+        ? activeObj._objects
+        : [activeObj];
+
+    const isLocked = !(targets[0].lockMovementX || targets[0].isLocked);
+    targets.forEach((obj) => {
+      obj.set({
+        lockMovementX: isLocked,
+        lockMovementY: isLocked,
+        lockScalingX: isLocked,
+        lockScalingY: isLocked,
+        lockRotation: isLocked,
+        hasControls: !isLocked,
+        editable: !isLocked,
+        hoverCursor: isLocked ? "default" : "move",
+      });
+      // Mirror the state onto a serialized flag the cleanup engine and the
+      // properties panel read.
+      obj.isLocked = isLocked;
     });
 
     canvas.requestRenderAll();
@@ -2889,7 +3032,27 @@ export default function App() {
       if (cleaned.length === 0) return;
 
       let completedCount = 0;
+      let finalized = false;
       applyingRemoteRef.current = true; // Disable intermediate history saves during animations
+
+      // Runs exactly once, when every cleaned element has settled. Previously
+      // the "no matching object" path incremented the counter without ever
+      // checking it, so if the last element to finish matched nothing the
+      // finalizer never ran and applyingRemoteRef stayed true forever —
+      // silently disabling all history saves and broadcasts until reload.
+      const finalizeCleanup = () => {
+        if (finalized) return;
+        finalized = true;
+        updateAllConnectors(canvas);
+        canvas.requestRenderAll();
+        applyingRemoteRef.current = false;
+        saveHistory();
+        sendCanvasUpdate();
+      };
+      const markCleanupItemDone = () => {
+        completedCount++;
+        if (completedCount >= cleaned.length) finalizeCleanup();
+      };
 
       const F = window.fabric;
       if (!F?.util?.animate) {
@@ -2930,22 +3093,18 @@ export default function App() {
             },
             onComplete: () => {
               obj.setCoords();
-              completedCount++;
-              if (completedCount === cleaned.length) {
-                updateAllConnectors(canvas);
-                canvas.requestRenderAll();
-                applyingRemoteRef.current = false;
-                saveHistory();
-                sendCanvasUpdate();
-              }
+              markCleanupItemDone();
             },
           });
         } else {
-          completedCount++;
+          markCleanupItemDone();
         }
       });
     } catch (err) {
       console.error("Mess cleanup error:", err);
+      // Never leave the canvas wedged with history/sync disabled if we bailed
+      // out after flipping the flag.
+      applyingRemoteRef.current = false;
       alert("Failed to tidy elements. Please try again.");
     } finally {
       setIsCleanupLoading(false);
@@ -3695,14 +3854,16 @@ export default function App() {
 
       const key = e.key.toLowerCase();
 
-      // Allow zooming shortcuts even if read-only
+      // Allow zooming shortcuts even if read-only. Read the live zoom from the
+      // ref: this handler is bound once per canvas mount, so the captured `zoom`
+      // state is stale and would always compute from the mount-time value.
       if (e.ctrlKey && e.key === "=") {
-        handleZoom(zoom + 0.1);
+        handleZoom(zoomRef.current + 0.1);
         e.preventDefault();
         return;
       }
       if (e.ctrlKey && e.key === "-") {
-        handleZoom(zoom - 0.1);
+        handleZoom(zoomRef.current - 0.1);
         e.preventDefault();
         return;
       }
@@ -3753,23 +3914,7 @@ export default function App() {
         e.preventDefault();
       }
 
-      // Zoom In (Ctrl+=)
-      if (e.ctrlKey && e.key === "=") {
-        handleZoom(zoom + 0.1);
-        e.preventDefault();
-      }
-
-      // Zoom Out (Ctrl+-)
-      if (e.ctrlKey && e.key === "-") {
-        handleZoom(zoom - 0.1);
-        e.preventDefault();
-      }
-
-      // Zoom Reset (Ctrl+0)
-      if (e.ctrlKey && e.key === "0") {
-        handleZoomReset();
-        e.preventDefault();
-      }
+      // (Zoom shortcuts are handled above, before the read-only gate.)
 
       // Group (Ctrl+G)
       if (e.ctrlKey && !e.shiftKey && key === "g") {
@@ -3939,7 +4084,8 @@ export default function App() {
         setBoardMeta({ owner, collaborators, isPublic });
 
         const myId = socketRef.current?.id;
-        const myDbUserId = user.id || user._id;
+        const currentUser = userRef.current || {};
+        const myDbUserId = currentUser.id || currentUser._id;
         if (socketId === myId || (dbUserId && dbUserId === myDbUserId)) {
           setSessionAccess(access);
         }

@@ -109,67 +109,115 @@ describe("Socket.io Real-Time Synchronization", () => {
     });
   });
 
+  // A shared room is only ever an authorised board: arbitrary room names now
+  // collapse to a private per-socket draft, so two clients coordinate over the
+  // owner's real board (both authenticated) to exercise broadcast.
   it("should broadcast canvas:update to other users in the room", (done) => {
-    clientSocket1.emit("join", {
-      roomId: "room-canvas",
-      user: { name: "User 1" },
-      pageId: "page-1",
+    const writer = ioClient(`http://localhost:${port}`, {
+      transports: ["websocket"],
+      forceNew: true,
+      auth: { token: ownerToken },
     });
-
-    clientSocket2.emit("join", {
-      roomId: "room-canvas",
-      user: { name: "User 2" },
-      pageId: "page-1",
+    const reader = ioClient(`http://localhost:${port}`, {
+      transports: ["websocket"],
+      forceNew: true,
+      auth: { token: ownerToken },
     });
-
-    const updatePayload = {
-      id: "room-canvas",
-      pageId: "page-1",
-      json: { objects: [{ type: "rect", left: 10, top: 20 }] },
+    const cleanup = () => {
+      writer.disconnect();
+      reader.disconnect();
     };
 
-    // Client 2 should receive the update sent by Client 1
-    clientSocket2.on("canvas:update", (data) => {
-      expect(data).toHaveProperty("pageId", "page-1");
-      expect(data.json.objects[0]).toHaveProperty("type", "rect");
-      done();
+    reader.on("canvas:update", (data) => {
+      try {
+        expect(data).toHaveProperty("pageId", "page-1");
+        expect(data.json.objects[0]).toHaveProperty("type", "rect");
+        cleanup();
+        done();
+      } catch (err) {
+        cleanup();
+        done(err);
+      }
     });
 
-    // Wait slightly to ensure both clients joined the room before emitting
-    setTimeout(() => {
-      clientSocket1.emit("canvas:update", updatePayload);
-    }, 100);
+    let connected = 0;
+    const onConnect = () => {
+      if (++connected < 2) return;
+      writer.emit("join", {
+        roomId: privateBoardId,
+        user: { name: "User 1" },
+        pageId: "page-1",
+      });
+      reader.emit("join", {
+        roomId: privateBoardId,
+        user: { name: "User 2" },
+        pageId: "page-1",
+      });
+      // Give both joins time to land before broadcasting.
+      setTimeout(() => {
+        writer.emit("canvas:update", {
+          pageId: "page-1",
+          json: { objects: [{ type: "rect", left: 10, top: 20 }] },
+        });
+      }, 120);
+    };
+    writer.on("connect", onConnect);
+    reader.on("connect", onConnect);
   });
 
   it("should broadcast cursor:move to other users in the room", (done) => {
-    clientSocket1.emit("join", {
-      roomId: "room-cursor",
-      user: { name: "User 1" },
-      pageId: "page-1",
+    const mover = ioClient(`http://localhost:${port}`, {
+      transports: ["websocket"],
+      forceNew: true,
+      auth: { token: ownerToken },
     });
-
-    clientSocket2.emit("join", {
-      roomId: "room-cursor",
-      user: { name: "User 2" },
-      pageId: "page-1",
+    const watcher = ioClient(`http://localhost:${port}`, {
+      transports: ["websocket"],
+      forceNew: true,
+      auth: { token: ownerToken },
     });
+    const cleanup = () => {
+      mover.disconnect();
+      watcher.disconnect();
+    };
 
     // cursor:move handler emits cursor:update to other sockets
-    clientSocket2.on("cursor:update", (data) => {
-      expect(data).toHaveProperty("x", 150);
-      expect(data).toHaveProperty("y", 250);
-      expect(data).toHaveProperty("userId");
-      done();
+    watcher.on("cursor:update", (data) => {
+      try {
+        expect(data).toHaveProperty("x", 150);
+        expect(data).toHaveProperty("y", 250);
+        expect(data).toHaveProperty("userId");
+        cleanup();
+        done();
+      } catch (err) {
+        cleanup();
+        done(err);
+      }
     });
 
-    setTimeout(() => {
-      clientSocket1.emit("cursor:move", {
-        roomId: "room-cursor",
+    let connected = 0;
+    const onConnect = () => {
+      if (++connected < 2) return;
+      mover.emit("join", {
+        roomId: privateBoardId,
+        user: { name: "User 1" },
         pageId: "page-1",
-        x: 150,
-        y: 250,
       });
-    }, 100);
+      watcher.emit("join", {
+        roomId: privateBoardId,
+        user: { name: "User 2" },
+        pageId: "page-1",
+      });
+      setTimeout(() => {
+        mover.emit("cursor:move", {
+          pageId: "page-1",
+          x: 150,
+          y: 250,
+        });
+      }, 120);
+    };
+    mover.on("connect", onConnect);
+    watcher.on("connect", onConnect);
   });
 
   // Unsaved boards all shared one "global" room, so two strangers each
@@ -224,6 +272,42 @@ describe("Socket.io Real-Time Synchronization", () => {
         pageId: "page-1",
       });
     }, 120);
+  });
+
+  // A draft room is derived from the owning socket's own id. A client must not
+  // be able to name someone else's draft room and join it to read their strokes.
+  it("should not let a client hijack another socket's private draft", (done) => {
+    let leaked = false;
+    clientSocket2.on("canvas:update", () => {
+      leaked = true;
+    });
+
+    clientSocket1.emit("join", {
+      roomId: "global",
+      user: { name: "Drafter One" },
+      pageId: "page-1",
+    });
+
+    // Guess Drafter One's draft room name and try to join it directly.
+    setTimeout(() => {
+      clientSocket2.emit("join", {
+        roomId: `draft:${clientSocket1.id}`,
+        user: { name: "Intruder" },
+        pageId: "page-1",
+      });
+    }, 80);
+
+    setTimeout(() => {
+      clientSocket1.emit("canvas:update", {
+        pageId: "page-1",
+        json: { objects: [{ type: "rect" }] },
+      });
+    }, 160);
+
+    setTimeout(() => {
+      expect(leaked).toBe(false);
+      done();
+    }, 480);
   });
 
   // Room membership is what exposes live board traffic, so an unauthorised
