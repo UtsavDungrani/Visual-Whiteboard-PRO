@@ -375,42 +375,37 @@ export default function ExportModal({
 
     setIsExporting(true);
 
+    // Declared outside try so the finally cleanup can always reach the element.
+    let tempCanvasEl = null;
     try {
       const selectedPages = pages
         .filter((p) => selectedPageIds.includes(p.page_id))
         .sort((a, b) => a.order - b.order);
 
       // We use a temporary Fabric canvas to render background JSONs and export to SVG
-      const tempCanvasEl = document.createElement("canvas");
+      tempCanvasEl = document.createElement("canvas");
       tempCanvasEl.style.display = "none";
       document.body.appendChild(tempCanvasEl);
 
       const F = window.fabric;
       const tempCanvas = new F.Canvas(tempCanvasEl);
 
-      let sectionsContent = "";
-
+      // Render each page to a self-contained SVG once; the format/styles
+      // options below decide how these are packaged.
+      const pageParts = [];
       for (let i = 0; i < selectedPages.length; i++) {
         const page = selectedPages[i];
-
-        const pageHtml = await new Promise((resolve) => {
+        const part = await new Promise((resolve) => {
           tempCanvas.loadFromJSON(page.canvas_state, () => {
-            // 1. Strip page boundaries
             tempCanvas.getObjects().forEach((obj) => {
-              if (obj.id === "page-boundary") {
-                tempCanvas.remove(obj);
-              } else {
-                obj.setCoords();
-              }
+              if (obj.id === "page-boundary") tempCanvas.remove(obj);
+              else obj.setCoords();
             });
             updateAllConnectors(tempCanvas);
 
-            // 2. Calculate drawing bounds
             const objects = tempCanvas.getObjects();
             if (objects.length === 0) {
-              resolve(
-                `<section class="page-section"><h2>${escapeHtml(page.title)}</h2><div class="canvas-box empty">Page is empty</div></section>`,
-              );
+              resolve({ title: page.title, svg: null, width: 800 });
               return;
             }
 
@@ -429,108 +424,146 @@ export default function ExportModal({
             const padding = 40;
             const width = maxX - minX + padding * 2;
             const height = maxY - minY + padding * 2;
-
-            // 3. Export to SVG using Fabric's built-in robust method
-            // We use viewBox to "crop" and center the drawing
             const svgData = tempCanvas.toSVG({
-              viewBox: {
-                x: minX - padding,
-                y: minY - padding,
-                width: width,
-                height: height,
-              },
-              width: width,
-              height: height,
+              viewBox: { x: minX - padding, y: minY - padding, width, height },
+              width,
+              height,
             });
-
-            resolve(`
-              <section class="page-section" style="width: ${Math.max(800, width + 48)}px;">
-                <h2 class="page-header">${escapeHtml(page.title)}</h2>
-                <div class="canvas-box">
-                  ${svgData}
-                </div>
-              </section>
-            `);
+            resolve({ title: page.title, svg: svgData, width });
           });
         });
-
-        sectionsContent += pageHtml;
+        pageParts.push(part);
       }
 
-      // Dispose offscreen canvas resources
+      // Dispose offscreen canvas resources (in finally too, in case of a throw).
       tempCanvas.dispose();
       tempCanvasEl.remove();
 
-      const singlePageHtml = `<!DOCTYPE html>
+      // The shared chrome stylesheet (used as a <style> block, an external
+      // styles.css, or inlined onto each element depending on the options).
+      const CSS = `body{background-color:#F3F4F6;font-family:'Inter',system-ui,-apple-system,sans-serif;margin:0;padding:40px 20px;display:flex;flex-direction:column;align-items:center;gap:30px}
+.page-section{background:#fff;border-radius:12px;padding:24px;box-shadow:0 4px 12px rgba(0,0,0,.08);border:1px solid #E5E7EB;box-sizing:border-box}
+.page-header{font-size:18px;font-weight:600;color:#1F2937;margin-top:0;margin-bottom:16px;border-bottom:1px solid #E5E7EB;padding-bottom:8px}
+.canvas-box{background-color:#F9FAFB;border:1px solid #E5E7EB;border-radius:8px;overflow:hidden;display:flex;justify-content:center;align-items:center}
+.canvas-box.empty{height:200px;color:#9CA3AF;font-style:italic}
+svg{max-width:100%;height:auto}`;
+
+      // Inline-style equivalents for htmlStyles === "inline".
+      const IN = {
+        section:
+          "background:#fff;border-radius:12px;padding:24px;box-shadow:0 4px 12px rgba(0,0,0,.08);border:1px solid #E5E7EB;box-sizing:border-box;",
+        header:
+          "font-size:18px;font-weight:600;color:#1F2937;margin:0 0 16px;border-bottom:1px solid #E5E7EB;padding-bottom:8px;",
+        box: "background-color:#F9FAFB;border:1px solid #E5E7EB;border-radius:8px;overflow:hidden;display:flex;justify-content:center;align-items:center;",
+        emptyBox:
+          "background-color:#F9FAFB;border:1px solid #E5E7EB;border-radius:8px;height:200px;color:#9CA3AF;font-style:italic;display:flex;justify-content:center;align-items:center;",
+        body: "background-color:#F3F4F6;font-family:'Inter',system-ui,-apple-system,sans-serif;margin:0;padding:40px 20px;",
+      };
+      const inlineMode = htmlStyles === "inline";
+
+      const sectionHtml = (part) => {
+        const inner = part.svg
+          ? `<div${inlineMode ? ` style="${IN.box}"` : ' class="canvas-box"'}>${part.svg}</div>`
+          : `<div${inlineMode ? ` style="${IN.emptyBox}"` : ' class="canvas-box empty"'}>Page is empty</div>`;
+        const widthStyle = part.svg
+          ? `width:${Math.max(800, part.width + 48)}px;`
+          : "";
+        if (inlineMode) {
+          return `<section style="${IN.section}${widthStyle}"><h2 style="${IN.header}">${escapeHtml(part.title)}</h2>${inner}</section>`;
+        }
+        return `<section class="page-section"${widthStyle ? ` style="${widthStyle}"` : ""}><h2 class="page-header">${escapeHtml(part.title)}</h2>${inner}</section>`;
+      };
+
+      // Build a full HTML document. `cssHref` links an external sheet; otherwise
+      // block styles are inlined into <head> (unless inlineMode is on).
+      const docHtml = (docTitle, bodyInner, cssHref) => {
+        const head =
+          inlineMode || cssHref
+            ? cssHref
+              ? `<link rel="stylesheet" href="${cssHref}">`
+              : ""
+            : `<style>${CSS}</style>`;
+        const bodyStyle = inlineMode ? ` style="${IN.body}"` : "";
+        return `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
-  <title>${escapeHtml(title)} Export</title>
-  <style>
-    body {
-      background-color: #F3F4F6;
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      margin: 0;
-      padding: 40px 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 30px;
-    }
-    .page-section {
-      background: white;
-      border-radius: 12px;
-      padding: 24px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      border: 1px solid #E5E7EB;
-      box-sizing: border-box;
-    }
-    .page-header {
-      font-size: 18px;
-      font-weight: 600;
-      color: #1F2937;
-      margin-top: 0;
-      margin-bottom: 16px;
-      border-bottom: 1px solid #E5E7EB;
-      padding-bottom: 8px;
-    }
-    .canvas-box {
-      background-color: #F9FAFB;
-      border: 1px solid #E5E7EB;
-      border-radius: 8px;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .canvas-box.empty {
-      height: 200px;
-      color: #9CA3AF;
-      font-style: italic;
-    }
-    svg {
-      max-width: 100%;
-      height: auto;
-    }
-  </style>
+  <title>${escapeHtml(docTitle)} Export</title>
+  ${head}
 </head>
-<body>
-  <h1>${escapeHtml(title)}</h1>
-  ${sectionsContent}
+<body${bodyStyle}>
+  <h1>${escapeHtml(docTitle)}</h1>
+  ${bodyInner}
 </body>
 </html>`;
+      };
 
-      const blob = new Blob([singlePageHtml], { type: "text/html" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${title.replace(/\s+/g, "_")}_export.html`;
-      a.click();
-      URL.revokeObjectURL(url);
+      const safeName = (s) =>
+        String(s || "page")
+          .replace(/[^a-z0-9]+/gi, "_")
+          .replace(/^_+|_+$/g, "")
+          .slice(0, 60) || "page";
+      const baseName = safeName(title) || "whiteboard";
+      const triggerDownload = (blob, filename) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+      };
+
+      if (htmlFormat === "zip") {
+        // One HTML file per page + an index, bundled. Block styles get a shared
+        // styles.css that each page links; inline styles are self-contained.
+        const zip = new JSZip();
+        const linkCss = !inlineMode; // link external sheet only in block mode
+        if (linkCss) zip.file("styles.css", CSS);
+
+        const indexLinks = [];
+        pageParts.forEach((part, idx) => {
+          const fname = `${String(idx + 1).padStart(2, "0")}-${safeName(part.title)}.html`;
+          zip.file(
+            fname,
+            docHtml(
+              part.title,
+              sectionHtml(part),
+              linkCss ? "styles.css" : null,
+            ),
+          );
+          indexLinks.push(
+            `<li><a href="${fname}">${escapeHtml(part.title || `Page ${idx + 1}`)}</a></li>`,
+          );
+        });
+        zip.file(
+          "index.html",
+          docHtml(
+            title,
+            `<section${inlineMode ? ` style="${IN.section}"` : ' class="page-section"'}><h2${inlineMode ? ` style="${IN.header}"` : ' class="page-header"'}>Pages</h2><ul>${indexLinks.join("")}</ul></section>`,
+            linkCss ? "styles.css" : null,
+          ),
+        );
+
+        const zipBlob = await zip.generateAsync({ type: "blob" });
+        triggerDownload(zipBlob, `${baseName}_export.zip`);
+      } else {
+        // Single page: all sections stacked in one document.
+        const body = pageParts.map(sectionHtml).join("\n");
+        const blob = new Blob([docHtml(title, body, null)], {
+          type: "text/html",
+        });
+        triggerDownload(blob, `${baseName}_export.html`);
+      }
     } catch (err) {
       console.error(err);
       alert("HTML Export failed: " + err.message);
     } finally {
+      // Guarantee the offscreen canvas is cleaned up even if export threw.
+      try {
+        if (tempCanvasEl && tempCanvasEl.parentNode) tempCanvasEl.remove();
+      } catch {
+        /* already removed */
+      }
       setIsExporting(false);
     }
   };
