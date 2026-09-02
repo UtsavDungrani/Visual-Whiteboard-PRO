@@ -24,6 +24,7 @@ import {
 } from "./pathLassoSplit";
 import { ConnectorLine } from "./tools/ConnectorLine";
 import CanvasOverlay from "./components/CanvasOverlay";
+import ShortcutsModal from "./components/ShortcutsModal";
 import { useConnectorTool } from "./tools/useConnectorTool";
 import {
   useConnectorSync,
@@ -499,6 +500,8 @@ export default function App() {
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   // Shows a first-draw hint while the active page has no user objects.
   const [showEmptyHint, setShowEmptyHint] = useState(false);
+  // Keyboard-shortcut cheat sheet (toggled with "?").
+  const [showShortcuts, setShowShortcuts] = useState(false);
 
   // Collapsible Panel States (Item 6)
   const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(false);
@@ -3870,6 +3873,18 @@ export default function App() {
 
       const key = e.key.toLowerCase();
 
+      // "?" toggles the shortcut cheat sheet; Escape closes it. Works in
+      // read-only too. Accept Shift+/ explicitly for keyboard layouts where the
+      // event reports the "/" key rather than "?".
+      if (e.key === "?" || (e.key === "/" && e.shiftKey)) {
+        setShowShortcuts((v) => !v);
+        e.preventDefault();
+        return;
+      }
+      if (e.key === "Escape") {
+        setShowShortcuts(false);
+      }
+
       // Allow zooming shortcuts even if read-only. Read the live zoom from the
       // ref: this handler is bound once per canvas mount, so the captured `zoom`
       // state is stale and would always compute from the mount-time value.
@@ -4466,8 +4481,9 @@ export default function App() {
                   <i className="fa-solid fa-pen-ruler empty-hint-icon"></i>
                   <div className="empty-hint-title">Your canvas is ready</div>
                   <div className="empty-hint-sub">
-                    Pick a shape or the pen from the toolbar to start drawing —
-                    or start a board from a template next time.
+                    Pick a shape or the pen from the toolbar to start drawing.
+                    Press <kbd className="empty-hint-kbd">?</kbd> for keyboard
+                    shortcuts.
                   </div>
                 </div>
               )}
@@ -4686,6 +4702,10 @@ export default function App() {
           onClose={() => setIsExportModalOpen(false)}
           pages={pages}
           title={title}
+        />
+        <ShortcutsModal
+          isOpen={showShortcuts}
+          onClose={() => setShowShortcuts(false)}
         />
       </div>
     </>
