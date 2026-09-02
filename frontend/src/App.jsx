@@ -25,6 +25,7 @@ import {
 import { ConnectorLine } from "./tools/ConnectorLine";
 import CanvasOverlay from "./components/CanvasOverlay";
 import ShortcutsModal from "./components/ShortcutsModal";
+import CommentsLayer from "./components/CommentsLayer";
 import { useConnectorTool } from "./tools/useConnectorTool";
 import {
   useConnectorSync,
@@ -184,11 +185,100 @@ function ContextBadgesOverlay({ canvas, contextMap, onBadgeClick }) {
   );
 }
 
+// Draws a colored outline around each element a peer currently has selected,
+// projected to screen and kept in sync with pan/zoom/move.
+function RemoteSelectionOverlay({ canvas, remoteSelections, activePageId }) {
+  const [, setTick] = useState(0);
+
+  useEffect(() => {
+    if (!canvas) return;
+    let animId = null;
+    const schedule = () => {
+      if (!animId) {
+        animId = requestAnimationFrame(() => {
+          animId = null;
+          setTick((t) => (t + 1) % 1000000);
+        });
+      }
+    };
+    canvas.on("after:render", schedule);
+    return () => {
+      if (animId) cancelAnimationFrame(animId);
+      canvas.off("after:render", schedule);
+    };
+  }, [canvas]);
+
+  if (!canvas || !remoteSelections) return null;
+  const vpt = canvas.viewportTransform;
+  if (!vpt) return null;
+
+  const byId = {};
+  (canvas.getObjects ? canvas.getObjects() : []).forEach((o) => {
+    if (o && o.id) byId[o.id] = o;
+  });
+
+  const boxes = [];
+  Object.entries(remoteSelections).forEach(([uid, sel]) => {
+    if (!sel || !Array.isArray(sel.ids) || sel.ids.length === 0) return;
+    if (sel.pageId && activePageId && sel.pageId !== activePageId) return;
+    let labeled = false;
+    sel.ids.forEach((id) => {
+      const obj = byId[id];
+      if (!obj) return;
+      const r = obj.getBoundingRect(true, true); // absolute canvas coords
+      const left = r.left * vpt[0] + vpt[4];
+      const top = r.top * vpt[3] + vpt[5];
+      const width = r.width * vpt[0];
+      const height = r.height * vpt[3];
+      boxes.push({
+        key: `${uid}-${id}`,
+        left,
+        top,
+        width,
+        height,
+        color: sel.color || "#6B7280",
+        name: labeled ? null : sel.name || "Collaborator",
+      });
+      labeled = true;
+    });
+  });
+
+  if (boxes.length === 0) return null;
+
+  return (
+    <>
+      {boxes.map((b) => (
+        <div
+          key={b.key}
+          className="remote-selection-box"
+          style={{
+            left: `${b.left}px`,
+            top: `${b.top}px`,
+            width: `${b.width}px`,
+            height: `${b.height}px`,
+            borderColor: b.color,
+          }}
+        >
+          {b.name && (
+            <span
+              className="remote-selection-tag"
+              style={{ backgroundColor: b.color }}
+            >
+              {b.name}
+            </span>
+          )}
+        </div>
+      ))}
+    </>
+  );
+}
+
 export default function App() {
   const canvasRef = useRef(null);
   const fabricRef = useRef(null);
   const socketRef = useRef(null);
   const overlayCanvasRef = useRef(null);
+  const canvasWrapperRef = useRef(null);
   const [canvasInstance, setCanvasInstance] = useState(null);
 
   // Screen and Authentication state
@@ -442,6 +532,8 @@ export default function App() {
   // Real-time Collaboration States
   const [roomUsers, setRoomUsers] = useState([]);
   const [remoteCursors, setRemoteCursors] = useState({});
+  // { [userId]: { name, color, pageId, ids: [] } } — peers' current selections.
+  const [remoteSelections, setRemoteSelections] = useState({});
   const [user, setUser] = useState(() => {
     const avatarColors = [
       "#1E3A5F",
@@ -502,6 +594,10 @@ export default function App() {
   const [showEmptyHint, setShowEmptyHint] = useState(false);
   // Keyboard-shortcut cheat sheet (toggled with "?").
   const [showShortcuts, setShowShortcuts] = useState(false);
+  // Anchored comment threads.
+  const [comments, setComments] = useState([]);
+  const [commentMode, setCommentMode] = useState(false);
+  const fetchCommentsRef = useRef(null);
 
   // Collapsible Panel States (Item 6)
   const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(false);
@@ -613,6 +709,119 @@ export default function App() {
   useEffect(() => {
     userRef.current = user;
   }, [user]);
+
+  // ---- Comments API --------------------------------------------------------
+  const commentHeaders = () => {
+    const token = localStorage.getItem("wb_token");
+    const h = { "Content-Type": "application/json" };
+    if (token) h["Authorization"] = `Bearer ${token}`;
+    return h;
+  };
+
+  const fetchComments = async () => {
+    const id = savedIdRef.current;
+    if (!id) {
+      setComments([]);
+      return;
+    }
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/comments/${id}`, {
+        headers: commentHeaders(),
+      });
+      if (res.status === 401) {
+        window.dispatchEvent(new Event("wb:auth-expired"));
+        return;
+      }
+      if (!res.ok) return;
+      const data = await res.json();
+      setComments(Array.isArray(data.comments) ? data.comments : []);
+    } catch (err) {
+      console.error("Failed to load comments", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchCommentsRef.current = fetchComments;
+  });
+
+  useEffect(() => {
+    if (savedId) fetchComments();
+    else setComments([]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [savedId]);
+
+  const createComment = async ({ pageId, elementId, anchor, text }) => {
+    const id = savedIdRef.current;
+    if (!id) {
+      alert("Save the board before adding comments.");
+      return;
+    }
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/comments/${id}`, {
+        method: "POST",
+        headers: commentHeaders(),
+        body: JSON.stringify({ pageId, elementId, anchor, text }),
+      });
+      if (res.status === 401)
+        return window.dispatchEvent(new Event("wb:auth-expired"));
+      if (res.ok) fetchComments();
+    } catch (err) {
+      console.error("Failed to create comment", err);
+    }
+  };
+
+  const replyComment = async (commentId, text) => {
+    const id = savedIdRef.current;
+    if (!id) return;
+    try {
+      const res = await fetch(
+        `${API_BASE_URL}/api/comments/${id}/${commentId}/reply`,
+        {
+          method: "POST",
+          headers: commentHeaders(),
+          body: JSON.stringify({ text }),
+        },
+      );
+      if (res.ok) fetchComments();
+    } catch (err) {
+      console.error("Failed to reply", err);
+    }
+  };
+
+  const resolveComment = async (commentId, resolved) => {
+    const id = savedIdRef.current;
+    if (!id) return;
+    try {
+      const res = await fetch(
+        `${API_BASE_URL}/api/comments/${id}/${commentId}`,
+        {
+          method: "PATCH",
+          headers: commentHeaders(),
+          body: JSON.stringify({ resolved }),
+        },
+      );
+      if (res.ok) fetchComments();
+    } catch (err) {
+      console.error("Failed to update comment", err);
+    }
+  };
+
+  const deleteComment = async (commentId) => {
+    const id = savedIdRef.current;
+    if (!id) return;
+    try {
+      const res = await fetch(
+        `${API_BASE_URL}/api/comments/${id}/${commentId}`,
+        {
+          method: "DELETE",
+          headers: commentHeaders(),
+        },
+      );
+      if (res.ok) fetchComments();
+    } catch (err) {
+      console.error("Failed to delete comment", err);
+    }
+  };
 
   // Derived board owner check
   const isOwner =
@@ -2321,9 +2530,22 @@ export default function App() {
       }
     };
 
+    // Awareness: tell peers which elements this user has selected.
+    const emitSelection = () => {
+      if (!socketRef.current) return;
+      const ids = (canvas.getActiveObjects?.() || [])
+        .map((o) => o.id)
+        .filter((id) => id && !isTransientObjectId(id));
+      socketRef.current.emit("selection:update", {
+        pageId: activePageIdRef.current,
+        ids,
+      });
+    };
+
     const onSelectionCreated = (e) => {
       const activeObj = canvas.getActiveObject() || e.selected[0];
       updateInspectorProperties(activeObj);
+      emitSelection();
 
       const targetTools = ["rect", "circle", "diamond", "line", "arrow"];
       if (targetTools.includes(activeToolRef.current)) {
@@ -2334,6 +2556,7 @@ export default function App() {
     const onSelectionUpdated = (e) => {
       const activeObj = canvas.getActiveObject() || e.selected[0];
       updateInspectorProperties(activeObj);
+      emitSelection();
 
       const targetTools = ["rect", "circle", "diamond", "line", "arrow"];
       if (targetTools.includes(activeToolRef.current)) {
@@ -2343,6 +2566,7 @@ export default function App() {
 
     const onSelectionCleared = () => {
       setSelectedObject(null);
+      emitSelection();
 
       const targetTools = ["rect", "circle", "diamond", "line", "arrow"];
       if (targetTools.includes(activeToolRef.current)) {
@@ -4099,7 +4323,21 @@ export default function App() {
     );
 
     socket.on("room:users", (users) => {
-      setRoomUsers(users || []);
+      const list = users || [];
+      setRoomUsers(list);
+      // Drop awareness state for anyone who has left the room.
+      const present = new Set(list.map((u) => u.id));
+      const prune = (prev) => {
+        let changed = false;
+        const next = {};
+        for (const [uid, v] of Object.entries(prev)) {
+          if (present.has(uid)) next[uid] = v;
+          else changed = true;
+        }
+        return changed ? next : prev;
+      };
+      setRemoteCursors((prev) => prune(prev));
+      setRemoteSelections((prev) => prune(prev));
     });
 
     socket.on(
@@ -4128,6 +4366,18 @@ export default function App() {
         ...prev,
         [userId]: { name, color, pageId, x, y },
       }));
+    });
+
+    socket.on("selection:update", ({ userId, name, color, pageId, ids }) => {
+      setRemoteSelections((prev) => ({
+        ...prev,
+        [userId]: { name, color, pageId, ids: ids || [] },
+      }));
+    });
+
+    // Comment threads changed elsewhere: refresh the board's comments.
+    socket.on("comment:changed", () => {
+      fetchCommentsRef.current && fetchCommentsRef.current();
     });
 
     return () => {
@@ -4463,8 +4713,9 @@ export default function App() {
             </div>
 
             <div
+              ref={canvasWrapperRef}
               id="canvas-wrapper"
-              className={`canvas-wrapper ${activeTool === "pan" ? "pan-mode" : ""} ${activeTool === "draw" && drawType === "eraser" ? "eraser-mode" : ""}`}
+              className={`canvas-wrapper ${activeTool === "pan" ? "pan-mode" : ""} ${activeTool === "draw" && drawType === "eraser" ? "eraser-mode" : ""} ${commentMode ? "comment-mode" : ""}`}
               style={{
                 display: canvasMode === "freehand" ? "block" : "none",
               }}
@@ -4474,6 +4725,48 @@ export default function App() {
                 fabricCanvas={canvasInstance}
                 overlayRef={overlayCanvasRef}
               />
+              <CommentsLayer
+                canvas={canvasInstance || fabricRef.current}
+                wrapperRef={canvasWrapperRef}
+                comments={comments}
+                activePageId={activePageId}
+                commentMode={commentMode}
+                isReadOnly={isReadOnly}
+                currentUser={{
+                  id: user?.id || user?._id,
+                  name: user?.name,
+                  color: user?.color,
+                  isOwner:
+                    boardMeta?.owner &&
+                    (user?.id || user?._id) &&
+                    String(boardMeta.owner) === String(user?.id || user?._id),
+                }}
+                onCreate={createComment}
+                onReply={replyComment}
+                onResolve={resolveComment}
+                onDelete={deleteComment}
+                onExitCommentMode={() => setCommentMode(false)}
+              />
+
+              {/* Comment-mode toggle */}
+              {!isReadOnly && (
+                <button
+                  className={`comment-fab ${commentMode ? "active" : ""}`}
+                  onClick={() => setCommentMode((v) => !v)}
+                  title={
+                    commentMode
+                      ? "Exit comment mode"
+                      : "Add a comment (click the canvas)"
+                  }
+                >
+                  <i className="fa-solid fa-comment-medical"></i>
+                  {comments.filter((c) => !c.resolved).length > 0 && (
+                    <span className="comment-fab-count">
+                      {comments.filter((c) => !c.resolved).length}
+                    </span>
+                  )}
+                </button>
+              )}
 
               {/* First-draw hint on an empty board */}
               {showEmptyHint && (
@@ -4554,6 +4847,11 @@ export default function App() {
                   updateInspectorProperties(obj);
                   setIsContextPanelOpen(true);
                 }}
+              />
+              <RemoteSelectionOverlay
+                canvas={canvasInstance || fabricRef.current}
+                remoteSelections={remoteSelections}
+                activePageId={activePageId}
               />
             </div>
 
