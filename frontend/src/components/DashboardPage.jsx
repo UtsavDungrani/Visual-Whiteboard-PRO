@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { BOARD_TEMPLATES } from "../templates/boardTemplates";
 
 export default function DashboardPage({
   user,
@@ -64,10 +65,10 @@ export default function DashboardPage({
   const sharedCount = whiteboardsList.length - ownedCount;
   const publicCount = whiteboardsList.filter((b) => b.isPublic).length;
 
-  const handleQuickTemplate = (templateTitle) => {
-    if (handleCreateBoard) {
-      handleCreateBoard(templateTitle);
-    }
+  const handleQuickTemplate = (template) => {
+    if (!handleCreateBoard) return;
+    // Blank template carries no pages -> creates an empty board.
+    handleCreateBoard(template.title, template.pages);
   };
 
   const handleShareSubmit = async (e) => {
@@ -207,57 +208,21 @@ export default function DashboardPage({
           </div>
 
           <div className="templates-grid">
-            <div
-              className="template-card card-blank"
-              onClick={() => handleQuickTemplate("Blank Canvas")}
-            >
-              <div className="template-icon bg-blue">
-                <i className="fa-solid fa-plus"></i>
+            {BOARD_TEMPLATES.map((tpl) => (
+              <div
+                key={tpl.id}
+                className={`template-card ${tpl.id === "blank" ? "card-blank" : ""}`}
+                onClick={() => handleQuickTemplate(tpl)}
+              >
+                <div className={`template-icon bg-${tpl.accent}`}>
+                  <i className={tpl.icon}></i>
+                </div>
+                <div className="template-info">
+                  <strong>{tpl.title}</strong>
+                  <span>{tpl.description}</span>
+                </div>
               </div>
-              <div className="template-info">
-                <strong>Blank Canvas</strong>
-                <span>Empty workspace for freeform design</span>
-              </div>
-            </div>
-
-            <div
-              className="template-card"
-              onClick={() => handleQuickTemplate("System Architecture Diagram")}
-            >
-              <div className="template-icon bg-emerald">
-                <i className="fa-solid fa-compass-drafting"></i>
-              </div>
-              <div className="template-info">
-                <strong>System Architecture</strong>
-                <span>Client, API Gateway, DB & Redis nodes</span>
-              </div>
-            </div>
-
-            <div
-              className="template-card"
-              onClick={() => handleQuickTemplate("Microservices Flowchart")}
-            >
-              <div className="template-icon bg-purple">
-                <i className="fa-solid fa-diagram-project"></i>
-              </div>
-              <div className="template-info">
-                <strong>Microservices Flow</strong>
-                <span>Asynchronous queues & event streaming</span>
-              </div>
-            </div>
-
-            <div
-              className="template-card"
-              onClick={() => handleQuickTemplate("Sprint Brainstorm & Notes")}
-            >
-              <div className="template-icon bg-amber">
-                <i className="fa-solid fa-lightbulb"></i>
-              </div>
-              <div className="template-info">
-                <strong>Sprint Brainstorm</strong>
-                <span>Sticky notes & ideas layout</span>
-              </div>
-            </div>
+            ))}
           </div>
         </section>
 

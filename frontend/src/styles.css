@@ -6207,3 +6207,51 @@ input[type="range"]::-webkit-slider-thumb:hover {
     transform: scale(0.85);
   }
 }
+
+/* Empty-board first-draw hint (non-interactive, centered on the canvas) */
+.empty-canvas-hint {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 8;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 340px;
+  padding: 28px 32px;
+  border-radius: 18px;
+  color: #64748b;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1.5px dashed #cbd5e1;
+  backdrop-filter: blur(2px);
+  animation: emptyHintFade 0.5s ease both;
+}
+.empty-hint-icon {
+  font-size: 30px;
+  color: #94a3b8;
+  margin-bottom: 12px;
+}
+.empty-hint-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 6px;
+}
+.empty-hint-sub {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #94a3b8;
+}
+@keyframes emptyHintFade {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -46%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}

@@ -497,6 +497,8 @@ export default function App() {
   const [pageMode, setPageMode] = useState("infinite"); // infinite, fixed
   const [pageSize, setPageSize] = useState({ w: 1024, h: 576 }); // default 16:9 Presentation Slide size
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+  // Shows a first-draw hint while the active page has no user objects.
+  const [showEmptyHint, setShowEmptyHint] = useState(false);
 
   // Collapsible Panel States (Item 6)
   const [isLeftPanelCollapsed, setIsLeftPanelCollapsed] = useState(false);
@@ -1335,7 +1337,7 @@ export default function App() {
     return () => window.removeEventListener("wb:auth-expired", onAuthExpired);
   }, []);
 
-  const handleCreateBoard = async (customTitle) => {
+  const handleCreateBoard = async (customTitle, templatePages) => {
     const boardTitle =
       customTitle && customTitle.trim()
         ? customTitle.trim()
@@ -1345,15 +1347,25 @@ export default function App() {
     const headers = { "Content-Type": "application/json" };
     if (token) headers["Authorization"] = `Bearer ${token}`;
 
-    const initialPages = [
-      {
-        page_id: "page-1",
-        title: "Page 1",
-        order: 0,
-        canvas_state: { objects: [] },
-        thumbnail: null,
-      },
-    ];
+    // A template supplies pre-built pages; otherwise start from one empty page.
+    const initialPages =
+      Array.isArray(templatePages) && templatePages.length
+        ? templatePages.map((p, i) => ({
+            page_id: p.page_id || `page-${i + 1}`,
+            title: p.title || `Page ${i + 1}`,
+            order: typeof p.order === "number" ? p.order : i,
+            canvas_state: p.canvas_state || { objects: [] },
+            thumbnail: p.thumbnail || null,
+          }))
+        : [
+            {
+              page_id: "page-1",
+              title: "Page 1",
+              order: 0,
+              canvas_state: { objects: [] },
+              thumbnail: null,
+            },
+          ];
 
     const payload = {
       title: boardTitle.trim(),
@@ -2360,6 +2372,7 @@ export default function App() {
       // touch history or the sync stream (that flooded both — a single lasso
       // could evict the entire undo stack and ship dashed ghosts to peers).
       if (obj && isTransientObjectId(obj.id)) return;
+      setShowEmptyHint(false);
       if (obj) {
         if (!obj.id) {
           obj.id = "el-" + Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -3809,6 +3822,7 @@ export default function App() {
       activePage.canvas_state.objects &&
       activePage.canvas_state.objects.length > 0
     ) {
+      setShowEmptyHint(false);
       applyingRemoteRef.current = true;
       canvas.discardActiveObject();
       canvas.loadFromJSON(activePage.canvas_state, () => {
@@ -3828,6 +3842,8 @@ export default function App() {
     } else {
       historyRef.current = [initialJson];
       historyIndexRef.current = 0;
+      // Empty board: offer a first-draw hint (editors only).
+      setShowEmptyHint(!isReadOnlyRef.current);
     }
 
     // Handle viewport resize
@@ -4443,6 +4459,18 @@ export default function App() {
                 fabricCanvas={canvasInstance}
                 overlayRef={overlayCanvasRef}
               />
+
+              {/* First-draw hint on an empty board */}
+              {showEmptyHint && (
+                <div className="empty-canvas-hint" aria-hidden="true">
+                  <i className="fa-solid fa-pen-ruler empty-hint-icon"></i>
+                  <div className="empty-hint-title">Your canvas is ready</div>
+                  <div className="empty-hint-sub">
+                    Pick a shape or the pen from the toolbar to start drawing —
+                    or start a board from a template next time.
+                  </div>
+                </div>
+              )}
 
               {/* Eraser brush size preview ring */}
               <div
