@@ -12,6 +12,7 @@ global.activeCacheMode = process.env.DEFAULT_CACHE_MODE || "redis"; // "redis" o
 const mongoose = require("mongoose");
 const Whiteboard = require("./models/Whiteboard");
 const ElementContext = require("./models/ElementContext");
+const Comment = require("./models/Comment");
 const User = require("./models/User");
 const auth = require("./middleware/auth");
 const admin = require("./middleware/admin");
@@ -1006,6 +1007,178 @@ app.delete(
   },
 );
 
+// ---- Comments (anchored threads) ----------------------------------------
+
+// List all comments for a board (any viewer, including public-board guests).
+app.get(
+  "/api/comments/:whiteboardId",
+  optionalAuth,
+  requireBoardAccess("view"),
+  async (req, res) => {
+    try {
+      const filter = { whiteboard_id: req.params.whiteboardId };
+      if (req.query.pageId) filter.page_id = req.query.pageId;
+      const comments = await Comment.find(filter).sort({ createdAt: 1 }).lean();
+      return res.json({ comments });
+    } catch (err) {
+      console.error("Failed to list comments", err);
+      return res.status(500).json({ error: "list_comments_failed" });
+    }
+  },
+);
+
+// Author identity for a comment/reply, taken from the authenticated user only —
+// never from the request body.
+function commentAuthor(req) {
+  return {
+    id: req.user.id,
+    name: req.user.name || "Collaborator",
+    color: req.user.color || "#6B7280",
+  };
+}
+
+const COMMENT_MAX = 4000;
+
+// Create a comment thread (collaborators/owner only).
+app.post(
+  "/api/comments/:whiteboardId",
+  auth,
+  requireBoardAccess("edit"),
+  async (req, res) => {
+    try {
+      const text = String(req.body.text || "").trim();
+      if (!text) return res.status(400).json({ error: "empty_comment" });
+
+      const anchor = req.body.anchor || {};
+      const comment = await Comment.create({
+        whiteboard_id: req.params.whiteboardId,
+        page_id: String(req.body.pageId || "page-1"),
+        element_id: String(req.body.elementId || ""),
+        anchor: {
+          x: Number.isFinite(anchor.x) ? anchor.x : 0,
+          y: Number.isFinite(anchor.y) ? anchor.y : 0,
+        },
+        author: commentAuthor(req),
+        text: text.slice(0, COMMENT_MAX),
+        resolved: false,
+        replies: [],
+      });
+
+      broadcastCommentChange(req.params.whiteboardId, "created", comment);
+      return res.json({ comment });
+    } catch (err) {
+      console.error("Failed to create comment", err);
+      return res.status(500).json({ error: "create_comment_failed" });
+    }
+  },
+);
+
+// Add a reply to a thread.
+app.post(
+  "/api/comments/:whiteboardId/:commentId/reply",
+  auth,
+  requireBoardAccess("edit"),
+  async (req, res) => {
+    try {
+      const text = String(req.body.text || "").trim();
+      if (!text) return res.status(400).json({ error: "empty_reply" });
+      if (!isBoardId(req.params.commentId)) {
+        return res.status(404).json({ error: "comment_not_found" });
+      }
+
+      const comment = await Comment.findOne({
+        _id: req.params.commentId,
+        whiteboard_id: req.params.whiteboardId,
+      });
+      if (!comment) return res.status(404).json({ error: "comment_not_found" });
+
+      comment.replies.push({
+        author: commentAuthor(req),
+        text: text.slice(0, COMMENT_MAX),
+      });
+      await comment.save();
+
+      broadcastCommentChange(req.params.whiteboardId, "updated", comment);
+      return res.json({ comment });
+    } catch (err) {
+      console.error("Failed to add reply", err);
+      return res.status(500).json({ error: "reply_failed" });
+    }
+  },
+);
+
+// Update a thread (resolve/reopen, or edit text by its author).
+app.patch(
+  "/api/comments/:whiteboardId/:commentId",
+  auth,
+  requireBoardAccess("edit"),
+  async (req, res) => {
+    try {
+      if (!isBoardId(req.params.commentId)) {
+        return res.status(404).json({ error: "comment_not_found" });
+      }
+      const comment = await Comment.findOne({
+        _id: req.params.commentId,
+        whiteboard_id: req.params.whiteboardId,
+      });
+      if (!comment) return res.status(404).json({ error: "comment_not_found" });
+
+      if (typeof req.body.resolved === "boolean") {
+        comment.resolved = req.body.resolved;
+      }
+      if (typeof req.body.text === "string") {
+        // Only the author may edit the text of their own comment.
+        if (comment.author.id !== req.user.id) {
+          return res.status(403).json({ error: "not_comment_author" });
+        }
+        const t = req.body.text.trim();
+        if (t) comment.text = t.slice(0, COMMENT_MAX);
+      }
+      await comment.save();
+
+      broadcastCommentChange(req.params.whiteboardId, "updated", comment);
+      return res.json({ comment });
+    } catch (err) {
+      console.error("Failed to update comment", err);
+      return res.status(500).json({ error: "update_comment_failed" });
+    }
+  },
+);
+
+// Delete a thread (its author or the board owner).
+app.delete(
+  "/api/comments/:whiteboardId/:commentId",
+  auth,
+  requireBoardAccess("edit"),
+  async (req, res) => {
+    try {
+      if (!isBoardId(req.params.commentId)) {
+        return res.status(404).json({ error: "comment_not_found" });
+      }
+      const comment = await Comment.findOne({
+        _id: req.params.commentId,
+        whiteboard_id: req.params.whiteboardId,
+      });
+      if (!comment) return res.status(404).json({ error: "comment_not_found" });
+
+      const isAuthor = comment.author.id === req.user.id;
+      const isOwner = req.board && req.board.owner.toString() === req.user.id;
+      if (!isAuthor && !isOwner) {
+        return res.status(403).json({ error: "forbidden_delete_comment" });
+      }
+
+      await comment.deleteOne();
+      broadcastCommentChange(req.params.whiteboardId, "deleted", {
+        _id: comment._id,
+      });
+      return res.json({ success: true });
+    } catch (err) {
+      console.error("Failed to delete comment", err);
+      return res.status(500).json({ error: "delete_comment_failed" });
+    }
+  },
+);
+
 // POST static layout cleanup snap & distribute
 app.post("/api/ai/cleanup", auth, aiLimiter, (req, res) => {
   try {
@@ -1272,6 +1445,12 @@ function writableRoom(socket) {
   return u.roomId;
 }
 
+// Notify everyone in a board's room that a comment thread changed, so open
+// clients update their markers/threads without polling.
+function broadcastCommentChange(boardId, action, comment) {
+  io.to(String(boardId)).emit("comment:changed", { action, comment });
+}
+
 // Re-resolves cached access for everyone in a room after its permissions
 // change, so a demoted collaborator stops being able to write immediately
 // instead of at their next reconnect.
@@ -1446,6 +1625,24 @@ io.on("connection", (socket) => {
         y,
       });
     }
+  });
+
+  // Awareness: broadcast which element ids a user has selected so peers can
+  // outline them. Pure presence data — no canvas state is written.
+  socket.on("selection:update", (payload) => {
+    if (!payload || typeof payload !== "object") return;
+    const u = activeUsers.get(socket.id);
+    if (!u) return;
+    const ids = Array.isArray(payload.ids)
+      ? payload.ids.filter((i) => typeof i === "string").slice(0, 200)
+      : [];
+    socket.to(u.roomId).emit("selection:update", {
+      userId: socket.id,
+      name: u.name,
+      color: u.color,
+      pageId: payload.pageId,
+      ids,
+    });
   });
 
   socket.on("page-switch", (payload) => {
