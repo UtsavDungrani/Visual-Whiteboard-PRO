@@ -1,7 +1,7 @@
 {
-  "0": "frontend/package.json",
+  "0": "devDependencies",
   "1": "index.js",
-  "2": "Project Description and Requirements",
+  "2": "Visual Whiteboard Pro — Phased Task Breakdown",
   "3": "dependencies",
   "4": "Visual Whiteboard Pro",
   "5": "Frontend Application & Collaboration UI",
@@ -26,12 +26,17 @@
   "24": "vercel.json",
   "25": "sockets.test.js",
   "26": "whiteboards.test.js",
-  "27": "config.js",
+  "27": "auth.js",
   "28": "User.js",
-  "29": "ai.test.js",
+  "29": "config.js",
   "30": "app",
   "31": "adminPanel.test.js",
   "32": "frontendUrlSanitize.test.js",
   "33": "boardAccess.js",
-  "34": "ai.service.js"
+  "34": "ai.service.js",
+  "35": "boardTemplates.js",
+  "36": "comments.test.js",
+  "37": "optionalAuth.js",
+  "38": "setup.js",
+  "39": "vitest.config.js"
 }

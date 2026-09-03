@@ -1,0 +1,22 @@
+{
+  "0": "Frontend Package Configuration",
+  "1": "Backend Server Initialization",
+  "2": "Project Description and Requirements",
+  "3": "dependencies",
+  "4": "Visual Whiteboard Pro",
+  "5": "Frontend Application & Collaboration UI",
+  "6": "App.jsx",
+  "8": "package.json",
+  "9": "context.test.js",
+  "10": "pathLassoSplit.js",
+  "11": "Visual Whiteboard Pro — Deployment Guide",
+  "12": "Visual Whiteboard - Feature Backlog & Task Tracking",
+  "13": "GEMINI.md",
+  "14": "eslint.config.mjs",
+  "15": "admin/admin.js",
+  "16": "AGENTS.md",
+  "17": "rules/graphify.md",
+  "18": "workflows/graphify.md",
+  "19": "copilot-instructions.md",
+  "20": "server/package.json"
+}

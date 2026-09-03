@@ -9,5 +9,3 @@ build/
 .gemini/
 deploy_data.txt
 graphify-out/cache/
-graphify-out/2026-*/
-graphify-out/*.sig
