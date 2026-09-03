@@ -13,7 +13,7 @@
       "file_type": "code",
       "norm_label": "broadcastroomusers()",
       "source_file": "server/index.js",
-      "source_location": "L1208"
+      "source_location": "L1248"
     },
     {
       "id": "server_index_isredisenabled",
@@ -25,7 +25,7 @@
       "file_type": "code",
       "norm_label": "isredisenabled()",
       "source_file": "server/index.js",
-      "source_location": "L223"
+      "source_location": "L196"
     },
     {
       "id": "server_index_seedadminuser",
@@ -37,7 +37,7 @@
       "file_type": "code",
       "norm_label": "seedadminuser()",
       "source_file": "server/index.js",
-      "source_location": "L1549"
+      "source_location": "L1604"
     },
     {
       "id": "server_index_slugifytitle",
@@ -49,7 +49,7 @@
       "file_type": "code",
       "norm_label": "slugifytitle()",
       "source_file": "server/index.js",
-      "source_location": "L453"
+      "source_location": "L429"
     },
     {
       "id": "server_index_startserver",
@@ -61,7 +61,7 @@
       "file_type": "code",
       "norm_label": "startserver()",
       "source_file": "server/index.js",
-      "source_location": "L1508"
+      "source_location": "L1563"
     },
     {
       "id": "server_index_uploadsinglefile",
@@ -73,7 +73,7 @@
       "file_type": "code",
       "norm_label": "uploadsinglefile()",
       "source_file": "server/index.js",
-      "source_location": "L101"
+      "source_location": "L107"
     },
     {
       "id": "frontend_src_pathlassosplit_bboxcornersinpolygon",
@@ -85,7 +85,7 @@
       "file_type": "code",
       "norm_label": "bboxcornersinpolygon()",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L80"
+      "source_location": "L82"
     },
     {
       "id": "frontend_src_pathlassosplit_buildclippolygon",
@@ -97,7 +97,7 @@
       "file_type": "code",
       "norm_label": "buildclippolygon()",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L205"
+      "source_location": "L222"
     },
     {
       "id": "frontend_src_pathlassosplit_canvaspolygontolocal",
@@ -109,7 +109,7 @@
       "file_type": "code",
       "norm_label": "canvaspolygontolocal()",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L197"
+      "source_location": "L214"
     },
     {
       "id": "frontend_src_pathlassosplit_getlineendpoints",
@@ -121,7 +121,7 @@
       "file_type": "code",
       "norm_label": "getlineendpoints()",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L124"
+      "source_location": "L126"
     },
     {
       "id": "frontend_src_pathlassosplit_getobjectselectionmode",
@@ -133,7 +133,7 @@
       "file_type": "code",
       "norm_label": "getobjectselectionmode()",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L142"
+      "source_location": "L149"
     },
     {
       "id": "frontend_src_pathlassosplit_getpathselectionmode",
@@ -145,7 +145,7 @@
       "file_type": "code",
       "norm_label": "getpathselectionmode()",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L94"
+      "source_location": "L96"
     },
     {
       "id": "frontend_src_pathlassosplit_ispointinpolygon",
@@ -169,7 +169,7 @@
       "file_type": "code",
       "norm_label": "linelineintersection()",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L220"
+      "source_location": "L237"
     },
     {
       "id": "frontend_src_pathlassosplit_pathdatatosvgd",
@@ -181,7 +181,7 @@
       "file_type": "code",
       "norm_label": "pathdatatosvgd()",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L21"
+      "source_location": "L20"
     },
     {
       "id": "frontend_src_pathlassosplit_samplefabricpath",
@@ -193,7 +193,7 @@
       "file_type": "code",
       "norm_label": "samplefabricpath()",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L37"
+      "source_location": "L36"
     },
     {
       "id": "frontend_src_pathlassosplit_samplepathhitpoints",
@@ -205,7 +205,7 @@
       "file_type": "code",
       "norm_label": "samplepathhitpoints()",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L59"
+      "source_location": "L61"
     },
     {
       "id": "frontend_src_pathlassosplit_splitlinewithlasso",
@@ -217,7 +217,7 @@
       "file_type": "code",
       "norm_label": "splitlinewithlasso()",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L280"
+      "source_location": "L303"
     },
     {
       "id": "frontend_src_pathlassosplit_splitobjectwithlasso",
@@ -229,7 +229,7 @@
       "file_type": "code",
       "norm_label": "splitobjectwithlasso()",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L340"
+      "source_location": "L367"
     },
     {
       "id": "frontend_src_pathlassosplit_splitsegmentbypolygon",
@@ -241,7 +241,7 @@
       "file_type": "code",
       "norm_label": "splitsegmentbypolygon()",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L239"
+      "source_location": "L256"
     },
     {
       "id": "server_admin_admin_deleteboard",
@@ -400,16 +400,124 @@
       "source_location": "L239"
     },
     {
+      "id": "frontend_src_components_exportmodal_escapehtml",
+      "label": "escapeHtml()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "useConnectorSync.js",
+      "file_type": "code",
+      "norm_label": "escapehtml()",
+      "source_file": "frontend/src/components/ExportModal.jsx",
+      "source_location": "L10"
+    },
+    {
+      "id": "frontend_src_components_exportmodal_exportmodal",
+      "label": "ExportModal()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "useConnectorSync.js",
+      "file_type": "code",
+      "norm_label": "exportmodal()",
+      "source_file": "frontend/src/components/ExportModal.jsx",
+      "source_location": "L19"
+    },
+    {
+      "id": "frontend_src_hooks_useconnectorsync_applyconnectoranchors",
+      "label": "applyConnectorAnchors()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "useConnectorSync.js",
+      "file_type": "code",
+      "norm_label": "applyconnectoranchors()",
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L41"
+    },
+    {
+      "id": "frontend_src_hooks_useconnectorsync_collectmovedshapes",
+      "label": "collectMovedShapes()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "useConnectorSync.js",
+      "file_type": "code",
+      "norm_label": "collectmovedshapes()",
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L4"
+    },
+    {
+      "id": "frontend_src_hooks_useconnectorsync_shapesmapfromcanvas",
+      "label": "shapesMapFromCanvas()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "useConnectorSync.js",
+      "file_type": "code",
+      "norm_label": "shapesmapfromcanvas()",
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L80"
+    },
+    {
+      "id": "frontend_src_hooks_useconnectorsync_stripconnectorsfromselection",
+      "label": "stripConnectorsFromSelection()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "useConnectorSync.js",
+      "file_type": "code",
+      "norm_label": "stripconnectorsfromselection()",
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L20"
+    },
+    {
+      "id": "frontend_src_hooks_useconnectorsync_updateallconnectors",
+      "label": "updateAllConnectors()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "useConnectorSync.js",
+      "file_type": "code",
+      "norm_label": "updateallconnectors()",
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L138"
+    },
+    {
+      "id": "frontend_src_hooks_useconnectorsync_useconnectorsync",
+      "label": "useConnectorSync()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "useConnectorSync.js",
+      "file_type": "code",
+      "norm_label": "useconnectorsync()",
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L92"
+    },
+    {
       "id": "frontend_src_tools_connectorline_fromobjectfn",
       "label": "fromObjectFn()",
       "_callable": true,
       "_origin": "ast",
       "community": 21,
-      "community_name": "useConnectorTool.js",
+      "community_name": "useConnectorSync.js",
       "file_type": "code",
       "norm_label": "fromobjectfn()",
       "source_file": "frontend/src/tools/ConnectorLine.js",
-      "source_location": "L189"
+      "source_location": "L227"
+    },
+    {
+      "id": "frontend_src_tools_connectorline_pointsegmentdistancesq",
+      "label": "pointSegmentDistanceSq()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "useConnectorSync.js",
+      "file_type": "code",
+      "norm_label": "pointsegmentdistancesq()",
+      "source_file": "frontend/src/tools/ConnectorLine.js",
+      "source_location": "L4"
     },
     {
       "id": "frontend_src_tools_useconnectortool_useconnectortool",
@@ -417,7 +525,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 21,
-      "community_name": "useConnectorTool.js",
+      "community_name": "useConnectorSync.js",
       "file_type": "code",
       "norm_label": "useconnectortool()",
       "source_file": "frontend/src/tools/useConnectorTool.js",
@@ -429,7 +537,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 21,
-      "community_name": "useConnectorTool.js",
+      "community_name": "useConnectorSync.js",
       "file_type": "code",
       "norm_label": "canvastoscreen()",
       "source_file": "frontend/src/utils/anchorPoints.js",
@@ -441,7 +549,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 21,
-      "community_name": "useConnectorTool.js",
+      "community_name": "useConnectorSync.js",
       "file_type": "code",
       "norm_label": "findclosestanchor()",
       "source_file": "frontend/src/utils/anchorPoints.js",
@@ -453,7 +561,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 21,
-      "community_name": "useConnectorTool.js",
+      "community_name": "useConnectorSync.js",
       "file_type": "code",
       "norm_label": "getanchorpoint()",
       "source_file": "frontend/src/utils/anchorPoints.js",
@@ -465,7 +573,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 21,
-      "community_name": "useConnectorTool.js",
+      "community_name": "useConnectorSync.js",
       "file_type": "code",
       "norm_label": "localanchoroffset()",
       "source_file": "frontend/src/utils/anchorPoints.js",
@@ -541,7 +649,7 @@
       "file_type": "code",
       "norm_label": "refreshroomaccess()",
       "source_file": "server/index.js",
-      "source_location": "L1238"
+      "source_location": "L1278"
     },
     {
       "id": "server_index_writableroom",
@@ -553,7 +661,7 @@
       "file_type": "code",
       "norm_label": "writableroom()",
       "source_file": "server/index.js",
-      "source_location": "L1228"
+      "source_location": "L1268"
     },
     {
       "id": "server_ai_service_architectureassist",
@@ -580,138 +688,6 @@
       "source_location": "L13"
     },
     {
-      "id": "frontend_src_app_app",
-      "label": "App()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "app()",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L186"
-    },
-    {
-      "id": "frontend_src_app_app_addnewelement",
-      "label": "addNewElement()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "addnewelement()",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L2564"
-    },
-    {
-      "id": "frontend_src_app_app_applyremotecanvas",
-      "label": "applyRemoteCanvas()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "applyremotecanvas()",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L1521"
-    },
-    {
-      "id": "frontend_src_app_app_attachfabriclisteners",
-      "label": "attachFabricListeners()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "attachfabriclisteners()",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L1598"
-    },
-    {
-      "id": "frontend_src_app_app_debounce",
-      "label": "debounce()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "debounce()",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L1414"
-    },
-    {
-      "id": "frontend_src_app_app_flushpendingremotecanvas",
-      "label": "flushPendingRemoteCanvas()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "flushpendingremotecanvas()",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L1547"
-    },
-    {
-      "id": "frontend_src_app_app_loadboard",
-      "label": "loadBoard()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "loadboard()",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L3310"
-    },
-    {
-      "id": "frontend_src_app_app_loadboardbyid",
-      "label": "loadBoardById()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "loadboardbyid()",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L3316"
-    },
-    {
-      "id": "frontend_src_app_app_saveboard",
-      "label": "saveBoard()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "saveboard()",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L3231"
-    },
-    {
-      "id": "frontend_src_app_app_throttle",
-      "label": "throttle()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "throttle()",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L1423"
-    },
-    {
-      "id": "frontend_src_app_app_updateinspectorproperties",
-      "label": "updateInspectorProperties()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "updateinspectorproperties()",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L1555"
-    },
-    {
       "id": "frontend_src_app_contextbadgesoverlay",
       "label": "ContextBadgesOverlay()",
       "_callable": true,
@@ -722,42 +698,6 @@
       "norm_label": "contextbadgesoverlay()",
       "source_file": "frontend/src/App.jsx",
       "source_location": "L80"
-    },
-    {
-      "id": "frontend_src_app_getboardurl",
-      "label": "getBoardUrl()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "getboardurl()",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L50"
-    },
-    {
-      "id": "frontend_src_app_parseboardidfromurl",
-      "label": "parseBoardIdFromUrl()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "parseboardidfromurl()",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L64"
-    },
-    {
-      "id": "frontend_src_app_slugifytitle",
-      "label": "slugifyTitle()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "slugifytitle()",
-      "source_file": "frontend/src/App.jsx",
-      "source_location": "L39"
     },
     {
       "id": "frontend_src_components_assistpanel_assistpanel",
@@ -808,6 +748,42 @@
       "source_location": "L8"
     },
     {
+      "id": "frontend_src_components_contextpanel_contextpanel",
+      "label": "ContextPanel()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "contextpanel()",
+      "source_file": "frontend/src/components/ContextPanel.jsx",
+      "source_location": "L52"
+    },
+    {
+      "id": "frontend_src_components_contextpanel_ensureabsoluteurl",
+      "label": "ensureAbsoluteUrl()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "ensureabsoluteurl()",
+      "source_file": "frontend/src/components/ContextPanel.jsx",
+      "source_location": "L23"
+    },
+    {
+      "id": "frontend_src_components_contextpanel_escapeattr",
+      "label": "escapeAttr()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "escapeattr()",
+      "source_file": "frontend/src/components/ContextPanel.jsx",
+      "source_location": "L44"
+    },
+    {
       "id": "frontend_src_components_customcursor_customcursor",
       "label": "CustomCursor()",
       "_callable": true,
@@ -830,18 +806,6 @@
       "norm_label": "dashboardpage()",
       "source_file": "frontend/src/components/DashboardPage.jsx",
       "source_location": "L3"
-    },
-    {
-      "id": "frontend_src_components_exportmodal_exportmodal",
-      "label": "ExportModal()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "exportmodal()",
-      "source_file": "frontend/src/components/ExportModal.jsx",
-      "source_location": "L6"
     },
     {
       "id": "frontend_src_components_landingpage_landingpage",
@@ -928,112 +892,172 @@
       "source_location": "L3"
     },
     {
-      "id": "frontend_src_hooks_useconnectorsync_applyconnectoranchors",
-      "label": "applyConnectorAnchors()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "applyconnectoranchors()",
-      "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L41"
-    },
-    {
-      "id": "frontend_src_hooks_useconnectorsync_collectmovedshapes",
-      "label": "collectMovedShapes()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "collectmovedshapes()",
-      "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L4"
-    },
-    {
-      "id": "frontend_src_hooks_useconnectorsync_shapesmapfromcanvas",
-      "label": "shapesMapFromCanvas()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "shapesmapfromcanvas()",
-      "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L80"
-    },
-    {
-      "id": "frontend_src_hooks_useconnectorsync_stripconnectorsfromselection",
-      "label": "stripConnectorsFromSelection()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "stripconnectorsfromselection()",
-      "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L20"
-    },
-    {
-      "id": "frontend_src_hooks_useconnectorsync_updateallconnectors",
-      "label": "updateAllConnectors()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "updateallconnectors()",
-      "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L138"
-    },
-    {
-      "id": "frontend_src_hooks_useconnectorsync_useconnectorsync",
-      "label": "useConnectorSync()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "useconnectorsync()",
-      "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L92"
-    },
-    {
-      "id": "frontend_src_components_contextpanel_contextpanel",
-      "label": "ContextPanel()",
+      "id": "frontend_src_app_app",
+      "label": "App()",
       "_callable": true,
       "_origin": "ast",
       "community": 7,
-      "community_name": "ContextPanel.jsx",
+      "community_name": "App",
       "file_type": "code",
-      "norm_label": "contextpanel()",
-      "source_file": "frontend/src/components/ContextPanel.jsx",
-      "source_location": "L52"
+      "norm_label": "app()",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L186"
     },
     {
-      "id": "frontend_src_components_contextpanel_ensureabsoluteurl",
-      "label": "ensureAbsoluteUrl()",
+      "id": "frontend_src_app_app_addnewelement",
+      "label": "addNewElement()",
       "_callable": true,
       "_origin": "ast",
       "community": 7,
-      "community_name": "ContextPanel.jsx",
+      "community_name": "App",
       "file_type": "code",
-      "norm_label": "ensureabsoluteurl()",
-      "source_file": "frontend/src/components/ContextPanel.jsx",
-      "source_location": "L23"
+      "norm_label": "addnewelement()",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L2683"
     },
     {
-      "id": "frontend_src_components_contextpanel_escapeattr",
-      "label": "escapeAttr()",
+      "id": "frontend_src_app_app_applyremotecanvas",
+      "label": "applyRemoteCanvas()",
       "_callable": true,
       "_origin": "ast",
       "community": 7,
-      "community_name": "ContextPanel.jsx",
+      "community_name": "App",
       "file_type": "code",
-      "norm_label": "escapeattr()",
-      "source_file": "frontend/src/components/ContextPanel.jsx",
-      "source_location": "L44"
+      "norm_label": "applyremotecanvas()",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L1614"
+    },
+    {
+      "id": "frontend_src_app_app_attachfabriclisteners",
+      "label": "attachFabricListeners()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "App",
+      "file_type": "code",
+      "norm_label": "attachfabriclisteners()",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L1691"
+    },
+    {
+      "id": "frontend_src_app_app_debounce",
+      "label": "debounce()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "App",
+      "file_type": "code",
+      "norm_label": "debounce()",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L1507"
+    },
+    {
+      "id": "frontend_src_app_app_flushpendingremotecanvas",
+      "label": "flushPendingRemoteCanvas()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "App",
+      "file_type": "code",
+      "norm_label": "flushpendingremotecanvas()",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L1640"
+    },
+    {
+      "id": "frontend_src_app_app_loadboard",
+      "label": "loadBoard()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "App",
+      "file_type": "code",
+      "norm_label": "loadboard()",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L3469"
+    },
+    {
+      "id": "frontend_src_app_app_loadboardbyid",
+      "label": "loadBoardById()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "App",
+      "file_type": "code",
+      "norm_label": "loadboardbyid()",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L3475"
+    },
+    {
+      "id": "frontend_src_app_app_saveboard",
+      "label": "saveBoard()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "App",
+      "file_type": "code",
+      "norm_label": "saveboard()",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L3390"
+    },
+    {
+      "id": "frontend_src_app_app_throttle",
+      "label": "throttle()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "App",
+      "file_type": "code",
+      "norm_label": "throttle()",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L1516"
+    },
+    {
+      "id": "frontend_src_app_app_updateinspectorproperties",
+      "label": "updateInspectorProperties()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "App",
+      "file_type": "code",
+      "norm_label": "updateinspectorproperties()",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L1648"
+    },
+    {
+      "id": "frontend_src_app_getboardurl",
+      "label": "getBoardUrl()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "App",
+      "file_type": "code",
+      "norm_label": "getboardurl()",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L50"
+    },
+    {
+      "id": "frontend_src_app_parseboardidfromurl",
+      "label": "parseBoardIdFromUrl()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "App",
+      "file_type": "code",
+      "norm_label": "parseboardidfromurl()",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L64"
+    },
+    {
+      "id": "frontend_src_app_slugifytitle",
+      "label": "slugifyTitle()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "App",
+      "file_type": "code",
+      "norm_label": "slugifytitle()",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L39"
     },
     {
       "id": "frontend_package",
@@ -1290,12 +1314,12 @@
     },
     {
       "id": "server_index_accessforboard_canedit_getboardaccess_isboardid",
-      "label": "{\n  accessForBoard,\n  canEdit,\n  getBoardAccess,\n  isBoardId,\n}",
+      "label": "{\r\n  accessForBoard,\r\n  canEdit,\r\n  getBoardAccess,\r\n  isBoardId,\r\n}",
       "_origin": "ast",
       "community": 1,
       "community_name": "index.js",
       "file_type": "code",
-      "norm_label": "{\n  accessforboard,\n  canedit,\n  getboardaccess,\n  isboardid,\n}",
+      "norm_label": "{\r\n  accessforboard,\r\n  canedit,\r\n  getboardaccess,\r\n  isboardid,\r\n}",
       "source_file": "server/index.js",
       "source_location": "L30"
     },
@@ -1308,7 +1332,7 @@
       "file_type": "code",
       "norm_label": "activeusers",
       "source_file": "server/index.js",
-      "source_location": "L1206"
+      "source_location": "L1246"
     },
     {
       "id": "server_index_admin",
@@ -1330,7 +1354,7 @@
       "file_type": "code",
       "norm_label": "admin_csp",
       "source_file": "server/index.js",
-      "source_location": "L763"
+      "source_location": "L790"
     },
     {
       "id": "server_index_ailimiter",
@@ -1341,7 +1365,7 @@
       "file_type": "code",
       "norm_label": "ailimiter",
       "source_file": "server/index.js",
-      "source_location": "L786"
+      "source_location": "L813"
     },
     {
       "id": "server_index_allowed_upload_extensions",
@@ -1352,7 +1376,7 @@
       "file_type": "code",
       "norm_label": "allowed_upload_extensions",
       "source_file": "server/index.js",
-      "source_location": "L63"
+      "source_location": "L69"
     },
     {
       "id": "server_index_allowedorigins",
@@ -1363,7 +1387,7 @@
       "file_type": "code",
       "norm_label": "allowedorigins",
       "source_file": "server/index.js",
-      "source_location": "L121"
+      "source_location": "L127"
     },
     {
       "id": "server_index_auth",
@@ -1385,7 +1409,7 @@
       "file_type": "code",
       "norm_label": "authlimiter",
       "source_file": "server/index.js",
-      "source_location": "L245"
+      "source_location": "L218"
     },
     {
       "id": "server_index_bcrypt",
@@ -1429,7 +1453,7 @@
       "file_type": "code",
       "norm_label": "drawiodir",
       "source_file": "server/index.js",
-      "source_location": "L141"
+      "source_location": "L147"
     },
     {
       "id": "server_index_elementcontext",
@@ -1605,7 +1629,7 @@
       "file_type": "code",
       "norm_label": "upload",
       "source_file": "server/index.js",
-      "source_location": "L86"
+      "source_location": "L92"
     },
     {
       "id": "server_index_uploadsdir",
@@ -1649,7 +1673,7 @@
       "file_type": "code",
       "norm_label": "whiteboards",
       "source_file": "server/index.js",
-      "source_location": "L230"
+      "source_location": "L203"
     },
     {
       "id": "server_middleware_admin",
@@ -2205,7 +2229,7 @@
       "node_kind": "heading",
       "norm_label": "phase 7 \u2014 deployment & monitoring",
       "source_file": "TASKS.md",
-      "source_location": "L51"
+      "source_location": "L52"
     },
     {
       "id": "tasks_pr_review_checklist",
@@ -2217,7 +2241,7 @@
       "node_kind": "heading",
       "norm_label": "pr / review checklist",
       "source_file": "TASKS.md",
-      "source_location": "L57"
+      "source_location": "L58"
     },
     {
       "id": "tasks_visual_whiteboard_pro_phased_task_breakdown",
@@ -2243,11 +2267,33 @@
       "source_location": "L1"
     },
     {
+      "id": "frontend_src_components_exportmodal",
+      "label": "ExportModal.jsx",
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "useConnectorSync.js",
+      "file_type": "code",
+      "norm_label": "exportmodal.jsx",
+      "source_file": "frontend/src/components/ExportModal.jsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "frontend_src_hooks_useconnectorsync",
+      "label": "useConnectorSync.js",
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "useConnectorSync.js",
+      "file_type": "code",
+      "norm_label": "useconnectorsync.js",
+      "source_file": "frontend/src/hooks/useConnectorSync.js",
+      "source_location": "L1"
+    },
+    {
       "id": "frontend_src_tools_connectorline",
       "label": "ConnectorLine.js",
       "_origin": "ast",
       "community": 21,
-      "community_name": "useConnectorTool.js",
+      "community_name": "useConnectorSync.js",
       "file_type": "code",
       "norm_label": "connectorline.js",
       "source_file": "frontend/src/tools/ConnectorLine.js",
@@ -2258,18 +2304,18 @@
       "label": "ConnectorLine",
       "_origin": "ast",
       "community": 21,
-      "community_name": "useConnectorTool.js",
+      "community_name": "useConnectorSync.js",
       "file_type": "code",
       "norm_label": "connectorline",
       "source_file": "frontend/src/tools/ConnectorLine.js",
-      "source_location": "L6"
+      "source_location": "L20"
     },
     {
       "id": "frontend_src_tools_useconnectortool",
       "label": "useConnectorTool.js",
       "_origin": "ast",
       "community": 21,
-      "community_name": "useConnectorTool.js",
+      "community_name": "useConnectorSync.js",
       "file_type": "code",
       "norm_label": "useconnectortool.js",
       "source_file": "frontend/src/tools/useConnectorTool.js",
@@ -2280,7 +2326,7 @@
       "label": "anchorPoints.js",
       "_origin": "ast",
       "community": 21,
-      "community_name": "useConnectorTool.js",
+      "community_name": "useConnectorSync.js",
       "file_type": "code",
       "norm_label": "anchorpoints.js",
       "source_file": "frontend/src/utils/anchorPoints.js",
@@ -2383,7 +2429,7 @@
       "file_type": "code",
       "norm_label": "httpserver",
       "source_file": "server/index.js",
-      "source_location": "L1157"
+      "source_location": "L1197"
     },
     {
       "id": "server_index_io",
@@ -2394,7 +2440,7 @@
       "file_type": "code",
       "norm_label": "io",
       "source_file": "server/index.js",
-      "source_location": "L1158"
+      "source_location": "L1198"
     },
     {
       "id": "server_tests_sockets_test",
@@ -3745,6 +3791,39 @@
       "source_location": "L1"
     },
     {
+      "id": "frontend_src_components_contextpanel",
+      "label": "ContextPanel.jsx",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "contextpanel.jsx",
+      "source_file": "frontend/src/components/ContextPanel.jsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "frontend_src_components_contextpanel_languages",
+      "label": "LANGUAGES",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "languages",
+      "source_file": "frontend/src/components/ContextPanel.jsx",
+      "source_location": "L3"
+    },
+    {
+      "id": "frontend_src_components_contextpanel_safe_url_schemes",
+      "label": "SAFE_URL_SCHEMES",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "safe_url_schemes",
+      "source_file": "frontend/src/components/ContextPanel.jsx",
+      "source_location": "L20"
+    },
+    {
       "id": "frontend_src_components_customcursor",
       "label": "CustomCursor.jsx",
       "_origin": "ast",
@@ -3787,17 +3866,6 @@
       "norm_label": "drawiocanvas",
       "source_file": "frontend/src/components/DrawioCanvas.jsx",
       "source_location": "L9"
-    },
-    {
-      "id": "frontend_src_components_exportmodal",
-      "label": "ExportModal.jsx",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "exportmodal.jsx",
-      "source_file": "frontend/src/components/ExportModal.jsx",
-      "source_location": "L1"
     },
     {
       "id": "frontend_src_components_landingpage",
@@ -3888,59 +3956,15 @@
       "source_location": "L1"
     },
     {
-      "id": "frontend_src_hooks_useconnectorsync",
-      "label": "useConnectorSync.js",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "useconnectorsync.js",
-      "source_file": "frontend/src/hooks/useConnectorSync.js",
-      "source_location": "L1"
-    },
-    {
       "id": "frontend_src_main",
       "label": "main.jsx",
       "_origin": "ast",
-      "community": 6,
-      "community_name": "App.jsx",
+      "community": 7,
+      "community_name": "App",
       "file_type": "code",
       "norm_label": "main.jsx",
       "source_file": "frontend/src/main.jsx",
       "source_location": "L1"
-    },
-    {
-      "id": "frontend_src_components_contextpanel",
-      "label": "ContextPanel.jsx",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "ContextPanel.jsx",
-      "file_type": "code",
-      "norm_label": "contextpanel.jsx",
-      "source_file": "frontend/src/components/ContextPanel.jsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "frontend_src_components_contextpanel_languages",
-      "label": "LANGUAGES",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "ContextPanel.jsx",
-      "file_type": "code",
-      "norm_label": "languages",
-      "source_file": "frontend/src/components/ContextPanel.jsx",
-      "source_location": "L3"
-    },
-    {
-      "id": "frontend_src_components_contextpanel_safe_url_schemes",
-      "label": "SAFE_URL_SCHEMES",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "ContextPanel.jsx",
-      "file_type": "code",
-      "norm_label": "safe_url_schemes",
-      "source_file": "frontend/src/components/ContextPanel.jsx",
-      "source_location": "L20"
     },
     {
       "id": "package",
@@ -4650,7 +4674,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1292",
+      "source_location": "L1385",
       "weight": 1.0
     },
     {
@@ -4662,7 +4686,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1294",
+      "source_location": "L1387",
       "weight": 1.0
     },
     {
@@ -4686,7 +4710,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L665",
+      "source_location": "L721",
       "weight": 1.0
     },
     {
@@ -4698,7 +4722,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L668",
+      "source_location": "L724",
       "weight": 1.0
     },
     {
@@ -4710,7 +4734,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L846",
+      "source_location": "L921",
       "weight": 1.0
     },
     {
@@ -4722,7 +4746,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1534",
+      "source_location": "L1627",
       "weight": 1.0
     },
     {
@@ -4734,7 +4758,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1632",
+      "source_location": "L1726",
       "weight": 1.0
     },
     {
@@ -4746,7 +4770,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1894",
+      "source_location": "L1999",
       "weight": 1.0
     },
     {
@@ -4758,7 +4782,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2131",
+      "source_location": "L2237",
       "weight": 1.0
     },
     {
@@ -4770,7 +4794,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2138",
+      "source_location": "L2244",
       "weight": 1.0
     },
     {
@@ -4782,7 +4806,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2148",
+      "source_location": "L2254",
       "weight": 1.0
     },
     {
@@ -4794,7 +4818,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1551",
+      "source_location": "L1644",
       "weight": 1.0
     },
     {
@@ -4806,7 +4830,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3313",
+      "source_location": "L3472",
       "weight": 1.0
     },
     {
@@ -4818,7 +4842,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3371",
+      "source_location": "L3530",
       "weight": 1.0
     },
     {
@@ -4830,7 +4854,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3394",
+      "source_location": "L3553",
       "weight": 1.0
     },
     {
@@ -4842,7 +4866,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3400",
+      "source_location": "L3559",
       "weight": 1.0
     },
     {
@@ -4854,7 +4878,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3291",
+      "source_location": "L3450",
       "weight": 1.0
     },
     {
@@ -4866,7 +4890,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3293",
+      "source_location": "L3452",
       "weight": 1.0
     },
     {
@@ -4890,7 +4914,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/components/ContextPanel.jsx",
-      "source_location": "L490",
+      "source_location": "L509",
       "weight": 1.0
     },
     {
@@ -4902,7 +4926,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/components/ContextPanel.jsx",
-      "source_location": "L493",
+      "source_location": "L512",
       "weight": 1.0
     },
     {
@@ -4914,7 +4938,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/components/ExportModal.jsx",
-      "source_location": "L110",
+      "source_location": "L123",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_components_exportmodal_exportmodal",
+      "target": "frontend_src_components_exportmodal_escapehtml",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/src/components/ExportModal.jsx",
+      "source_location": "L412",
       "weight": 1.0
     },
     {
@@ -5010,7 +5046,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L90",
+      "source_location": "L92",
       "weight": 1.0
     },
     {
@@ -5022,7 +5058,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L146",
+      "source_location": "L153",
       "weight": 1.0
     },
     {
@@ -5034,7 +5070,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L153",
+      "source_location": "L160",
       "weight": 1.0
     },
     {
@@ -5046,7 +5082,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L154",
+      "source_location": "L161",
       "weight": 1.0
     },
     {
@@ -5058,7 +5094,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L172",
+      "source_location": "L189",
       "weight": 1.0
     },
     {
@@ -5070,7 +5106,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L101",
+      "source_location": "L103",
       "weight": 1.0
     },
     {
@@ -5082,7 +5118,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L104",
+      "source_location": "L106",
       "weight": 1.0
     },
     {
@@ -5094,7 +5130,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L110",
+      "source_location": "L112",
       "weight": 1.0
     },
     {
@@ -5106,7 +5142,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L97",
+      "source_location": "L99",
       "weight": 1.0
     },
     {
@@ -5118,7 +5154,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L42",
+      "source_location": "L41",
       "weight": 1.0
     },
     {
@@ -5130,7 +5166,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L73",
+      "source_location": "L75",
       "weight": 1.0
     },
     {
@@ -5142,7 +5178,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L284",
+      "source_location": "L307",
       "weight": 1.0
     },
     {
@@ -5154,7 +5190,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L285",
+      "source_location": "L308",
       "weight": 1.0
     },
     {
@@ -5166,7 +5202,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L354",
+      "source_location": "L381",
       "weight": 1.0
     },
     {
@@ -5178,7 +5214,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L355",
+      "source_location": "L382",
       "weight": 1.0
     },
     {
@@ -5190,7 +5226,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L242",
+      "source_location": "L259",
       "weight": 1.0
     },
     {
@@ -5202,7 +5238,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L261",
+      "source_location": "L284",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_tools_connectorline_connectorline",
+      "target": "frontend_src_tools_connectorline_pointsegmentdistancesq",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/src/tools/ConnectorLine.js",
+      "source_location": "L139",
       "weight": 1.0
     },
     {
@@ -5622,7 +5670,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/index.js",
-      "source_location": "L1242",
+      "source_location": "L1282",
       "weight": 1.0
     },
     {
@@ -5634,7 +5682,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/index.js",
-      "source_location": "L1231",
+      "source_location": "L1271",
       "weight": 1.0
     },
     {
@@ -5646,7 +5694,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/index.js",
-      "source_location": "L1231",
+      "source_location": "L1271",
       "weight": 1.0
     },
     {
@@ -5658,7 +5706,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1414",
+      "source_location": "L1507",
       "weight": 1.0
     },
     {
@@ -5670,7 +5718,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1423",
+      "source_location": "L1516",
       "weight": 1.0
     },
     {
@@ -5682,7 +5730,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1521",
+      "source_location": "L1614",
       "weight": 1.0
     },
     {
@@ -5694,7 +5742,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1555",
+      "source_location": "L1648",
       "weight": 1.0
     },
     {
@@ -5706,7 +5754,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1598",
+      "source_location": "L1691",
       "weight": 1.0
     },
     {
@@ -5718,7 +5766,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L2564",
+      "source_location": "L2683",
       "weight": 1.0
     },
     {
@@ -5730,7 +5778,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3316",
+      "source_location": "L3475",
       "weight": 1.0
     },
     {
@@ -6263,6 +6311,30 @@
     },
     {
       "source": "server_index",
+      "target": "server_ai_service_cleanuplayout",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "server/index.js",
+      "source_location": "L1022",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_ai_service_architectureassist",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "server/index.js",
+      "source_location": "L1038",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
       "target": "server_boardaccess_accessforboard",
       "relation": "imports",
       "_origin": "ast",
@@ -6307,30 +6379,6 @@
       "context": "import",
       "source_file": "server/index.js",
       "source_location": "L30",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
-      "target": "server_ai_service_cleanuplayout",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "server/index.js",
-      "source_location": "L982",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
-      "target": "server_ai_service_architectureassist",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "server/index.js",
-      "source_location": "L998",
       "weight": 1.0
     },
     {
@@ -6959,6 +7007,18 @@
     },
     {
       "source": "server_index",
+      "target": "server_ai_service",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "server/index.js",
+      "source_location": "L1038",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
       "target": "server_models_whiteboard",
       "relation": "imports_from",
       "_origin": "ast",
@@ -7063,18 +7123,6 @@
       "context": "import",
       "source_file": "server/index.js",
       "source_location": "L30",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
-      "target": "server_ai_service",
-      "relation": "imports_from",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "server/index.js",
-      "source_location": "L998",
       "weight": 1.0
     },
     {
@@ -7712,7 +7760,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L1547",
+      "source_location": "L1640",
       "weight": 1.0
     },
     {
@@ -7723,7 +7771,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3231",
+      "source_location": "L3390",
       "weight": 1.0
     },
     {
@@ -7734,7 +7782,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L3310",
+      "source_location": "L3469",
       "weight": 1.0
     },
     {
@@ -7871,13 +7919,24 @@
     },
     {
       "source": "frontend_src_components_exportmodal",
+      "target": "frontend_src_components_exportmodal_escapehtml",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/ExportModal.jsx",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_components_exportmodal",
       "target": "frontend_src_components_exportmodal_exportmodal",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/components/ExportModal.jsx",
-      "source_location": "L6",
+      "source_location": "L19",
       "weight": 1.0
     },
     {
@@ -8031,7 +8090,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L124",
+      "source_location": "L126",
       "weight": 1.0
     },
     {
@@ -8042,29 +8101,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L142",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_src_pathlassosplit",
-      "target": "frontend_src_pathlassosplit_canvaspolygontolocal",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L197",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_src_pathlassosplit",
-      "target": "frontend_src_pathlassosplit_buildclippolygon",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L205",
+      "source_location": "L149",
       "weight": 1.0
     },
     {
@@ -8075,7 +8112,29 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L21",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pathlassosplit",
+      "target": "frontend_src_pathlassosplit_canvaspolygontolocal",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L214",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pathlassosplit",
+      "target": "frontend_src_pathlassosplit_buildclippolygon",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L222",
       "weight": 1.0
     },
     {
@@ -8086,7 +8145,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L220",
+      "source_location": "L237",
       "weight": 1.0
     },
     {
@@ -8097,7 +8156,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L239",
+      "source_location": "L256",
       "weight": 1.0
     },
     {
@@ -8108,18 +8167,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L280",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_src_pathlassosplit",
-      "target": "frontend_src_pathlassosplit_splitobjectwithlasso",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L340",
+      "source_location": "L303",
       "weight": 1.0
     },
     {
@@ -8130,7 +8178,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L37",
+      "source_location": "L36",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pathlassosplit",
+      "target": "frontend_src_pathlassosplit_splitobjectwithlasso",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/pathLassoSplit.js",
+      "source_location": "L367",
       "weight": 1.0
     },
     {
@@ -8152,7 +8211,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L59",
+      "source_location": "L61",
       "weight": 1.0
     },
     {
@@ -8163,7 +8222,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L80",
+      "source_location": "L82",
       "weight": 1.0
     },
     {
@@ -8174,18 +8233,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/pathLassoSplit.js",
-      "source_location": "L94",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_src_tools_connectorline",
-      "target": "frontend_src_tools_connectorline_fromobjectfn",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/tools/ConnectorLine.js",
-      "source_location": "L189",
+      "source_location": "L96",
       "weight": 1.0
     },
     {
@@ -8196,7 +8244,29 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/tools/ConnectorLine.js",
-      "source_location": "L6",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_tools_connectorline",
+      "target": "frontend_src_tools_connectorline_fromobjectfn",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/tools/ConnectorLine.js",
+      "source_location": "L227",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_tools_connectorline",
+      "target": "frontend_src_tools_connectorline_pointsegmentdistancesq",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/tools/ConnectorLine.js",
+      "source_location": "L4",
       "weight": 1.0
     },
     {
@@ -9120,7 +9190,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L1157",
+      "source_location": "L1197",
       "weight": 1.0
     },
     {
@@ -9131,7 +9201,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L1158",
+      "source_location": "L1198",
       "weight": 1.0
     },
     {
@@ -9153,7 +9223,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L1206",
+      "source_location": "L1246",
       "weight": 1.0
     },
     {
@@ -9164,18 +9234,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L1208",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
-      "target": "server_index_allowedorigins",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "server/index.js",
-      "source_location": "L121",
+      "source_location": "L1248",
       "weight": 1.0
     },
     {
@@ -9186,7 +9245,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L1228",
+      "source_location": "L1268",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_index_allowedorigins",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L127",
       "weight": 1.0
     },
     {
@@ -9197,7 +9267,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L1238",
+      "source_location": "L1278",
       "weight": 1.0
     },
     {
@@ -9230,7 +9300,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L141",
+      "source_location": "L147",
       "weight": 1.0
     },
     {
@@ -9252,18 +9322,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L1508",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
-      "target": "server_index_seedadminuser",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "server/index.js",
-      "source_location": "L1549",
+      "source_location": "L1563",
       "weight": 1.0
     },
     {
@@ -9275,6 +9334,17 @@
       "confidence_score": 1.0,
       "source_file": "server/index.js",
       "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_index_seedadminuser",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L1604",
       "weight": 1.0
     },
     {
@@ -9312,6 +9382,17 @@
     },
     {
       "source": "server_index",
+      "target": "server_index_isredisenabled",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L196",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
       "target": "server_index_cors",
       "relation": "contains",
       "_origin": "ast",
@@ -9334,6 +9415,17 @@
     },
     {
       "source": "server_index",
+      "target": "server_index_whiteboards",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L203",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
       "target": "server_index_bcrypt",
       "relation": "contains",
       "_origin": "ast",
@@ -9341,6 +9433,17 @@
       "confidence_score": 1.0,
       "source_file": "server/index.js",
       "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_index_authlimiter",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L218",
       "weight": 1.0
     },
     {
@@ -9356,17 +9459,6 @@
     },
     {
       "source": "server_index",
-      "target": "server_index_isredisenabled",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "server/index.js",
-      "source_location": "L223",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
       "target": "server_index_redis",
       "relation": "contains",
       "_origin": "ast",
@@ -9378,17 +9470,6 @@
     },
     {
       "source": "server_index",
-      "target": "server_index_whiteboards",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "server/index.js",
-      "source_location": "L230",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
       "target": "server_index_createadapter",
       "relation": "contains",
       "_origin": "ast",
@@ -9396,17 +9477,6 @@
       "confidence_score": 1.0,
       "source_file": "server/index.js",
       "source_location": "L24",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
-      "target": "server_index_authlimiter",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "server/index.js",
-      "source_location": "L245",
       "weight": 1.0
     },
     {
@@ -9505,7 +9575,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L453",
+      "source_location": "L429",
       "weight": 1.0
     },
     {
@@ -9527,7 +9597,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L63",
+      "source_location": "L69",
       "weight": 1.0
     },
     {
@@ -9538,7 +9608,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L763",
+      "source_location": "L790",
       "weight": 1.0
     },
     {
@@ -9549,18 +9619,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/index.js",
-      "source_location": "L786",
-      "weight": 1.0
-    },
-    {
-      "source": "server_index",
-      "target": "server_index_upload",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "server/index.js",
-      "source_location": "L86",
+      "source_location": "L813",
       "weight": 1.0
     },
     {
@@ -9572,6 +9631,17 @@
       "confidence_score": 1.0,
       "source_file": "server/index.js",
       "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "server_index",
+      "target": "server_index_upload",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/index.js",
+      "source_location": "L92",
       "weight": 1.0
     },
     {
@@ -10495,7 +10565,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "TASKS.md",
-      "source_location": "L51",
+      "source_location": "L52",
       "weight": 1.0
     },
     {
@@ -10506,7 +10576,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "TASKS.md",
-      "source_location": "L57",
+      "source_location": "L58",
       "weight": 1.0
     },
     {
@@ -10540,7 +10610,7 @@
       "confidence_score": 0.85,
       "context": "argument",
       "source_file": "server/index.js",
-      "source_location": "L894",
+      "source_location": "L934",
       "weight": 1.0
     },
     {
@@ -10848,5 +10918,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "4bd99c3915e02a8c29d2328e55e411b5017d69b0"
+  "built_at_commit": "3b7bea6f9c2afcdf9975c6a0e57e4fe53b35dc93"
 }

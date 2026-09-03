@@ -1,16 +1,16 @@
 # Graph Report - Visual Whiteboard Pro  (2026-09-01)
 
 ## Corpus Check
-- 62 files · ~60,901 words
+- 62 files · ~63,468 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 403 nodes · 543 edges · 35 communities (25 shown, 10 thin omitted)
+- 405 nodes · 547 edges · 35 communities (25 shown, 10 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 13 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `4bd99c39`
+- Built from commit: `3b7bea6f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -21,7 +21,7 @@
 - dependencies
 - Visual Whiteboard Pro
 - App.jsx
-- ContextPanel.jsx
+- App
 - package.json
 - context.test.js
 - pathLassoSplit.js
@@ -33,7 +33,7 @@
 - rules/graphify.md
 - workflows/graphify.md
 - copilot-instructions.md
-- useConnectorTool.js
+- useConnectorSync.js
 - frontend/vercel.json
 - login.js
 - vercel.json
@@ -61,16 +61,16 @@
 10. `isPointInPolygon()` - 7 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `App()` --calls--> `updateAllConnectors()`  [EXTRACTED]
+  frontend/src/App.jsx → frontend/src/hooks/useConnectorSync.js
+- `App()` --calls--> `useConnectorSync()`  [EXTRACTED]
+  frontend/src/App.jsx → frontend/src/hooks/useConnectorSync.js
 - `App()` --calls--> `useConnectorTool()`  [EXTRACTED]
   frontend/src/App.jsx → frontend/src/tools/useConnectorTool.js
+- `applyRemoteCanvas()` --calls--> `updateAllConnectors()`  [EXTRACTED]
+  frontend/src/App.jsx → frontend/src/hooks/useConnectorSync.js
 - `attachFabricListeners()` --calls--> `getObjectSelectionMode()`  [EXTRACTED]
   frontend/src/App.jsx → frontend/src/pathLassoSplit.js
-- `attachFabricListeners()` --calls--> `splitLineWithLasso()`  [EXTRACTED]
-  frontend/src/App.jsx → frontend/src/pathLassoSplit.js
-- `attachFabricListeners()` --calls--> `splitObjectWithLasso()`  [EXTRACTED]
-  frontend/src/App.jsx → frontend/src/pathLassoSplit.js
-- `applyConnectorAnchors()` --calls--> `getAnchorPoint()`  [EXTRACTED]
-  frontend/src/hooks/useConnectorSync.js → frontend/src/utils/anchorPoints.js
 
 ## Import Cycles
 - None detected.
@@ -83,11 +83,11 @@ Nodes (21): dependencies, jspdf, jszip, react, react-dom, socket.io-client, devD
 
 ### Community 1 - "index.js"
 Cohesion: 0.05
-Nodes (33): {
-  accessForBoard,
-  canEdit,
-  getBoardAccess,
-  isBoardId,
+Nodes (33): {
+  accessForBoard,
+  canEdit,
+  getBoardAccess,
+  isBoardId,
 }, activeUsers, admin, ADMIN_CSP, aiLimiter, ALLOWED_UPLOAD_EXTENSIONS, allowedOrigins, auth (+25 more)
 
 ### Community 2 - "Project Description and Requirements"
@@ -103,12 +103,12 @@ Cohesion: 0.12
 Nodes (17): API Surface, Configuration, Current Limitations, Data Model, Future Improvements, How It Works, Live Url: https://visual-whiteboard-pro.vercel.app/, Local Setup (+9 more)
 
 ### Community 6 - "App.jsx"
-Cohesion: 0.06
-Nodes (33): App(), applyRemoteCanvas(), attachFabricListeners(), flushPendingRemoteCanvas(), loadBoard(), loadBoardById(), saveBoard(), updateInspectorProperties() (+25 more)
+Cohesion: 0.08
+Nodes (20): RESERVED_ROUTES, AssistPanel(), AuthPage(), CanvasControls(), CanvasOverlay(), ContextPanel(), ensureAbsoluteUrl(), escapeAttr() (+12 more)
 
-### Community 7 - "ContextPanel.jsx"
-Cohesion: 0.47
-Nodes (5): ContextPanel(), ensureAbsoluteUrl(), escapeAttr(), LANGUAGES, SAFE_URL_SCHEMES
+### Community 7 - "App"
+Cohesion: 0.23
+Nodes (11): App(), applyRemoteCanvas(), attachFabricListeners(), flushPendingRemoteCanvas(), loadBoard(), loadBoardById(), saveBoard(), updateInspectorProperties() (+3 more)
 
 ### Community 8 - "package.json"
 Cohesion: 0.06
@@ -134,9 +134,9 @@ Nodes (11): 10. Advanced Lasso & Selection Tool Refactor (On-Demand Implementati
 Cohesion: 0.43
 Nodes (12): deleteBoard(), deleteUser(), escapeHtml(), getHeaders(), handleResponse(), loadAllData(), loadBoardsList(), loadDashboardStats() (+4 more)
 
-### Community 21 - "useConnectorTool.js"
-Cohesion: 0.42
-Nodes (6): ConnectorLine, useConnectorTool(), canvasToScreen(), findClosestAnchor(), getAnchorPoint(), localAnchorOffset()
+### Community 21 - "useConnectorSync.js"
+Cohesion: 0.20
+Nodes (15): escapeHtml(), ExportModal(), applyConnectorAnchors(), collectMovedShapes(), shapesMapFromCanvas(), stripConnectorsFromSelection(), updateAllConnectors(), useConnectorSync() (+7 more)
 
 ### Community 23 - "login.js"
 Cohesion: 0.50
@@ -179,7 +179,7 @@ Nodes (9): accessForBoard(), canEdit(), getBoardAccess(), isBoardId(), mongoose,
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Visual Whiteboard Pro` connect `Visual Whiteboard Pro` to `Project Description and Requirements`?**
-  _High betweenness centrality (0.030) - this node is a cross-community bridge._
+  _High betweenness centrality (0.029) - this node is a cross-community bridge._
 - **Why does `Real-time Collaboration` connect `Project Description and Requirements` to `index.js`?**
   _High betweenness centrality (0.028) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `private` to the rest of the system?**
